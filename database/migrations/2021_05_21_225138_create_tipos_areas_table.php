@@ -16,7 +16,7 @@ class CreateTiposAreasTable extends Migration
         Schema::create('tipos_areas', function (Blueprint $table) {
             $table->bigIncrements('idtar');
             $table->string('nombre');
-            $table->boolean('estado')->default(0);
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

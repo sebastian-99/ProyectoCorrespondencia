@@ -19,7 +19,7 @@ class CreateSeguimientosActividadesTable extends Migration
             $table->dateTime('fecha');
             $table->longText('detalle');
             $table->float('porcentaje');
-            $table->text('estado');
+            $table->string('estado');
             $table->timestamps();
             $table->foreign('idreac_responsables_actividades')->references('idreac')->on('responsables_actividades');
         });

@@ -16,7 +16,7 @@ class CreateTiposActividadesTable extends Migration
         Schema::create('tipos_actividades', function (Blueprint $table) {
             $table->bigIncrements('idtac');
             $table->string('nombre');
-            $table->boolean('estado')->default(0);
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }
