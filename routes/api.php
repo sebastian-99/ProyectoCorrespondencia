@@ -20,4 +20,5 @@ use Illuminate\Support\Facades\Route;
 });
  */
 
+#comentario q
 #Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
