@@ -9,8 +9,10 @@ class tiposActividades extends Model
 {
     use HasFactory;
 
+    protected $table = 'tipos_actividades';
     protected $primaryKey = 'idtac';
-    protected $table = 'tiposActividades';
-    protected $fillable = ['idtac','nombre','activo'];
-
+    protected $fillable = [
+        'nombre',
+        'activo'
+    ];
 }

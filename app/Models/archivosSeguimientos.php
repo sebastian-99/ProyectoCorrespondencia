@@ -9,7 +9,7 @@ class archivosSeguimientos extends Model
 {
     use HasFactory;
 
-    protected $table = 'archivosSeguimientos';
+    protected $table = 'archivos_seguimientos';
     protected $primaryKey = 'idarseg';
 
     /**

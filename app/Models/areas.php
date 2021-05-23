@@ -11,5 +11,8 @@ class areas extends Model
 
     protected $table = 'areas';
     protected $primaryKey = 'idar';
-    protected $fillable = ['nombre','idtar'];
+    protected $fillable = [
+        'nombre',
+        'idtar'
+    ];
 }

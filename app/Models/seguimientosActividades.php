@@ -9,7 +9,7 @@ class seguimientosActividades extends Model
 {
     use HasFactory;
 
-    protected $table = 'seguimientosActividades';
+    protected $table = 'seguimientos_actividades';
     protected $primaryKey = 'idseac';
 
     /**
