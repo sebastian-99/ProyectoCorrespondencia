@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="{{asset('src/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('src/css/OverlayScrollbars.min.css')}}">
-</head>
+  @yield('header')
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
   <head class="main-header">
@@ -48,7 +48,7 @@
 
 
 
-  
+
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
@@ -125,9 +125,9 @@
         @yield('content')
       </div>
     </section>
-    
+
   </div>
-  
+
   <footer class="main-footer">
     <strong>Universidad Tecnol&oacute;gica del Valle de Toluca - Correspondencia</strong>
   </footer>
@@ -147,14 +147,17 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{asset('src/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-<!-- Summernote -->
+<!-- Tempusdominus Bootstrap 4
+<script src="{{-- asset('src/js/tempusdominus-bootstrap-4.min.js') --}}"></script>
+<!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+@yield('scripts')
+
 </body>
 </html>
