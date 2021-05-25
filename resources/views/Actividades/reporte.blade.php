@@ -6,7 +6,15 @@
 @endsection
 <div class="card">
     <div class="card-header">
-      <h3>Reporte de actividades / oficios</h3>
+      <div class="row">
+        <div class="col-sm-11">
+          <h3>Reporte de actividades / oficios</h3>
+        </div>
+        <div class="col-sm-1">
+         <a href="{{route('create_actividades')}}"><button class="btn btn-primary">Nuevo</button></a>
+        </div>
+      </div>
+      
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -39,8 +47,12 @@
                 <td>2 de 3</td>
                 <td>
                     <a href=""><button type="button" class="btn btn-success">Ver detalle</button></a>    
-                    <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
-                    <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
+                    <a href="{{route('edit_modificacion', ['id' => encrypt($c->idac)])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
+                    @if($c->activo == 1)   
+                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-danger">Desactivar</button></a>
+                    @else
+                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-primary">Activar</button></a>
+                    @endif 
                 </td>
               </tr>
             @endforeach
@@ -50,6 +62,10 @@
     </div>
   </div>
 <script>
-    $("#tabla").DataTable();
+    $("#tabla").DataTable({ 
+        "language": {
+            "url": "https://raw.githubusercontent.com/DataTables/Plugins/master/i18n/es_es.json"
+        }
+    });
 </script>
 @endsection
