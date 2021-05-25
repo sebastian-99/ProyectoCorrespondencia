@@ -17,4 +17,6 @@ Route::get('/', function () {
     return view('layout/layout');
 });
 Route::get('/reporte', [Reportecontroller::class, 'reporte']);
-Route::get('reporte/list', [Reportecontroller::class, 'getReportes'])->name('reportes.list');
+
+Route::get('Detalles/{id}', [Reportecontroller::class, 'Detalles'])->name('Detalles');
+

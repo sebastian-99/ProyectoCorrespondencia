@@ -7,10 +7,15 @@
 
   
  <!---------------------------Reportes-------------------------------------->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+ <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <link rel="stylesheet" href="https://cdnj.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
-  <!--  <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">-->
+
+    <link href="//cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+
+
+
   <!---------------------------Reportes-------------------------------------->
 
 
@@ -149,10 +154,7 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
+
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
@@ -161,47 +163,116 @@
 <!-- Summernote -->
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
  <!---------------------------Reportes-------------------------------------->
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script src="//cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+   
+
+
 
 <script type="text/javascript">
   $(function () {
+            $.ajaxSetup({
+              headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}
+            });
+
             var table = $('.yajra-datatable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('reportes.list') }}",
+                    rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+                    responsive: true,
+                    ajax: "",
+                                    
         columns: [
             {data: 'idac', name: 'idac'},
             {data: 'fecha_creacion', name: 'fecha_creacion'},
             {data: 'asunto', name: 'asunto'},
-            {data: 'idu_users', name: 'idu_users'},
-            {data: 'fecha_hora_inicio', name: 'fecha_hora_inicio'},
-            {data: 'fecha_hora_fin', name: 'fecha_hora_fin'},
+            {data: null, render: function (data,type, row) {
+              return data.nombre+'<br> '+data.app+' '+data.apm;
+            }},
+            {data: null, render: function (data,type, row) {
+              return data.fecha_inicio+'<br> '+data.hora_inicio;
+            }},
+            {data: null, render: function (data,type, row) {
+              return data.fecha_fin+'<br> '+data.hora_fin;
+            }},
             {data: 'importancia', name: 'importancia'},
             {data: 'idar_areas', name: 'idar_areas'},
-            {data: null, name: null},
-            {data: null, name: null},
+            {data: 'status', name: 'status'},
+            {data: null, render: function (data,type,row){
+             return data.idu_users;
+            }
+            },
             {
                 data: 'action', 
                 name: 'action', 
-                orderable: true, 
-                searchable: true
+                orderable: false, 
+                searchable: false
             },
-        ]
+            
+        ],
+
+        "oLanguage": {
+          "sSearch": "Buscar _INPUT_",
+          "lengthMenu": "Mostrar _MENU_ registros",
+                   },
+        "language": {
+          "lengthMenu": "Mostrar _MENU_ registros",
+           "emptyTable":     "No existen registros para mostrar",
+           "info":           "Mostrando de _START_ a _END_ de _TOTAL_ registros",
+          "infoEmpty":      "Sin registros",
+          "processing":     "Cargando...",
+         "zeroRecords":    "Ninguna coincidencia encontrada",
+         "paginate": {
+        "first":      "Primero",
+        "last":       "Ultimo",
+        "next":       "Siguiente",
+        "previous":   "Previa"
+                  },
+                },
     });
-    
+   
   });
+  //---------------------------Detalles---------------------------
+    $('body').on('click', '.Detalles',function(){
+      var id = $(this).data('id');
+      console.log(id)
+      $.get("Detalles/" + id, function(data){
+        
+       //alert( JSON.stringify(data,['app']));
+ 
+        $('#modelHeading').html("Detalles");
+        $('#ajaxModel').modal('show');
+        $('#nombre').val(JSON.stringify(data,['idu_users']));
+        $('#idar').val(JSON.stringify(data,['nombre_a']));
+        $('#avance').val("");
+        $('#status').val(JSON.stringify(data,['status']));
+        $('#acuse').val(JSON.stringify(data,['acuse']));
+
+        $('#modelextra').html("ver detalle");
+      })
+    });
+  //---------------------------Detalles---------------------------
 </script>
  <!---------------------------Reportes-------------------------------------->
 </body>
 </html>
+
+2333221112
