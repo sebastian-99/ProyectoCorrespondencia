@@ -38,7 +38,9 @@
                 <td>100%</td>
                 <td>2 de 3</td>
                 <td>
-                    <a href=""><button type="button" class="btn btn-success">Ver detalle</button></a>    
+                   
+                <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idac}}" data-original-title="Detalles"
+                     class="edit btn btn-success btn-sm Detalles">Detalles</a>
                     <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
                     <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
                 </td>
@@ -49,7 +51,79 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title" id="modelHeading"></h4></div>
+            <div class="modal-body">
+                <form id="Detalles" name="Detalles" class="form-horzontal">
+                <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered" id="tablaModal">
+            <thead class="text-center">
+              <tr style="background-color: #1F75FE; color: #ffffff">
+                <th scope="col">Nombre atendio</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Avance</th>
+                <th scope="col">Status Atenci&aacute;n</th>
+                <th scope="col">Acuse recibido</th>
+                <th scope="col">Operaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+           
+              <tr class="text-center">
+               
+                
+
+              <!--  <td id="modelextra" name="modelextra"></td>-->
+              </tr>
+
+            </tbody>
+          </table>
+      </div>
+    </div>
+                    
+                </form>
+            </div>
+        </div>
+  </div>
+</div>
+
 <script>
     $("#tabla").DataTable();
+
+</script>
+
+<script type="text/javascript">
+
+    $('body').on('click', '.Detalles',function(){
+      var id = $(this).data('id');
+      console.log(id)
+      
+      $.get("Detalles/" + id, function(data){
+       //alert( JSON.stringify(data,['app']));
+       var button = '<input type="submit" value="Detalles" id="detalles" name="Detalles"/>';
+
+       for (var i=0;i<=1;i=i+1){
+        $('#modelHeading').html("Detalles");
+        $('#ajaxModel').modal('show');
+        //console.log(data);
+        $('#tablaModal>tbody').append("<tr><td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td><td><input id='idar"+i+"' name='idar"+i+"' disabled></td><td><input id='avance"+i+"' name='avance"+i+"' disabled></td><td><input id='status"+i+"' name='status"+i+"' disabled></td><td><input id='acuse"+i+"' name='acuse"+i+"' disabled></td><td><input type='submit' value='Detalles' id='detalles' name='Detalles'/></td></tr>");
+        $('#nombre'+i).val(data[i].nombre_us);
+        $('#idar'+i).val(data[i].nombre_ar);
+        $('#avance'+i).val("50%");
+        $('#status'+i).val("incompleto");
+        $('#acuse'+i).val(data[i].acuse);
+      }
+      })
+    });
+    $("#ajaxModel").on('hidden.bs.modal', function () {
+        
+              $('#tablaModal>tbody>tr').remove();
+            
+    });
 </script>
 @endsection

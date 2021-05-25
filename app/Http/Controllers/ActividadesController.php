@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\actividades;
+use App\Models\users;
 use DB;
 use Arr;
 class ActividadesController extends Controller
@@ -11,7 +13,7 @@ class ActividadesController extends Controller
     public function reporte_actividades(){
 
         $consult = DB::SELECT("SELECT a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre
+        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.idac
         FROM actividades AS a
         INNER JOIN users AS us ON us.idu = a.idu_users
         INNER JOIN areas AS ar ON ar.idar = a.idar_areas");
@@ -21,8 +23,14 @@ class ActividadesController extends Controller
         ->with('consult', $consult);
     }
 
-
-
+    public function Detalles($idac){
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse
+        FROM responsables_actividades AS res
+        INNER JOIN users AS us ON us.idu = res.idu_users
+        INNER JOIN areas AS ar ON ar.idar = us.idar_areas
+        WHERE idac_actividades = $idac");
+        return response()->json($query);
+    }
 
     public function actividades(){
 

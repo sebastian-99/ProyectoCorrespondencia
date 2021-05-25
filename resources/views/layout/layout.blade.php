@@ -6,7 +6,7 @@
   <title>Correspondencia UTVT</title>
 
   
- <!---------------------------Reportes-------------------------------------->
+ <!---------------------------Reportes-------------------------------------
  <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <link rel="stylesheet" href="https://cdnj.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
@@ -164,11 +164,11 @@
 
 <<<<<<< HEAD
 
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -
 =======
-<!-- jQuery -->
+<!-- jQuery 
 {{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
+<!-- jQuery UI 1.11.4 
 <script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
  --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 >>>>>>> dev
@@ -185,7 +185,7 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 <<<<<<< HEAD
- <!---------------------------Reportes-------------------------------------->
+ <!---------------------------Reportes------------------------------------
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
@@ -218,25 +218,6 @@
                     ajax: "",
                                     
         columns: [
-            {data: 'idac', name: 'idac'},
-            {data: 'fecha_creacion', name: 'fecha_creacion'},
-            {data: 'asunto', name: 'asunto'},
-            {data: null, render: function (data,type, row) {
-              return data.nombre+'<br> '+data.app+' '+data.apm;
-            }},
-            {data: null, render: function (data,type, row) {
-              return data.fecha_inicio+'<br> '+data.hora_inicio;
-            }},
-            {data: null, render: function (data,type, row) {
-              return data.fecha_fin+'<br> '+data.hora_fin;
-            }},
-            {data: 'importancia', name: 'importancia'},
-            {data: 'idar_areas', name: 'idar_areas'},
-            {data: 'status', name: 'status'},
-            {data: null, render: function (data,type,row){
-             return data.idu_users;
-            }
-            },
             {
                 data: 'action', 
                 name: 'action', 
@@ -267,33 +248,12 @@
     });
    
   });
-  //---------------------------Detalles---------------------------
-    $('body').on('click', '.Detalles',function(){
-      var id = $(this).data('id');
-      console.log(id)
-      $.get("Detalles/" + id, function(data){
-        
-       //alert( JSON.stringify(data,['app']));
- 
-        $('#modelHeading').html("Detalles");
-        $('#ajaxModel').modal('show');
-        $('#nombre').val(JSON.stringify(data,['idu_users']));
-        $('#idar').val(JSON.stringify(data,['nombre_a']));
-        $('#avance').val("");
-        $('#status').val(JSON.stringify(data,['status']));
-        $('#acuse').val(JSON.stringify(data,['acuse']));
+  //---------------------------Detalles--------------------------->>
 
-        $('#modelextra').html("ver detalle");
-      })
-    });
-  //---------------------------Detalles---------------------------
-</script>
- <!---------------------------Reportes-------------------------------------->
+ <!-------------------------Reportes-------------------------------------->
 =======
 @yield('scripts')
 
 >>>>>>> dev
 </body>
 </html>
-
-2333221112

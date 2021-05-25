@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Models\actividades;
-use App\Models\responsables_actividades;
-use App\Models\users;
-use App\Models\areas;
+
 use Illuminate\Support\Facades\DB;
 
 class Reportecontroller extends Controller
