@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ReporteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('layout/layout');
 });
-Route::get('/Reporte', function () {
-    return view('Reporte');
-});
+Route::get('/reporte', [Reportecontroller::class, 'reporte']);
+Route::get('reporte/list', [Reportecontroller::class, 'getReportes'])->name('reportes.list');
