@@ -17,7 +17,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-12"><br>
-                <table class="table table-responsive">
+                <table class="table table-responsive table-striped">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Turno</th>
@@ -32,7 +32,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">143</th>
+                            <th scope="row">{{$consulta->turno}}</th>
                             <td>10-03-2021</td>
                             <td>Acreditacion TIC</td>
                             <td>Carlos Millan Hinojosa</td>
@@ -43,7 +43,7 @@
                     </tbody>
                 </table>
 
-                <table class="table table-responsive">
+                <table class="table table-responsive table-striped">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Avance</th>
