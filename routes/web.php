@@ -3,7 +3,7 @@
 use App\Http\Controllers\TiposActividadesController;
 use App\Http\Controllers\SeguimientoController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ActividadesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,13 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('plantilla', function () {
-    return view('layout/layout');
-});
 
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
 
@@ -30,7 +23,11 @@ Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['
 // Seguimiento de actividades 
 Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
 
-//Route::name('Seguimiento')->get('alumnos', [AlumnosController::class, 'index']);
-//Route::get('modificaDoctor/{id_doctor}', [doctorController::class, 'modificaDoctor'])->name('modificaDoctor');
-//Route::POST('updateDoctor', [doctorController::class, 'updateDoctor'])->name('updateDoctor');
-
+////Actividades
+Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
+Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
+Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
+Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
+Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
+Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
+Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');

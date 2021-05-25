@@ -1,12 +1,13 @@
 @extends('layout.layout')
 @section('content')
+<input type="hidden" value="{{$consulta->idac}}" name="idac">
 
 <div class="row">
     <div class="col-sm-4">
-        <h3>Detalle del turno: 143</h3>
+        <h3>Detalle del turno: {{$consulta->turno}}</h3>
     </div>
     <div class="col-sm-4">
-        <h3>Comunicado: 62235</h3>
+        <h3>Comunicado: {{$consulta->comunicado}}</h3>
     </div>
     <div class="col-sm-4">
         <h3>Oficio: UTVT/SEP/000011</h3>
@@ -33,12 +34,12 @@
                     <tbody>
                         <tr>
                             <th scope="row">{{$consulta->turno}}</th>
-                            <td>10-03-2021</td>
-                            <td>Acreditacion TIC</td>
-                            <td>Carlos Millan Hinojosa</td>
-                            <td>12-03-2021 al 25-03-2021</td>
-                            <td>Alta</td>
-                            <td>Direccion de carrera TIC</td>
+                            <td>{{$consulta->fecha_creacion}}</td>
+                            <td>{{$consulta->asunto}}</td>
+                            <td>{{$consulta->titulo}} {{$consulta->nombre}} {{$consulta->app}} {{$consulta->apm}}</td>
+                            <td>{{$consulta->fecha_inicio}} - al - {{$consulta->fecha_fin}}</td>
+                            <td>{{$consulta->importancia}}</td>
+                            <td>{{$consulta->nombre_area}}</td>
                         </tr>
                     </tbody>
                 </table>

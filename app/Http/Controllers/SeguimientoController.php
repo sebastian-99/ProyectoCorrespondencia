@@ -10,9 +10,7 @@ class SeguimientoController extends Controller
 {
     public function Seguimiento($idac)
     {
-        
-
-        $consulta = DB::table('actividades')->where('idac', $idac)
+        $consulta = DB::table('actividades')
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
         ->select(
@@ -40,10 +38,16 @@ class SeguimientoController extends Controller
             'actividades.link2',
             'actividades.link3',
         )
+        ->where('idac', $idac)
+        ->get();    
+
+        $tipo_actividad = DB::table('tipos_actividades')
+        ->orderBy('nombre','Asc')
         ->get();
 
-
-            return view('SeguimientoActividades/Seguimiento', compact('consulta'));
+            return view('SeguimientoActividades/Seguimiento')
+            ->with('consulta', $consulta[0])
+            ->with('tipo_actividad', $tipo_actividad);
            
             
     }
