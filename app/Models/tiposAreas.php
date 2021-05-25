@@ -9,8 +9,12 @@ class tiposAreas extends Model
 {
     use HasFactory;
 
+    protected $table = 'tipos_areas';
     protected $primaryKey = 'idtar';
-    protected $table = 'tiposAreas';
-    protected $fillable = ['idtar', 'nombre', 'activo'];
+    protected $fillable = [
+        'idtar',
+        'nombre',
+        'activo'
+    ];
 
 }

@@ -9,7 +9,7 @@ class responsablesActividades extends Model
 {
     use HasFactory;
 
-    protected $table = 'responsablesActividades';
+    protected $table = 'responsables_actividades';
     protected $primaryKey = 'idreac';
 
     /**

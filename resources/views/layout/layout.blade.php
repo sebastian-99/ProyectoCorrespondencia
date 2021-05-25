@@ -34,7 +34,11 @@
   <link rel="stylesheet" href="{{asset('src/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('src/css/OverlayScrollbars.min.css')}}">
-</head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
+
+  @yield('header')
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
   <head class="main-header">
@@ -62,7 +66,7 @@
 
 
 
-  
+
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
@@ -125,6 +129,10 @@
             </ul>
           </li>
         </ul>
+        <div class="text-center">
+          <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
+        </div>
+  
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -139,9 +147,9 @@
         @yield('content')
       </div>
     </section>
-    
+
   </div>
-  
+
   <footer class="main-footer">
     <strong>Universidad Tecnol&oacute;gica del Valle de Toluca - Correspondencia</strong>
   </footer>
@@ -154,13 +162,21 @@
 </div>
 <!-- ./wrapper -->
 
+<<<<<<< HEAD
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+=======
+<!-- jQuery -->
+{{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
+ --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+>>>>>>> dev
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{asset('src/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-<!-- Summernote -->
+<!-- Tempusdominus Bootstrap 4
+<script src="{{-- asset('src/js/tempusdominus-bootstrap-4.min.js') --}}"></script>
+<!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 
@@ -168,6 +184,7 @@
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
+<<<<<<< HEAD
  <!---------------------------Reportes-------------------------------------->
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -272,6 +289,10 @@
   //---------------------------Detalles---------------------------
 </script>
  <!---------------------------Reportes-------------------------------------->
+=======
+@yield('scripts')
+
+>>>>>>> dev
 </body>
 </html>
 
