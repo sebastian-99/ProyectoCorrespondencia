@@ -30,13 +30,13 @@ class TiposActividadesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => ['required', 'string', 'max:60']
+            'nombre' => ['required', 'string', 'max:60'],
         ]);
 
         $guardar = TiposActividades::query()
                                    ->create([
-                                       'nombre' => $request->nombre
-                                   ]);
+            'nombre' => $request->nombre,
+        ]);
 
         return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha guardado correctamente');
     }
@@ -82,20 +82,37 @@ class TiposActividadesController extends Controller
     /**
      * Actualiza un recurso
      */
-    public function update(Request $request)
+    public function update(Request $request, $idtac)
     {
-        $request->validate([
-            'idtac' => ['required', 'numeric', 'exists:tipos_actividades,idtac'],
-            'nombre' => ['required', 'string', 'max:60']
-        ]);
+        if ($idtac) {
+            $tipo_actividad = TiposActividades::query()
+                                            ->where('idtac', $idtac)
+                                            ->first();
+            if ($tipo_actividad) {
+                $request->validate([
+                    'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                                í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
+                                Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
+                    'estado' => ['required', 'boolean'],
+                ]);
 
-        $actualizar = TiposActividades::where('idtac', $request->idtac)
-                                      ->udpate([
-                                          'nombre' => $request->nombre
-                                      ]);
+                $actualizar = $tipo_actividad->update([
+                    'nombre' => $request->nombre,
+                    'estado' => $request->estado,
+                ]);
 
-        return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
+                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
+
+            } else {
+                abort(404);
+                }
+            } else {
+                abort(404);
+        }
     }
+
+
 
     /**
      * Elimina un recurso
@@ -107,8 +124,8 @@ class TiposActividadesController extends Controller
                                               ->first();
             if ($tipo_actividad){
                 $eliminar = $tipo_actividad->delete();
-                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
-            } else {
+                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha eliminado correctamente');
+          } else {
                 abort(404);
             }
         } else {

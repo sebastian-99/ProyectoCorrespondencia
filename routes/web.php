@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\TiposActividadesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActividadesController;
+use App\Http\Controllers\AreasController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\TiposActividadesController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +24,8 @@ Route::get('/', function () {
 */
 
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+/*
+
 
 ////Actividades
 Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
@@ -30,3 +35,7 @@ Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name(
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
+
+Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
+Route::resource('admin/users', UsersController::class, ['names' => 'users']);
+*/

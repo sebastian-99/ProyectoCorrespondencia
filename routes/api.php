@@ -2,7 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-/* use App\Http\Controllers\TiposActividadesController;
+#use App\Http\Controllers\AreasController;
+#use App\Http\Controllers\UsersController;
+use App\Http\Controllers\TiposActividadesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +23,7 @@ use Illuminate\Support\Facades\Route;
 });
  */
 
-#comentario q
-#Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+#Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
+#Route::resource('admin/users', UsersController::class, ['names' => 'users']);
+

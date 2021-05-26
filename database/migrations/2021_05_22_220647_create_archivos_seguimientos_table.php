@@ -16,8 +16,8 @@ class CreateArchivosSeguimientosTable extends Migration
         Schema::create('archivos_seguimientos', function (Blueprint $table) {
             $table->bigIncrements('idarseg');
             $table->unsignedBigInteger('idseac_seguimientos_actividades');
-            $table->text('nombre');
-            $table->text('ruta');
+            $table->string('nombre');
+            $table->string('ruta');
             $table->longText('detalle');
             $table->timestamps();
             $table->foreign('idseac_seguimientos_actividades')->references('idseac')->on('seguimientos_actividades');
