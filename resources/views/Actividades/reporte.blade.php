@@ -46,7 +46,7 @@
                 <td>100%</td>
                 <td>2 de 3</td>
                 <td>
-                    <a href=""><button type="button" class="btn btn-success">Ver detalle</button></a>    
+                    <a href="{{route('Seguimiento', ['idac' => encrypt($c->idac)])}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
                     <a href="{{route('edit_modificacion', ['id' => encrypt($c->idac)])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
                     @if($c->activo == 1)   
                       <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-danger">Desactivar</button></a>

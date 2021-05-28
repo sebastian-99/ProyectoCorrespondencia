@@ -101,7 +101,7 @@
                 <div class="col-sm-10">
                     <div class="mb-3">
                         <label for="NoSeguimiento" class="form-label">Fecha de Seguimiento</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="24-04-2021" disabled>
+                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="{{$now->format('d-m-y')}}" disabled>
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -179,14 +179,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
+                            <td colspan="5">Aun no hay un seguimiento de esta actividad por el usuario.</td>
+                           <!-- <th scope="row">1</th>
                             <td>10-21-2021</td>
                             <td>Detalle de actividad 1</td>
                             <td>Pendiente</td>
                             <td>30%</td>
-                            <td>Sin archivos
+                            <td>Sin archivos 
                                 <button class="btn btn-danger">-</button>
-                            </td>
+                            </td>-->
                         </tr>
                     </tbody>
                 </table>

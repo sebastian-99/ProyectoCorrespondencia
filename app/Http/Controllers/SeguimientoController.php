@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\seguimientosActividades;
 use App\Models\actividades;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SeguimientoController extends Controller
 {
     public function Seguimiento($idac)
-    {
+    { 
+        $idac = decrypt($idac);
         $consulta = DB::table('actividades')
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
@@ -44,10 +46,12 @@ class SeguimientoController extends Controller
         $tipo_actividad = DB::table('tipos_actividades')
         ->orderBy('nombre','Asc')
         ->get();
+        $now=Carbon::now();
 
             return view('SeguimientoActividades/Seguimiento')
             ->with('consulta', $consulta[0])
-            ->with('tipo_actividad', $tipo_actividad);
+            ->with('tipo_actividad', $tipo_actividad)
+            ->with('now', $now);
            
             
     }
