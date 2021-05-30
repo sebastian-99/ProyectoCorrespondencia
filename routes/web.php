@@ -22,6 +22,7 @@ Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['
 
 // Seguimiento de actividades 
 Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
+Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
 
 ////Actividades
 Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');

@@ -78,81 +78,83 @@
     <div class="col-sm-5">
         <div class="card">
             <div class="card-body">
-                <form action=""></form>
-                {{csrf_field()}}
-                <div class="col-sm-4">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" placeholder="1" disabled>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">Actividad creada por</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="Lic. Roberto Torres Martinez" disabled>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">Tipo usuario (Detalle)</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="Direccion de carrera - TIC" disabled>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">Fecha de Seguimiento</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="{{$now->format('d-m-y')}}" disabled>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">Detalle de la actividad</label>
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Detalle de la actividad" id="floatingTextarea"></textarea>
+                <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="col-sm-4">
+                        <div class="mb-3">
+                            <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
+                            <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-10">
                         <div class="mb-3">
-                            <label for="NoSeguimiento" class="form-label">Porcentaje Avance</label>
-                            <span class="input-group-text"><input type="text" class="form-control form-control-sm" id="NoSeguimiento" value=""> %</span>
+                            <label for="" class="form-label">Actividad creada por</label>
+                            <input type="text" class="form-control form-control-sm" id="" value="Lic. Roberto Torres Martinez" disabled>
                         </div>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-10">
                         <div class="mb-3">
-                            <label for="NoSeguimiento" class="form-label">Estado Actividad</label><br>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                <label class="form-check-label" for="inlineRadio1">Completo</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                <label class="form-check-label" for="inlineRadio2">Pendiente</label>
+                            <label for="tipo_usuario" class="form-label">Tipo usuario (Detalle)</label>
+                            <input type="text" class="form-control form-control-sm" id="tipo_usuario" value="Direccion de carrera - TIC" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="mb-3">
+                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label>
+                            <input type="text" class="form-control form-control-sm" id="fecha_seg" name="fecha" value="{{$now->format('d-m-y')}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="detalle" class="form-label">Detalle de la actividad</label>
+                            <div class="form-floating">
+                                <textarea class="form-control" name="detalle" placeholder="Detalle de la actividad" id="detalle"></textarea>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-sm-10">
-
-                    <label for="formFileSm" class="form-label">Seleccione Archivo</label>
-                    <input class="form-group form-group-sm" id="formFileSm" type="file">
-
-                </div>
-
-
-                <div class="col-sm-10">
-                    <div class="mb-3">
-                        <label for="NoSeguimiento" class="form-label">Detalle Evidencia</label>
-                        <input type="text" class="form-control form-control-sm" id="NoSeguimiento" value="" placeholder="Detalle de la evidencia">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="mb-3">
+                                <label for="porcentaje" class="form-label">Porcentaje Avance</label>
+                                <span class="input-group-text"><input type="text" class="form-control form-control-sm" id="porcentaje" name="porcentaje"> %</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">Estado Actividad</label><br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="estado" id="inlineRadio1" value="Pendiente">
+                                    <label class="form-check-label" for="inlineRadio1">Pendiente</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="estado" id="inlineRadio2" value="Completo">
+                                    <label class="form-check-label" for="inlineRadio2">Completo</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2">
 
-                    <button class="btn btn-sm btn-success">+</button>
+                    <div class="col-sm-10">
 
-                </div>
+                        <label for="formFileSm" class="form-label">Seleccione Archivo</label>
+                        <input class="form-group form-group-sm" id="formFileSm" name="ruta" type="file">
+
+                    </div>
+
+
+                    <div class="col-sm-10">
+                        <div class="mb-3">
+                            <label for="detalle" class="form-label">Detalle Evidencia</label>
+                            <input type="text" class="form-control form-control-sm" id="detalle" name="detalle" placeholder="Detalle de la evidencia">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+
+                        <button class="btn btn-sm btn-success">+</button>
+
+                    </div>
+
+                </form>
 
 
 
@@ -166,6 +168,21 @@
                 <center>
                     <h4>Seguimiento de la actividad</h4>
                 </center><br>
+                @if (Session::has('message'))
+                <p class="alert alert-info">
+                    {{Session::get('message')}}
+                </p>
+                @endif
+                @if (Session::has('message2'))
+                <p class="alert alert-danger">
+                    {{Session::get('message2')}}
+                </p>
+                @endif
+                @if (Session::has('message3'))
+                <p class="alert alert-warning">
+                    {{Session::get('message3')}}
+                </p>
+                @endif
                 <table class="table table-responsive">
                     <thead class="thead-light">
                         <tr>
@@ -180,7 +197,7 @@
                     <tbody>
                         <tr>
                             <td colspan="5">Aun no hay un seguimiento de esta actividad por el usuario.</td>
-                           <!-- <th scope="row">1</th>
+                            <!-- <th scope="row">1</th>
                             <td>10-21-2021</td>
                             <td>Detalle de actividad 1</td>
                             <td>Pendiente</td>

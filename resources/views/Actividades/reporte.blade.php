@@ -17,6 +17,21 @@
       
     </div>
     <div class="card-body">
+    @if (Session::has('message'))
+                <p class="alert alert-info">
+                    {{Session::get('message')}}
+                </p>
+                @endif
+                @if (Session::has('message2'))
+                <p class="alert alert-danger">
+                    {{Session::get('message2')}}
+                </p>
+                @endif
+                @if (Session::has('message3'))
+                <p class="alert alert-warning">
+                    {{Session::get('message3')}}
+                </p>
+                @endif  
       <div class="table-responsive">
         <table class="table table-striped table-bordered" id="tabla">
             <thead class="text-center">
