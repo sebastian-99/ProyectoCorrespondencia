@@ -150,7 +150,7 @@ class ActividadesController extends Controller
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
+            DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
         }
 
 
@@ -197,16 +197,17 @@ class ActividadesController extends Controller
 
         $tipous = DB::SELECT("SELECT a.nombre, a.`idar`
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idar_areas
-        WHERE ac.idac = $id");
+        WHERE ac.idac = $id
+        GROUP BY a.nombre");
 
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idtu_tipos_usuarios
         WHERE ac.idac = $id");
 
