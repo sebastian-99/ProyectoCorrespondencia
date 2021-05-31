@@ -35,7 +35,8 @@
                 <td>{{$c->detalle}}</td>
                 <td>{{$c->estado}}</td>
                 <td>{{$c->porcentaje}}</td>
-                <td>{{$c->ruta}}</td>
+                <td><a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idseac}}"  data-original-title="DetallesArchivos" 
+                     class="edit btn btn-success btn-sm DetallesArchivos">DetallesArchivos</a></td>
                 
 
               </tr>
@@ -45,11 +46,80 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title" id="modelHeading"></h4></div>
+            <div class="modal-body">
+                <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
+                <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered" id="tablaModal">
+            <thead class="text-center">
+              <tr style="background-color: #1F75FE; color: #ffffff">
+                <th scope="col">Nombre </th>
+                <th scope="col">Detalle</th>
+                <th scope="col">Arrchivo</th>
+              </tr>
+            </thead>
+            <tbody>
+             <tr class="text-center">
+               
+            
 
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+                    
+                </form>
+            </div>
+        </div>
+  </div>
+</div>
 
 <script>
     $("#tabla").DataTable();
 
 </script>
+<script type="text/javascript">
+ 
+    $('body').on('click', '.DetallesArchivos',function(){
+      var id = $(this).data('id');
+     
+      var i = 0;
+      $.get("../DetallesArchivos/" + id, function(data){
+        $('#tablaModal>tbody>tr').remove();
+       while ( i!=1+i){
+         if(data[i].nombre == null){
+           break;
+         }else{
+      
+       $('#modelHeading').html("DetallesArchivos");
+        $('#ajaxModel').modal('show');
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td>"
+        var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' disabled></td>"
+        var ruta = "<td><input id='ruta"+i+"' name='ruta"+i+"' disabled></td>"
+        
+        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+        $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(data[i].ruta);
+  
+        i=i+1;
+         }
+        }
+      })
+      
+    });
 
+    $("#ajaxModel").on('hidden.bs.modal', function () {
+        
+              $('#tablaModal>tbody>tr').remove();
+            
+    });
+    
+</script>
 @endsection

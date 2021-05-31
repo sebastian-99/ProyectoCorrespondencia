@@ -31,3 +31,4 @@ Route::get('actividades_modificacion/{id}', [ActividadesController::class,'activ
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
+Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');

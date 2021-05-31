@@ -7,6 +7,7 @@
 <div class="card">
     <div class="card-header">
       <h3>Reporte de actividades / oficios</h3>
+     
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -39,7 +40,7 @@
                 <td>2 de 3</td>
                 <td>
                    
-                <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idac}}" data-original-title="Detalles"
+                <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idac}}"  data-original-title="Detalles" 
                      class="edit btn btn-success btn-sm Detalles">Detalles</a>
                     <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
                     <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
@@ -70,6 +71,7 @@
                 <th scope="col">Status Atenci&aacute;n</th>
                 <th scope="col">Acuse recibido</th>
                 <th scope="col">Operaciones</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -101,10 +103,11 @@
  
     $('body').on('click', '.Detalles',function(){
       var id = $(this).data('id');
-      console.log(id)
+
       var i = 0;
       $.get("Detalles/" + id, function(data){
        //alert( JSON.stringify(data,['app']));
+       $('#tablaModal>tbody>tr').remove();
        while ( i!=1+i){
          if(data[i].nombre_us == null){
            break;
@@ -118,7 +121,7 @@
         var avance = "<td><input id='avance"+i+"' name='avance"+i+"' disabled></td>"
         var status = "<td><input id='status"+i+"' name='status"+i+"' disabled></td>"
         var acuse = "<td><input id='acuse"+i+"' name='acuse"+i+"' disabled></td>"
-        var detalles = "<td><a form method ='post' id='masDet"+i+"' name='masDet"+i+"' target='popup' class='btn btn-success btn-sm' >Detalles<span class='icon text-white-50'></td>"        
+        var detalles = "<td><a form method ='post' id='masDet"+i+"' name='masDet"+i+"' <a  target='_blank' onclick=window.open(this.href,this.target,width=600,height=800); class='btn btn-success btn-sm' >Detalles<span class='icon text-white-50'></td>"        
         $('#tablaModal>tbody').append("<tr>"+nombre+area+avance+status+acuse+detalles+"</tr>");
         $('#nombre'+i).val(data[i].nombre_us);
         $('#idar'+i).val(data[i].nombre_ar);
@@ -126,10 +129,12 @@
         $('#status'+i).val("incompleto");
         $('#acuse'+i).val(data[i].acuse);
         $('#masDet'+i).attr('href',"detallesSeguimiento/"+data[i].idreac);
+        $('#masDet'+i).attr('target',"_blank");
         i=i+1;
           }
        }
       })
+      
     });
     $("#ajaxModel").on('hidden.bs.modal', function () {
         

@@ -48,6 +48,13 @@ class ActividadesController extends Controller
         ->with('consult', $consult);
 	}
 
+    public function DetallesArchivos($idarc){
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        FROM archivos_seguimientos AS res
+        WHERE res.idarseg = $idarc");
+        return response()->json($query);
+    }
+
 
 
     public function actividades(){
