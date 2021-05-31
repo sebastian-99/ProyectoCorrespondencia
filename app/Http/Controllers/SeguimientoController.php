@@ -14,7 +14,6 @@ class SeguimientoController extends Controller
     public function Seguimiento($idac)
     { 
         $idac = decrypt($idac);
-        //dd($idac);
         $consulta = DB::table('actividades')
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
@@ -36,6 +35,12 @@ class SeguimientoController extends Controller
             'users.apm',
             'actividades.status',
             'actividades.importancia',
+            'actividades.archivo1',
+            'actividades.archivo2',
+            'actividades.archivo3',
+            'actividades.link1',
+            'actividades.link2',
+            'actividades.link3',
         )
         ->where('idac', $idac)
         ->get();    
@@ -46,8 +51,6 @@ class SeguimientoController extends Controller
         ->orderBy('nombre','Asc')
         ->get();
         $now=Carbon::now();
-
-       // dd($consulta[0]);
 
             return view('SeguimientoActividades.Seguimiento')
             ->with('consulta', $consulta[0])

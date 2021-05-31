@@ -19,8 +19,8 @@
         <div class="row">
             <div class="col-sm-12"><br>
                 <table class="table table-responsive table-striped">
-                    <thead class="thead-light">
-                        <tr>
+                    <thead class="">
+                        <tr class="bg-primary">
                             <th scope="col">Turno</th>
                             <th scope="col">Fecha Creación</th>
                             <th scope="col">Asunto</th>
@@ -45,8 +45,8 @@
                 </table>
 
                 <table class="table table-responsive table-striped">
-                    <thead class="thead-light">
-                        <tr>
+                    <thead class="">
+                        <tr class="bg-primary">
                             <th scope="col">Avance</th>
                             <th scope="col">Atendido por</th>
                             <th scope="col">Nombre atendió</th>
@@ -166,7 +166,7 @@
         <div class="card">
             <div class="card-body">
                 <center>
-                    <h4>Seguimiento de la actividad</h4>
+                    <h4>Seguimientos de la actividad</h4>
                 </center><br>
                 @if (Session::has('message'))
                 <p class="alert alert-info">
@@ -184,8 +184,8 @@
                 </p>
                 @endif
                 <table class="table table-responsive">
-                    <thead class="thead-light">
-                        <tr>
+                    <thead class="">
+                        <tr class="bg-primary">
                             <th scope="col">No. Segui.</th>
                             <th scope="col">Fecha avance</th>
                             <th scope="col">Detalle</th>
@@ -211,7 +211,54 @@
 
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-body">
+                <center>
+                    <h4>Archivos de la actividad</h4>
+                </center><br>
+                <table class="table table-responsive table-striped">
+                    <thead class="">
+                        <tr class="bg-primary">
+                            <th scope="col">Nombre archivo</th>
+                            <th scope="col">Detalle</th>
+                            <th scope="col">Archivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($consulta->archivo1 == 0)
+                        <tr>
+                            <td colspan="3">Esta actividad no tiene archivos.</td>                          
+                        </tr>
+                        @endif
+                        <tr>
+                            <td>Evidencia 1</td>
+                            <td>{{$consulta->link1}}</td>
+                            <td><a href="{{$consulta->archivo1}}" download="evidencia"></a>Evidencia 1</td>
+                        </tr>
+                        @if ($consulta->archivo2)
+                        <tr>
+                            <td>Evidencia 2</td>
+                            <td>{{$consulta->link2}}</td>
+                            <td>{{$consulta->archivo2}}</td>
+                        </tr>
+                        @endif
+
+                        @if ($consulta->archivo2)
+                        <tr>
+                            <td>Evidencia 3</td>
+                            <td>{{$consulta->link3}}</td>
+                            <td>{{$consulta->archivo3}}</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </div>
-</div>
+
+    </div>
+    
 
 @stop
