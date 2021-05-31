@@ -230,14 +230,14 @@
                         <tr>
                             <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link1}}</td>
-                            <td><a download="" href="{{asset('public/archivos/'.$consulta->archivo1)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download href="{{asset('archivos/').'/'.$consulta->archivo1}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                         @if ($consulta->archivo2 != "Sin archivo")
                         <tr>
                             <td>{{$consulta->archivo2}}</td>
                             <td>{{$consulta->link2}}</td>
-                            <td><a download="" href="{{asset('public/archivos/'.$consulta->archivo2)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download="" href="{{asset('archivos/').'/'.$consulta->archivo2}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
 
@@ -245,7 +245,7 @@
                         <tr>
                             <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link3}}</td>
-                            <td><a download="{{$consulta->archivo3}}" href="{{asset('public/archivos/'.$consulta->archivo3)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download="{{$consulta->archivo3}}" href="{{asset('archivos/').'/'.$consulta->archivo3}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                     </tbody>

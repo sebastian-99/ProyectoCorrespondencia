@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use DB;
+use App\Models\actividades;
 use App\Models\seguimientosActividades;
 use App\Models\archivosSeguimientos;
 use App\Models\responsablesActividades;
@@ -113,6 +114,11 @@ class SeguimientoController extends Controller
 
         Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
+    }
+    public function Descarga($idac){
+        $consulta = actividades::where('idac', $idac)->firstOrFail();
+        $pathToFile = ("public/archivos/".$consulta->archivo1);
+        return response()->download($pathToFile);
     }
 }
     
