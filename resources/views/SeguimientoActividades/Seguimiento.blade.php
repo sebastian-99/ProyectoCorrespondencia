@@ -80,12 +80,12 @@
             <div class="card-body">
                 <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-sm-4">
+                    <!--<div class="col-sm-4">
                         <div class="mb-3">
                             <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
                             <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-sm-10">
                         <div class="mb-3">
                             <label for="" class="form-label">Actividad creada por</label>
@@ -178,11 +178,6 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                @if (Session::has('message3'))
-                <p class="alert alert-warning">
-                    {{Session::get('message3')}}
-                </p>
-                @endif
                 <table class="table table-responsive">
                     <thead class="">
                         <tr class="bg-primary">
@@ -226,29 +221,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($consulta->archivo1 == 0)
+                        @if($consulta->archivo1 == "Sin archivo" && $consulta->archivo2 == "Sin archivo" && $consulta->archivo3 == "Sin archivo" )
                         <tr>
-                            <td colspan="3">Esta actividad no tiene archivos.</td>                          
+                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>                          
                         </tr>
                         @endif
+                        @if ($consulta->archivo1 != "Sin archivo")
                         <tr>
-                            <td>Evidencia 1</td>
+                            <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link1}}</td>
-                            <td><a href="{{$consulta->archivo1}}" download="evidencia"></a>Evidencia 1</td>
+                            <td><a download="" href="{{asset('public/archivos/'.$consulta->archivo1)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
-                        @if ($consulta->archivo2)
+                        @endif
+                        @if ($consulta->archivo2 != "Sin archivo")
                         <tr>
-                            <td>Evidencia 2</td>
-                            <td>{{$consulta->link2}}</td>
                             <td>{{$consulta->archivo2}}</td>
+                            <td>{{$consulta->link2}}</td>
+                            <td><a download="" href="{{asset('public/archivos/'.$consulta->archivo2)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
 
-                        @if ($consulta->archivo2)
+                        @if ($consulta->archivo3 != "Sin archivo")
                         <tr>
-                            <td>Evidencia 3</td>
+                            <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link3}}</td>
-                            <td>{{$consulta->archivo3}}</td>
+                            <td><a download="{{$consulta->archivo3}}" href="{{asset('public/archivos/'.$consulta->archivo3)}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                     </tbody>
