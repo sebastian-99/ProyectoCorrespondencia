@@ -38,10 +38,11 @@ class ActividadesController extends Controller
 
     public function detallesSeguimiento($idac)
 	{
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
+        INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac");
         return view('SeguimientoActividades.detallesSeguimiento')

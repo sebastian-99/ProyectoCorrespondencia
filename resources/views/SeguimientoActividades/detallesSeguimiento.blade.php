@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 @endsection
-<div class="card">
+
 
     <div class="card">
     <div class="card-header">
@@ -12,8 +12,9 @@
     @if ($loop->first)
     <h3>Reporte de actividades de {{$c->nombre}} </h3>
     @endif
-    </div>
     @endforeach
+    </div>
+   
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-striped table-bordered" id="tabla">
@@ -46,6 +47,7 @@
       </div>
     </div>
   </div>
+
   <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -55,6 +57,20 @@
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                 <div class="card-body">
       <div class="table-responsive">
+     
+      @foreach ($consult as $c)
+    @if ($loop->first)
+    <h4>
+  
+    <div >Actividad: {{$c->asunto}} </div>
+   <div> Usuario: {{$c->nombre}} </div> 
+    <div >Fecha: {{$c->fecha}} </div> 
+    </h4>
+    </div>
+   
+    @endif
+    
+    @endforeach
         <table class="table table-striped table-bordered" id="tablaModal">
             <thead class="text-center">
               <tr style="background-color: #1F75FE; color: #ffffff">
@@ -78,7 +94,7 @@
             </div>
         </div>
   </div>
-</div>
+
 
 <script>
     $("#tabla").DataTable();
@@ -97,7 +113,7 @@
            break;
          }else{
       
-       $('#modelHeading').html("DetallesArchivos");
+       $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td>"
         var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' disabled></td>"
