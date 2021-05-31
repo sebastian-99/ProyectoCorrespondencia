@@ -30,3 +30,4 @@ Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
+Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');

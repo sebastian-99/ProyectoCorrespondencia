@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\actividades;
 use App\Models\users;
+use App\Models\seguimientos_actividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller
@@ -24,13 +25,30 @@ class ActividadesController extends Controller
     }
 
     public function Detalles($idac){
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac
         FROM responsables_actividades AS res
         INNER JOIN users AS us ON us.idu = res.idu_users
         INNER JOIN areas AS ar ON ar.idar = us.idar_areas
         WHERE idac_actividades = $idac");
         return response()->json($query);
     }
+
+
+
+
+    public function detallesSeguimiento($idac)
+	{
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta
+        FROM seguimientos_actividades AS seg
+        INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
+        INNER JOIN users AS us ON us.idu = re.idu_users
+        INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
+            WHERE idreac_responsables_actividades = $idac");
+        return view('SeguimientoActividades.detallesSeguimiento')
+        ->with('consult', $consult);
+	}
+
+
 
     public function actividades(){
 

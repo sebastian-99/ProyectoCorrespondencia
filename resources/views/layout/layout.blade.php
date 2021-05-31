@@ -6,17 +6,6 @@
   <title>Correspondencia UTVT</title>
 
   
- <!---------------------------Reportes-------------------------------------
- <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <link rel="stylesheet" href="https://cdnj.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
-
-    <link href="//cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
-
-
-
-  <!---------------------------Reportes-------------------------------------->
 
 
   <!-- Google Font: Source Sans Pro -->
@@ -162,16 +151,7 @@
 </div>
 <!-- ./wrapper -->
 
-<<<<<<< HEAD
 
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -
-=======
-<!-- jQuery 
-{{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
- --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
->>>>>>> dev
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4
@@ -184,74 +164,7 @@
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
-<<<<<<< HEAD
- <!---------------------------Reportes------------------------------------
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-
-<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
-<script src="//cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-   
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-   
-
-
-
-<script type="text/javascript">
-  $(function () {
-            $.ajaxSetup({
-              headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}
-            });
-
-            var table = $('.yajra-datatable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    rowReorder: {
-            selector: 'td:nth-child(2)'
-        },
-                    responsive: true,
-                    ajax: "",
-                                    
-        columns: [
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: false, 
-                searchable: false
-            },
-            
-        ],
-
-        "oLanguage": {
-          "sSearch": "Buscar _INPUT_",
-          "lengthMenu": "Mostrar _MENU_ registros",
-                   },
-        "language": {
-          "lengthMenu": "Mostrar _MENU_ registros",
-           "emptyTable":     "No existen registros para mostrar",
-           "info":           "Mostrando de _START_ a _END_ de _TOTAL_ registros",
-          "infoEmpty":      "Sin registros",
-          "processing":     "Cargando...",
-         "zeroRecords":    "Ninguna coincidencia encontrada",
-         "paginate": {
-        "first":      "Primero",
-        "last":       "Ultimo",
-        "next":       "Siguiente",
-        "previous":   "Previa"
-                  },
-                },
-    });
-   
-  });
-  //---------------------------Detalles--------------------------->>
-
- <!-------------------------Reportes-------------------------------------->
-=======
 @yield('scripts')
 
 >>>>>>> dev

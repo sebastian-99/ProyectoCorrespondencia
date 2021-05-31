@@ -76,9 +76,8 @@
            
               <tr class="text-center">
                
-                
+            
 
-              <!--  <td id="modelextra" name="modelextra"></td>-->
               </tr>
 
             </tbody>
@@ -94,30 +93,42 @@
 
 <script>
     $("#tabla").DataTable();
+   
 
 </script>
 
 <script type="text/javascript">
-
+ 
     $('body').on('click', '.Detalles',function(){
       var id = $(this).data('id');
       console.log(id)
-      
+      var i = 0;
       $.get("Detalles/" + id, function(data){
        //alert( JSON.stringify(data,['app']));
-       var button = '<input type="submit" value="Detalles" id="detalles" name="Detalles"/>';
-
-       for (var i=0;i<=1;i=i+1){
+       while ( i!=1+i){
+         if(data[i].nombre_us == null){
+           break;
+         }else{
         $('#modelHeading').html("Detalles");
         $('#ajaxModel').modal('show');
         //console.log(data);
-        $('#tablaModal>tbody').append("<tr><td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td><td><input id='idar"+i+"' name='idar"+i+"' disabled></td><td><input id='avance"+i+"' name='avance"+i+"' disabled></td><td><input id='status"+i+"' name='status"+i+"' disabled></td><td><input id='acuse"+i+"' name='acuse"+i+"' disabled></td><td><input type='submit' value='Detalles' id='detalles' name='Detalles'/></td></tr>");
+
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td>"
+        var area = "<td><input id='idar"+i+"' name='idar"+i+"' disabled></td>"
+        var avance = "<td><input id='avance"+i+"' name='avance"+i+"' disabled></td>"
+        var status = "<td><input id='status"+i+"' name='status"+i+"' disabled></td>"
+        var acuse = "<td><input id='acuse"+i+"' name='acuse"+i+"' disabled></td>"
+        var detalles = "<td><a form method ='post' id='masDet"+i+"' name='masDet"+i+"' target='popup' class='btn btn-success btn-sm' >Detalles<span class='icon text-white-50'></td>"        
+        $('#tablaModal>tbody').append("<tr>"+nombre+area+avance+status+acuse+detalles+"</tr>");
         $('#nombre'+i).val(data[i].nombre_us);
         $('#idar'+i).val(data[i].nombre_ar);
         $('#avance'+i).val("50%");
         $('#status'+i).val("incompleto");
         $('#acuse'+i).val(data[i].acuse);
-      }
+        $('#masDet'+i).attr('href',"detallesSeguimiento/"+data[i].idreac);
+        i=i+1;
+          }
+       }
       })
     });
     $("#ajaxModel").on('hidden.bs.modal', function () {
@@ -125,5 +136,7 @@
               $('#tablaModal>tbody>tr').remove();
             
     });
+    
 </script>
+
 @endsection
