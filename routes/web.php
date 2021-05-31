@@ -41,13 +41,10 @@ Route::get('actividades', [ActividadesController::class,'actividades'])->name('c
 Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
-<<<<<<< HEAD
-=======
 
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
 Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');
 
->>>>>>> 62db6720ac0b9e8e4212869db770afdbad493359
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
