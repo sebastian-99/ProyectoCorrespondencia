@@ -24,11 +24,16 @@ use App\Http\Controllers\ActividadesController;
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
 
 Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
+Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
 Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
 Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
+<<<<<<< HEAD
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
 Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');
+=======
+Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
+>>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280

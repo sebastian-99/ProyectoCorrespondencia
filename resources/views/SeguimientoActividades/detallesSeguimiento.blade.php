@@ -61,14 +61,11 @@
       @foreach ($consult as $c)
     @if ($loop->first)
     <h4>
-  
     <div >Actividad: {{$c->asunto}} </div>
    <div> Usuario: {{$c->nombre}} </div> 
-    <div >Fecha: {{$c->fecha}} </div> 
+   @endif
     </h4>
-    </div>
    
-    @endif
     
     @endforeach
         <table class="table table-striped table-bordered" id="tablaModal">

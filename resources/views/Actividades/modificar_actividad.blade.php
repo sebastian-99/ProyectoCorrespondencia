@@ -70,8 +70,9 @@
             <div class="card-body">
             <div class="row">
                 <div class="col-xs-5 col-sm-5 col-md-5">
-                <form action="{{route('insert_actividad')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('update_actividades')}}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" value="{{$consul[0]->idac}}" name="idac">
                     <div class="row">
                         <!--Inicio seccion izquierda-->
                         <!--Primera sección-->
@@ -210,6 +211,7 @@
                                 <input type="file" class="form-control" id="arvhivos" name="archivos">
                                 @if($consul[0]->archivo1 != null)
                                     <label for="">{{$consul[0]->archivo1}}</label>
+                                    <input type="hidden" name="archivosoculto" value="{{$consul[0]->archivo1}}">
                                 @endif
                                              
                             </div>
@@ -222,7 +224,7 @@
                         <div class="col-xs-11 col-sm-11 col-md-11">
                             <div class="form-group">                            
                                 <strong>Link de soportes:</strong>
-                                <input type="text" class="form-control" id="link" name="link" value="{{$consul[0]->link1}}">
+                                <input type="text" class="form-control" id="link" name="link"  value="{{($consul[0]->link1 == 'Sin Link') ? '' : $consul[0]->link1}}">
                             </div>
                         </div> 
                     </div>
@@ -233,6 +235,8 @@
                                 <input type="file" class="form-control" id="archivos" name="archivos2">
                                 @if($consul[0]->archivo2 != null)
                                     <label for="">{{$consul[0]->archivo2}}</label>
+                                    <input type="hidden" name="archivosoculto2" value="{{$consul[0]->archivo2}}">
+
                                 @endif
                             </div>
                         </div>
@@ -240,7 +244,7 @@
                         <div class="col-xs-11 col-sm-11 col-md-11">
                             <div class="form-group">                            
                                 <strong>Link de soportes:</strong>
-                                <input type="text" class="form-control" id="link" name="link2" value="{{$consul[0]->link2}}">
+                                <input type="text" class="form-control" id="link" name="link2" value="{{($consul[0]->link2 == 'Sin Link') ? '' : $consul[0]->link2}}">
                             </div>
                         </div>
                         <div class="col-xs-11 col-sm-11 col-md-11">
@@ -249,6 +253,7 @@
                                 <input type="file" class="form-control" id="archivos" name="archivos3">
                                 @if($consul[0]->archivo3 != null)
                                     <label for="">{{$consul[0]->archivo3}}</label>
+                                    <input type="hidden" name="archivosoculto3" >
                                 @endif                   
                             </div>
                         </div>
@@ -256,10 +261,10 @@
                         <div class="col-xs-11 col-sm-11 col-md-11">
                             <div class="form-group">                            
                                 <strong>Link de soportes:</strong>
-                                <input type="text" class="form-control" id="link" name="link3" value="{{$consul[0]->link3}}">
+                                <input type="text" class="form-control" id="link" name="link3" value="{{($consul[0]->link3 == 'Sin Link') ? '' : $consul[0]->link3}}">
                             </div>
                         </div>
-                        
+                    
                     </div>
                     <!--Fin Novena sección-->
                 </div>

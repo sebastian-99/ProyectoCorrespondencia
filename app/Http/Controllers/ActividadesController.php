@@ -13,12 +13,17 @@ class ActividadesController extends Controller
 {
     public function reporte_actividades(){
 
+<<<<<<< HEAD
         $consult = DB::SELECT("SELECT a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
         CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.idac
+=======
+        $consult = DB::SELECT("SELECT a.idac ,a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.activo
+>>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280
         FROM actividades AS a
         INNER JOIN users AS us ON us.idu = a.idu_users
         INNER JOIN areas AS ar ON ar.idar = a.idar_areas");
-
+    
 
         return view('Actividades.reporte')
         ->with('consult', $consult);
@@ -184,20 +189,22 @@ class ActividadesController extends Controller
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
+            DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
         }
 
 
-        
+        return redirect()->route('reporte_actividades');
+
     }
     
     public function actividades_modificacion($id){
         
-    
+        $id = decrypt($id);
         $consul = DB::table('actividades')->where('idac', $id)
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
         ->select(
+            'actividades.idac',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.fecha_creacion',
@@ -229,16 +236,17 @@ class ActividadesController extends Controller
 
         $tipous = DB::SELECT("SELECT a.nombre, a.`idar`
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
-        INNER JOIN areas AS a ON a.idar = u.idtu_tipos_usuarios
-        WHERE ac.idac = $id");
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
+        INNER JOIN areas AS a ON a.idar = u.idar_areas
+        WHERE ac.idac = $id
+        GROUP BY a.nombre");
 
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idtu_tipos_usuarios
         WHERE ac.idac = $id");
 
@@ -256,6 +264,143 @@ class ActividadesController extends Controller
         ->with('users', $users);
     }
 
-    
+    public function update_actividades(Request $r){
+
+        $id = $r->idac;
+        $idusuario = $r->idusuario;
+        $idar_areas = $r->idar_areas;
+        $fechacreacion = $r->fechacreacion;
+        $turno = $r->turno;
+        $comunicado = $r->comunicado;
+        $Asunto = $r->Asunto;
+        $tipoactividad = $r->tipoactividad;
+        $fechainicio = $r->fechainicio;
+        $fechatermino = $r->fechatermino;
+        $horadeinicio = $r->horadeinicio;
+        $horatermino = $r->horatermino;
+        $detalleactividad = $r->detalleactividad;
+        
+        
+        if(\Storage::disk('local')->exists($r->archivosoculto)){
+            
+            $archivos = $r->archivosoculto;
+
+        }elseif($r->file('archivos') != null){
+
+            $file = $r->file('archivos');
+            $archivos = $file->getClientOriginalName();
+            $archivos = date('Ymd_His_') . $archivos;
+            \Storage::disk('local')->put($archivos, \File::get($file));
+
+        }else{
+            
+            $archivos = 'Sin archivo';
+        }
+
+        if(\Storage::disk('local')->exists($r->archivosoculto2)){
+            
+            $archivos2 = $r->archivosoculto2;
+
+        }else if($r->file('archivos2') != null){
+           
+            $file2 = $r->file('archivos2');
+            $archivos2 = $file2->getClientOriginalName();
+            $archivos2 = date('Ymd_His_') . $archivos2;
+            \Storage::disk('local')->put($archivos, \File::get($file2));
+
+        }else{
+            
+            $archivos2 = 'Sin archivo';
+        }
+
+        if(\Storage::disk('local')->exists($r->archivosoculto3)){
+            
+            $archivos3 = $r->archivosoculto3;
+
+        }else if($r->file('archivos3') != null){
+
+            $file3 = $r->file('archivos3');
+            $archivos3 = $file3->getClientOriginalName();
+            $archivos3 = date('Ymd_His_') . $archivos3;
+            \Storage::disk('local')->put($archivos3, \File::get($file3));
+
+        }else{
+            
+            $archivos3 = 'Sin archivo';
+        }
+
+
+
+
+
+
+        if($r->link != null){
+
+            $link = $r->link;
+
+        }else{
+            $link = "Sin Link";
+        }
+
+        if($r->link2 != null){
+
+            $link2 = $r->link2;
+
+        }else{
+            $link2 = "Sin Link";
+        }
+
+        if($r->link3 != null){
+
+            $link3 = $r->link3;
+
+        }else{
+            $link3 = "Sin Link";
+        }
+        
+
+        $tipousuario = $r->tipousuario;
+        $tipousuarioarea = $r->tipousuarioarea;
+
+        $estado = $r->estado;
+        $importancia = $r->importancia;
+
+
+        DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion', 
+        turno = '$turno',  comunicado = '$comunicado', fecha_inicio = '$fechainicio',
+        hora_inicio = '$horadeinicio', fecha_fin = '$fechatermino', hora_fin = '$horatermino', idtac_tipos_actividades = '$tipoactividad', 
+        status = '$estado',
+        importancia = '$importancia',  archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3', 
+        link1 = '$link', link2 = '$link2', link3 = '$link3'
+        WHERE idac = $id");
+
+        return redirect()->route('reporte_actividades');
+
+        /* $consul = DB::table('actividades')->max('idac');
+
+        for($i=0; $i < count($tipousuarioarea); $i++){
+
+            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
+        } */
+        
+    }
+
+    public function activacion($id, $activo){
+
+        $id = decrypt($id);
+        $activo = decrypt($activo);
+
+        if($activo == 1){
+
+            DB::UPDATE("UPDATE actividades SET activo = '0' WHERE idac = $id");
+
+        }else{
+            DB::UPDATE("UPDATE actividades SET activo = '1' WHERE idac = $id");
+        }
+
+        return redirect()->route('reporte_actividades');
+    }
+
+
 
 }
