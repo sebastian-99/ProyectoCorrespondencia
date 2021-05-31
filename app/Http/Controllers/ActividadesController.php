@@ -13,13 +13,8 @@ class ActividadesController extends Controller
 {
     public function reporte_actividades(){
 
-<<<<<<< HEAD
-        $consult = DB::SELECT("SELECT a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.idac
-=======
         $consult = DB::SELECT("SELECT a.idac ,a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
         CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.activo
->>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280
         FROM actividades AS a
         INNER JOIN users AS us ON us.idu = a.idu_users
         INNER JOIN areas AS ar ON ar.idar = a.idar_areas");

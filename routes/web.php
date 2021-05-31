@@ -29,11 +29,10 @@ Route::get('actividades', [ActividadesController::class,'actividades'])->name('c
 Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
-<<<<<<< HEAD
+
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
 Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');
-=======
+
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
->>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280

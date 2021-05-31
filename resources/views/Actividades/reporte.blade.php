@@ -6,10 +6,6 @@
 @endsection
 <div class="card">
     <div class="card-header">
-<<<<<<< HEAD
-      <h3>Reporte de actividades / oficios</h3>
-     
-=======
       <div class="row">
         <div class="col-sm-11">
           <h3>Reporte de actividades / oficios</h3>
@@ -19,7 +15,6 @@
         </div>
       </div>
       
->>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -51,21 +46,11 @@
                 <td>100%</td>
                 <td>2 de 3</td>
                 <td>
-<<<<<<< HEAD
                    
                 <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idac}}"  data-original-title="Detalles" 
                      class="edit btn btn-success btn-sm Detalles">Detalles</a>
                     <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
                     <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
-=======
-                    <a href=""><button type="button" class="btn btn-success">Ver detalle</button></a>    
-                    <a href="{{route('edit_modificacion', ['id' => encrypt($c->idac)])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
-                    @if($c->activo == 1)   
-                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-danger">Desactivar</button></a>
-                    @else
-                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-primary">Activar</button></a>
-                    @endif 
->>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280
                 </td>
               </tr>
             @endforeach
@@ -116,7 +101,6 @@
 </div>
 
 <script>
-<<<<<<< HEAD
     $("#tabla").DataTable();
    
 
@@ -165,13 +149,6 @@
             
     });
     
-=======
-    $("#tabla").DataTable({ 
-        "language": {
-            "url": "https://raw.githubusercontent.com/DataTables/Plugins/master/i18n/es_es.json"
-        }
-    });
->>>>>>> 332fc7370bcd4c865e9041dfaf40090947a95280
 </script>
 
 @endsection
