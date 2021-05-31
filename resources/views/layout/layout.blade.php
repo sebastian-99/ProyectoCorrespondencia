@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correspondencia UTVT</title>
 
+  
+
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -148,11 +151,7 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-{{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
- --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4
@@ -160,12 +159,14 @@
 <!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
+
 @yield('scripts')
 
+>>>>>>> dev
 </body>
 </html>
