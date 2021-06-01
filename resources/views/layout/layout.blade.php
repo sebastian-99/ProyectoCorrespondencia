@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correspondencia UTVT</title>
 
+  
+
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -89,13 +92,19 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>Cat&aacute;logos<i class="fas fa-angle-left right"></i></p>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ asset ('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Gesti&oacute;n areas</p>
+                  <p>Asignar actividad</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ asset ('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
                 </a>
               </li>
             </ul>
@@ -103,15 +112,16 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
-              <p>Reportes<i class="fas fa-angle-left right"></i></p>
+              <p>Seguimiento de actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ asset ('actividades_asignadas')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte oficios</p>
+                  <p>Actividades asignadas</p>
                 </a>
               </li>
+              
             </ul>
           </li>
         </ul>
@@ -148,11 +158,7 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-{{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
- --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4
@@ -160,12 +166,14 @@
 <!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
+
 @yield('scripts')
 
+>>>>>>> dev
 </body>
 </html>

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\actividades;
+use App\Models\users;
+use App\Models\seguimientos_actividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller
@@ -21,6 +24,37 @@ class ActividadesController extends Controller
         ->with('consult', $consult);
     }
 
+    public function Detalles($idac){
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac
+        FROM responsables_actividades AS res
+        INNER JOIN users AS us ON us.idu = res.idu_users
+        INNER JOIN areas AS ar ON ar.idar = us.idar_areas
+        WHERE idac_actividades = $idac");
+        return response()->json($query);
+    }
+
+
+
+
+    public function detallesSeguimiento($idac)
+	{
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
+        FROM seguimientos_actividades AS seg
+        INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
+        INNER JOIN users AS us ON us.idu = re.idu_users
+        INNER JOIN actividades AS act ON re.idac_actividades = act.idac
+        INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
+            WHERE idreac_responsables_actividades = $idac");
+        return view('SeguimientoActividades.detallesSeguimiento')
+        ->with('consult', $consult);
+	}
+
+    public function DetallesArchivos($idarc){
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        FROM archivos_seguimientos AS res
+        WHERE res.idarseg = $idarc");
+        return response()->json($query);
+    }
 
 
 
@@ -150,7 +184,7 @@ class ActividadesController extends Controller
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
+            DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
         }
 
 
@@ -197,16 +231,17 @@ class ActividadesController extends Controller
 
         $tipous = DB::SELECT("SELECT a.nombre, a.`idar`
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idar_areas
-        WHERE ac.idac = $id");
+        WHERE ac.idac = $id
+        GROUP BY a.nombre");
 
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idtu_tipos_usuarios
         WHERE ac.idac = $id");
 

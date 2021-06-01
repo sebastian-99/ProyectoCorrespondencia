@@ -18,7 +18,7 @@ class seguimientosActividades extends Model
      * @var array
      */
     protected $fillable = [
-        'idreac',
+        'idreac_seguimientos_actividades',
         'fecha',
         'detalle',
         'porcentaje',
