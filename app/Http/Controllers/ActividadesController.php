@@ -13,15 +13,46 @@ class ActividadesController extends Controller
 {
     public function reporte_actividades(){
 
-        $consult = DB::SELECT("SELECT a.idac ,a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.activo
-        FROM actividades AS a
-        INNER JOIN users AS us ON us.idu = a.idu_users
-        INNER JOIN areas AS ar ON ar.idar = a.idar_areas");
-    
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, 
+        porcentaje(ac.idac) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        GROUP BY ac.idac");
 
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+        
+        foreach($consult as $c){
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array('idac' => $c->idac,
+                                    'turno' => $c->turno,
+                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'asunto' => $c->asunto,
+                                    'creador' => $c->creador,
+                                    'periodo' => $c->periodo,
+                                    'importancia' => $c->importancia,
+                                    'nombre' => $c->nombre,
+                                    'activo' => $c->activo,
+                                    'acuse' => $c->acuse,
+                                    'idu_users' => $c->idu_users,
+                                    'A' => (gettype($data) == "array") ? $data[0] : 0,
+                                    'B' => (gettype($data) == "array") ? $data[1] : 0,
+                                    'C' => (gettype($data) == "array") ? number_format($data[2], 2, '.', ' ') : '0.00',
+                                    ));
+        }
         return view('Actividades.reporte')
-        ->with('consult', $consult);
+        ->with('consult', $consult)
+        ->with('array', $array);
     }
 
     public function Detalles($idac){

@@ -49,23 +49,28 @@
               </tr>
             </thead>
             <tbody>
-            @foreach ($consult as $c)
+            @foreach ($array as $c)
+              
               <tr class="text-center">
-                <td>{{$c->turno}}</td>
-                <td>{{$c->fecha_creacion}}</td>
-                <td>{{$c->asunto}}</td>
-                <td>{{$c->creador}}</td>
-                <td>{{$c->periodo}}</td>
-                <td>{{$c->importancia}}</td>
-                <td>{{$c->nombre}}</td>
-                <td>100%</td>
-                <td>2 de 3</td>
+                <td>{{$c['turno']}}</td>
+                <td>{{$c['fecha_creacion']}}</td>
+                <td>{{$c['asunto']}}</td>
+                <td>{{$c['creador']}}</td>
+                <td>{{$c['periodo']}}</td>
+                <td>{{$c['importancia']}}</td>
+                <td>{{$c['nombre']}}</td>
+                <td>{{$c['C']. '%'}}</td>
+                <td>{{$c['A'] . ' de ' . $c['B']}}</td>
                 <td>
                    
-                <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idac}}"  data-original-title="Detalles" 
+                <a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c['idac']}}"  data-original-title="Detalles" 
                      class="edit btn btn-success btn-sm Detalles">Detalles</a>
-                    <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
-                    <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
+                    <a href="{{route('edit_modificacion', ['id' => encrypt($c['idac'])])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
+                    @if($c['idac'] == 1)
+                    <a href="{{route('activacion', ['id' => encrypt($c['idac']), 'activo' => encrypt($c['activo'])])}}"><button type="button" class="btn btn-danger">Desactivar</button></a>
+                    @else
+                    <a href="{{route('activacion', ['id' => encrypt($c['idac']), 'activo' => encrypt($c['activo'])])}}"><button type="button" class="btn btn-primary">Activar</button></a>
+                    @endif   
                 </td>
               </tr>
             @endforeach
@@ -116,7 +121,11 @@
 </div>
 
 <script>
-    $("#tabla").DataTable();
+    $("#tabla").DataTable( {
+        "language": {
+            "url": "https://raw.githubusercontent.com/DataTables/Plugins/master/i18n/es_es.json"
+        }
+    });
    
 
 </script>
