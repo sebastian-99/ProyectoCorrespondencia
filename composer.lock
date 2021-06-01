@@ -5,10 +5,14 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "e31796f0eae7ebe9d20131d984d3a3c1",
 =======
     "content-hash": "9fd8d1560cf3b29f4cf3169171d33d8a",
 >>>>>>> 68b5a99377bb1b5e5e1cb28d93d68e958778d66b
+=======
+    "content-hash": "4953066f6274c5994a7b80f27d78809d",
+>>>>>>> 0e889d39492a15ee8079aba9b778776d7fe4803e
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1531,6 +1535,7 @@
         },
         {
             "name": "laravel/ui",
+<<<<<<< HEAD
             "version": "v3.2.1",
             "source": {
                 "type": "git",
@@ -1547,6 +1552,25 @@
                 "illuminate/console": "^8.0",
                 "illuminate/filesystem": "^8.0",
                 "illuminate/support": "^8.0",
+=======
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "07d725813350c695c779382cbd6dac0ab8665537"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/07d725813350c695c779382cbd6dac0ab8665537",
+                "reference": "07d725813350c695c779382cbd6dac0ab8665537",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^8.42",
+                "illuminate/filesystem": "^8.42",
+                "illuminate/support": "^8.42",
+                "illuminate/validation": "^8.42",
+>>>>>>> 0e889d39492a15ee8079aba9b778776d7fe4803e
                 "php": "^7.3|^8.0"
             },
             "type": "library",
@@ -1582,9 +1606,15 @@
                 "ui"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/laravel/ui/tree/v3.2.1"
             },
             "time": "2021-04-27T18:17:41+00:00"
+=======
+                "source": "https://github.com/laravel/ui/tree/v3.3.0"
+            },
+            "time": "2021-05-25T16:45:33+00:00"
+>>>>>>> 0e889d39492a15ee8079aba9b778776d7fe4803e
         },
         {
             "name": "league/commonmark",

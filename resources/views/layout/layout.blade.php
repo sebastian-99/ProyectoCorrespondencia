@@ -42,10 +42,11 @@
           <!-- logout -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link text-dark"  href="#" role="button">
-                  <label for="">Cerrar sesi&oacute;n</label>
-                  <i class="fas fa-sign-out-alt"></i>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>                 
               </a>
+            </form>
             </li>
           </ul>
         </nav>
@@ -71,8 +72,8 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="https://phantom-marca.unidadeditorial.es/252acdd64f48851f815c16049a789f23/resize/1320/f/jpg/assets/multimedia/imagenes/2021/04/19/16188479459744.jpg" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="#" class="d-block">MT.Carlos millan hidrajosa</a>
+              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <a href="#" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
         </div>
@@ -96,13 +97,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ asset ('actividades')}}" class="nav-link">
+                <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Asignar actividad</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ asset ('reporte_actividades')}}" class="nav-link">
+                <a href="{{ url('reporte_actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades</p>
                 </a>
@@ -112,11 +113,15 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
-              <p>Seguimiento de actividades<i class="fas fa-angle-left right"></i></p>
+              <p>Seguimiento de</p>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p> 
+              <i class="fas fa-angle-left right"></i>
+              
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ asset ('actividades_asignadas')}}" class="nav-link">
+                <a href="{{ url('actividades_asignadas')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Actividades asignadas</p>
                 </a>
@@ -174,6 +179,5 @@
 
 @yield('scripts')
 
->>>>>>> dev
 </body>
 </html>
