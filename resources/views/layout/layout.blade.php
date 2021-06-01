@@ -20,6 +20,10 @@
   <link rel="stylesheet" href="{{asset('src/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('src/css/OverlayScrollbars.min.css')}}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
+
   @yield('header')
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
@@ -111,6 +115,10 @@
             </ul>
           </li>
         </ul>
+        <div class="text-center">
+          <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
+        </div>
+  
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -141,10 +149,10 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="{{asset('src/js/jquery.min.js')}}"></script>
+{{-- <script src="{{asset('src/js/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+ --}}<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4
