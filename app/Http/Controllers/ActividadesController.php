@@ -94,14 +94,31 @@ class ActividadesController extends Controller
         $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
         $consul = DB::table('actividades')->count() + 1;
         $tipous = DB::table('areas')->get()->all();
-        $tipo_actividad = DB::table('tipos_actividades')
+        $tipo_actividad = DB::table('tipos_actividades')             
         ->orderBy('nombre','Asc')
         ->get();
+
+        $user = DB::table('users')
+                    ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
+                    ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
+                    ->select('users.idu',
+                            'users.titulo',
+                            'users.nombre',
+                            'users.app',
+                            'users.apm',
+                            'tipos_usuarios.nombre as tipo_usuario',
+                            'areas.nombre as nombre_areas',
+                            'areas.idar',
+                            )
+                    ->where('users.idu' , '=', Auth()->user()->idu)
+                    ->get();
+        
         return view('Actividades.actividades')
         ->with('hoy', $hoy)
         ->with('consul', $consul)
         ->with('tipo_actividad', $tipo_actividad)
-        ->with('tipous', $tipous);
+        ->with('tipous', $tipous)
+        ->with('user', $user);
     }
 
     public function tipousuarios(Request $request){
