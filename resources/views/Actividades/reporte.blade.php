@@ -63,8 +63,7 @@
                 <td>
                    
                 <a target='_blank' onclick=window.open(this.href,this.target,width=600,height=800); href="{{route('Detalles', encrypt($c->idac))}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
-                    <a href=""><button type="button" class="btn btn-warning">Modificar</button></a>    
-                    <a href=""><button type="button" class="btn btn-danger">Modificar</button></a>    
+                   
                 </td>
               </tr>
             @endforeach

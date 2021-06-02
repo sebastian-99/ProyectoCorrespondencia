@@ -92,13 +92,19 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>Cat&aacute;logos<i class="fas fa-angle-left right"></i></p>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ asset ('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Gesti&oacute;n areas</p>
+                  <p>Asignar actividad</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ asset ('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
                 </a>
               </li>
             </ul>
@@ -106,15 +112,16 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
-              <p>Reportes<i class="fas fa-angle-left right"></i></p>
+              <p>Seguimiento de actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ asset ('actividades_asignadas')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte oficios</p>
+                  <p>Actividades asignadas</p>
                 </a>
               </li>
+              
             </ul>
           </li>
         </ul>
