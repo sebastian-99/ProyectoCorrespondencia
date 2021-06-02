@@ -63,7 +63,7 @@
                 <td>{{$c['A'] . ' de ' . $c['B']}}</td>
                 <td>
                    
-                <a target='_blank' onclick=window.open(this.href,this.target,width=600,height=800); href="{{route('Detalles', encrypt($c->idac))}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
+                <a target='_blank' onclick=window.open(this.href,this.target,width=600,height=800); href="{{route('Detalles', ['id' => encrypt($c['idac'])])}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
                    
                     <a href="{{route('edit_modificacion', ['id' => encrypt($c['idac'])])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
                     @if($c['idac'] == 1)
