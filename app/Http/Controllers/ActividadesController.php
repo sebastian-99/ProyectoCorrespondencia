@@ -25,12 +25,14 @@ class ActividadesController extends Controller
     }
 
     public function Detalles($idac){
+        $idac = decrypt($idac);
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac
         FROM responsables_actividades AS res
         INNER JOIN users AS us ON us.idu = res.idu_users
         INNER JOIN areas AS ar ON ar.idar = us.idar_areas
         WHERE idac_actividades = $idac");
-        return response()->json($query);
+        return view('Actividades.reporte_detalles')
+        ->with('query', $query);
     }
 
 
@@ -38,6 +40,7 @@ class ActividadesController extends Controller
 
     public function detallesSeguimiento($idac)
 	{
+        $idac = decrypt($idac);
         $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
@@ -50,6 +53,7 @@ class ActividadesController extends Controller
 	}
 
     public function DetallesArchivos($idarc){
+        $idarc = decrypt($idarc);
         $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
         FROM archivos_seguimientos AS res
         WHERE res.idarseg = $idarc");
