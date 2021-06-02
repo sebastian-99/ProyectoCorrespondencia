@@ -28,7 +28,9 @@ class SeguimientoController extends Controller
 
     public function Seguimiento($idac)
     { 
+        //Encriptar el id de la actividad que se esta consulutando 
         $idac = decrypt($idac);
+        //Obtener detalles de la actividad
         $consulta = DB::table('actividades')
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
@@ -58,18 +60,21 @@ class SeguimientoController extends Controller
             'actividades.link3',
         )
         ->where('idac', $idac)
-        ->get();    
-
-        
-
+        ->get();       
+        //Obtener el tipo de actividad
         $tipo_actividad = DB::table('tipos_actividades')
         ->orderBy('nombre','Asc')
         ->get();
+        //Obtener la fecha actual 
         $now=Carbon::now();
+
+        //Obtener los seguimientos que se le ha dado a la actividad asignada
+        $seguimientos = seguimientosActividades::all();
 
             return view('SeguimientoActividades.Seguimiento')
             ->with('consulta', $consulta[0])
             ->with('tipo_actividad', $tipo_actividad)
+            ->with('seguimientos', $seguimientos)
             ->with('now', $now);            
     }
 
@@ -87,9 +92,9 @@ class SeguimientoController extends Controller
             
             $archivos = $request->archivosoculto;
 
-        }elseif($request->file('archivos') != null){
+        }elseif($request->file('ruta') != null){
 
-            $file = $request->file('archivos');
+            $file = $request->file('ruta');
             $archivos = $file->getClientOriginalName();
             $archivos = date('Ymd_His_') . $archivos;
             \Storage::disk('local')->put($archivos, \File::get($file));
@@ -107,9 +112,6 @@ class SeguimientoController extends Controller
         $seg_ac->estado = $request->estado;
 
         $seg_ac->save();
-        //return $seg_ac;
-
-       // $ultimo = seguimientosActividades::max('idseac');
 
        $detalle = $request->detalle;
 
@@ -123,7 +125,6 @@ class SeguimientoController extends Controller
 
         $seg_arch->save();
 
-        //dd($seg_ac);
         $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
 
         Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');

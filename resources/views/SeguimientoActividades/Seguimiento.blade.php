@@ -190,17 +190,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($seguimientos as $seg)
                         <tr>
-                            <td colspan="5">Aun no hay un seguimiento de esta actividad por el usuario.</td>
-                            <!-- <th scope="row">1</th>
-                            <td>10-21-2021</td>
-                            <td>Detalle de actividad 1</td>
-                            <td>Pendiente</td>
-                            <td>30%</td>
-                            <td>Sin archivos 
-                                <button class="btn btn-danger">-</button>
-                            </td>-->
+                            <td>{{$seg->idseac}}</td>
+                            <td>{{$seg->fecha}}</td>
+                            <td>{{$seg->detalle}}</td>
+                            <td>{{$seg->estado}}</td>
+                            <td>{{$seg->porcentaje}}</td>
+                            <td><a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -223,21 +222,21 @@
                     <tbody>
                         @if($consulta->archivo1 == "Sin archivo" && $consulta->archivo2 == "Sin archivo" && $consulta->archivo3 == "Sin archivo" )
                         <tr>
-                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>                          
+                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>
                         </tr>
                         @endif
                         @if ($consulta->archivo1 != "Sin archivo")
                         <tr>
                             <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link1}}</td>
-                            <td><a download href="{{asset('archivos/').'/'.$consulta->archivo1}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download href="{{asset('archivos/').'/'.$consulta->archivo1}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                         @if ($consulta->archivo2 != "Sin archivo")
                         <tr>
                             <td>{{$consulta->archivo2}}</td>
                             <td>{{$consulta->link2}}</td>
-                            <td><a download="" href="{{asset('archivos/').'/'.$consulta->archivo2}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download="" href="{{asset('archivos/').'/'.$consulta->archivo2}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
 
@@ -245,7 +244,7 @@
                         <tr>
                             <td>{{$consulta->archivo1}}</td>
                             <td>{{$consulta->link3}}</td>
-                            <td><a download="{{$consulta->archivo3}}" href="{{asset('archivos/').'/'.$consulta->archivo3}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td><a download="{{$consulta->archivo3}}" href="{{asset('archivos/').'/'.$consulta->archivo3}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                     </tbody>
@@ -255,7 +254,7 @@
         </div>
     </div>
 
-    </div>
-    
+</div>
+
 
 @stop
