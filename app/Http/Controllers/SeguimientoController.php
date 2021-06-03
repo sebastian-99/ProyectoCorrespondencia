@@ -74,7 +74,7 @@ class SeguimientoController extends Controller
             return view('SeguimientoActividades.Seguimiento')
             ->with('consulta', $consulta[0])
             ->with('tipo_actividad', $tipo_actividad)
-            ->with('seguimientos', $seguimientos)
+            ->with('seguimientos', $seguimientos)            
             ->with('now', $now);            
     }
 
@@ -102,7 +102,7 @@ class SeguimientoController extends Controller
         }else{
             
             $archivos = 'Sin archivo';
-        }
+       }
 
         $seg_ac = new seguimientosActividades;
         $seg_ac->idreac_responsables_actividades = 4;
