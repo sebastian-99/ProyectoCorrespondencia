@@ -36,8 +36,8 @@
                
               <td>{{$c->nombre_us}}</td>
                 <td>{{$c->nombre_ar}}</td>
-                <td>50%</td>
-                <td>incompleto</td>
+                <td>{{$c->porcentaje}}</td>
+                <td>{{$c->estado}}</td>
                 <td>{{$c->acuse}}</td>
                 <td>
                    

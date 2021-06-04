@@ -355,7 +355,7 @@
     $("#tipousuario").on('change',function(e){
         let tipo_u = $("#tipousuario").val();
         //console.log(tipo_u);
-        $("#tipousuarioarea").empty();
+        /* $("#tipousuarioarea").empty(); */
         $.ajax({
             type:'GET',
             data:{
@@ -384,7 +384,9 @@
 
    
     
-    
+    $("#tipousuario").on("select2:unselecting", function(e) {
+        $("#tipousuarioarea").empty();
+    });
     
 </script>
     

@@ -15,4 +15,10 @@ class areas extends Model
         'nombre',
         'idtar'
     ];
+
+    public function tipoArea()
+    {
+        return $this->belongsTo(tiposAreas::class,$this->primaryKey,'idtar');
+    }
+
 }
