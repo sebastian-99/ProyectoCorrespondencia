@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correspondencia UTVT</title>
 
+  
+
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -20,6 +23,10 @@
   <link rel="stylesheet" href="{{asset('src/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('src/css/OverlayScrollbars.min.css')}}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
+
   @yield('header')
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
@@ -35,10 +42,11 @@
           <!-- logout -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link text-dark"  href="#" role="button">
-                  <label for="">Cerrar sesi&oacute;n</label>
-                  <i class="fas fa-sign-out-alt"></i>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>                 
               </a>
+            </form>
             </li>
           </ul>
         </nav>
@@ -64,8 +72,8 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="https://phantom-marca.unidadeditorial.es/252acdd64f48851f815c16049a789f23/resize/1320/f/jpg/assets/multimedia/imagenes/2021/04/19/16188479459744.jpg" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="#" class="d-block">MT.Carlos millan hidrajosa</a>
+              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <a href="#" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
         </div>
@@ -85,13 +93,19 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>Cat&aacute;logos<i class="fas fa-angle-left right"></i></p>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Gesti&oacute;n areas</p>
+                  <p>Asignar actividad</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
                 </a>
               </li>
             </ul>
@@ -99,18 +113,27 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
-              <p>Reportes<i class="fas fa-angle-left right"></i></p>
+              <p>Seguimiento de</p>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p> 
+              <i class="fas fa-angle-left right"></i>
+              
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('actividades_asignadas')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte oficios</p>
+                  <p>Actividades asignadas</p>
                 </a>
               </li>
+              
             </ul>
           </li>
         </ul>
+        <div class="text-center">
+          <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
+        </div>
+  
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -140,11 +163,7 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
 <!-- Bootstrap 4 -->
 <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4
@@ -152,10 +171,11 @@
 <!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
 
 @yield('scripts')
 
