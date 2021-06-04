@@ -24,5 +24,13 @@
 		<button type="submit" class="btn btn-primary btn-sm rounded submit mt-3">Iniciar sesión</button>
 	</div>
 	</div>
+    <br>
+	<br>
+	<div class="form-group md-flex">
+	<div>
+	<h6 align=center>Universidad Tecnol&oacute;gica del Valle de Toluca</h6>
+	<h6 align=center>¡¡Siempre Cuervos!!</h6>
+	</div>
+	</div>
 </form>
 @endsection

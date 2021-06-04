@@ -3,18 +3,25 @@
 use App\Http\Controllers\TiposActividadesController;
 use App\Http\Controllers\SeguimientoController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ActividadesController;
 
 Auth::routes();
-
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+
+
+Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 
 // Seguimiento de actividades 
 Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
 Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
 Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
 Route::get('EliminarSeguimiento/{idarse}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
+
 
 
 ////Actividades
