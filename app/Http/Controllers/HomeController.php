@@ -23,10 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-<<<<<<< HEAD
-        return view('home');
-=======
         return view('layout.layout');
->>>>>>> 0e889d39492a15ee8079aba9b778776d7fe4803e
     }
 }
+

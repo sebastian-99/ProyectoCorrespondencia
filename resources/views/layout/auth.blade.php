@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>Login 08</title>
+<title>Login</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
@@ -13,18 +13,22 @@
 <div class="container">
 <div class="row justify-content-center">
 <div class="col-md-8 text-center mb-2">
-<h2 class="heading-section">UNIVERSIDAD TECNOLOGICA DEL VALLE DE TOLUCA</h2>
 </div>
 </div>
 <div class="row justify-content-center">
 <div class="col-md-5 col-lg-5">
 <div class="login-wrap p-4 p-md-5">
-<div class="icon d-flex align-items-center justify-content-center">
-<span class="fa fa-user-o"></span>
+<div class="justify-content-center">
+<div align="center"><img src="{{asset('images/Edomex.png')}}" width="180" height="40"></div>
+<br>
+<h5 align=center>Sistema de Seguimineto de Oficios</h5>
+<br>
+<h6>INICIAR SESIÓN</h6>
 </div>
 
 @yield('contenido')
 
+</div>
 </div>
 </div>
 </div>

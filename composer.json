@@ -11,15 +11,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "inertiajs/inertia-laravel": "^0.4.2",
         "laravel/framework": "^8.40",
-<<<<<<< HEAD
-        "laravel/jetstream": "^2.3",
-        "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.2"
-=======
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "yajra/laravel-datatables-oracle": "^9.18"
->>>>>>> 68b5a99377bb1b5e5e1cb28d93d68e958778d66b
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -5,11 +5,9 @@ use App\Http\Controllers\SeguimientoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReporteController;
-use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ActividadesController;
 
 Auth::routes();
-
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
 
 
