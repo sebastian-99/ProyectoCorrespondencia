@@ -39,4 +39,46 @@ class actividades extends Model
         'link3'
 
     ];
+
+    public function area()
+    {
+        return $this->belongsTo(areas::class,'idar_areas','idar');
+    }
+
+    public function responsables()
+    {
+        return $this->hasMany(responsablesActividades::class,'idac_actividades');
+    }
+
+    public function getCompletadasAttribute()
+    {
+        return $this->responsables()->where('fecha','!=', null)->get();
+    }
+
+    public function getEnProcesoAttribute()
+    {
+        return $this->responsables()->where('fecha','=', null)->get();;
+    }
+
+    public function getIncompletasAttribute()
+    {
+        return $this->responsables()->where('fecha','>',"$this->fecha_fin")->get();
+    }
+
+    public function getTotalCompletadasAttribute()
+    {
+        return $this->responsables()->where('fecha','!=', null)->count();
+    }
+
+    public function getTotalEnProcesoAttribute()
+    {
+        return $this->responsables()->where('fecha','=', null)->count();
+    }
+
+    public function getTotalIncompletasAttribute()
+    {
+        return $this->responsables()->where('fecha','>=',"$this->fecha_fin")->count();
+    }
+
+
 }

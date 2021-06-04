@@ -50,4 +50,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function responsables()
+    {
+        return $this->hasMany(responsablesActividades::class,'idu_users', $this->primary_key);
+    }
+
 }

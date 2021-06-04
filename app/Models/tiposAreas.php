@@ -19,7 +19,7 @@ class tiposAreas extends Model
 
     public function areas()
     {
-        return $this->hasMany(areas::class,$this->primaryKey,'idar');
+        return $this->hasMany(areas::class,'idtar',$this->primaryKey);
     }
 
 }
