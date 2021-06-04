@@ -6,7 +6,7 @@
     </div>
 @endif
 <div align="center">
-    <h3>Ingresar correo electrónico para cambio de contraseña</h3>
+    <h3>Ingresa tu Correo Electrónico</h3>
 </div>
 <form method="POST" action="{{ route('password.email') }}">
     @csrf

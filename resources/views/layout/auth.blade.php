@@ -22,9 +22,8 @@
 <div align="center"><img src="{{asset('images/Edomex.png')}}" width="180" height="40"></div>
 <br>
 <h5 align=center>Sistema de Seguimineto de Oficios</h5>
-<br>
-<h6>INICIAR SESIÓN</h6>
 </div>
+<br>
 
 @yield('contenido')
 
