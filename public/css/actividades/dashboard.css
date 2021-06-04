@@ -1,0 +1,50 @@
+.dashboard-dark{
+    background-color:#111;
+}
+.circular-progress {
+    margin: auto;
+    position: relative;
+}
+.circular-progress,
+.circular-progress:before,
+.circular-progress:after {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+}
+.circular-progress:before,
+.circular-progress:after {
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 0;
+}
+.circular-progress:before {
+    padding: .5em;
+    box-sizing: border-box;
+    font-size: 2rem;
+    line-height: 8rem;
+}
+.circular-progress:after {
+    line-height: 13rem;
+}
+
+.html {
+transform: rotate(18deg);
+background: linear-gradient(0deg, #6666ff 50%, rgba(102, 102, 255, 0.2) 50%);
+}
+.html:before,
+.html:after {
+    color: #6666ff;
+}
+.html:before {
+    content: "html5";
+    background: #111 content-box;
+    transform: rotate(-18deg);
+    text-transform: uppercase;
+}
+.html:after {
+    content: "10%";
+    background: linear-gradient(transparent 50%, #111 50%);
+    transform: scale(1.1) rotate(-18deg);
+}
