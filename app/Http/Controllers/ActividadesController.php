@@ -184,7 +184,7 @@ class ActividadesController extends Controller
             $archivos2 = 'Sin archivo';
         }
         
-        if($r->file('archivos2') != null){
+        if($r->file('archivos3') != null){
 
             $file3 = $r->file('archivos3');
             $archivos3 = $file3->getClientOriginalName();

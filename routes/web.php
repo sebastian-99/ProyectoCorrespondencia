@@ -13,8 +13,9 @@ Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['
 // Seguimiento de actividades 
 Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
 Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
-Route::get('archivo/{idac}/download', [SeguimientoController::class, 'Descarga'])->name('archivo.descarga');
 Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
+Route::get('EliminarSeguimiento/{idarse}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
+
 
 ////Actividades
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
