@@ -21,7 +21,7 @@
 <div class="justify-content-center">
 <div align="center"><img src="{{asset('images/Edomex.png')}}" width="180" height="40"></div>
 <br>
-<h5 align=center>Sistema de Seguimineto de Oficios</h5>
+<h5 align=center>Sistema de Seguimiento de Oficios</h5>
 </div>
 <br>
 
