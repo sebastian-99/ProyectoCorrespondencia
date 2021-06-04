@@ -105,8 +105,8 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Actividad Creada por:</strong>
-                                    <input type="text" class="form-control" id="actividadcreador" value ="Lic. Pedro Gonzales Mendez" readonly>
-                                    <input type="hidden" name="idusuario" value="1">
+                                    <input type="text" class="form-control" id="actividadcreador" value ="{{$user[0]->titulo . ' ' . $user[0]->nombre . ' ' . $user[0]->app . ' ' . $user[0]->apm}}" readonly>
+                                    <input type="hidden" name="idusuario" value="{{$user[0]->idu}}">
                                 </div>
                             </div>
                         </div>
@@ -117,8 +117,8 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Tipo de usuario - Detalle:</strong>
-                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="Administrador - Dirección de area de control escolar" readonly>
-                                    <input type="hidden" name="idar_areas" value="1" >
+                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
+                                    <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}" >
                                 </div>
                             </div>
                         </div>

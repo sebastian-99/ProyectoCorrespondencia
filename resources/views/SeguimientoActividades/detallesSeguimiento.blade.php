@@ -8,13 +8,22 @@
 
     <div class="card">
     <div class="card-header">
+    <div class="row">
+    <div class="col-sm-11">
     @foreach ($consult as $c)
     @if ($loop->first)
     <h3>Reporte de actividades de {{$c->nombre}} </h3>
     @endif
     @endforeach
     </div>
-   
+    <div class="col-sm-10">
+    <a href="javascript:history.back()"><button class="btn btn-warning">Regresar a responsables</button></a>
+        </div>
+    <div class="col-sm-2">
+        <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
+        </div>
+    </div>
+    </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-striped table-bordered" id="tabla">
@@ -36,7 +45,7 @@
                 <td>{{$c->detalle}}</td>
                 <td>{{$c->estado}}</td>
                 <td>{{$c->porcentaje}}</td>
-                <td><a href="javascript:void(0)" data-toggle="tooltip" data-id="{{ $c->idseac}}"  data-original-title="DetallesArchivos" 
+                <td><a href="javascript:void(0)" data-toggle="tooltip" data-id="{{encrypt($c->idseac)}}"  data-original-title="DetallesArchivos" 
                      class="edit btn btn-success btn-sm DetallesArchivos">DetallesArchivos</a></td>
                 
 

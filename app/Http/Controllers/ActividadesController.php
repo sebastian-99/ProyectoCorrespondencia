@@ -56,12 +56,14 @@ class ActividadesController extends Controller
     }
 
     public function Detalles($idac){
+        $idac = decrypt($idac);
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac
         FROM responsables_actividades AS res
         INNER JOIN users AS us ON us.idu = res.idu_users
         INNER JOIN areas AS ar ON ar.idar = us.idar_areas
         WHERE idac_actividades = $idac");
-        return response()->json($query);
+        return view('Actividades.reporte_detalles')
+        ->with('query', $query);
     }
 
 
@@ -69,6 +71,7 @@ class ActividadesController extends Controller
 
     public function detallesSeguimiento($idac)
 	{
+        $idac = decrypt($idac);
         $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
@@ -81,6 +84,7 @@ class ActividadesController extends Controller
 	}
 
     public function DetallesArchivos($idarc){
+        $idarc = decrypt($idarc);
         $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
         FROM archivos_seguimientos AS res
         WHERE res.idarseg = $idarc");
@@ -94,14 +98,31 @@ class ActividadesController extends Controller
         $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
         $consul = DB::table('actividades')->count() + 1;
         $tipous = DB::table('areas')->get()->all();
-        $tipo_actividad = DB::table('tipos_actividades')
+        $tipo_actividad = DB::table('tipos_actividades')             
         ->orderBy('nombre','Asc')
         ->get();
+
+        $user = DB::table('users')
+                    ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
+                    ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
+                    ->select('users.idu',
+                            'users.titulo',
+                            'users.nombre',
+                            'users.app',
+                            'users.apm',
+                            'tipos_usuarios.nombre as tipo_usuario',
+                            'areas.nombre as nombre_areas',
+                            'areas.idar',
+                            )
+                    ->where('users.idu' , '=', Auth()->user()->idu)
+                    ->get();
+        
         return view('Actividades.actividades')
         ->with('hoy', $hoy)
         ->with('consul', $consul)
         ->with('tipo_actividad', $tipo_actividad)
-        ->with('tipous', $tipous);
+        ->with('tipous', $tipous)
+        ->with('user', $user);
     }
 
     public function tipousuarios(Request $request){

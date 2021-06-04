@@ -29,54 +29,53 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
 
   @yield('header')
+<body class="hold-transition skin-yellow sidebar-mini">
+<div class="wrapper">
+  <head class="main-header">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-color: #1c9842">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+          </ul>
+          <h3 class="text-light">Universidad Tecnol&oacute;gica del Valle de Toluca</h3>
+          <!-- logout -->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>                 
+              </a>
+            </form>
+            </li>
+          </ul>
+        </nav>
+  </head>
+  <img src="{{asset('images/BarraColores.png')}}" width="100%" height="10px">
 
 </head>
 
-<body class="hold-transition skin-yellow sidebar-mini">
-  <div class="wrapper">
-
-    <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-color: #1c9842">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </li>
-      </ul>
-      <h3 class="text-light">Universidad Tecnol&oacute;gica del Valle de Toluca</h3>
-      <!-- logout -->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="#" role="button">
-            <label for="">Cerrar sesi&oacute;n</label>
-            <i class="fas fa-sign-out-alt"></i>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <img src="{{asset('images/BarraColores.png')}}" width="100%" height="10px">
 
 
 
+  <!-- /.navbar -->
 
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link text-center">
+      <img src="{{asset('images/logoUTVT.png')}}" width="70%">
+    </a>
 
-    <!-- /.navbar -->
-
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <!-- Brand Logo -->
-      <a href="#" class="brand-link text-center">
-        <img src="{{asset('images/logoUTVT.png')}}" width="70%">
-      </a>
-
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="mt-3 pb-3 mb-3">
-          <div class="text-center">
-            <div>
-              <img src="https://phantom-marca.unidadeditorial.es/252acdd64f48851f815c16049a789f23/resize/1320/f/jpg/assets/multimedia/imagenes/2021/04/19/16188479459744.jpg" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="#" class="d-block">MT.Carlos millan hidrajosa</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="mt-3 pb-3 mb-3">
+        <div class="text-center">
+            <div >
+              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <a href="#" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
           </div>
@@ -93,48 +92,62 @@
               </p>
             </a>
           </li> --}}
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-edit"></i>
-                <p>Actividades<i class="fas fa-angle-left right"></i></p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ asset ('actividades')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Asignar actividad</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ asset ('reporte_actividades')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Ver actividades</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Seguimiento de actividades<i class="fas fa-angle-left right"></i></p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ asset ('actividades_asignadas')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Actividades asignadas</p>
-                  </a>
-                </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Asignar actividad</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>Seguimiento de</p>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p> 
+              <i class="fas fa-angle-left right"></i>
+              
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('actividades_asignadas')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Actividades asignadas</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+        </ul>
+        <div class="text-center">
+          <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
+        </div>
+  
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
 
-              </ul>
-            </li>
-          </ul>
-          <div class="text-center">
-            <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
-          </div>
-
-        </nav>
-        <!-- /.sidebar-menu -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        @yield('content')
       </div>
       <!-- /.sidebar -->
     </aside>
