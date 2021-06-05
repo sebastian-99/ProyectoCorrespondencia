@@ -182,13 +182,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de inicio:</strong>
-                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio" value="{{$consul[0]->hora_inicio}}" required>
+                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio" value="{{($consul[0]->hora_inicio == '00:00:00') ? null : $consul[0]->hora_inicio }}">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino" value="{{$consul[0]->hora_fin}}" required>
+                                <input class="form-control" type="time" name="horatermino" id="horatermino" value="{{($consul[0]->hora_fin == '00:00:00') ? null : $consul[0]->hora_fin }}" required>
                             </div>
                         </div>
                     </div>
