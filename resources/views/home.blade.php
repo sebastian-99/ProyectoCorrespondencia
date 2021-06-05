@@ -97,5 +97,5 @@
             });
         }
     });
-</script>f
+</script>
 @endsection

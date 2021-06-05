@@ -6,15 +6,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ActividadesController;
+use App\Http\Controllers\Sistema\Panel\PanelController;
 
 Auth::routes();
 Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
 
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/panel', [PanelController::class,'panel']);
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 // Seguimiento de actividades 
 Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
@@ -40,4 +43,4 @@ Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'Detalle
 
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
