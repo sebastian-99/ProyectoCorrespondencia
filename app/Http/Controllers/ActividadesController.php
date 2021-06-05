@@ -512,10 +512,10 @@ class ActividadesController extends Controller
     {
         $id_u = decrypt($id);
 
-        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, IF(ac.status = 1, 'Activo', 'Inactivo') as status
+        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, ac.status
             FROM responsables_actividades AS ra 
             INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
-            WHERE ra.idu_users = $id_u AND ac.idu_users != $id_u
+            WHERE ra.idu_users = $id_u AND (ac.idu_users != $id_u OR ac.idu_users = $id_u)
             ORDER BY ac.fecha_creacion DESC
             ");
         
