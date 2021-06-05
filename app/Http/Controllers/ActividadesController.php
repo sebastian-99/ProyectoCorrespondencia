@@ -521,7 +521,7 @@ class ActividadesController extends Controller
         
         $json = json_encode($ac_asig);
 
-        return view ('actividades.actividadescreadas', compact('json'));
+        return view ('actividades.actividadesasignadas', compact('json'));
 
     }
 
