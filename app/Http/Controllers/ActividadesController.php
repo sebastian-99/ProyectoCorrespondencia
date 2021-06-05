@@ -425,11 +425,6 @@ class ActividadesController extends Controller
             $archivos3 = 'Sin archivo';
         }
 
-
-
-
-
-
         if($r->link != null){
 
             $link = $r->link;
@@ -497,6 +492,37 @@ class ActividadesController extends Controller
         return redirect()->route('reporte_actividades');
     }
 
+    public function actividades_creadas($id)
+    {
+        $id_u = decrypt($id);
 
+        $ac_cre = DB::SELECT("SELECT ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, IF(ac.status = 1, 'Activo', 'Inactivo') as status
+            FROM actividades AS ac 
+            INNER JOIN users AS u ON u.idu = ac.idu_users
+            WHERE u.idu = $id_u
+            ORDER BY ac.fecha_creacion DESC");
+        
+        $json = json_encode($ac_cre);
+
+        return view ('actividades.actividadescreadas', compact('json'));
+
+    }
+
+    public function actividades_asignadas($id)
+    {
+        $id_u = decrypt($id);
+
+        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, IF(ac.status = 1, 'Activo', 'Inactivo') as status
+            FROM responsables_actividades AS ra 
+            INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
+            WHERE ra.idu_users = $id_u AND ac.idu_users != $id_u
+            ORDER BY ac.fecha_creacion DESC
+            ");
+        
+        $json = json_encode($ac_asig);
+
+        return view ('actividades.actividadescreadas', compact('json'));
+
+    }
 
 }
