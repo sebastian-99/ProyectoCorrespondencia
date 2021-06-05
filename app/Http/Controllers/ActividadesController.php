@@ -88,7 +88,8 @@ class ActividadesController extends Controller
         $idarc = decrypt($idarc);
         $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
         FROM archivos_seguimientos AS res
-        WHERE res.idarseg = $idarc");
+        INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
+        WHERE res.idseac_seguimientos_actividades = $idarc");
         return response()->json($query);
     }
 
@@ -184,7 +185,7 @@ class ActividadesController extends Controller
             $archivos2 = 'Sin archivo';
         }
         
-        if($r->file('archivos2') != null){
+        if($r->file('archivos3') != null){
 
             $file3 = $r->file('archivos3');
             $archivos3 = $file3->getClientOriginalName();

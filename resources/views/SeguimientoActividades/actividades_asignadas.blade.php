@@ -54,20 +54,15 @@
                 <td>{{$c->turno}}</td>
                 <td>{{$c->fecha_creacion}}</td>
                 <td>{{$c->asunto}}</td>
-                <td>{{$c->creador}}</td>
-                <td>{{$c->periodo}}</td>
+                <td>{{$c->nombre}} {{$c->app}} {{$c->apm}}</td>
+                <td>{{$c->fecha_inicio}} al {{$c->fecha_fin}}</td>
                 <td>{{$c->importancia}}</td>
                 <td>{{$c->nombre}}</td>
                 <td>100%</td>
                 <td>2 de 3</td>
                 <td>
                     <a href="{{route('Seguimiento', ['idac' => encrypt($c->idac)])}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
-                    <a href="{{route('edit_modificacion', ['id' => encrypt($c->idac)])}}"><button type="button" class="btn btn-warning">Modificar</button></a>
-                    @if($c->activo == 1)   
-                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-danger">Desactivar</button></a>
-                    @else
-                      <a href="{{route('activacion', ['id' => encrypt($c->idac) , 'activo' => encrypt($c->activo)])}}"><button type="button" class="btn btn-primary">Activar</button></a>
-                    @endif 
+                 
                 </td>
               </tr>
             @endforeach

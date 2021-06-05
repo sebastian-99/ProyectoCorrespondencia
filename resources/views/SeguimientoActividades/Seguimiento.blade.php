@@ -1,13 +1,13 @@
 @extends('layout.layout')
 @section('content')
-<input type="hidden" value="{{$consulta->idac}}" name="idac">
+<input type="hidden" value="{{$actividades->idac}}" name="idac">
 
 <div class="row">
     <div class="col-sm-4">
-        <h3>Detalle del turno: {{$consulta->turno}}</h3>
+        <h3>Detalle del turno: {{$actividades->turno}}</h3>
     </div>
     <div class="col-sm-4">
-        <h3>Comunicado: {{$consulta->comunicado}}</h3>
+        <h3>Comunicado: {{$actividades->comunicado}}</h3>
     </div>
     <div class="col-sm-4">
         <h3>Oficio: UTVT/SEP/000011</h3>
@@ -33,13 +33,13 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{{$consulta->turno}}</th>
-                            <td>{{$consulta->fecha_creacion}}</td>
-                            <td>{{$consulta->asunto}}</td>
-                            <td>{{$consulta->titulo}} {{$consulta->nombre}} {{$consulta->app}} {{$consulta->apm}}</td>
-                            <td>{{$consulta->fecha_inicio}} - al - {{$consulta->fecha_fin}}</td>
-                            <td>{{$consulta->importancia}}</td>
-                            <td>{{$consulta->nombre_area}}</td>
+                            <th scope="row">{{$actividades->turno}}</th>
+                            <td>{{$actividades->fecha_creacion}}</td>
+                            <td>{{$actividades->asunto}}</td>
+                            <td>{{$actividades->titulo}} {{$actividades->nombre}} {{$actividades->app}} {{$actividades->apm}}</td>
+                            <td>{{$actividades->fecha_inicio}} - al - {{$actividades->fecha_fin}}</td>
+                            <td>{{$actividades->importancia}}</td>
+                            <td>{{$actividades->nombre_area}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -61,8 +61,8 @@
                         <tr>
                             <th scope="row">80%</th>
                             <td>3 de 3</td>
-                            <td>Carlos Millan Hinojosa</td>
-                            <td>Director de Carrera TIC</td>
+                            <td>{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</td>
+                            <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
                             <td>100%</td>
                             <td>En tiempo</td>
                             <td>Si</td>
@@ -86,16 +86,18 @@
                             <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
                         </div>
                     </div>-->
+                    <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
+
                     <div class="col-sm-10">
                         <div class="mb-3">
-                            <label for="" class="form-label">Actividad creada por</label>
-                            <input type="text" class="form-control form-control-sm" id="" value="Lic. Roberto Torres Martinez" disabled>
+                            <label for="" class="form-label">Seguimiento realizado por</label>
+                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}" disabled>
                         </div>
                     </div>
                     <div class="col-sm-10">
                         <div class="mb-3">
                             <label for="tipo_usuario" class="form-label">Tipo usuario (Detalle)</label>
-                            <input type="text" class="form-control form-control-sm" id="tipo_usuario" value="Direccion de carrera - TIC" disabled>
+                            <input type="text" class="form-control form-control-sm" id="tipo_usuario" value="{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
                         </div>
                     </div>
                     <div class="col-sm-10">
@@ -137,7 +139,7 @@
                     <div class="col-sm-10">
 
                         <label for="formFileSm" class="form-label">Seleccione Archivo</label>
-                        <input class="form-group form-group-sm" id="formFileSm" name="ruta" type="file">
+                        <input class="form-group form-group-sm" id="formFileSm" name="ruta" type="file" multiple>
 
                     </div>
 
@@ -190,17 +192,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($seguimientos as $seg)
                         <tr>
-                            <td colspan="5">Aun no hay un seguimiento de esta actividad por el usuario.</td>
-                            <!-- <th scope="row">1</th>
-                            <td>10-21-2021</td>
-                            <td>Detalle de actividad 1</td>
-                            <td>Pendiente</td>
-                            <td>30%</td>
-                            <td>Sin archivos 
-                                <button class="btn btn-danger">-</button>
-                            </td>-->
+                            <td>{{$seg->idseac}}</td>
+                            <td>{{$seg->fecha}}</td>
+                            <td>{{$seg->detalle}}</td>
+                            <td>{{$seg->estado}}</td>
+                            <td>{{$seg->porcentaje}}</td>
+                            <td><a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -221,31 +222,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($consulta->archivo1 == "Sin archivo" && $consulta->archivo2 == "Sin archivo" && $consulta->archivo3 == "Sin archivo" )
+                        @if($actividades->archivo1 == "Sin archivo" && $actividades->archivo2 == "Sin archivo" && $actividades->archivo3 == "Sin archivo" )
                         <tr>
-                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>                          
+                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>
                         </tr>
                         @endif
-                        @if ($consulta->archivo1 != "Sin archivo")
+                        @if ($actividades->archivo1 != "Sin archivo")
                         <tr>
-                            <td>{{$consulta->archivo1}}</td>
-                            <td>{{$consulta->link1}}</td>
-                            <td><a download href="{{asset('archivos/').'/'.$consulta->archivo1}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td>{{$actividades->archivo1}}</td>
+                            <td>{{$actividades->link1}}</td>
+                            <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
-                        @if ($consulta->archivo2 != "Sin archivo")
+                        @if ($actividades->archivo2 != "Sin archivo")
                         <tr>
-                            <td>{{$consulta->archivo2}}</td>
-                            <td>{{$consulta->link2}}</td>
-                            <td><a download="" href="{{asset('archivos/').'/'.$consulta->archivo2}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td>{{$actividades->archivo2}}</td>
+                            <td>{{$actividades->link2}}</td>
+                            <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
 
-                        @if ($consulta->archivo3 != "Sin archivo")
+                        @if ($actividades->archivo3 != "Sin archivo")
                         <tr>
-                            <td>{{$consulta->archivo1}}</td>
-                            <td>{{$consulta->link3}}</td>
-                            <td><a download="{{$consulta->archivo3}}" href="{{asset('archivos/').'/'.$consulta->archivo3}}" class="btn btn-danger" ><i class="fa fa-file"></i></a></td>
+                            <td>{{$actividades->archivo1}}</td>
+                            <td>{{$actividades->link3}}</td>
+                            <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-danger"><i class="fa fa-file"></i></a></td>
                         </tr>
                         @endif
                     </tbody>
@@ -255,7 +256,7 @@
         </div>
     </div>
 
-    </div>
-    
+</div>
+
 
 @stop
