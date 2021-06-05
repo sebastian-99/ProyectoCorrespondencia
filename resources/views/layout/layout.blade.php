@@ -75,7 +75,7 @@
         <div class="text-center">
             <div >
               <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="#" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
+              <a href="{{url('/panel')}}" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
           </div>
@@ -131,6 +131,24 @@
               
             </ul>
           </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="fas fa-chart-pie"></i>
+              <p>Gr&aacute;ficas</p> 
+              <i class="fas fa-angle-left right"></i>
+              
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('admin/actividades/dashboard')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Gr&aacute;ficas seguimientos</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+          
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
