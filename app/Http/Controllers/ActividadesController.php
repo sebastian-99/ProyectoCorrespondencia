@@ -99,16 +99,59 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac, seg.estado, seg.porcentaje
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
         JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
         GROUP BY idu_users");
+
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+
+
+        function btn($idac){
+
+          
+          
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+            
+        }
+        
+     //  function C($data){
+
+       //     if(gettype($data) == "array"){
+
+         //       return number_format($data[2], 2, '.', ' ').'%';
+           // }else{
+             //   return 0.00;
+            //}
+
+        //}
+
+        foreach($query as $c){
+
+           // $data = recorrer($c->porcentaje);
+
+            array_push($array, array('nombre_us' => $c->nombre_us,
+                                    'nombre_ar' => $c->nombre_ar,
+                                    'porcentaje' =>  $c->porcentaje,
+                                    'estado' => $c->estado,
+                                    'acuse' => $c->acuse,
+                                    'operaciones' => btn($c->idreac),
+                                    ));
+        }
+        $json = json_encode($array);
+
         return view('Actividades.reporte_detalles')
         
-        ->with('query', $query);
+        ->with('json', $json);
+
     }
 
 
@@ -124,8 +167,35 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac");
-        return view('SeguimientoActividades.detallesSeguimiento')
-        ->with('consult', $consult);
+
+        $array = array();
+
+        function recorrer($value){
+          $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+        function btn($idac){
+
+            return "
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>DetallesArchivos</a>";
+            }
+        foreach($consult as $c){
+
+         // $data = recorrer($c->porcentaje);
+
+          array_push($array, array('idseac' => $c->idseac,
+                             'fecha' => $c->fecha,
+                             'detalle' =>  $c->detalle,
+                             'estado' => $c->estado,
+                             'porcentaje' => $c->porcentaje,
+                             'operaciones' => btn($c->idseac),
+                             ));
+        }
+        $json = json_encode($array);
+
+            return view('SeguimientoActividades.detallesSeguimiento')
+            ->with('json', $json)
+              ->with('consult', $consult);
 	}
 
     public function DetallesArchivos($idarc){
