@@ -181,13 +181,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de inicio:</strong>
-                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio" required>
+                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino" required>
+                                <input class="form-control" type="time" name="horatermino" id="horatermino">
                             </div>
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia" value="Baja">
-                                        <label class="form-check-label" for="importancia">baja</label>
+                                        <label class="form-check-label" for="importancia">Baja</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia1" value="Media">

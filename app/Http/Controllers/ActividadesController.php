@@ -21,7 +21,8 @@ class ActividadesController extends Controller
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        GROUP BY ac.idac");
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
 
         $array = array();
 
@@ -29,7 +30,46 @@ class ActividadesController extends Controller
             $arr = (gettype($value) == "string") ? explode('-', $value) : null;
             return $arr;
         }
+
+        function btn($idac, $activo){
+
+          
+            if($activo == 1){
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }else{
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }
+        }
+
+        function AB($data){
+
+            if(gettype($data) == "array"){
+
+                return $data[0]." de ".$data[1];
+            }else{
+                return 0;
+            }
+
+
+        }
+
+        function C($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data[2], 2, '.', ' ').'%';
+            }else{
+                return 0.00;
+            }
+
+        }
+
         
+
         foreach($consult as $c){
 
             $data = recorrer($c->porcentaje);
@@ -45,14 +85,16 @@ class ActividadesController extends Controller
                                     'activo' => $c->activo,
                                     'acuse' => $c->acuse,
                                     'idu_users' => $c->idu_users,
-                                    'A' => (gettype($data) == "array") ? $data[0] : 0,
-                                    'B' => (gettype($data) == "array") ? $data[1] : 0,
-                                    'C' => (gettype($data) == "array") ? number_format($data[2], 2, '.', ' ') : '0.00',
+                                    'AB' => AB($data),
+                                    'C' =>  C($data),
+                                    'operaciones' => btn($c->idac, $c->activo),
                                     ));
         }
+
+        $json = json_encode($array);
+
         return view('Actividades.reporte')
-        ->with('consult', $consult)
-        ->with('array', $array);
+        ->with('json', $json);
     }
 
     public function Detalles($idac){
@@ -131,6 +173,7 @@ class ActividadesController extends Controller
 
     public function tipousuarios(Request $request){
 
+        $id_user = Auth()->user()->idu;
         $id = $request->tipo_u;
         $id_seleccionado;
 
@@ -139,7 +182,8 @@ class ActividadesController extends Controller
             $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
             INNER JOIN areas AS a ON a.idar = u.idar_areas
-            WHERE a.idar = $id[$b]");
+            WHERE u.idu NOT IN($id_user)
+            AND a.idar = $id[$b]");
 
             $id_seleccionado[$b] = $consul;
 
@@ -236,7 +280,10 @@ class ActividadesController extends Controller
                     '$horadeinicio', '$fechainicio', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
                     '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
 
+
         $consul = DB::table('actividades')->max('idac');
+
+        DB::Insert("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$idusuario','$consul')");
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
@@ -380,11 +427,6 @@ class ActividadesController extends Controller
             $archivos3 = 'Sin archivo';
         }
 
-
-
-
-
-
         if($r->link != null){
 
             $link = $r->link;
@@ -452,6 +494,37 @@ class ActividadesController extends Controller
         return redirect()->route('reporte_actividades');
     }
 
+    public function actividades_creadas($id)
+    {
+        $id_u = decrypt($id);
 
+        $ac_cre = DB::SELECT("SELECT ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, IF(ac.status = 1, 'Activo', 'Inactivo') as status
+            FROM actividades AS ac 
+            INNER JOIN users AS u ON u.idu = ac.idu_users
+            WHERE u.idu = $id_u
+            ORDER BY ac.fecha_creacion DESC");
+        
+        $json = json_encode($ac_cre);
+
+        return view ('actividades.actividadescreadas', compact('json'));
+
+    }
+
+    public function actividades_asignadas($id)
+    {
+        $id_u = decrypt($id);
+
+        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, ac.status
+            FROM responsables_actividades AS ra 
+            INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
+            WHERE ra.idu_users = $id_u AND (ac.idu_users != $id_u OR ac.idu_users = $id_u)
+            ORDER BY ac.fecha_creacion DESC
+            ");
+        
+        $json = json_encode($ac_asig);
+
+        return view ('actividades.actividadesasignadas', compact('json'));
+
+    }
 
 }

@@ -43,4 +43,8 @@ Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'Detalle
 
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
 
+Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
+
+Route::get('actividades_asignadas/{id}', [ActividadesController::class, 'actividades_asignadas'])->name('actividades_asignadas');
+
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

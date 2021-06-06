@@ -110,6 +110,18 @@
                   <p>Ver actividades</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ url('actividades_asignadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades asignadas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades creadas</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
