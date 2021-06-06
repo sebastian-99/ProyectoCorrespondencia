@@ -13,7 +13,7 @@ class TiposActividadesController extends Controller
     public function index()
     {
         $tipos_actividades = TiposActividades::all();
-        return view('tipos-actividades.index', compact('tipos_actividades'));
+        return view('tipos-actividades', compact('tipos_actividades'));
     }
 
     /**
@@ -29,16 +29,16 @@ class TiposActividadesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => ['required', 'string', 'max:60'],
+        $this->validate($request,[
+            'nombre' => ['required', 'string', 'max:60']
         ]);
 
         $guardar = TiposActividades::query()
-                                   ->create([
-            'nombre' => $request->nombre,
-        ]);
+                                    ->create([
+                'nombre' => $request->nombre
+            ]);
 
-        return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha guardado correctamente');
+        return redirect()->route('tipos-actividades.index')->with('success', 'Se ha guardado correctamente');
     }
 
     /**
@@ -51,7 +51,7 @@ class TiposActividadesController extends Controller
                                               ->where('idtac', $idtac)
                                               ->first();
             if($tipo_actividad){
-                return view('tipos-actividades.show', compact('tipo_actividad'));
+                return view('tipos-actividades', compact('tipo_actividad'));
             } else {
                 abort(404);
             }
@@ -94,12 +94,12 @@ class TiposActividadesController extends Controller
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'estado' => ['required', 'boolean'],
+                    'estado' => ['required', 'boolean']
                 ]);
 
                 $actualizar = $tipo_actividad->update([
                     'nombre' => $request->nombre,
-                    'estado' => $request->estado,
+                    'activo' => $request->activo
                 ]);
 
                 return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
@@ -111,7 +111,6 @@ class TiposActividadesController extends Controller
                 abort(404);
         }
     }
-
 
 
     /**

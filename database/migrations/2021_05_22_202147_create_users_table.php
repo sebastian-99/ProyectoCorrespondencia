@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('idu');
             $table->unsignedBigInteger('idtu_tipos_usuarios');
-            $table->string('imagen', 255)->nullable();
+            $table->text('imagen')->nullable();
             $table->string('titulo');
             $table->string('nombre');
             $table->string('app');

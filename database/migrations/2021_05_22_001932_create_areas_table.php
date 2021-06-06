@@ -15,7 +15,7 @@ class CreateAreasTable extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->bigIncrements('idar');
-            $table->string('nombre', 50);
+            $table->string('nombre');
             $table->unsignedBigInteger('idtar');
             $table->foreign('idtar')->references('idtar')->on('tipos_areas');
             $table->timestamps();

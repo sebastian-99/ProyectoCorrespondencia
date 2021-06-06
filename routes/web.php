@@ -1,11 +1,10 @@
 <?php
 
-/*
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
-*/
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,8 +22,8 @@ Route::get('/', function () {
 });
 */
 
-/*
-Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
-Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
-Route::resource('admin/users', UsersController::class, ['names' => 'users']);
-*/
+
+Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+Route::resource('users', UsersController::class, ['names' => 'users']);
+Route::resource('areas', AreasController::class, ['names' => 'areas']);
+

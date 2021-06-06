@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'idtu',
+        'idtu_tipos_usuarios',
         'imagen',
         'titulo',
         'nombre',
@@ -28,7 +28,7 @@ class User extends Authenticatable
         'apm',
         'email',
         'password',
-        'idar',
+        'idar_areas',
         'activo'
     ];
 
