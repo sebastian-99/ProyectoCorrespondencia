@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correspondencia UTVT</title>
+
+
+
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -28,7 +32,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-</head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
+
+  @yield('header')
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
   <head class="main-header">
@@ -43,16 +51,18 @@
           <!-- logout -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link text-dark"  href="#" role="button">
-                  <label for="">Cerrar sesi&oacute;n</label>
-                  <i class="fas fa-sign-out-alt"></i>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>
               </a>
+            </form>
             </li>
           </ul>
         </nav>
   </head>
   <img src="{{asset('images/BarraColores.png')}}" width="100%" height="10px">
 
+</head>
 
 
 
@@ -72,17 +82,17 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="https://phantom-marca.unidadeditorial.es/252acdd64f48851f815c16049a789f23/resize/1320/f/jpg/assets/multimedia/imagenes/2021/04/19/16188479459744.jpg" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="#" class="d-block">MT.Carlos millan hidrajosa</a>
+              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <a href="{{url('/panel')}}" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          {{-- <li class="nav-item">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            {{-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
@@ -93,13 +103,31 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>Cat&aacute;logos<i class="fas fa-angle-left right"></i></p>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Gesti&oacute;n areas</p>
+                  <p>Asignar actividad</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('actividades_asignadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades asignadas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades creadas</p>
                 </a>
               </li>
             </ul>
@@ -107,57 +135,80 @@
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
-              <p>Reportes<i class="fas fa-angle-left right"></i></p>
+              <p>Seguimiento de</p>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p>
+              <i class="fas fa-angle-left right"></i>
+
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('actividades_asignadas')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte oficios</p>
+                  <p>Actividades asignadas</p>
                 </a>
               </li>
+
             </ul>
           </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="fas fa-chart-pie"></i>
+              <p>Gr&aacute;ficas</p>
+              <i class="fas fa-angle-left right"></i>
+
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('admin/actividades/dashboard')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Gr&aacute;ficas seguimientos</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+
         </ul>
+        <div class="text-center">
+          <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
+        </div>
+
       </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        @yield('content')
-      </div>
-    </section>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          @yield('content')
+        </div>
+      </section>
 
+    </div>
+
+    <footer class="main-footer">
+      <strong>Universidad Tecnol&oacute;gica del Valle de Toluca - Correspondencia</strong>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
   </div>
+  <!-- ./wrapper -->
 
-  <footer class="main-footer">
-    <strong>Universidad Tecnol&oacute;gica del Valle de Toluca - Correspondencia</strong>
-  </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery -->
-<script src="{{asset('src/js/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('src/js/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<!-- Bootstrap 4 -->
-<script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{asset('src/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-<!-- Summernote -->
+  <!-- Bootstrap 4 -->
+  <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
+  <!-- Tempusdominus Bootstrap 4
+<script src="{{-- asset('src/js/tempusdominus-bootstrap-4.min.js') --}}"></script>
+<!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
@@ -166,9 +217,15 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
  <!-- Modal -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <!-- AdminLTE App -->
+  <script src="{{asset('src/js/adminlte.js')}}"></script>
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+
+  @yield('scripts')
 
 </body>
+
 </html>

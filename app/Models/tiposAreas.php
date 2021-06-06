@@ -12,8 +12,14 @@ class TiposAreas extends Model
     protected $table = 'tipos_areas';
     protected $primaryKey = 'idtar';
     protected $fillable = [
+        //'idtar',
         'nombre',
         'activo'
     ];
+
+    public function areas()
+    {
+        return $this->hasMany(areas::class,'idtar',$this->primaryKey);
+    }
 
 }
