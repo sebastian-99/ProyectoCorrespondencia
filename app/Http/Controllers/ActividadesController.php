@@ -59,11 +59,13 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac, seg.estado, seg.porcentaje
         FROM responsables_actividades AS res
-        INNER JOIN users AS us ON us.idu = res.idu_users
-        INNER JOIN areas AS ar ON ar.idar = us.idar_areas
-        INNER JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
-        WHERE idac_actividades = $idac");
+        JOIN users AS us ON us.idu = res.idu_users
+        JOIN areas AS ar ON ar.idar = us.idar_areas
+        JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
+        WHERE idac_actividades = $idac
+        GROUP BY idu_users");
         return view('Actividades.reporte_detalles')
+        
         ->with('query', $query);
     }
 

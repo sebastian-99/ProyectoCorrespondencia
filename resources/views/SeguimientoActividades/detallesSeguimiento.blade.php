@@ -116,6 +116,7 @@
         $('#tablaModal>tbody>tr').remove();
        while ( i!=1+i){
          if(data[i].nombre == null){
+           i=i+1;
            break;
          }else{
       
@@ -123,12 +124,26 @@
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td>"
         var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' disabled></td>"
-        var ruta = "<td><input id='ruta"+i+"' name='ruta"+i+"' disabled></td>"
-        
+        if(data[i].ruta == ''){
+        var texto = '<td>no hay archivos disponibles</td>';
+        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+texto+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+        $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }else if(data[i].ruta != '' ){
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = '{{asset(('archivos'))}}/'+data[i].ruta;
         $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
         $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(data[i].ruta);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }
+       
+     
   
         i=i+1;
          }
