@@ -17,6 +17,7 @@ class CreateAreasTable extends Migration
             $table->bigIncrements('idar');
             $table->string('nombre');
             $table->unsignedBigInteger('idtar');
+            $table->boolean('activo')->default(1);
             $table->foreign('idtar')->references('idtar')->on('tipos_areas');
             $table->timestamps();
         });

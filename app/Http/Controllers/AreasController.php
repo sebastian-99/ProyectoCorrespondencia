@@ -13,9 +13,37 @@ class AreasController extends Controller
      */
     public function index()
     {
-        $areas = Areas::all();
+        $areas = Areas::query()
+                        ->get();
         $tipos_areas = TiposAreas::all();
-        return view('areas', compact('areas', 'tipos_areas'));
+        $array = array();
+
+        function btn($idar, $activo){
+            if($activo == 1){
+                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\">Desactivar</a>"
+                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idar\">Editar</a>";
+            } else {
+                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\">Activar</a>";
+            }
+
+            return $botones;
+        }
+
+        #return btn(1, 1);
+        foreach ($areas as $area){
+
+            array_push($array, array(
+                'idar'        =>$area->idar,
+                'nombre'      =>$area->nombre,
+                'idtar'       =>$area->idtar,
+                'activo'      => ($area->activo == 1) ? "Si" : "No",
+                'operaciones' => btn($area->idar, $area->activo)
+            ));
+        }
+
+        $json = json_encode($array);
+
+        return view('areas', compact('json','areas', 'tipos_areas'));
     }
 
     /**
@@ -101,12 +129,14 @@ class AreasController extends Controller
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'idtar'   => ['required', 'integer', 'exists:tipos_areas,idtar']
+                    'idtar'   => ['required', 'integer', 'exists:tipos_areas,idtar'],
+                    'activo' => ['required', 'boolean']
                 ]);
 
                 $actualizar = $area->update([
                     'nombre' => $request->nombre,
                     'idtar'  => $request->idtar,
+                    'activo' => $request->activo
                 ]);
 
                 return redirect()->route('areas.index')->with('mensaje', 'Se ha actualizado correctamente');
@@ -129,8 +159,10 @@ class AreasController extends Controller
             $area = Areas::where('idar', $idar)
                          ->first();
             if ($area){
-                $eliminar = $area->delete();
-                return redirect()->route('areas.index')->with('mensaje', 'Se ha eliminado correctamente');
+                $eliminar = $area->update([
+                    'activo' => ($area->activo == 1) ? 0 : 1
+                ]);
+                return redirect()->route('areas.index')->with('mensaje', 'Su estado ha cambiado');
             } else {
                 abort(404);
             }

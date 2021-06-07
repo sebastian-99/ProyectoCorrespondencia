@@ -1,5 +1,12 @@
 @extends('layout.layout')
 @section('content')
+    @section('header')
+        <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+        <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
+        <script>
+        if (es) ZingGrid.registerLanguage(es, 'custom');
+        </script>
+    @endsection
 
 {{-- Inicia Reporte --}}
     <div class="card">
@@ -15,53 +22,42 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="tabla">
-            <thead class="text-center">
-             <tr style="background-color: #1F75FE; color: #ffffff">
-
-                <th scope="col">#</th>
-                <th scope="col">Tipo de usuario</th>
-                <th scope="col">Imagen</th>
-                <th scope="col">Título</th>
-                <th scope="col">Nombre(s)</th>
-                <th scope="col">Apellido Paterno</th>
-                <th scope="col">Apellido Materno</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Área</th>
-                <th scope="col">Activo</th>
-                <th scope="col">Operaciones</th>
-            </tr>
-        </thead>
-        <tbody>
-  	        @foreach($usuarios as $user)
-                <tr>
-                    <td>{{$user->idu}}</td>
-                    <td>{{$user->idtu_tipos_usuarios}}</td>
-                    <td><img src="{{ asset("storage/imagenes_perfil/$user->imagen") }}" height="80" alt="{{ $user->imagen }}"></td>
-                    <td>{{$user->titulo}}</td>
-                    <td>{{$user->nombre}}</td>
-                    <td>{{$user->app}}</td>
-                    <td>{{$user->apm}}</td>
-                    <td>{{$user->email}}</td>
-                    <td>{{$user->idar_areas}}</td>
-                    <td>{{($user->activo == 1) ? 'Si' : 'No' }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <a href="#editar" class="btn btn-primary" data-toggle="modal" data-target="#editarModal-{{ $user->idu }}">
-                                Editar
-                            </a>
-                            <form id="eliminar-usuario-{{ $user->idu }}" class="ocultar" action="{{ route('users.destroy', ['user' => $user->idu]) }}" method="POST">
-                              @csrf
-                              @method('DELETE')
-                            </form>
-                            <a href="#eliminar" class="btn btn-danger" onclick="formSubmit('eliminar-usuario-{{ $user->idu }}')">Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-             @endforeach
-        </tbody>
-    </table>
+     <div class="card-body">
+    	<zing-grid
+        	lang="custom"
+        	caption='Reporte de tipos de actividades'
+        	sort
+        	search
+        	pager
+        	page-size='3'
+        	page-size-options='1,2,3,4,5,10'
+        	layout='row'
+        	viewport-stop
+        	theme='android'
+        	id='zing-grid'
+        	filter
+            data="{{ $json }}">
+        	<zg-colgroup>
+            	<zg-column index='idu' header='#'  type='text'></zg-column>
+            	<zg-column index='idtu_tipos_usuarios' header='Tipo-Uusario'  type='text'></zg-column>
+                <zg-column index='imagen' header='Imagen'></zg-column>
+                <zg-column index='titulo' header='Título'  type='text'></zg-column>
+                <zg-column index='nombre' header='Nombre'  type='text'></zg-column>
+                <zg-column index='app' header='Apellido-Paterno'  type='text'></zg-column>
+                <zg-column index='apm' header='Apellido-Materno'  type='text'></zg-column>
+                <zg-column index='email' header='email'  type='text'></zg-column>
+                <zg-column index='idar_areas' header='Área'  type='text'></zg-column>
+            	<zg-column index='activo' header='Activo'  type='text'></zg-column>
+                <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' type='text'></zg-column>
+        	</zg-colgroup>
+    	</zing-grid>
+	</div>
+    @foreach ($usuarios as $user)
+    <form id="eliminar-usuario-{{ $user->idu }}" class="ocultar" action="{{ route('users.destroy', ['user' => $user->idu]) }}" method="POST">
+        @csrf
+        @method('DELETE')
+    </form>
+     @endforeach
 {{-- Termina Reporte --}}
 
 {{-- Inicia Modal para crear --}}
@@ -161,47 +157,47 @@
               @csrf
               @method('PATCH')
                 <div class="form-group">
-                <label for="idtu_tipos_usuarios">Tipo Usuario: <b class="text-danger">*</b></label>
-                <select class="form-control @error('idtu_tipos_usuarios') is-invalid @enderror" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
-                  <option value="">Selección</option>
-                  @foreach($tipos_usuarios as $tipo_usuario_edit)
-                    <option value="{{ $tipo_usuario_edit->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipo_usuario_edit->idtu) ? 'selected' : '' }}>{{ $tipo_usuario_edit->nombre }}</option>
-                  @endforeach
-                </select>
-                @error('idtu_tipos_usuarios')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
-              </div>
+                    <label for="idtu_tipos_usuarios">Tipo Usuario:</label>
+                    <select class="form-control @error('idtu_tipos_usuarios') is-invalid @enderror" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
+                    <option value="">Selección</option>
+                    @foreach($tipos_usuarios as $tipousuario)
+                        <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->idtu) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
+                    @endforeach
+                    </select>
+                    @error('idtu_tipos_usuarios')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                </div>
               <div class="">
                 <label for="">Imagen:</label>
                 <input type="file" class="form-control @error('imagen') is-invalid @enderror" id="imagen" name="imagen">
                 @error('imagen')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div><br>
               <div class="form-group">
-                <label for="titulo">Título: <b class="text-danger">*</b></label>
+                <label for="titulo">Título:</label>
                 <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo', $user_edit->titulo) }}" required>
                 @error('titulo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="nombre">Nombre: <b class="text-danger">*</b></label>
+                <label for="nombre">Nombre:</label>
                 <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $user_edit->nombre) }}" required>
                 @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="app">Apellido Paterno: <b class="text-danger">*</b></label>
+                <label for="app">Apellido Paterno:</label>
                 <input type="text" class="form-control @error('app') is-invalid @enderror" id="app" name="app" value="{{ old('app', $user_edit->app) }}" required>
                 @error('app')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="apm">Apellido Materno: <b class="text-danger">*</b></label>
+                <label for="apm">Apellido Materno:</label>
                 <input type="text" class="form-control @error('apm') is-invalid @enderror" id="apm" name="apm" value="{{ old('apm', $user_edit->apm) }}" required>
                 @error('apm')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="email">Correo: <b class="text-danger">*</b></label>
+                <label for="email">Correo:</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user_edit->email) }}" required>
                 @error('email')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="idar_areas">Área: <b class="text-danger">*</b></label>
+                <label for="idar_areas">Área:</label>
                 <select class="form-control @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
                     <option value="">Selección</option>
                     @foreach($areas as $area)
@@ -211,7 +207,7 @@
                 @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="activo">Activo: <b class="text-danger">*</b></label>
+                <label for="activo">Activo:</label>
                 <select class="form-control @error('activo') is-invalid @enderror" id="activo" name="activo" required>
                   <option value="">Selección</option>
                   <option value="1" {{ (old('activo', $user_edit->activo) == 1) ? 'selected' : '' }}>Si</option>

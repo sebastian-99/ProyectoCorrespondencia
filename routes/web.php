@@ -11,9 +11,6 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
 
-Auth::routes();
-Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
-
 
 Auth::routes();
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -36,7 +33,6 @@ Route::get('EliminarSeguimiento/{idarse}', [SeguimientoController::class, 'Elimi
 
 
 ////Actividades
-Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
 
 Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
 Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');

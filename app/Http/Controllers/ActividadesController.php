@@ -150,7 +150,7 @@ class ActividadesController extends Controller
                     ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
                     ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
                     ->select('users.idu',
-                            'users.titulo',
+                            ' users.titulo',
                             'users.nombre',
                             'users.app',
                             'users.apm',

@@ -1,5 +1,12 @@
 @extends('layout.layout')
 @section('content')
+    @section('header')
+        <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+        <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
+        <script>
+        if (es) ZingGrid.registerLanguage(es, 'custom');
+        </script>
+    @endsection
 
     {{--Inicia Reporte --}}
     <div class="card">
@@ -15,40 +22,37 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="tabla">
-            <thead class="text-center">
-             <tr style="background-color: #1F75FE; color: #ffffff">
+    <div class="card-body">
+    	<zing-grid
+        	lang="custom"
+        	caption='Reporte de tipos de áreas'
+        	sort
+        	search
+        	pager
+        	page-size='3'
+        	page-size-options='1,2,3,4,5,10'
+        	layout='row'
+        	viewport-stop
+        	theme='android'
+        	id='zing-grid'
+        	filter
+            data="{{ $json }}">
+        	<zg-colgroup>
+            	<zg-column index='idar' header='#'  type='text'></zg-column>
+            	<zg-column index='nombre' header='Nombre'  type='text'></zg-column>
+            	<zg-column index='idtar' header='Tipo-área'  type='text'></zg-column>
+                <zg-column index='activo' header='Activo'  type='text'></zg-column>
+                <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' type='text'></zg-column>
+        	</zg-colgroup>
+    	</zing-grid>
+	</div>
+    @foreach ($areas as $area)
+    <form id="eliminar-area-{{ $area->idar }}" class="ocultar" action="{{ route('areas.destroy', ['area' => $area->idar]) }}" method="POST">
+        @csrf
+        @method('DELETE')
+    </form>
+    @endforeach
 
-                <th scope="col">#</th>
-                <th scope="col">Nombre(s)</th>
-                <th scope="col">Tipo de areas</th>
-                <th scope="col">Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-  	        @foreach($areas as $area)
-                <tr class="text-center">
-                    <td>{{$area->idar}}</td>
-                    <td>{{$area->nombre}}</td>
-                    <td>{{$area->idtar}}</td>
-                    <td>
-                        <div class="btn-group">
-                            <a href="#editar" class="btn btn-primary" data-toggle="modal" data-target="#editarModal-{{ $area->idar }}">
-                                Editar
-                            </a>
-                            <form id="eliminar-area-{{ $area->idar }}" class="ocultar" action="{{ route('areas.destroy', ['area' => $area->idar]) }}" method="POST">
-                              @csrf
-                              @method('DELETE')
-                            </form>
-                            <a href="#eliminar" class="btn btn-danger" onclick="formSubmit('eliminar-area-{{ $area->idar }}')">Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-
-             @endforeach
-        </tbody>
-    </table>
     {{-- Termina reporte --}}
 
 {{-- Inicia Modal para crear --}}
@@ -114,12 +118,12 @@
               @csrf
               @method('PATCH')
               <div class="form-group">
-                <label for="nombre">Nombre: <b class="text-danger">*</b></label>
+                <label for="nombre">Nombre:</label>
                 <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $area_edit->nombre) }}" required>
                 @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
-                <label for="idtar">Tipo de Área: <b class="text-danger">*</b></label>
+                <label for="idtar">Tipo de Área:</label>
                 <select class="form-control @error('idtar') is-invalid @enderror" id="idtar" name="idtar" required>
                     <option value="">Selección</option>
                     @foreach($tipos_areas as $tipoarea)
@@ -127,6 +131,15 @@
                     @endforeach
                 </select>
                 @error('idtar')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+              </div>
+              <div class="form-group">
+                <label for="activo">Activo:</label>
+                <select class="form-control @error('activo') is-invalid @enderror" id="activo" name="activo" required>
+                  <option value="">Selección</option>
+                  <option value="1" {{ (old('activo', $area_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
+                  <option value="0" {{ (old('activo', $area_edit->activo) == 0) ? 'selected' : '' }}>No</option>
+                </select>
+                @error('activo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Actualizar</button>

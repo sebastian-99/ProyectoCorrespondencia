@@ -169,6 +169,27 @@
             </ul>
           </li>
 
+            <li class="nav-item">
+                <a href="{{ url('tipos-actividades')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Tipos de actividades</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ url('areas')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Áreas</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ url('users')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Usuarios</p>
+                </a>
+            </li>
+
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">

@@ -19,10 +19,43 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $usuarios = User::all();
+        $usuarios = User::query()
+                         ->get();
         $areas = Areas::all();
         $tipos_usuarios = TiposUsuarios::all();
-        return view('users', compact('usuarios', 'areas', 'tipos_usuarios'));
+
+        $array = array();
+
+        function btn($idu, $activo){
+            if($activo == 1){
+                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-usuario-$idu')\">Desactivar</a>"
+                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idu\">Editar</a>";
+            } else {
+                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-usuario-$idu')\">Activar</a>";
+            }
+            return $botones;
+        }
+
+        foreach ($usuarios as $user){
+
+            array_push($array, array(
+                'idu'                 => $user->idu,
+                'idtu_tipos_usuarios' => $user->idtu_tipos_usuarios,
+                'imagen'              => '<img src="'.asset("storage/imagenes_perfil/$user->imagen").'" height="80">',
+                'titulo'              => $user->titulo,
+                'nombre'              => $user->nombre,
+                'app'                 => $user->app,
+                'apm'                 => $user->apm,
+                'email'               => $user->email,
+                'idar_areas'          => $user->idar_areas,
+                'activo'              => ($user->activo == 1) ? "Si" : "No",
+                'operaciones'         => btn($user->idu, $user->activo)
+            ));
+        }
+
+        $json = json_encode($array);
+
+        return view('users', compact('json', 'usuarios', 'areas', 'tipos_usuarios'));
     }
 
     /**
@@ -199,8 +232,10 @@ class UsersController extends Controller
                            ->where('idu', $idu)
                            ->first();
             if ($usuario){
-                $eliminar = $usuario->delete();
-                return redirect()->route('users.index')->with('mensaje', 'Se ha eliminado correctamente');
+                $eliminar = $usuario->update([
+                    'activo' => ($usuario->activo == 1) ? 0 : 1
+                ]);
+                return redirect()->route('users.index')->with('mensaje', 'Su estado ha cambiado');
             } else {
                 abort(404);
             }

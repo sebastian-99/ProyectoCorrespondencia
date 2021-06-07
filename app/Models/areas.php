@@ -13,7 +13,8 @@ class Areas extends Model
     protected $primaryKey = 'idar';
     protected $fillable = [
         'nombre',
-        'idtar'
+        'idtar',
+        'activo'
     ];
 
     public function tipoArea()
