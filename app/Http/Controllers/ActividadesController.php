@@ -34,15 +34,9 @@ class ActividadesController extends Controller
         function btn($idac, $activo){
 
           
-            if($activo == 1){
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }else{
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }
+            
+            return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            
         }
 
         function AB($data){
