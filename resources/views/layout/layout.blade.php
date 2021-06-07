@@ -24,6 +24,14 @@
   <link rel="stylesheet" href="{{asset('src/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('src/css/OverlayScrollbars.min.css')}}">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{asset('src/css/custom.css')}}">
+  <!-- Helpers JS -->
+  <script src="{{ asset('src/js/helpers.js') }}"></script>
+  {{-- Modal --}}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
@@ -45,7 +53,7 @@
             <li class="nav-item">
               <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>                 
+                <button type ="submit" class="btn btn-primary"><i class="fas fa-sign-out-alt"></i> Cerrar sesi&oacute;n</button>
               </a>
             </form>
             </li>
@@ -129,9 +137,9 @@
               <i class="nav-icon fas fa-copy"></i>
               <p>Seguimiento de</p>
               <br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p>
               <i class="fas fa-angle-left right"></i>
-              
+
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -140,15 +148,15 @@
                   <p>Actividades asignadas</p>
                 </a>
               </li>
-              
+
             </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="fas fa-chart-pie"></i>
-              <p>Gr&aacute;ficas</p> 
+              <p>Gr&aacute;ficas</p>
               <i class="fas fa-angle-left right"></i>
-              
+
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -157,15 +165,36 @@
                   <p>Gr&aacute;ficas seguimientos</p>
                 </a>
               </li>
-              
+
             </ul>
           </li>
-          
+
+            <li class="nav-item">
+                <a href="{{ url('tipos-actividades')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Tipos de actividades</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ url('areas')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Áreas</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ url('users')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Usuarios</p>
+                </a>
+            </li>
+
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
         </div>
-  
+
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -203,6 +232,13 @@
 <!-- Summernote
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
+<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('src/js/adminlte.js')}}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+ <!-- Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
   <!-- AdminLTE App -->
   <script src="{{asset('src/js/adminlte.js')}}"></script>

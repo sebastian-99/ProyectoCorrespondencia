@@ -52,6 +52,13 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'imagenes_perfil' => [
+            'driver' => 'local',
+            'root' => public_path( 'storage/imagenes_perfil'),
+            'url' => env('APP_URL').'/storage/imagenes_perfil',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
