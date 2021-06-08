@@ -14,7 +14,7 @@ class ActividadesController extends Controller
     public function reporte_actividades(){
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
         porcentaje(ac.idac) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -72,6 +72,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => $c->fecha_creacion,
                                     'asunto' => $c->asunto,
+                                    'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => $c->periodo,
                                     'importancia' => $c->importancia,
@@ -216,7 +217,7 @@ class ActividadesController extends Controller
                     ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
                     ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
                     ->select('users.idu',
-                            ' users.titulo',
+                            'users.titulo',
                             'users.nombre',
                             'users.app',
                             'users.apm',
@@ -563,7 +564,7 @@ class ActividadesController extends Controller
         $id_u = decrypt($id);
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
         porcentaje(ac.idac) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -629,6 +630,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => $c->fecha_creacion,
                                     'asunto' => $c->asunto,
+                                    'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => $c->periodo,
                                     'importancia' => $c->importancia,

@@ -116,7 +116,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Tipo de usuario - Detalle:</strong>
+                                    <strong>Tipo de usuario-Detalle:</strong>
                                     <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
                                     <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}" >
                                 </div>
