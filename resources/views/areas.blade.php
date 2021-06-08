@@ -38,7 +38,6 @@
         	filter
             data="{{ $json }}">
         	<zg-colgroup>
-            	<zg-column index='idar' header='#'  type='text'></zg-column>
             	<zg-column index='nombre' header='Nombre'  type='text'></zg-column>
             	<zg-column index='idtar' header='Tipo-área'  type='text'></zg-column>
                 <zg-column index='activo' header='Activo'  type='text'></zg-column>

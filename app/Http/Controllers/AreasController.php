@@ -14,7 +14,14 @@ class AreasController extends Controller
     public function index()
     {
         $areas = Areas::query()
+                        ->join('tipos_areas', 'tipos_areas.idtar', '=' , 'areas.idtar')
+                        ->select(
+                                'areas.idar',
+                                'areas.nombre',
+                                'areas.activo',
+                                'tipos_areas.nombre as idtar')
                         ->get();
+        
         $tipos_areas = TiposAreas::all();
         $array = array();
 

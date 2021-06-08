@@ -38,8 +38,7 @@
         	filter
             data="{{ $json }}">
         	<zg-colgroup>
-            	<zg-column index='idu' header='#'  type='text'></zg-column>
-            	<zg-column index='idtu_tipos_usuarios' header='Tipo-Uusario'  type='text'></zg-column>
+            	  <zg-column index='idtu_tipos_usuarios' header='Tipo-Uusario'  type='text'></zg-column>
                 <zg-column index='imagen' header='Imagen'></zg-column>
                 <zg-column index='titulo' header='Título'  type='text'></zg-column>
                 <zg-column index='nombre' header='Nombre'  type='text'></zg-column>

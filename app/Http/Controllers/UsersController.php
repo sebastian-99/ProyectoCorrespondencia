@@ -20,6 +20,20 @@ class UsersController extends Controller
     public function index()
     {
         $usuarios = User::query()
+                         ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                         ->join('areas', 'areas.idar', '=', 'users.idar_areas')
+                         ->select(
+                                'users.idu',
+                                'users.imagen',
+                                'users.titulo',
+                                'users.nombre',
+                                'users.app',
+                                'users.apm',
+                                'users.email',
+                                'users.activo',
+                                'tipos_usuarios.nombre as idtu_tipos_usuarios',
+                                'areas.nombre as idar_areas',
+                                )
                          ->get();
         $areas = Areas::all();
         $tipos_usuarios = TiposUsuarios::all();

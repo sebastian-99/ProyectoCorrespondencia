@@ -100,6 +100,37 @@
               </p>
             </a>
           </li> --}}
+        @if(Auth()->user()->idtu_tipos_usuarios == 1)
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              <p>Administraci&oacute;n<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('tipos-actividades')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Tipos de actividades</p>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{{ url('areas')}}" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Áreas</p>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{{ url('users')}}" class="nav-link">
+                  <i class="fas fa-user"></i>
+                  <p>Usuarios</p>
+                </a>
+            </li>
+            </ul>
+          </li>
+        @endif
+        @if(Auth()->user()->idtu_tipos_usuarios != 1)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
@@ -112,12 +143,14 @@
                   <p>Asignar actividad</p>
                 </a>
               </li>
+              @if(Auth()->user()->idtu_tipos_usuarios == 3)
               <li class="nav-item">
                 <a href="{{ url('reporte_actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades</p>
                 </a>
               </li>
+              @endif
               <li class="nav-item">
                 <a href="{{ url('actividades_asignadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -139,7 +172,7 @@
               <br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p>
               <i class="fas fa-angle-left right"></i>
-
+              
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -148,9 +181,26 @@
                   <p>Actividades asignadas</p>
                 </a>
               </li>
-
+              
             </ul>
           </li>
+          @endif
+          @if(Auth()->user()->idtu_tipos_usuarios == 1)
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>Actividades<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('reporte_actividades')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="fas fa-chart-pie"></i>
@@ -168,28 +218,6 @@
 
             </ul>
           </li>
-
-            <li class="nav-item">
-                <a href="{{ url('tipos-actividades')}}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Tipos de actividades</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ url('areas')}}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Áreas</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ url('users')}}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Usuarios</p>
-                </a>
-            </li>
-
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
