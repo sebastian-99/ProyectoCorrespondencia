@@ -52,7 +52,7 @@
                 filter
                 data = "{{$json}}">
                 <zg-colgroup>
-                    <zg-column index='turno' header='Turno' width="100" type='number'></zg-column>
+                    <zg-column index='turno' header='Turno' width="5%" type='number'></zg-column>
                     <zg-column index='fecha_creacion' header='Fecha creación' width="120" type='text'></zg-column>
                     <zg-column index='creador' header='Creador' width="120" type='text'></zg-column>
                     <zg-column index='periodo' header='Periodo' width="120" type='text'></zg-column>
