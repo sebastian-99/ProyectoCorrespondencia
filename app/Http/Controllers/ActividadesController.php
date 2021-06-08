@@ -160,7 +160,8 @@ class ActividadesController extends Controller
         INNER JOIN users AS us ON us.idu = re.idu_users
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
-            WHERE idreac_responsables_actividades = $idac");
+            WHERE idreac_responsables_actividades = $idac
+            GROUP BY idseac");
 
         $array = array();
 
