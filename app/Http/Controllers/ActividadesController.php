@@ -34,15 +34,9 @@ class ActividadesController extends Controller
         function btn($idac, $activo){
 
           
-            if($activo == 1){
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }else{
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }
+            
+            return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            
         }
 
         function AB($data){
@@ -222,7 +216,7 @@ class ActividadesController extends Controller
                     ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
                     ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
                     ->select('users.idu',
-                            'users.titulo',
+                            ' users.titulo',
                             'users.nombre',
                             'users.app',
                             'users.apm',
@@ -568,13 +562,89 @@ class ActividadesController extends Controller
     {
         $id_u = decrypt($id);
 
-        $ac_cre = DB::SELECT("SELECT ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, IF(ac.status = 1, 'Activo', 'Inactivo') as status
-            FROM actividades AS ac 
-            INNER JOIN users AS u ON u.idu = ac.idu_users
-            WHERE u.idu = $id_u
-            ORDER BY ac.fecha_creacion DESC");
+        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, 
+        porcentaje(ac.idac) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.idu_users = $id_u
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+
+
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+
+        function btn($idac, $activo){
+
+          
+            if($activo == 1){
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }else{
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }
+        }
+
+        function AB($data){
+
+            if(gettype($data) == "array"){
+
+                return $data[0]." de ".$data[1];
+            }else{
+                return 0;
+            }
+
+
+        }
+
+        function C($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data[2], 2, '.', ' ').'%';
+            }else{
+                return 0.00;
+            }
+
+        }
+
         
-        $json = json_encode($ac_cre);
+
+        foreach($ac_cre as $c){
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array('idac' => $c->idac,
+                                    'turno' => $c->turno,
+                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'asunto' => $c->asunto,
+                                    'creador' => $c->creador,
+                                    'periodo' => $c->periodo,
+                                    'importancia' => $c->importancia,
+                                    'nombre' => $c->nombre,
+                                    'activo' => $c->activo,
+                                    'acuse' => $c->acuse,
+                                    'idu_users' => $c->idu_users,
+                                    'AB' => AB($data),
+                                    'C' =>  C($data),
+                                    'operaciones' => btn($c->idac, $c->activo),
+                                    ));
+        }
+
+        
+       
+        $json = json_encode($array);
 
         return view ('actividades.actividadescreadas', compact('json'));
 
@@ -584,14 +654,58 @@ class ActividadesController extends Controller
     {
         $id_u = decrypt($id);
 
-        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio, ac.importancia, ac.status
+        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio,ac.fecha_fin,ac.importancia, ac.status, ac.activo
             FROM responsables_actividades AS ra 
             INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
             WHERE ra.idu_users = $id_u AND (ac.idu_users != $id_u OR ac.idu_users = $id_u)
-            ORDER BY ac.fecha_creacion DESC
-            ");
-        
-        $json = json_encode($ac_asig);
+            ORDER BY ac.fecha_creacion DESC");
+
+        $array = array();
+
+        function status($status){
+
+            if($status == 1){
+                return "Activo";
+            }elseif($status == 2){
+                return "Desarollo";
+            }else{
+                return "Cancelado";
+            }
+
+
+        }
+
+        function btn($idac, $activo){
+
+          
+            if($activo == 1){
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }else{
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }
+        }
+
+        foreach($ac_asig as $a){
+            
+            array_push($array, array(
+                                        'idac' => $a->idac,
+                                        'asunto' => $a->asunto,
+                                        'descripcion' => $a->descripcion,
+                                        'fecha_creacion' => $a->fecha_creacion,
+                                        'turno' => $a->turno,
+                                        'comunicado' => $a->comunicado,
+                                        'fecha_inicio_fin' => $a->fecha_inicio . " al " . $a->fecha_fin,
+                                        'importancia' => $a->importancia,
+                                        'status' => status($a->status),
+                                        'operaciones' => btn($a->idac, $a->activo),
+            ));
+        }
+
+        $json = json_encode($array);
 
         return view ('actividades.actividadesasignadas', compact('json'));
 

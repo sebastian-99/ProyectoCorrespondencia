@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TiposUsuarios extends Model
+class Participantes extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipos_usuarios';
-    protected $primaryKey = 'idtu';
+    protected $table = 'participantes';
+    protected $primaryKey = 'id_participantes';
     protected $fillable = [
-        'nombre'
+        'idac',
+        'idu',
     ];
-
 }

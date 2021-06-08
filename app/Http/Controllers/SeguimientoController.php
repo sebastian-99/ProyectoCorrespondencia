@@ -38,10 +38,10 @@ class SeguimientoController extends Controller
                 'users.app',
                 'users.apm',
 
-            ) 
+            )
             ->where('users.idu', '=', Auth()->user()->idu)
             ->get();
-            
+
 
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('consult', $consult);
@@ -49,7 +49,7 @@ class SeguimientoController extends Controller
 
     public function Seguimiento($idac)
     {
-        //Encriptar el id de la actividad que se esta consulutando 
+        //Encriptar el id de la actividad que se esta consulutando
         $idac = decrypt($idac);
         //Obtener detalles de la actividad
         $actividades = DB::table('actividades')
@@ -101,7 +101,7 @@ class SeguimientoController extends Controller
             ->where('users.idu', '=', Auth()->user()->idu)
             ->get();
 
-        //Obtener la fecha actual 
+        //Obtener la fecha actual
         $now = Carbon::now();
 
         //Obtener el responsable que le esta dando seguimiento ala actividad

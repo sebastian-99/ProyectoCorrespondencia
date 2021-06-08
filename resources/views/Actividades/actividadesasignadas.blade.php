@@ -35,12 +35,13 @@
         	<zg-colgroup>
             	<zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
             	<zg-column index='asunto' header='Asunto' width="100" type='text'></zg-column>
-            	<zg-column index='descripcion' header='Descripcion' width="200" type='text'></zg-column>
+            	<zg-column index='descripcion' header='Descripcion' width="100" type='text'></zg-column>
             	<zg-column index='fecha_creacion' header='Fecha de creacion' width="100" type='text'></zg-column>
             	<zg-column index='comunicado' header='Comunicado' width="200" type='text'></zg-column>
-            	<zg-column index='fecha_inicio' header='Fecha de inicio' width="100" type='text'></zg-column>
+            	<zg-column index='fecha_inicio_fin' header='Fecha de inicio' width="100" type='text'></zg-column>
             	<zg-column index='importancia' header='Importancia' width="100" type='text'></zg-column>
             	<zg-column index='status' header='Estatus' width="100" type='text'></zg-column>
+            	<zg-column index='operaciones' width="100" header='Operaciones'  type='text'></zg-column>
         	</zg-colgroup>
     	</zing-grid>
 	</div>

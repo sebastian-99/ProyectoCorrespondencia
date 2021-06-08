@@ -21,13 +21,14 @@ class CreateActividadesTable extends Migration
             $table->string('turno');
             $table->string('comunicado');
             $table->dateTime('fecha_inicio');
-            $table->dateTime('hora_inicio');
+            $table->timestamp('hora_inicio');
             $table->dateTime('fecha_fin');
-            $table->dateTime('hora_fin');
+            $table->timestamp('hora_fin');
             $table->unsignedBigInteger('idtac_tipos_actividades');
             $table->unsignedBigInteger('idar_areas');
             $table->unsignedBigInteger('idu_users');
-            $table->boolean('status')->default(1);
+            $table->timestamp('finalizado_en');
+            $table->string('status');
             $table->string('importancia');
             $table->string('activo');
             $table->string('archivo1', 255)->nullable();
