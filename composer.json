@@ -12,8 +12,7 @@
         "inertiajs/inertia-laravel": "^0.4.2",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.3",
-        "yajra/laravel-datatables-oracle": "^9.18"
+        "laravel/ui": "^3.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
