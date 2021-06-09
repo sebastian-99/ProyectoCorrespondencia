@@ -81,8 +81,9 @@ $('document').ready(()=>{
                 for (let index = 1; index <= moment().weeksInYear(); index++) {
                     const template = `
                         <option value="${index}">
-
-                            ${moment(year).set({week: index, day: 0}).format('DD-MMM-YYYY') }-
+                            DEL
+                            ${moment(year).set({week: index, day: 0}).format('DD-MMM-YYYY') }
+                            AL
                             ${moment(year).set({week: index, day: 6}).format('DD-MMM-YYYY') }
                             </option>
                     `
@@ -111,7 +112,6 @@ $('document').ready(()=>{
         const rango = $('input:radio[name=rango]:checked').val()
         switch (rango){
             case 'mensual':
-                    console.log(direccionDeCarrera);
                     const mes = Number(moment().month(rangoInicial).format('MM'))
                     $.ajax({
                         type: 'GET',
