@@ -14,7 +14,7 @@ class ActividadesController extends Controller
 {
 
     public function seguimiento($idac){
-        return redirect()->route('Seguimiento',[ 'idac' => encrypt($idac) ]);
+        return redirect()->route('detallesSeguimiento',[ 'idac' => encrypt($idac) ]);
     }
 
     public function dashboard()
