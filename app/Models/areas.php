@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class areas extends Model
+class Areas extends Model
 {
     use HasFactory;
 
@@ -13,7 +13,8 @@ class areas extends Model
     protected $primaryKey = 'idar';
     protected $fillable = [
         'nombre',
-        'idtar'
+        'idtar',
+        'activo'
     ];
 
     public function tipoArea()

@@ -1,8 +1,11 @@
 @extends('layout.layout')
 @section('content')
 @section('header')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+    <script>
+      if (es) ZingGrid.registerLanguage(es, 'custom');
+    </script> 
 @endsection
 
 
@@ -24,41 +27,37 @@
         </div>
     </div>
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="tabla">
-            <thead class="text-center">
-              <tr style="background-color: #1F75FE; color: #ffffff">
-                <th scope="col">No. Seguimiento</th>
-                <th scope="col">Fecha de avance</th>
-                <th scope="col">Detalle</th>
-                <th scope="col">Status</th>
-                <th scope="col">% de avance</th>
-                <th scope="col">Archivos</th>
-              </tr>
-            </thead>
-            <tbody>
-            @foreach ($consult as $c)
-            <tr class="text-center">
-                <td>{{$c->idseac}}</td>
-                <td>{{$c->fecha}}</td>
-                <td>{{$c->detalle}}</td>
-                <td>{{$c->estado}}</td>
-                <td>{{$c->porcentaje}}</td>
-                <td><a href="javascript:void(0)" data-toggle="tooltip" data-id="{{encrypt($c->idseac)}}"  data-original-title="DetallesArchivos" 
-                     class="edit btn btn-success btn-sm DetallesArchivos">DetallesArchivos</a></td>
-                
 
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-      </div>
-    </div>
-  </div>
 
+    <zing-grid
+                lang="custom" 
+                caption='Actividades' 
+                sort 
+                search 
+                pager 
+                page-size='3' 
+                page-size-options='1,2,3,4,5,10' 
+                layout='row' 
+                viewport-stop
+                theme='android'
+                id='zing-grid'
+                filter
+                data = "{{$json}}">
+                <zg-colgroup>
+                    <zg-column index='idseac' header='No. Seguimeinto' width="100" type='text'></zg-column>
+                    <zg-column index='fecha' header='Fecha de avance' width="120" type='text'></zg-column>
+                    <zg-column index='detalle' header='Detalles' width="500" type='text'></zg-column>
+                    <zg-column index='estado' header='Estado' width="100" type='text'></zg-column>
+                    <zg-column index='porcentaje' header='Porcentaje' width="100" type='text'></zg-column>
+                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="200" type='text'></zg-column>
+                </zg-colgroup>
+              </zing-grid>
+
+
+
+  
   <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
             <h4 class="modal-title" id="modelHeading"></h4></div>
@@ -81,8 +80,7 @@
             <thead class="text-center">
               <tr style="background-color: #1F75FE; color: #ffffff">
                 <th scope="col">Nombre </th>
-                <th scope="col">Detalle</th>
-                <th scope="col">Arrchivo</th>
+                <th scope="col">Archivo</th>
               </tr>
             </thead>
             <tbody>
@@ -102,10 +100,7 @@
   </div>
 
 
-<script>
-    $("#tabla").DataTable();
 
-</script>
 <script type="text/javascript">
  
     $('body').on('click', '.DetallesArchivos',function(){
@@ -116,19 +111,34 @@
         $('#tablaModal>tbody>tr').remove();
        while ( i!=1+i){
          if(data[i].nombre == null){
+           i=i+1;
            break;
          }else{
       
        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"' disabled></td>"
-        var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' disabled></td>"
-        var ruta = "<td><input id='ruta"+i+"' name='ruta"+i+"' disabled></td>"
-        
-        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta+"</tr>");
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
+      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+        if(data[i].ruta == ''){
+        var texto = '<td>no hay archivos disponibles</td>';
+        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-        $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(data[i].ruta);
+       // $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }else if(data[i].ruta != '' ){
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = '{{asset(('Seguimientos'))}}/'+data[i].ruta;
+        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+      //  $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }
+       
+     
   
         i=i+1;
          }

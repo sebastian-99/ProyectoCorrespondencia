@@ -1,14 +1,18 @@
 @extends('layout.layout')
 @section('content')
 @section('header')
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+    <script>
+      if (es) ZingGrid.registerLanguage(es, 'custom');
+    </script> 
 @endsection
 <div class="card">
 <div class="card-header">
       <div class="row">
         <div class="col-sm-11">
-          <h3>Reporte de actividades / oficios</h3>
+          <h3>Responsables de la actividad</h3>
         </div>
         <div class="col-sm-2">
         <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
@@ -16,45 +20,30 @@
       </div>
       
     </div>
-    <div class="card-body">
-                <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="tabla">
-            <thead class="text-center">
-              <tr style="background-color: #1F75FE; color: #ffffff">
-                <th scope="col">Nombre atendio</th>
-                <th scope="col">Cargo</th>
-                <th scope="col">Avance</th>
-                <th scope="col">Status Atenci&aacute;n</th>
-                <th scope="col">Acuse recibido</th>
-                <th scope="col">Operaciones</th>
-                
-              </tr>
-            </thead>
-            <tbody>
-            @foreach ($query as $c)
-              <tr class="text-center">
-               
-              <td>{{$c->nombre_us}}</td>
-                <td>{{$c->nombre_ar}}</td>
-                <td>{{$c->porcentaje}}</td>
-                <td>{{$c->estado}}</td>
-                <td>{{$c->acuse}}</td>
-                <td>
-                   
-                <a href="{{route('detallesSeguimiento', encrypt($c->idreac))}}"><button type="button" class="btn btn-success">Ver detalle</button></a>    
-                </td>
+    <zing-grid
+                lang="custom" 
+                caption='Responsables' 
+                sort 
+                search 
+                pager 
+                page-size='3' 
+                page-size-options='1,2,3,4,5,10' 
+                layout='row' 
+                viewport-stop
+                theme='android'
+                id='zing-grid'
+                filter
+                data = "{{$json}}">
+                <zg-colgroup>
+                    <zg-column index='nombre_us' header='Nombre atendio' width="250" type='text'></zg-column>
+                    <zg-column index='nombre_ar' header='Cargo' width="150" type='text'></zg-column>
+                    <zg-column index='porcentaje' header='Avance' width="120" type='text'></zg-column>
+                    <zg-column index='estado' header='Estado' width="120" type='text'></zg-column>
+                    <zg-column index='acuse' header='Acuse' width="100" type='text'></zg-column>
+                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="200" type='text'></zg-column>
+                </zg-colgroup>
+              </zing-grid>
 
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    $("#tabla").DataTable();
-   
 
-</script>
   @endsection
