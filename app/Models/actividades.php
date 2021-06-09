@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -62,7 +63,10 @@ class Actividades extends Model
 
     public function getIncompletasAttribute()
     {
-        return $this->responsables()->where('fecha','>',"$this->fecha_fin")->get();
+        return $this->where('fecha_fin','<',Carbon::now()->format('Y-m-d'))
+            ->join('responsables_actividades','idac_actividades', 'actividades.idac')
+            ->where('responsables_actividades.fecha',null)
+            ->get();
     }
 
     public function getTotalCompletadasAttribute()
@@ -77,7 +81,10 @@ class Actividades extends Model
 
     public function getTotalIncompletasAttribute()
     {
-        return $this->responsables()->where('fecha','>=',"$this->fecha_fin")->count();
+        return $this->where('fecha_fin','<',Carbon::now()->format('Y-m-d'))
+            ->join('responsables_actividades','idac_actividades', 'actividades.idac')
+            ->where('responsables_actividades.fecha',null)
+            ->count();
     }
 
 
