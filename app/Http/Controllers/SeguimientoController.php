@@ -31,7 +31,8 @@ class SeguimientoController extends Controller
 
         $array = array();
 
-        function recorrer($value){
+        function recorrer($value)
+        {
             $arr = (gettype($value) == "string") ? explode('-', $value) : null;
             return $arr;
         }
@@ -153,6 +154,7 @@ class SeguimientoController extends Controller
         //Obtener los seguimientos que se le ha dado a la actividad asignada
         $seguimientos = DB::table('seguimientos_actividades')
             ->join('responsables_actividades', 'responsables_actividades.idreac', '=', 'seguimientos_actividades.idreac_responsables_actividades')
+            ->leftJoin('archivos_seguimientos as arse', 'arse.idseac_seguimientos_actividades', '=', 'seguimientos_actividades.idseac')
             ->select(
                 'seguimientos_actividades.idseac',
                 'seguimientos_actividades.fecha',
@@ -162,17 +164,21 @@ class SeguimientoController extends Controller
                 'responsables_actividades.idu_users',
                 'responsables_actividades.idac_actividades',
                 'seguimientos_actividades.idreac_responsables_actividades',
+                'arse.idarseg',
             )
             ->where('responsables_actividades.idac_actividades', '=', $idac)
             ->where('responsables_actividades.idu_users', '=', Auth()->user()->idu)
+            ->groupBy('seguimientos_actividades.idseac')
             ->get();
+        //return $seguimientos;
 
         $array_sa = array();
 
-        function detalles()
+
+        function detalles($idseac, $idarseg)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' href=''><i class='nav-icon fas fa-eye'></i></a>
-                        <a class='btn btn-danger mt-1 btn-sm' href=''><i class='nav-icon fas fa-trash'></i></a>";
+            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . "><i class='nav-icon fas fa-trash'></i></a>";
         }
 
         foreach ($seguimientos as $seg_ac) {
@@ -184,7 +190,7 @@ class SeguimientoController extends Controller
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles(),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg),
             ));
         }
 
@@ -225,18 +231,26 @@ class SeguimientoController extends Controller
         $user_id = Auth()->user()->idu;
         $files = $request->file('ruta');
 
-        if ($request->hasFile('ruta')) { }
+        if ($request->hasFile('ruta')) {
 
-        foreach ($files as $file) {
-            if (Storage::putFileAs('/Seguimientos/', $file, $file->getClientOriginalName())) {
+            foreach ($files as $file) {
+                if (Storage::putFileAs('/Seguimientos/', $file, $file->getClientOriginalName())) {
 
-                archivosSeguimientos::create([
-                    'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
-                    'nombre' => $file->getClientOriginalName(),
-                    'ruta' => $file->getClientOriginalName(),
-                    'detalle' => $detalle,
-                ]);
+                    archivosSeguimientos::create([
+                        'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
+                        'nombre' => $file->getClientOriginalName(),
+                        'ruta' => $file->getClientOriginalName(),
+                        'detalle' => $detalle,
+                    ]);
+                }
             }
+        } else {
+            archivosSeguimientos::create([
+                'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
+                'nombre' => 'Sin archivo',
+                'ruta' => 'Sin archivo',
+                'detalle' => $detalle,
+            ]);
         }
 
 
@@ -246,18 +260,21 @@ class SeguimientoController extends Controller
         Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
     }
-    public function EliminarSeguimiento($idarse)
+    public function EliminarSeguimiento($idarseg, $idseac)
+
     {
-        $seg = archivosSeguimientos::find($idarse);
-        dd($seg);
-        //$archs = archivosSeguimientos::find('idarseg');
+        //$ultimo = archivosSeguimientos::find('idarse')->orderBy('idarse')->desc();
+        $idarseg = decrypt($idarseg);
+        $idseac = decrypt($idseac);
 
-        // archivosSeguimientos::find($archs)->delete();
-        $seg->idreac_responsables_actividades = 4;
+        $elim = DB::DELETE("DELETE FROM archivos_seguimientos  
+        where idseac_seguimientos_actividades =$idseac
+        ");
 
-        $consid = responsablesActividades::find($seg->idreac_responsables_actividades);
+        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades  
+        where idseac =$idseac
+        ");
 
-        Session::flash('message2', 'Se ha eliminado este seguimiento');
-        return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
+        return "Seguimiento eliminado";
     }
 }

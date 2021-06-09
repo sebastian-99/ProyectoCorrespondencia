@@ -28,7 +28,7 @@ Route::resource('areas', AreasController::class, ['names' => 'areas']);
 Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
 Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
 Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
-Route::get('EliminarSeguimiento/{idarse}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
+Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
 
 
 
