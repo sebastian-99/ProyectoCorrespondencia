@@ -37,6 +37,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
 
   @yield('header')
+</head>
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
   <head class="main-header">
@@ -59,10 +60,11 @@
             </li>
           </ul>
         </nav>
-  </head>
+      </head>
   <img src="{{asset('images/BarraColores.png')}}" width="100%" height="10px">
 
-</head>
+
+
 
 
 
@@ -255,12 +257,12 @@
 
   <!-- Bootstrap 4 -->
   <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
-  <!-- Tempusdominus Bootstrap 4
-<script src="{{-- asset('src/js/tempusdominus-bootstrap-4.min.js') --}}"></script>
-<!-- Summernote
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+  <!-- Tempusdominus Bootstrap 4-->
+{{-- <script src="asset('src/js/tempusdominus-bootstrap-4.min.js')"></script> --}}
+<!-- Summernote-->
+{{-- <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -268,9 +270,6 @@
  <!-- Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
-  <!-- AdminLTE App -->
-  <script src="{{asset('src/js/adminlte.js')}}"></script>
-  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 
   @yield('scripts')
