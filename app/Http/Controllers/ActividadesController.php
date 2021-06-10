@@ -649,7 +649,7 @@ class ActividadesController extends Controller
        
         $json = json_encode($array);
 
-        return view ('actividades.actividadescreadas', compact('json'));
+        return view ('Actividades.actividadescreadas', compact('json'));
 
     }
 
@@ -710,7 +710,7 @@ class ActividadesController extends Controller
 
         $json = json_encode($array);
 
-        return view ('actividades.actividadesasignadas', compact('json'));
+        return view ('Actividades.actividadesasignadas', compact('json'));
 
     }
 
