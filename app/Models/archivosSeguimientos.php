@@ -18,7 +18,7 @@ class ArchivosSeguimientos extends Model
      * @var array
      */
     protected $fillable = [
-        'idseac',
+        'idseac_seguimientos_actividades',
         'nombre',
         'ruta',
         'detalle',
