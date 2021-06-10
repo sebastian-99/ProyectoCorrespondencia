@@ -185,7 +185,7 @@ export default class Area{
                                         <td> ${dato.fecha_fin} </td>
                                         <td> ${dato.importancia} </td>
                                         <td>
-                                            <a href="/admin/seguimiento/${dato.idac}" class="btn btn-link">Ver Detalle</a>
+                                            <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
                                         </td>
                                     </tr>
                                 `
