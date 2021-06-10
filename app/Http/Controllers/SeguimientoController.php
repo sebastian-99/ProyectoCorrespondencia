@@ -96,7 +96,7 @@ class SeguimientoController extends Controller
         $idac = decrypt($idac);
         $id_user = Auth()->user()->idu;
 
-        
+
 
         //Obtener detalles de la actividad
 
@@ -151,7 +151,7 @@ class SeguimientoController extends Controller
         FROM responsables_actividades AS res
         JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac AND idu_users = $id_user
-        ");               
+        ");
 
         //Ver quien ha visto su actividad asignada
 
@@ -186,7 +186,7 @@ class SeguimientoController extends Controller
                 'responsables_actividades.idac_actividades',
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'arse.idarseg',
-                
+
             )
             ->where('responsables_actividades.idac_actividades', '=', $idac)
             ->where('responsables_actividades.idu_users', '=', Auth()->user()->idu)
@@ -284,7 +284,8 @@ class SeguimientoController extends Controller
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
     }
 
-    public function DetallesArchivos($idarc){
+    public function DetallesArchivos($idarc)
+    {
         $idarc = decrypt($idarc);
         $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
         FROM archivos_seguimientos AS res
@@ -308,6 +309,9 @@ class SeguimientoController extends Controller
         where idseac =$idseac
         ");
 
-        return "Seguimiento eliminado";
+        Session::flash('message2', 'Se ha eliminado el seguimiento de actividad');
+
+
+        return back();
     }
 }

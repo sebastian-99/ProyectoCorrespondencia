@@ -117,7 +117,7 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
                     </div>
-                    <p class="bd-lead">En tiempo</p>
+                   <input class="form-control form-control-sm bg-success"  value="En tiempo" type="text" disabled>
 
 
                 </div>
