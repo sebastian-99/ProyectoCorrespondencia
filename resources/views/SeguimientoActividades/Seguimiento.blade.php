@@ -8,6 +8,12 @@
 <script>
     if (es) ZingGrid.registerLanguage(es, 'custom');
 </script>
+<style>
+    body {
+        color: #4D4D4D;
+        font: 15px, Helvetica;
+    }
+</style>
 
 @endsection
 
@@ -86,7 +92,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>2</td>
+                            <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
                             <td>{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</td>
                             <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
                             <td>Si</td>
@@ -106,12 +112,12 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Avance</h3>
                     </div>
-                    <p class="bd-lead">General</p>
-                    <p class="bd-lead">Individual</p>
+                    <p class="bd-lead"></p>
+                    <p class="bd-lead"><h6>{{$max_ai->avance_i}}%</h6></p> 
                     <div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
                     </div>
-                    <p class="bd-lead">En tiempo</p>
+                   <input class="form-control form-control-sm bg-success"  value="En tiempo" type="text" disabled>
 
 
                 </div>
@@ -135,22 +141,15 @@
                     </div>-->
                     <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
 
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="" class="form-label">Seguimiento realizado por</label>
-                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}" disabled>
+                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}   /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
                         </div>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                         <div class="mb-3">
-                            <label for="tipo_usuario" class="form-label">Tipo usuario (Detalle)</label>
-                            <input type="text" class="form-control form-control-sm" id="tipo_usuario" value="{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-10">
-                        <div class="mb-3">
-                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label>
-                            <input type="text" class="form-control form-control-sm" id="fecha_seg" name="fecha" value="{{$now->format('d-m-y')}}" disabled>
+                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label> ( {{$now->locale('es')->isoFormat('D MMMM h:mm')}} )
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -161,33 +160,47 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <div class="mb-3">
-                                <label for="porcentaje" class="form-label">Porcentaje Avance</label>
-                                <span class="input-group-text"><input type="text" class="form-control form-control-sm" id="porcentaje" name="porcentaje" required> %</span>
-                            </div>
+
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="porcentaje" class="form-label">Porcentaje </label>
+                            <input class="form-control" type="range" list="tickmarks" id="porcentaje" name="porcentaje" value="{{$max_ai->avance_i}}">
+                            
+                            <datalist id="tickmarks">
+                                <option value="0" label="0%">
+                                <option value="10">
+                                <option value="20">
+                                <option value="30">
+                                <option value="40">
+                                <option value="50" label="50%">
+                                <option value="60">
+                                <option value="70">
+                                <option value="80">
+                                <option value="90">
+                                <option value="100" label="100%">
+                            </datalist>
                         </div>
-                        <div class="col-sm-7">
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado Actividad</label><br>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="estado" id="inlineRadio1" value="Pendiente" checked>
-                                    <label class="form-check-label" for="inlineRadio1">Pendiente</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="estado" id="inlineRadio2" value="Completo">
-                                    <label class="form-check-label" for="inlineRadio2">Completo</label>
-                                </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado Actividad</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="estado" id="inlineRadio1" value="Pendiente" checked>
+                                <label class="form-check-label" for="inlineRadio1">Pendiente</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="estado" id="inlineRadio2" value="Completo">
+                                <label class="form-check-label" for="inlineRadio2">Completo</label>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="col-sm-10">
-
-                        <label for="ruta[]" class="form-label">Seleccione Archivo</label>
-                        <input class="form-group form-group-sm" id="ruta[]" name="ruta[]" type="file" multiple>
-
+                        <div class="form-group">
+                            <label for="ruta[]" class="form-label">Seleccione Archivo</label>
+                            <input class="form-control form-control-sm" id="ruta[]" name="ruta[]" type="file" multiple>
+                        </div>
                     </div>
 
 
@@ -301,15 +314,11 @@
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                 <div class="card-body">
       <div class="table-responsive">
-
-
-
      
-        <table class="table table-bordered" id="tablaModal">
+        <table class="table table-striped table-bordered" id="tablaModal">
             <thead class="text-center">
               <tr style="background-color: #607d8b; color: #ffffff">
                 <th scope="col">Nombre </th>
-               <!-- <th scope="col">Detalle </th>-->
                 <th scope="col">Archivo</th>
               </tr>
             </thead>
@@ -347,8 +356,8 @@
       
        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' class='form-control form-control-sm' name='nombre"+i+"'  style='width:250px' disabled></td>"
-        //var detalle = "<td><input id='detalle"+i+"' class='form-control form-control-sm' name='detalle"+i+"' style='width:250px' disabled></td>"
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
+      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
         if(data[i].ruta == ''){
         var texto = '<td>no hay archivos disponibles</td>';
         $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
@@ -358,7 +367,7 @@
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
         }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-sm btn-danger' ><i class='fa fa-file'></i></a></td>"
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
         var archivo = '{{asset(('Seguimientos'))}}/'+data[i].ruta;
         $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
