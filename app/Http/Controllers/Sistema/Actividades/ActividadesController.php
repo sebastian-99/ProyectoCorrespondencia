@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Sistema\Actividades;
 
 use App\Http\Controllers\Controller;
-use App\Models\actividades;
-use App\Models\areas;
-use App\Models\tiposAreas;
+use App\Models\Actividades as actividades;
+use App\Models\Areas as areas;
+use App\Models\TiposAreas as tiposAreas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

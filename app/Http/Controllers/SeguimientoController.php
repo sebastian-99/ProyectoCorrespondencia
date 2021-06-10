@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\Models\actividades;
-use App\Models\seguimientosActividades;
-use App\Models\archivosSeguimientos;
-use App\Models\responsablesActividades;
+use App\Models\Actividades as actividades;
+use App\Models\SeguimientosActividades as seguimientosActividades;
+use App\Models\ArchivosSeguimientos as archivosSeguimientos;
+use App\Models\ResponsablesActividades as responsablesActividades;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

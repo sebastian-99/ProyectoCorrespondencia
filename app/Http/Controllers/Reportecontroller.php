@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
-use App\Models\actividades;
+use App\Models\Actividades as actividades;
 
 use Illuminate\Support\Facades\DB;
 
