@@ -18,6 +18,9 @@ class SeguimientoController extends Controller
 
     public function actividades_asignadas()
     {
+        //Filtrar solo mis actividades que tengo asignadas
+        $id_user = Auth()->user()->idu;
+
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
         porcentaje(ac.idac) AS porcentaje
@@ -25,7 +28,7 @@ class SeguimientoController extends Controller
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ra.idu_users = $id_user
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
 
@@ -91,6 +94,9 @@ class SeguimientoController extends Controller
     {
         //Encriptar el id de la actividad que se esta consulutando 
         $idac = decrypt($idac);
+        $id_user = Auth()->user()->idu;
+
+        
 
         //Obtener detalles de la actividad
 
@@ -140,6 +146,24 @@ class SeguimientoController extends Controller
             ->where('idac', $idac)
             ->get();
 
+        //Porcenteje mas alto del de avance
+        $max_ai = DB::SELECT("SELECT MAX(seg.porcentaje) AS avance_i
+        FROM responsables_actividades AS res
+        JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
+        WHERE idac_actividades = $idac AND idu_users = $id_user
+        ");               
+
+        //Ver quien ha visto su actividad asignada
+
+        $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra  
+        WHERE idac_actividades = $idac
+        AND ra.acuse = 1");
+        //dd($atendido);
+
+        //Ver el total de personas asignadas a esa actividad
+        $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra  
+        WHERE idac_actividades = $idac");
+
         //Marca que el usuario le ha empezado a dar seguimiento a su actividad en el campo acuse = 1
 
         $consulta = $resp[0]->idreac;
@@ -147,9 +171,6 @@ class SeguimientoController extends Controller
         if ($acuse == '0') {
             DB::UPDATE("UPDATE responsables_actividades SET acuse = '1' WHERE idreac = $consulta");
         }
-
-
-
 
         //Obtener los seguimientos que se le ha dado a la actividad asignada
         $seguimientos = DB::table('seguimientos_actividades')
@@ -165,15 +186,14 @@ class SeguimientoController extends Controller
                 'responsables_actividades.idac_actividades',
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'arse.idarseg',
+                
             )
             ->where('responsables_actividades.idac_actividades', '=', $idac)
             ->where('responsables_actividades.idu_users', '=', Auth()->user()->idu)
             ->groupBy('seguimientos_actividades.idseac')
             ->get();
-        //return $seguimientos;
 
         $array_sa = array();
-
 
         function detalles($idseac, $idarseg)
         {
@@ -202,7 +222,10 @@ class SeguimientoController extends Controller
             ->with('resp', $resp[0])
             ->with('json_sa', $json_sa)
             ->with('user', $user[0])
-            ->with('now', $now);
+            ->with('now', $now)
+            ->with('atendido', $atendido[0])
+            ->with('total_at', $total_at[0])
+            ->with('max_ai', $max_ai[0]);
     }
 
     public function AgregarSeguimiento(Request $request)
@@ -218,7 +241,7 @@ class SeguimientoController extends Controller
 
         $seg_ac = new seguimientosActividades;
         $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
-        $seg_ac->fecha = $now->format('y-m-d');
+        $seg_ac->fecha = $now;
         $seg_ac->detalle = $request->detalle;
         $seg_ac->porcentaje = $request->porcentaje;
         $seg_ac->estado = $request->estado;
@@ -260,6 +283,16 @@ class SeguimientoController extends Controller
         Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
     }
+
+    public function DetallesArchivos($idarc){
+        $idarc = decrypt($idarc);
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        FROM archivos_seguimientos AS res
+        INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
+        WHERE res.idseac_seguimientos_actividades = $idarc");
+        return response()->json($query);
+    }
+
     public function EliminarSeguimiento($idarseg, $idseac)
 
     {
