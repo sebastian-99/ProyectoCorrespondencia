@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\actividades;
-use App\Models\users;
-use App\Models\seguimientos_actividades;
+use App\Models\Actividades;
+use App\Models\Users;
+use App\Models\SeguimientosActividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller

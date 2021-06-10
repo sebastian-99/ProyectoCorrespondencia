@@ -43,12 +43,12 @@ class Actividades extends Model
 
     public function area()
     {
-        return $this->belongsTo(areas::class,'idar_areas','idar');
+        return $this->belongsTo(Areas::class,'idar_areas','idar');
     }
 
     public function responsables()
     {
-        return $this->hasMany(responsablesActividades::class,'idac_actividades');
+        return $this->hasMany(ResponsablesActividades::class,'idac_actividades');
     }
 
     public function getCompletadasAttribute()
