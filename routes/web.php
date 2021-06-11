@@ -22,7 +22,7 @@ use App\Http\Controllers\TiposActividadesController;
 |
 */
 
-/*
+
 
 Auth::routes();
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -30,7 +30,7 @@ Route::get('/panel', [PanelController::class,'panel']);
 Route::get('/', function () {
     return view('auth.login');
 });
-*/
+
 
 
 Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);

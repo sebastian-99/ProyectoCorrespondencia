@@ -235,7 +235,7 @@ class ActividadesController extends Controller
 
     public function tipousuarios(Request $request){
 
-        $id_user = Auth()->user()->idu;
+        //$id_user = Auth()->user()->idu;
         $id = $request->tipo_u;
         $id_seleccionado;
 
@@ -244,7 +244,7 @@ class ActividadesController extends Controller
             $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
             INNER JOIN areas AS a ON a.idar = u.idar_areas
-            WHERE u.idu NOT IN($id_user)
+            WHERE u.idtu_tipos_usuarios NOT IN(1)
             AND a.idar = $id[$b]");
 
             $id_seleccionado[$b] = $consul;
