@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function responsables()
     {
-        return $this->hasMany(responsablesActividades::class,'idu_users', $this->primary_key);
+        return $this->hasMany(ResponsablesActividades::class,'idu_users', $this->primary_key);
     }
 
 }

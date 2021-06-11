@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -37,6 +37,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet">
 
   @yield('header')
+</head>
 <body class="hold-transition skin-yellow sidebar-mini">
 <div class="wrapper">
   <head class="main-header">
@@ -59,10 +60,11 @@
             </li>
           </ul>
         </nav>
-  </head>
+      </head>
   <img src="{{asset('images/BarraColores.png')}}" width="100%" height="10px">
 
-</head>
+
+
 
 
 
@@ -82,7 +84,7 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <img src="{{asset('storage/imagenes_perfil') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
               <a href="{{url('/panel')}}" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
@@ -113,14 +115,14 @@
                   <p>Tipos de actividades</p>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a href="{{ url('areas')}}" class="nav-link">
                   <i class="nav-icon fas fa-edit"></i>
                   <p>Áreas</p>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a href="{{ url('users')}}" class="nav-link">
                   <i class="fas fa-user"></i>
@@ -231,12 +233,12 @@
 
   <!-- Bootstrap 4 -->
   <script src="{{asset('src/js/bootstrap.bundle.min.js')}}"></script>
-  <!-- Tempusdominus Bootstrap 4
-<script src="{{-- asset('src/js/tempusdominus-bootstrap-4.min.js') --}}"></script>
-<!-- Summernote
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+  <!-- Tempusdominus Bootstrap 4-->
+{{-- <script src="asset('src/js/tempusdominus-bootstrap-4.min.js')"></script> --}}
+<!-- Summernote-->
+{{-- <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script>
+<script src="{{asset('src/js/jquery.overlayScrollbars.min.js')}}"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{asset('src/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -244,9 +246,6 @@
  <!-- Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
-  <!-- AdminLTE App -->
-  <script src="{{asset('src/js/adminlte.js')}}"></script>
-  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 
   @yield('scripts')

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Actividades;
 use App\Models\Users;
-use App\Models\Seguimientos_actividades;
+use App\Models\SeguimientosActividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller
@@ -648,7 +648,7 @@ class ActividadesController extends Controller
        
         $json = json_encode($array);
 
-        return view ('actividades.actividadescreadas', compact('json'));
+        return view ('Actividades.actividadescreadas', compact('json'));
 
     }
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Sistema\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\responsablesActividades;
-use App\Models\seguimientosActividades;
+use App\Models\ResponsablesActividades as responsablesActividades;
+use App\Models\SeguimientosActividades as seguimientosActividades;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
