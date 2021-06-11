@@ -8,6 +8,17 @@
         </script>
     @endsection
 
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
 {{-- Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
@@ -29,8 +40,8 @@
         	sort
         	search
         	pager
-        	page-size='3'
-        	page-size-options='1,2,3,4,5,10'
+        	page-size='10'
+        	page-size-options='10,15,20,25,30'
         	layout='row'
         	viewport-stop
         	theme='android'
@@ -115,6 +126,11 @@
                 @error('email')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
+                <label for="password">Contraseña: <b class="text-danger">*</b></label>
+                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" required>
+                @error('password')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+              </div>
+              <div class="form-group">
                 <label for="idar_areas">Área: <b class="text-danger">*</b></label>
                 <select class="form-control @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
                     <option value="">Selección</option>
@@ -194,6 +210,11 @@
                 <label for="email">Correo:</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user_edit->email) }}" required>
                 @error('email')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+              </div>
+              <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password', $user_edit->password) }}" required>
+                @error('password')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
                 <label for="idar_areas">Área:</label>
