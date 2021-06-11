@@ -4,23 +4,204 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Actividades;
+use App\Models\Users;
+use App\Models\SeguimientosActividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller
 {
     public function reporte_actividades(){
 
-        $consult = DB::SELECT("SELECT a.idac ,a.turno, a.fecha_creacion, a.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(a.fecha_inicio, ' al ', a.fecha_fin) AS periodo, a.importancia, ar.nombre, a.activo
-        FROM actividades AS a
-        INNER JOIN users AS us ON us.idu = a.idu_users
-        INNER JOIN areas AS ar ON ar.idar = a.idar_areas");
-    
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        porcentaje(ac.idac) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+
+        function btn($idac, $activo){
+
+          
+            
+            return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            
+        }
+
+        function AB($data){
+
+            if(gettype($data) == "array"){
+
+                return $data[0]." de ".$data[1];
+            }else{
+                return 0;
+            }
+
+
+        }
+
+        function C($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data[2], 2, '.', ' ').'%';
+            }else{
+                return 0.00;
+            }
+
+        }
+
+        
+
+        foreach($consult as $c){
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array('idac' => $c->idac,
+                                    'turno' => $c->turno,
+                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'asunto' => $c->asunto,
+                                    'descripcion' => $c->descripcion,
+                                    'creador' => $c->creador,
+                                    'periodo' => $c->periodo,
+                                    'importancia' => $c->importancia,
+                                    'nombre' => $c->nombre,
+                                    'activo' => $c->activo,
+                                    'acuse' => $c->acuse,
+                                    'idu_users' => $c->idu_users,
+                                    'AB' => AB($data),
+                                    'C' =>  C($data),
+                                    'operaciones' => btn($c->idac, $c->activo),
+                                    ));
+        }
+
+        $json = json_encode($array);
 
         return view('Actividades.reporte')
-        ->with('consult', $consult);
+        ->with('json', $json);
     }
 
+    public function Detalles($idac){
+        $idac = decrypt($idac);
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
+        FROM responsables_actividades AS res
+        JOIN users AS us ON us.idu = res.idu_users
+        JOIN areas AS ar ON ar.idar = us.idar_areas
+        JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
+        WHERE idac_actividades = $idac
+        GROUP BY idu_users");
+
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+
+
+        function btn($idac){
+
+          
+          
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+            
+        }
+        
+     //  function C($data){
+
+       //     if(gettype($data) == "array"){
+
+         //       return number_format($data[2], 2, '.', ' ').'%';
+           // }else{
+             //   return 0.00;
+            //}
+
+        //}
+
+        foreach($query as $c){
+
+           // $data = recorrer($c->porcentaje);
+
+            array_push($array, array('nombre_us' => $c->nombre_us,
+                                    'nombre_ar' => $c->nombre_ar,
+                                    'porcentaje' =>  $c->porcentaje,
+                                    'estado' => $c->estado,
+                                    'acuse' => $c->acuse,
+                                    'operaciones' => btn($c->idreac),
+                                    ));
+        }
+        $json = json_encode($array);
+
+        return view('Actividades.reporte_detalles')
+        
+        ->with('json', $json);
+
+    }
+
+
+
+
+    public function detallesSeguimiento($idac)
+	{
+        $idac = decrypt($idac);
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
+        FROM seguimientos_actividades AS seg
+        INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
+        INNER JOIN users AS us ON us.idu = re.idu_users
+        INNER JOIN actividades AS act ON re.idac_actividades = act.idac
+        INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
+            WHERE idreac_responsables_actividades = $idac
+            GROUP BY idseac");
+
+        $array = array();
+
+        function recorrer($value){
+          $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+        function btn($idac){
+
+            return "
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>DetallesArchivos</a>";
+            }
+        foreach($consult as $c){
+
+         // $data = recorrer($c->porcentaje);
+
+          array_push($array, array('idseac' => $c->idseac,
+                             'fecha' => $c->fecha,
+                             'detalle' =>  $c->detalle,
+                             'estado' => $c->estado,
+                             'porcentaje' => $c->porcentaje,
+                             'operaciones' => btn($c->idseac),
+                             ));
+        }
+        $json = json_encode($array);
+
+            return view('SeguimientoActividades.detallesSeguimiento')
+            ->with('json', $json)
+              ->with('consult', $consult);
+	}
+
+    public function DetallesArchivos($idarc){
+        $idarc = decrypt($idarc);
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        FROM archivos_seguimientos AS res
+        INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
+        WHERE res.idseac_seguimientos_actividades = $idarc");
+        return response()->json($query);
+    }
 
 
 
@@ -29,18 +210,36 @@ class ActividadesController extends Controller
         $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
         $consul = DB::table('actividades')->count() + 1;
         $tipous = DB::table('areas')->get()->all();
-        $tipo_actividad = DB::table('tipos_actividades')
+        $tipo_actividad = DB::table('tipos_actividades')             
         ->orderBy('nombre','Asc')
         ->get();
+
+        $user = DB::table('users')
+                    ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
+                    ->join('areas', 'areas.idar', '=' , 'users.idar_areas')
+                    ->select('users.idu',
+                            'users.titulo',
+                            'users.nombre',
+                            'users.app',
+                            'users.apm',
+                            'tipos_usuarios.nombre as tipo_usuario',
+                            'areas.nombre as nombre_areas',
+                            'areas.idar',
+                            )
+                    ->where('users.idu' , '=', Auth()->user()->idu)
+                    ->get();
+        
         return view('Actividades.actividades')
         ->with('hoy', $hoy)
         ->with('consul', $consul)
         ->with('tipo_actividad', $tipo_actividad)
-        ->with('tipous', $tipous);
+        ->with('tipous', $tipous)
+        ->with('user', $user);
     }
 
     public function tipousuarios(Request $request){
 
+        $id_user = Auth()->user()->idu;
         $id = $request->tipo_u;
         $id_seleccionado;
 
@@ -49,7 +248,8 @@ class ActividadesController extends Controller
             $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
             INNER JOIN areas AS a ON a.idar = u.idar_areas
-            WHERE a.idar = $id[$b]");
+            WHERE u.idu NOT IN($id_user)
+            AND a.idar = $id[$b]");
 
             $id_seleccionado[$b] = $consul;
 
@@ -97,7 +297,7 @@ class ActividadesController extends Controller
             $archivos2 = 'Sin archivo';
         }
         
-        if($r->file('archivos2') != null){
+        if($r->file('archivos3') != null){
 
             $file3 = $r->file('archivos3');
             $archivos3 = $file3->getClientOriginalName();
@@ -146,11 +346,14 @@ class ActividadesController extends Controller
                     '$horadeinicio', '$fechainicio', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
                     '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
 
+
         $consul = DB::table('actividades')->max('idac');
+
+        DB::Insert("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$idusuario','$consul')");
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
+            DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
         }
 
 
@@ -197,16 +400,17 @@ class ActividadesController extends Controller
 
         $tipous = DB::SELECT("SELECT a.nombre, a.`idar`
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idar_areas
-        WHERE ac.idac = $id");
+        WHERE ac.idac = $id
+        GROUP BY a.nombre");
 
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario
         FROM actividades AS ac 
-        INNER JOIN participantes AS p ON p.idac = ac.idac
-        INNER JOIN users AS u ON u.idu = p.id_users
+        INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
+        INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idtu_tipos_usuarios
         WHERE ac.idac = $id");
 
@@ -289,11 +493,6 @@ class ActividadesController extends Controller
             $archivos3 = 'Sin archivo';
         }
 
-
-
-
-
-
         if($r->link != null){
 
             $link = $r->link;
@@ -361,6 +560,158 @@ class ActividadesController extends Controller
         return redirect()->route('reporte_actividades');
     }
 
+    public function actividades_creadas($id)
+    {
+        $id_u = decrypt($id);
 
+        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        porcentaje(ac.idac) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.idu_users = $id_u
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+
+
+        $array = array();
+
+        function recorrer($value){
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            return $arr;
+        }
+
+        function btn($idac, $activo){
+
+          
+            if($activo == 1){
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }else{
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }
+        }
+
+        function AB($data){
+
+            if(gettype($data) == "array"){
+
+                return $data[0]." de ".$data[1];
+            }else{
+                return 0;
+            }
+
+
+        }
+
+        function C($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data[2], 2, '.', ' ').'%';
+            }else{
+                return 0.00;
+            }
+
+        }
+
+        
+
+        foreach($ac_cre as $c){
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array('idac' => $c->idac,
+                                    'turno' => $c->turno,
+                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'asunto' => $c->asunto,
+                                    'descripcion' => $c->descripcion,
+                                    'creador' => $c->creador,
+                                    'periodo' => $c->periodo,
+                                    'importancia' => $c->importancia,
+                                    'nombre' => $c->nombre,
+                                    'activo' => $c->activo,
+                                    'acuse' => $c->acuse,
+                                    'idu_users' => $c->idu_users,
+                                    'AB' => AB($data),
+                                    'C' =>  C($data),
+                                    'operaciones' => btn($c->idac, $c->activo),
+                                    ));
+        }
+
+        
+       
+        $json = json_encode($array);
+
+        return view ('Actividades.actividadescreadas', compact('json'));
+
+    }
+
+    public function actividades_asignadas($id)
+    {
+        $id_u = decrypt($id);
+
+        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio,ac.fecha_fin,ac.importancia, ac.status, ac.activo
+            FROM responsables_actividades AS ra 
+            INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
+            WHERE ra.idu_users = $id_u AND (ac.idu_users != $id_u OR ac.idu_users = $id_u)
+            ORDER BY ac.fecha_creacion DESC");
+
+        $array = array();
+
+        function status($status){
+
+            if($status == 1){
+                return "Activo";
+            }elseif($status == 2){
+                return "Desarollo";
+            }else{
+                return "Cancelado";
+            }
+
+
+        }
+
+        function btn($idac, $activo){
+
+          
+            if($activo == 1){
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }else{
+                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+            }
+        }
+
+        foreach($ac_asig as $a){
+            
+            array_push($array, array(
+                                        'idac' => $a->idac,
+                                        'asunto' => $a->asunto,
+                                        'descripcion' => $a->descripcion,
+                                        'fecha_creacion' => $a->fecha_creacion,
+                                        'turno' => $a->turno,
+                                        'comunicado' => $a->comunicado,
+                                        'fecha_inicio_fin' => $a->fecha_inicio . " al " . $a->fecha_fin,
+                                        'importancia' => $a->importancia,
+                                        'status' => status($a->status),
+                                        'operaciones' => btn($a->idac, $a->activo),
+            ));
+        }
+
+        $json = json_encode($array);
+
+        return view ('Actividades.actividadesasignadas', compact('json'));
+
+    }
 
 }

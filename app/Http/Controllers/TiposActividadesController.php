@@ -12,9 +12,38 @@ class TiposActividadesController extends Controller
      */
     public function index()
     {
-        $tipos_actividades = TiposActividades::all();
-        return view('tipos-actividades.index', compact('tipos_actividades'));
+        $tipos_actividades = TiposActividades::query()
+                                             ->get();
+        $array = array();
+
+        function btn($idtac, $activo){
+            if($activo == 1){
+                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\">Desactivar</a>"
+                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idtac\">Editar</a>";
+            } else {
+                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\">Activar</a>";
+            }
+
+            return $botones;
+        }
+
+        #return btn(1, 1);
+        foreach ($tipos_actividades as $tipoactividades) {
+
+            array_push($array, array(
+                'idtac'       => $tipoactividades->idtac,
+                'nombre'      => $tipoactividades->nombre,
+                'activo'      => ($tipoactividades->activo == 1) ? "Si" : "No",
+                'operaciones' => btn($tipoactividades->idtac, $tipoactividades->activo)
+            ));
+        }
+
+        $json = json_encode($array);
+
+        return view('tipos-actividades', compact('json', 'tipos_actividades'));
     }
+
+
 
     /**
      * Vista que muestra un formulario para crear un recurso
@@ -29,16 +58,17 @@ class TiposActividadesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => ['required', 'string', 'max:60'],
+        $this->validate($request,[
+            'nombre' => ['required', 'string', 'max:60']
         ]);
 
         $guardar = TiposActividades::query()
-                                   ->create([
-            'nombre' => $request->nombre,
-        ]);
+                                    ->create([
+                'nombre' => $request->nombre
+            ]);
 
-        return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha guardado correctamente');
+
+        return redirect()->route('tipos-actividades.index')->with('success', 'Se ha guardado correctamente');
     }
 
     /**
@@ -51,7 +81,7 @@ class TiposActividadesController extends Controller
                                               ->where('idtac', $idtac)
                                               ->first();
             if($tipo_actividad){
-                return view('tipos-actividades.show', compact('tipo_actividad'));
+                return view('tipos-actividades', compact('tipo_actividad'));
             } else {
                 abort(404);
             }
@@ -94,12 +124,12 @@ class TiposActividadesController extends Controller
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'estado' => ['required', 'boolean'],
+                    'activo' => ['required', 'boolean']
                 ]);
 
                 $actualizar = $tipo_actividad->update([
                     'nombre' => $request->nombre,
-                    'estado' => $request->estado,
+                    'activo' => $request->activo
                 ]);
 
                 return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
@@ -113,18 +143,20 @@ class TiposActividadesController extends Controller
     }
 
 
-
     /**
      * Elimina un recurso
      */
     public function destroy($idtac)
     {
         if ($idtac){
-            $tipo_actividad = TiposActividades::where('idtac', $idtac)
+            $tipo_actividad = TiposActividades::query()
+                                              ->where('idtac', $idtac)
                                               ->first();
             if ($tipo_actividad){
-                $eliminar = $tipo_actividad->delete();
-                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha eliminado correctamente');
+                $eliminar = $tipo_actividad->update([
+                    'activo' => ($tipo_actividad->activo == 1) ? 0 : 1
+                ]);
+                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Su estado ha cambiado');
           } else {
                 abort(404);
             }

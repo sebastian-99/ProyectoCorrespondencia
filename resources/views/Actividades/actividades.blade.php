@@ -105,8 +105,8 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Actividad Creada por:</strong>
-                                    <input type="text" class="form-control" id="actividadcreador" value ="Lic. Pedro Gonzales Mendez" readonly>
-                                    <input type="hidden" name="idusuario" value="1">
+                                    <input type="text" class="form-control" id="actividadcreador" value ="{{$user[0]->titulo . ' ' . $user[0]->nombre . ' ' . $user[0]->app . ' ' . $user[0]->apm}}" readonly>
+                                    <input type="hidden" name="idusuario" value="{{$user[0]->idu}}">
                                 </div>
                             </div>
                         </div>
@@ -116,9 +116,9 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Tipo de usuario - Detalle:</strong>
-                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="Administrador - Dirección de area de control escolar" readonly>
-                                    <input type="hidden" name="idar_areas" value="1" >
+                                    <strong>Tipo de usuario-Detalle:</strong>
+                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
+                                    <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}" >
                                 </div>
                             </div>
                         </div>
@@ -181,13 +181,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de inicio:</strong>
-                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio" required>
+                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino" required>
+                                <input class="form-control" type="time" name="horatermino" id="horatermino">
                             </div>
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia" value="Baja">
-                                        <label class="form-check-label" for="importancia">baja</label>
+                                        <label class="form-check-label" for="importancia">Baja</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia1" value="Media">
@@ -355,7 +355,7 @@
     $("#tipousuario").on('change',function(e){
         let tipo_u = $("#tipousuario").val();
         //console.log(tipo_u);
-        $("#tipousuarioarea").empty();
+        /* $("#tipousuarioarea").empty(); */
         $.ajax({
             type:'GET',
             data:{
@@ -384,7 +384,9 @@
 
    
     
-    
+    $("#tipousuario").on("select2:unselecting", function(e) {
+        $("#tipousuarioarea").empty();
+    });
     
 </script>
     
