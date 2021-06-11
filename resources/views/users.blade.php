@@ -8,7 +8,7 @@
         </script>
     @endsection
 
-
+        {{-- If para los errores --}}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
