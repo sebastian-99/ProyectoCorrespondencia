@@ -267,7 +267,7 @@
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="estado" id="estado" value="1" checked>
-                                        <label class="form-check-label" for="estado">Activo</label>
+                                        <label class="form-check-label" for="estado">Concluida</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="estado" id="estado2" value="2">

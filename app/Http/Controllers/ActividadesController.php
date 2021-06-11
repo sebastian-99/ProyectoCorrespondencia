@@ -4,18 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\actividades;
-use App\Models\users;
-use App\Models\seguimientos_actividades;
+use App\Models\Actividades;
+use App\Models\Users;
+use App\Models\Seguimientos_actividades;
 use DB;
 use Arr;
 class ActividadesController extends Controller
 {
     public function reporte_actividades(){
 
+        $us_id = \Auth()->User()->idu;
+
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac) AS porcentaje
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje 
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -27,14 +28,17 @@ class ActividadesController extends Controller
         $array = array();
 
         function recorrer($value){
-            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
+            }else{
+                $arr = null;
+            }
             return $arr;
         }
 
         function btn($idac, $activo){
 
-          
-            
             return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
             
         }
@@ -43,31 +47,27 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return $data[0]." de ".$data[1];
+                return $data['1'][0]." de ".$data['1'][1];
             }else{
                 return 0;
             }
-
-
         }
 
         function C($data){
 
             if(gettype($data) == "array"){
 
-                return number_format($data[2], 2, '.', ' ').'%';
+                return number_format($data['2'], 0, '.', ' ').'%';
             }else{
-                return 0.00;
+                return 0;
             }
 
         }
 
-        
-
         foreach($consult as $c){
 
             $data = recorrer($c->porcentaje);
-
+            
             array_push($array, array('idac' => $c->idac,
                                     'turno' => $c->turno,
                                     'fecha_creacion' => $c->fecha_creacion,
@@ -111,11 +111,7 @@ class ActividadesController extends Controller
 
 
         function btn($idac){
-
-          
-          
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
-            
+            return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
         }
         
      //  function C($data){
@@ -330,7 +326,6 @@ class ActividadesController extends Controller
         }else{
             $link3 = "Sin Link";
         }
-        
 
         $tipousuario = $r->tipousuario;
         $tipousuarioarea = $r->tipousuarioarea;
@@ -349,15 +344,16 @@ class ActividadesController extends Controller
 
         $consul = DB::table('actividades')->max('idac');
 
-        DB::Insert("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$idusuario','$consul')");
-
         for($i=0; $i < count($tipousuarioarea); $i++){
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
         }
 
-
-        return redirect()->route('reporte_actividades');
+        if (Auth()->User()->idtu_tipos_usuarios == 3) {            
+            return redirect()->route('reporte_actividades');
+        }else{
+            return redirect()->route('actividades_creadas',['id'=>encrypt(Auth()->User()->idu)]);
+        }
 
     }
     
@@ -566,7 +562,7 @@ class ActividadesController extends Controller
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
         CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac) AS porcentaje
+        porcentaje(ac.idac, $id_u) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -580,7 +576,12 @@ class ActividadesController extends Controller
         $array = array();
 
         function recorrer($value){
-            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
+            }else{
+                $arr = null;
+            }
             return $arr;
         }
 
@@ -602,21 +603,19 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return $data[0]." de ".$data[1];
+                return $data['1'][0]." de ".$data['1'][1];
             }else{
                 return 0;
             }
-
-
         }
 
         function C($data){
 
             if(gettype($data) == "array"){
 
-                return number_format($data[2], 2, '.', ' ').'%';
+                return number_format($data['2'], 0, '.', ' ').'%';
             }else{
-                return 0.00;
+                return 0;
             }
 
         }
@@ -653,65 +652,5 @@ class ActividadesController extends Controller
 
     }
 
-    public function actividades_asignadas($id)
-    {
-        $id_u = decrypt($id);
-
-        $ac_asig = DB::SELECT("SELECT ac.idac, ac.asunto, ac.descripcion, ac.fecha_creacion, ac.turno, ac.comunicado, ac.fecha_inicio,ac.fecha_fin,ac.importancia, ac.status, ac.activo
-            FROM responsables_actividades AS ra 
-            INNER JOIN actividades AS ac ON ac.idac = ra.idac_actividades
-            WHERE ra.idu_users = $id_u AND (ac.idu_users != $id_u OR ac.idu_users = $id_u)
-            ORDER BY ac.fecha_creacion DESC");
-
-        $array = array();
-
-        function status($status){
-
-            if($status == 1){
-                return "Activo";
-            }elseif($status == 2){
-                return "Desarollo";
-            }else{
-                return "Cancelado";
-            }
-
-
-        }
-
-        function btn($idac, $activo){
-
-          
-            if($activo == 1){
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }else{
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a> 
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }
-        }
-
-        foreach($ac_asig as $a){
-            
-            array_push($array, array(
-                                        'idac' => $a->idac,
-                                        'asunto' => $a->asunto,
-                                        'descripcion' => $a->descripcion,
-                                        'fecha_creacion' => $a->fecha_creacion,
-                                        'turno' => $a->turno,
-                                        'comunicado' => $a->comunicado,
-                                        'fecha_inicio_fin' => $a->fecha_inicio . " al " . $a->fecha_fin,
-                                        'importancia' => $a->importancia,
-                                        'status' => status($a->status),
-                                        'operaciones' => btn($a->idac, $a->activo),
-            ));
-        }
-
-        $json = json_encode($array);
-
-        return view ('actividades.actividadesasignadas', compact('json'));
-
-    }
-
+    
 }

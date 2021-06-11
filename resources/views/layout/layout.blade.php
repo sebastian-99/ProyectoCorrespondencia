@@ -92,14 +92,14 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            {{-- <li class="nav-item">
-            <a href="#" class="nav-link">
+            <li class="nav-item">
+            <a href="{{ url('panel') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Ejemplo
+                Inicio
               </p>
             </a>
-          </li> --}}
+          </li>
         @if(Auth()->user()->idtu_tipos_usuarios == 1)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -151,39 +151,15 @@
                 </a>
               </li>
               @endif
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{ url('actividades_asignadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades asignadas</p>
                 </a>
-              </li> --}}
-              <li class="nav-item">
-                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ver actividades creadas</p>
-                </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>Seguimiento de</p>
-              <br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p>
-              <i class="fas fa-angle-left right"></i>
-              
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('actividades_asignadas')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Actividades asignadas</p>
-                </a>
-              </li>
-              
-            </ul>
-          </li>
+          
           @endif
           @if(Auth()->user()->idtu_tipos_usuarios == 1)
           <li class="nav-item has-treeview">

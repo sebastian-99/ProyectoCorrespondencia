@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\Models\actividades;
-use App\Models\seguimientosActividades;
-use App\Models\archivosSeguimientos;
-use App\Models\responsablesActividades;
+use App\Models\Actividades as actividades;
+use App\Models\SeguimientosActividades as seguimientosActividades;
+use App\Models\ArchivosSeguimientos as archivosSeguimientos;
+use App\Models\ResponsablesActividades as responsablesActividades;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ class SeguimientoController extends Controller
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
-        porcentaje(ac.idac) AS porcentaje
+        porcentaje(ac.idac, $id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -34,29 +34,30 @@ class SeguimientoController extends Controller
 
         $array = array();
 
-        function recorrer($value)
-        {
-            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+        function recorrer($value){
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
+            }else{
+                $arr = null;
+            }
             return $arr;
         }
+        
+        function AB($data){
+            if(gettype($data) == "array"){
 
-        function AB($data)
-        {
-            if (gettype($data) == "array") {
-
-                return $data[0] . " de " . $data[1];
-            } else {
+                return $data['1'][0]." de ".$data['1'][1];
+            }else{
                 return 0;
             }
         }
 
-        function C($data)
-        {
-            if (gettype($data) == "array") {
-
-                return number_format($data[2], 2, '.', ' ') . '%';
-            } else {
-                return 0.00;
+        function C($data){
+            if(gettype($data) == "array"){
+                return number_format($data['2'], 0, '.', ' ').'%';
+            }else{
+                return 0;
             }
         }
 
@@ -85,7 +86,7 @@ class SeguimientoController extends Controller
         }
 
         $json = json_encode($array);
-
+        
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
     }
