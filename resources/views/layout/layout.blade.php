@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -84,7 +84,7 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="{{asset('images') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
+              <img src="{{asset('storage/imagenes_perfil') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
               <a href="{{url('/panel')}}" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
               <hr class="bg-secondary">
             </div>
@@ -115,14 +115,14 @@
                   <p>Tipos de actividades</p>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a href="{{ url('areas')}}" class="nav-link">
                   <i class="nav-icon fas fa-edit"></i>
                   <p>Áreas</p>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a href="{{ url('users')}}" class="nav-link">
                   <i class="fas fa-user"></i>
@@ -174,7 +174,7 @@
               <br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>actividades</p>
               <i class="fas fa-angle-left right"></i>
-              
+
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -183,7 +183,7 @@
                   <p>Actividades asignadas</p>
                 </a>
               </li>
-              
+
             </ul>
           </li>
           @endif
