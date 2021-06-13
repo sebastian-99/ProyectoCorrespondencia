@@ -11,20 +11,14 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
+use App\Http\Controllers\EncryptController;
 
 Auth::routes();
+/*
+ * Cambiar Auth::routes() por rutas a solo usar, 
+ * ya que la ruta /register permite inserción de usuarios.
+ */
+
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/panel', [PanelController::class,'panel']);
 Route::get('/', function () {
@@ -68,5 +62,10 @@ Route::resource('admin/users', UsersController::class, ['names' => 'users']);
 Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
 
 
-
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+/*
+Route::get('hello',function(){
+    return view('hello');
+});*/
+Route::get('hello', [EncryptController::class,'index']);
+
