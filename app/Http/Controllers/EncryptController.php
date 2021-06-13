@@ -12,6 +12,13 @@ class EncryptController extends Controller
     {
         $new = new FunctionPkg;
 
+        /*
+         * Orden de inserción de firma electronica
+         * id_actividad (act)
+         * id_usuario (id)
+         * nombre_usuario (ini)
+         */
+
         $encrypt = $new->Encrypt(12,12,'Alberto');
 
         $decrypt = $new->Decrypt( $encrypt );
