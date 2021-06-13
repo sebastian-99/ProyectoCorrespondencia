@@ -135,8 +135,16 @@
       var id = $(this).data('id');
 
       $.get("../DetallesAsignacion/" + id, function(data) {
-       
-        
+        $('#asunto_a').empty();
+        $('#descripcion_a').empty();
+        $('#importancia_a').empty();
+        $('#comunicado_a').empty();
+        $('#turno_a').empty();
+        $('#creador_a').empty();
+        $('#area_a').empty();
+        $('#f_creacion_a').empty();
+        $('#periodo_atencion_a').empty();
+
 
         $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
