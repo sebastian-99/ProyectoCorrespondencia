@@ -23,7 +23,11 @@ class SeguimientoController extends Controller
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users,
+<<<<<<< HEAD
         porcentaje(ac.idac, $id_user) AS porcentaje
+=======
+        porcentaje(ac.idac) AS porcentaje
+>>>>>>> uriel2
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -34,6 +38,14 @@ class SeguimientoController extends Controller
 
         $array = array();
 
+<<<<<<< HEAD
+=======
+        function recorrer($value)
+        {
+            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+
+
+>>>>>>> uriel2
         function recorrer($value){
             if (gettype($value) == "string") {
                 $val = explode('*', $value);
@@ -90,6 +102,7 @@ class SeguimientoController extends Controller
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
     }
+}
 
     public function Seguimiento($idac)
     {
