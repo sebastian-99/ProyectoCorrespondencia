@@ -38,89 +38,163 @@
 </div>
 
 {{-- Inicia Modal --}}
-<!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Aceptar Asignación
-            </button>
+<div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actividad para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Actividad de: </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="container">
-                      <div class="accordion" id="accordionExample">
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                              Ver Detalles
-                            </button>
-                          </h2>
-                          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                              <strong>Titulo (asunto).</strong>
-                              <li>Descripcion</li>
-                              <li>Comunicado</li>
-                              <li>Importancia</li>
-                              <li>Tipo de actividad</li>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div id="sec1" hidden>
-                        <label>Incresa tu contraseña para confirmacion</label>
-                        <input type="password" class="form-control">
-                      </div>
-                      <div id="sec2" hidden>
-                        <label>Describe la situacion del porque rechazas la actividad</label>
-                        <Textarea cols="64" rows="5"></Textarea>
-                      </div>
-                    </div>
-                    <br><br>
-                    <div class="form-group text-center">
-                        <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
-                        <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                     </div>
-                    </div>
-
+      <div class="container">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Ver Detalles
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-sm-12 mb-3" id="asunto_a"></div>
                 </div>
+                <div class="row">
+                  <div class="col-sm-12 mb-3" id="descripcion_a"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4 mb-3" id="importancia_a"></div>
+                  <div class="col-sm-4 mb-3" id="comunicado_a"></div>
+                  <div class="col-sm-4 mb-3" id="turno_a"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 mb-3" id="creador_a"></div>
+                  <div class="col-sm-6 mb-3" id="area_a"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
+                  <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
+                </div>
+              </div>
             </div>
-{{-- Fin de modal --}}
+          </div>
+        </div>
+        <div id="sec1" hidden>
+          <label>Ingresa tu contraseña para confirmacion</label>
+          <input type="password" class="form-control">
+        </div>
+        <div id="sec2" hidden>
+          <label>Describe la situacion del porque rechazas la actividad</label>
+          <Textarea cols="64" rows="5"></Textarea>
+        </div>
+      </div>
+      <br><br>
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
+        <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
 
-<script>
+  {{-- Fin de modal --}}
 
-  $('#aceptar').on('click', function () {
-    $('#sec1').removeAttr('hidden');
-    $('#rechazar').prop('disabled', true);
-  });
+  <script>
+    $('#aceptar').on('click', function() {
+      $('#sec1').removeAttr('hidden');
+      $('#rechazar').prop('disabled', true);
+    });
 
-  $('#aceptar').dblclick(function () {
-    $('#sec1').Attr('hidden');
-    $('#rechazar').prop('disabled', false);
-  });
+    $('#aceptar').dblclick(function() {
+      $('#sec1').Attr('hidden');
+      $('#rechazar').prop('disabled', false);
+    });
 
-  $('#rechazar').on('click', function () {
-    $('#sec2').removeAttr('hidden');
-    $('#aceptar').prop('disabled', true);
-  });
+    $('#rechazar').on('click', function() {
+      $('#sec2').removeAttr('hidden');
+      $('#aceptar').prop('disabled', true);
+    });
 
-  /*$('#rechazar').dblclick(function () {
-    $('#sec2').Attr('hidden');
-    $('#aceptar').prop('disabled', false);
-  });*/
 
-  /*$('#rechazar').mouseover(function(){
 
-  });*/
-</script>
+    /*$('#rechazar').dblclick(function () {
+      $('#sec2').Attr('hidden');
+      $('#aceptar').prop('disabled', false);
+    });*/
 
-@endsection
+    /*$('#rechazar').mouseover(function(){
+
+    });*/
+  </script>
+  <script type="text/javascript">
+    $('body').on('click', '.DetallesAsignacion', function() {
+      var id = $(this).data('id');
+
+      $.get("../DetallesAsignacion/" + id, function(data) {
+        $('#asunto_a').empty();
+        $('#descripcion_a').empty();
+        $('#importancia_a').empty();
+        $('#comunicado_a').empty();
+        $('#turno_a').empty();
+        $('#creador_a').empty();
+        $('#area_a').empty();
+        $('#f_creacion_a').empty();
+        $('#periodo_atencion_a').empty();
+
+
+        $('#modelHeading').html("Detalles Archivos");
+        $('#ajaxModel').modal('show');
+        var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
+        var descripcion = "<textarea id='descripcion' name='descripcion'  class='form-control form-control-sm' disabled></textarea>"
+        var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
+        var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
+        var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
+        var creador = "<input id='creador' name='creador'  class='form-control form-control-sm' disabled>"
+        var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
+        var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
+        var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
+
+        $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
+        $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+        $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
+        $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
+        $('#turno_a').append("<strong>Turno </strong>" + turno);
+        $('#creador_a').append("<strong>Creador </strong>" + creador);
+        $('#area_a').append("<strong>Area responsable </strong>" + area);
+        $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
+        $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
+
+        $('#asunto').val(data[0].asunto);
+        $('#descripcion').val(data[0].descripcion);
+        $('#importancia').val(data[0].importancia);
+        $('#comunicado').val(data[0].comunicado);
+        $('#turno').val(data[0].turno);
+        $('#creador').val(data[0].creador);
+        $('#area').val(data[0].turno);
+        $('#creacion').val(data[0].fecha_creacion);
+        $('#periodo').val(data[0].fecha_inicio);
+
+      })
+
+    });
+
+    $("#ajaxModel").on('hidden.bs.modal', function() {
+
+      $('#asunto_a').empty();
+      $('#descripcion_a').empty();
+      $('#importancia_a').empty();
+      $('#comunicado_a').empty();
+      $('#turno_a').empty();
+      $('#creador_a').empty();
+      $('#area_a').empty();
+      $('#f_creacion_a').empty();
+      $('#periodo_atencion_a').empty();
+
+    });
+  </script>
+
+  @endsection
