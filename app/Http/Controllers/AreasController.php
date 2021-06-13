@@ -21,7 +21,7 @@ class AreasController extends Controller
                                 'areas.activo',
                                 'tipos_areas.nombre as idtar')
                         ->get();
-        
+
         $tipos_areas = TiposAreas::all();
         $array = array();
 
