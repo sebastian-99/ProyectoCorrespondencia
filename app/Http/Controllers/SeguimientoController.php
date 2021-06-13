@@ -21,8 +21,8 @@ class SeguimientoController extends Controller
         //Filtrar solo mis actividades que tengo asignadas
         $id_user = Auth()->user()->idu;
 
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users,
         porcentaje(ac.idac, $id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -43,7 +43,7 @@ class SeguimientoController extends Controller
             }
             return $arr;
         }
-        
+
         function AB($data){
             if(gettype($data) == "array"){
 
@@ -86,14 +86,14 @@ class SeguimientoController extends Controller
         }
 
         $json = json_encode($array);
-        
+
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
     }
 
     public function Seguimiento($idac)
     {
-        //Encriptar el id de la actividad que se esta consulutando 
+        //Encriptar el id de la actividad que se esta consulutando
         $idac = decrypt($idac);
         $id_user = Auth()->user()->idu;
 
@@ -103,8 +103,8 @@ class SeguimientoController extends Controller
 
         $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area, 
-        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, 
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
+        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3,
         ac.status, porcentaje(ac.idac) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -130,7 +130,7 @@ class SeguimientoController extends Controller
             ->where('users.idu', '=', Auth()->user()->idu)
             ->get();
 
-        //Obtener la fecha actual 
+        //Obtener la fecha actual
         $now = Carbon::now();
 
         //Obtener el responsable que le esta dando seguimiento ala actividad
@@ -156,13 +156,13 @@ class SeguimientoController extends Controller
 
         //Ver quien ha visto su actividad asignada
 
-        $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra  
+        $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac
         AND ra.acuse = 1");
         //dd($atendido);
 
         //Ver el total de personas asignadas a esa actividad
-        $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra  
+        $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac");
 
         //Marca que el usuario le ha empezado a dar seguimiento a su actividad en el campo acuse = 1
@@ -302,11 +302,11 @@ class SeguimientoController extends Controller
         $idarseg = decrypt($idarseg);
         $idseac = decrypt($idseac);
 
-        $elim = DB::DELETE("DELETE FROM archivos_seguimientos  
+        $elim = DB::DELETE("DELETE FROM archivos_seguimientos
         where idseac_seguimientos_actividades =$idseac
         ");
 
-        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades  
+        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades
         where idseac =$idseac
         ");
 
