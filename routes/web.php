@@ -40,6 +40,7 @@ Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimie
 Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
 Route::get('DetallesArchivos/{idarseg}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
 
+Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
 
 
 ////Actividades
