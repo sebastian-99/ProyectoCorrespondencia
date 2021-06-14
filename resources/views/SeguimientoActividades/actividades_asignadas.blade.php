@@ -93,7 +93,8 @@
       <br><br>
       <div class="form-group text-center">
         <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
-        <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
+    <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
+    <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -104,31 +105,29 @@
   {{-- Fin de modal --}}
 
   <script>
-    $('#aceptar').on('click', function() {
-      $('#sec1').removeAttr('hidden');
-      $('#rechazar').prop('disabled', true);
-    });
-
-    $('#aceptar').dblclick(function() {
-      $('#sec1').Attr('hidden');
-      $('#rechazar').prop('disabled', false);
-    });
-
-    $('#rechazar').on('click', function() {
-      $('#sec2').removeAttr('hidden');
-      $('#aceptar').prop('disabled', true);
-    });
-
-
-
-    /*$('#rechazar').dblclick(function () {
-      $('#sec2').Attr('hidden');
-      $('#aceptar').prop('disabled', false);
-    });*/
-
-    /*$('#rechazar').mouseover(function(){
-
-    });*/
+  $('#aceptar').on('click', function () {
+    $('#sec1').removeAttr('hidden');
+    $('#cancelar').removeAttr('hidden');
+    $('#rechazar').hide();
+    $('#aceptar').hide();
+  });
+  
+  $('#rechazar').on('click', function () {
+    $('#sec2').removeAttr('hidden');
+    $('#cancelar').removeAttr('hidden');
+    $('#aceptar').hide();
+    $('#rechazar').hide();
+  });
+  
+  $('#cancelar').on('click', function () {
+    if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)){
+      $('#sec1').attr('hidden', true);
+      $('#sec2').attr('hidden', true);
+      $('#aceptar').show();
+      $('#rechazar').show();
+      $('#cancelar').hide();
+    }
+  });
   </script>
   <script type="text/javascript">
     $('body').on('click', '.DetallesAsignacion', function() {
