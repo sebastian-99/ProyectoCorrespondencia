@@ -64,7 +64,8 @@ class SeguimientoController extends Controller
 
         function ver($idac)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+            return "<a class='btn btn-success mt-1 btn-sm' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion'><i class='nav-icon fas fa-user-check'></i></a>";
         }
 
         foreach ($consult as $c) {
@@ -93,6 +94,25 @@ class SeguimientoController extends Controller
     
 }
 
+public function DetallesAsignacion($idac)
+    {
+        $idac = decrypt($idac);
+        $id_user = Auth()->user()->idu;
+
+
+        $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
+        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
+        
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        WHERE ac.idac = $idac");
+
+        return response()->json($actividad);
+    }
+
     public function Seguimiento($idac)
     {
         //Encriptar el id de la actividad que se esta consulutando
@@ -107,7 +127,7 @@ class SeguimientoController extends Controller
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
         ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3,
-        ac.status, porcentaje(ac.idac) AS porcentaje
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
