@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Session;
+use Brs\FunctionPkg;
 
 class SeguimientoController extends Controller
 {
@@ -93,7 +94,27 @@ class SeguimientoController extends Controller
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
     
-}
+    }
+
+    public function aceptarActividad(Request $request){
+        $contraseña = $request->pass;
+        $idac = decrypt($request->id);
+
+        if(password_verify($contraseña, Auth()->User()->password)){
+            $new = new FunctionPkg;
+            $id_user = Auth()->user()->idu;
+            $firma = $new->Encrypt($idac, $id_user, Auth()->User()->nombre);
+            
+            $cons = DB::UPDATE("UPDATE responsables_actividades SET 
+                acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
+                WHERE idu_users = $id_user AND idac_actividades = $idac");
+            return response()->json('aceptado');
+
+        } else {
+            return response()->json('rechazado');   
+        }
+
+    }    
 
 public function DetallesAsignacion($idac)
     {
