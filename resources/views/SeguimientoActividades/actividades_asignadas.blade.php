@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="card-body">
-    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='3' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='5,10,20,30,50,100' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
         <zg-column index='fecha_creacion' header='Fecha de creacion' width="100" type='text'></zg-column>
@@ -81,16 +81,17 @@
             </div>
           </div>
         </div>
-        <div id="sec1" hidden>
-          <label>Ingresa tu contraseña para confirmacion</label>
-          <input type="password" class="form-control">
-          <button type="button" class="btn btn-sm btn-primary" id="guardar" >Aceptar</button>
-
-        </div>
-        <div id="sec2" hidden>
-          <label>Describe la situacion del porque rechazas la actividad</label>
-          <Textarea cols="64" rows="5"></Textarea>
-        </div>
+        <form id="seccion" method="post">
+          @csrf
+          <div id="sec1" hidden>
+            <label>Ingresa tu contraseña para confirmacion</label>
+            <input type="password" id="pass"  class="form-control">
+          </div>
+          <div id="sec2" hidden>
+            <label>Describe la situacion del porque rechazas la actividad</label>
+            <Textarea cols="64" rows="5"></Textarea>
+          </div>
+        </form>
       </div>
       <br><br>
       <div class="form-group text-center">
@@ -99,6 +100,7 @@
         <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
       </div>
       <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="guardar" data-dismiss="modal">Guardar</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
@@ -107,12 +109,16 @@
 
 {{-- Fin de modal --}}
 
-<script>
-  $('#aceptar').on('click', function() {
+  <script>
+
+  let val = 0;
+
+  $('#aceptar').on('click', function () {
     $('#sec1').removeAttr('hidden');
     $('#cancelar').removeAttr('hidden');
     $('#rechazar').hide();
     $('#aceptar').hide();
+    val = 1;
   });
 
   $('#rechazar').on('click', function() {
@@ -120,6 +126,7 @@
     $('#cancelar').removeAttr('hidden');
     $('#aceptar').hide();
     $('#rechazar').hide();
+    val = 0;
   });
 
   $('#cancelar').on('click', function() {
@@ -131,13 +138,79 @@
       $('#cancelar').hide();
     }
   });
+
   $('#guardar').on('click', function () {
-    $('#ver').removeAttr('hidden');
+    if (val!=0) {
+      $('#btn-mostrar').removeAttr('hidden');
+      $('#seccion')[0].reset();
+      $('#sec1').hide();
+      $('#sec2').hide();
+      $('#cancelar').hide();
+      $('#detalle').hide();
+    } else {
+      $('#sec1').hide();
+      $('#sec2').hide();
+      $('#cancelar').hide();
+      $('#detalle').hide(); 
+      $('#mensaje').removeAttr('hidden'); 
+      alert('Has rechachazo esta actividad por lo que ya no podras darle seguimiento');
+    }
   });
-</script>
-<script type="text/javascript">
-  $('body').on('click', '.DetallesAsignacion', function() {
-    var id = $(this).data('id');
+
+  </script>
+  <script type="text/javascript">
+    $('body').on('click', '.DetallesAsignacion', function() {
+      var id = $(this).data('id');
+      console.log(id);
+      $.get("../DetallesAsignacion/" + id, function(data) {
+        $('#asunto_a').empty();
+        $('#descripcion_a').empty();
+        $('#importancia_a').empty();
+        $('#comunicado_a').empty();
+        $('#turno_a').empty();
+        $('#creador_a').empty();
+        $('#area_a').empty();
+        $('#f_creacion_a').empty();
+        $('#periodo_atencion_a').empty();
+        $('#pass').empty();
+
+
+        $('#ajaxModel').modal('show');
+        var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
+        var descripcion = "<textarea id='descripcion' name='descripcion'  class='form-control form-control-sm' disabled></textarea>"
+        var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
+        var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
+        var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
+        var creador = "<input id='creador' name='creador'  class='form-control form-control-sm' disabled>"
+        var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
+        var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
+        var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
+
+        $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
+        $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+        $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
+        $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
+        $('#turno_a').append("<strong>Turno </strong>" + turno);
+        $('#creador_a').append("<strong>Creador </strong>" + creador);
+        $('#area_a').append("<strong>Area responsable </strong>" + area);
+        $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
+        $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
+
+        $('#asunto').val(data[0].asunto);
+        $('#descripcion').val(data[0].descripcion);
+        $('#importancia').val(data[0].importancia);
+        $('#comunicado').val(data[0].comunicado);
+        $('#turno').val(data[0].turno);
+        $('#creador').val(data[0].creador);
+        $('#area').val(data[0].turno);
+        $('#creacion').val(data[0].fecha_creacion);
+        $('#periodo').val(data[0].fecha_inicio);
+
+      })
+
+    });
+
+    $("#ajaxModel").on('hidden.bs.modal', function() {
 
     $.get("../DetallesAsignacion/" + id, function(data) {
       $('#asunto_a').empty();
@@ -149,6 +222,7 @@
       $('#area_a').empty();
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
+      $('#pass').empty();
 
 
       $('#modelHeading').html("Detalles Archivos");
