@@ -157,12 +157,20 @@
               <li class="nav-item">
                 <a href="{{ url('actividades_asignadas') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Ver actividades asignadas</p>
+                  <p>Ver actividades</p>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>asignadas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades creadas</p>
                 </a>
               </li>
             </ul>
           </li>
-
+          
           @endif
           @if(Auth()->user()->idtu_tipos_usuarios == 1)
           <li class="nav-item has-treeview">
@@ -180,7 +188,6 @@
             </ul>
           </li>
           @endif
-          @if(Auth()->user()->idtu_tipos_usuarios == 1 || Auth()->user()->idtu_tipos_usuarios == 3)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="fas fa-chart-pie"></i>
@@ -196,7 +203,6 @@
               </li>
             </ul>
           </li>
-          @endif
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
