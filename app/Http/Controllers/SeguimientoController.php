@@ -64,8 +64,9 @@ class SeguimientoController extends Controller
 
         function ver($idac)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion'><i class='nav-icon fas fa-user-check'></i></a>";
+            return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+            <a class='btn btn-danger' id='mensaje' hidden disabled> X </a>";
         }
 
         foreach ($consult as $c) {

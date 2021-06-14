@@ -81,35 +81,44 @@
             </div>
           </div>
         </div>
-        <div id="sec1" hidden>
-          <label>Ingresa tu contraseña para confirmacion</label>
-          <input type="password" class="form-control">
-        </div>
-        <div id="sec2" hidden>
-          <label>Describe la situacion del porque rechazas la actividad</label>
-          <Textarea cols="64" rows="5"></Textarea>
-        </div>
+        <form id="seccion" method="post">
+          @csrf
+          <div id="sec1" hidden>
+            <label>Ingresa tu contraseña para confirmacion</label>
+            <input type="password" id="pass"  class="form-control">
+          </div>
+          <div id="sec2" hidden>
+            <label>Describe la situacion del porque rechazas la actividad</label>
+            <Textarea cols="64" rows="5"></Textarea>
+          </div>
+        </form>
       </div>
       <br><br>
       <div class="form-group text-center">
         <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
-    <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
-    <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
+        <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
+        <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
       </div>
       <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="guardar" data-dismiss="modal">Guardar</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
+</div>
 
   {{-- Fin de modal --}}
 
   <script>
+
+  let val = 0;
+
   $('#aceptar').on('click', function () {
     $('#sec1').removeAttr('hidden');
     $('#cancelar').removeAttr('hidden');
     $('#rechazar').hide();
     $('#aceptar').hide();
+    val = 1;
   });
   
   $('#rechazar').on('click', function () {
@@ -117,6 +126,7 @@
     $('#cancelar').removeAttr('hidden');
     $('#aceptar').hide();
     $('#rechazar').hide();
+    val = 0;
   });
   
   $('#cancelar').on('click', function () {
@@ -128,11 +138,30 @@
       $('#cancelar').hide();
     }
   });
+
+  $('#guardar').on('click', function () {
+    if (val!=0) {
+      $('#btn-mostrar').removeAttr('hidden');
+      $('#seccion')[0].reset();
+      $('#sec1').hide();
+      $('#sec2').hide();
+      $('#cancelar').hide();
+      $('#detalle').hide();
+    } else {
+      $('#sec1').hide();
+      $('#sec2').hide();
+      $('#cancelar').hide();
+      $('#detalle').hide(); 
+      $('#mensaje').removeAttr('hidden'); 
+      alert('Has rechachazo esta actividad por lo que ya no podras darle seguimiento');
+    }
+  });
+
   </script>
   <script type="text/javascript">
     $('body').on('click', '.DetallesAsignacion', function() {
       var id = $(this).data('id');
-
+      console.log(id);
       $.get("../DetallesAsignacion/" + id, function(data) {
         $('#asunto_a').empty();
         $('#descripcion_a').empty();
@@ -143,9 +172,9 @@
         $('#area_a').empty();
         $('#f_creacion_a').empty();
         $('#periodo_atencion_a').empty();
+        $('#pass').empty();
 
 
-        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
         var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
         var descripcion = "<textarea id='descripcion' name='descripcion'  class='form-control form-control-sm' disabled></textarea>"
@@ -192,6 +221,7 @@
       $('#area_a').empty();
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
+      $('#pass').empty();
 
     });
   </script>
