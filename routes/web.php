@@ -70,3 +70,4 @@ Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividad
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+ 
