@@ -84,6 +84,8 @@
         <div id="sec1" hidden>
           <label>Ingresa tu contraseña para confirmacion</label>
           <input type="password" class="form-control">
+          <button type="button" class="btn btn-sm btn-primary" id="guardar" >Aceptar</button>
+
         </div>
         <div id="sec2" hidden>
           <label>Describe la situacion del porque rechazas la actividad</label>
@@ -93,34 +95,35 @@
       <br><br>
       <div class="form-group text-center">
         <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
-    <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
-    <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
+        <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
+        <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
+</div>
 
-  {{-- Fin de modal --}}
+{{-- Fin de modal --}}
 
-  <script>
-  $('#aceptar').on('click', function () {
+<script>
+  $('#aceptar').on('click', function() {
     $('#sec1').removeAttr('hidden');
     $('#cancelar').removeAttr('hidden');
     $('#rechazar').hide();
     $('#aceptar').hide();
   });
-  
-  $('#rechazar').on('click', function () {
+
+  $('#rechazar').on('click', function() {
     $('#sec2').removeAttr('hidden');
     $('#cancelar').removeAttr('hidden');
     $('#aceptar').hide();
     $('#rechazar').hide();
   });
-  
-  $('#cancelar').on('click', function () {
-    if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)){
+
+  $('#cancelar').on('click', function() {
+    if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)) {
       $('#sec1').attr('hidden', true);
       $('#sec2').attr('hidden', true);
       $('#aceptar').show();
@@ -128,61 +131,15 @@
       $('#cancelar').hide();
     }
   });
-  </script>
-  <script type="text/javascript">
-    $('body').on('click', '.DetallesAsignacion', function() {
-      var id = $(this).data('id');
+  $('#guardar').on('click', function () {
+    $('#ver').removeAttr('hidden');
+  });
+</script>
+<script type="text/javascript">
+  $('body').on('click', '.DetallesAsignacion', function() {
+    var id = $(this).data('id');
 
-      $.get("../DetallesAsignacion/" + id, function(data) {
-        $('#asunto_a').empty();
-        $('#descripcion_a').empty();
-        $('#importancia_a').empty();
-        $('#comunicado_a').empty();
-        $('#turno_a').empty();
-        $('#creador_a').empty();
-        $('#area_a').empty();
-        $('#f_creacion_a').empty();
-        $('#periodo_atencion_a').empty();
-
-
-        $('#modelHeading').html("Detalles Archivos");
-        $('#ajaxModel').modal('show');
-        var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
-        var descripcion = "<textarea id='descripcion' name='descripcion'  class='form-control form-control-sm' disabled></textarea>"
-        var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
-        var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
-        var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
-        var creador = "<input id='creador' name='creador'  class='form-control form-control-sm' disabled>"
-        var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
-        var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
-        var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
-
-        $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
-        $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
-        $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
-        $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
-        $('#turno_a').append("<strong>Turno </strong>" + turno);
-        $('#creador_a').append("<strong>Creador </strong>" + creador);
-        $('#area_a').append("<strong>Area responsable </strong>" + area);
-        $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
-        $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
-
-        $('#asunto').val(data[0].asunto);
-        $('#descripcion').val(data[0].descripcion);
-        $('#importancia').val(data[0].importancia);
-        $('#comunicado').val(data[0].comunicado);
-        $('#turno').val(data[0].turno);
-        $('#creador').val(data[0].creador);
-        $('#area').val(data[0].turno);
-        $('#creacion').val(data[0].fecha_creacion);
-        $('#periodo').val(data[0].fecha_inicio);
-
-      })
-
-    });
-
-    $("#ajaxModel").on('hidden.bs.modal', function() {
-
+    $.get("../DetallesAsignacion/" + id, function(data) {
       $('#asunto_a').empty();
       $('#descripcion_a').empty();
       $('#importancia_a').empty();
@@ -193,7 +150,56 @@
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
 
-    });
-  </script>
 
-  @endsection
+      $('#modelHeading').html("Detalles Archivos");
+      $('#ajaxModel').modal('show');
+      var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
+      var descripcion = "<textarea id='descripcion' name='descripcion'  class='form-control form-control-sm' disabled></textarea>"
+      var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
+      var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
+      var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
+      var creador = "<input id='creador' name='creador'  class='form-control form-control-sm' disabled>"
+      var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
+      var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
+      var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
+
+      $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
+      $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+      $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
+      $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
+      $('#turno_a').append("<strong>Turno </strong>" + turno);
+      $('#creador_a').append("<strong>Creador </strong>" + creador);
+      $('#area_a').append("<strong>Area responsable </strong>" + area);
+      $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
+      $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
+
+      $('#asunto').val(data[0].asunto);
+      $('#descripcion').val(data[0].descripcion);
+      $('#importancia').val(data[0].importancia);
+      $('#comunicado').val(data[0].comunicado);
+      $('#turno').val(data[0].turno);
+      $('#creador').val(data[0].creador);
+      $('#area').val(data[0].turno);
+      $('#creacion').val(data[0].fecha_creacion);
+      $('#periodo').val(data[0].fecha_inicio);
+
+    })
+
+  });
+
+  $("#ajaxModel").on('hidden.bs.modal', function() {
+
+    $('#asunto_a').empty();
+    $('#descripcion_a').empty();
+    $('#importancia_a').empty();
+    $('#comunicado_a').empty();
+    $('#turno_a').empty();
+    $('#creador_a').empty();
+    $('#area_a').empty();
+    $('#f_creacion_a').empty();
+    $('#periodo_atencion_a').empty();
+
+  });
+</script>
+
+@endsection
