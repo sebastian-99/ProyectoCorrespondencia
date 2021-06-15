@@ -41,6 +41,7 @@ Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::clas
 Route::get('DetallesArchivos/{idarseg}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
 
 Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
+Route::post('rechazarActividad', [SeguimientoController::class,'rechazarActividad'])->name('rechazarActividad');
 
 
 ////Actividades
