@@ -71,19 +71,23 @@ class SeguimientoController extends Controller
             //consulta para ver si el acuse se recibio
             $id_user = Auth()->user()->idu;
 
-            $ver_acuse = DB::SELECT("SELECT ra.acuse 
+            $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             WHERE ra.idu_users = $id_user
             AND ra.idac_actividades = $idac
             ");
+            if ($ver_acuse[0]->acuse == 2) {
+                return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
+            }
 
             if ($ver_acuse[0]->acuse == 1) {
                 return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
             } else {
-                return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                $idreac = $ver_acuse[0]->idreac;
+                return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
                     <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
-                    <a class='btn btn-danger' id='mensaje' hidden disabled> X </a>";
+                    <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
         }
 
@@ -127,7 +131,7 @@ class SeguimientoController extends Controller
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
             return response()->json('aceptado');
         } else {
-            return response()->json('rechazado');
+            return 'Contraseña incorrecta';
         }
     }
 
@@ -138,7 +142,7 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $rechazar = DB::UPDATE("UPDATE responsables_actividades SET 
-                acuse = 0, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
+                acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
         return response()->json('aceptado');
     }

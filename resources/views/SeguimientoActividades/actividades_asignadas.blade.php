@@ -29,7 +29,7 @@
         <zg-column index='importancia' header='Importancia' width="100" type='text'></zg-column>
         <zg-column index='area' header='Àrea' width="100" type='text'></zg-column>
         <zg-column index='recibo' header='Atendido por' width="100" type='text'></zg-column>
-        <zg-column index='porcentaje' header='Avance' width="100" type='text'></zg-column>
+        <zg-column index='porcentaje' header='Avance individual' width="100" type='text'></zg-column>
 
         <zg-column align="center" filter="disabled" index='operaciones' header='Operaciones' width="100" type='text'></zg-column>
       </zg-colgroup>
@@ -81,26 +81,26 @@
         </div>
         <div>
           <div id="sec1" hidden>
-            <label>Ingresa tu contraseña para confirmacion</label>
-            <input type="password" id="pass" name="pass" class="form-control">
+            <label>Ingresa tu contraseña para confirmación</label>
+            <input type="password" id="pass" name="pass" class="form-control" placeholder="Escribe tu contraseña para aceptar la actividad" required>
             <label hidden>Fecha de acuse de recibido</label>
             <input type="text" id="fechaacuse" name="fecha_acuse" hidden>
           </div>
         </div>
         <div id="sec2" hidden>
-          <label>Describe la situacion del porque rechazas la actividad</label>
-          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" cols="64" rows="5"></Textarea>
+          <label>Describe la situación del porque rechazas la actividad</label>
+          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" rows="5" required>Yo estoy rechazando esta actividad por los siguientes motivos:</Textarea>
         </div>
 
       </div>
       <br><br>
       <div class="form-group text-center">
+        <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
         <button type="button" class="btn btn-success" id="aceptar">Aceptar actividad</button>
         <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
-        <button type="button" class="btn btn-danger" id="cancelar" hidden="">Cancelar</button>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" id="guardar" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close">Guardar</button>
+        <button type="submit" class="btn btn-outline-primary" id="guardar" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
     </div>
   </div>
@@ -109,9 +109,10 @@
 {{-- Fin de modal --}}
 
 <script type="text/javascript">
+  var id_actividad = null;
   $('body').on('click', '.DetallesAsignacion', function() {
-    let id = $(this).data('id');
-    console.log(id);
+    var id = $(this).data('id');
+    id_actividad = id;
     $.get("../DetallesAsignacion/" + id, function(data) {
       $('#asunto_a').empty();
       $('#descripcion_a').empty();
@@ -125,7 +126,41 @@
       $('#pass').empty();
       $('#aceptar').show();
       $('#rechazar').show();
+      $('#guardar').attr('hidden', true);
+      $('#cancelar').attr('hidden', true);
 
+      var val = 0;
+
+      $('#aceptar').on('click', function() {
+        $('#sec1').attr('hidden', false);
+        $('#guardar').removeAttr('hidden');
+        $('#guardar').html('Aceptar');
+        $('#cancelar').removeAttr('hidden');
+        $('#rechazar').hide();
+        $('#aceptar').hide();
+        val = 1;
+      });
+
+      $('#rechazar').on('click', function() {
+        $('#sec2').attr('hidden', false);
+        $('#guardar').removeAttr('hidden');
+        $('#guardar').html('Rechazar');
+        $('#cancelar').removeAttr('hidden');
+        $('#rechazar').hide();
+        $('#aceptar').hide();
+        val = 0;
+      });
+
+      $('#cancelar').on('click', function() {
+
+        $('#sec1').attr('hidden', true);
+        $('#sec2').attr('hidden', true);
+        $('#aceptar').show();
+        $('#rechazar').show();
+        $('#guardar').attr('hidden', true);
+        $('#cancelar').attr('hidden', true);
+
+      });
 
       $('#crearModal').modal('show');
       var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
@@ -158,9 +193,54 @@
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio);
 
-    })
+      //Guardar informacion de recibo de actividad
 
-  });
+      $('#guardar').on('click', function() {
+        if (val != 0) {
+          let pass = $('#pass').val();
+          $.ajax({
+            url: 'aceptarActividad',
+            data: {
+              id: id_actividad,
+              pass: pass,
+              "_token": "{{ csrf_token() }}",
+            },
+            method: 'POST',
+            success: function(data) {
+              location.reload()
+            },
+            error: function(data) {
+              console.log(data);
+            }
+          });
+          //En caso de que el usuario rechaze la actividada
+        } else {
+          $('#sec1').hide();
+          $('#sec2').hide();
+          $('#cancelar').hide();
+          $('#detalle').hide();
+          $('#mensaje').removeAttr('hidden');
+          let rechazo = $('#razon_r').val();
+          $.ajax({
+            url: 'rechazarActividad',
+            data: {
+              id_a: id_actividad,
+              rechazo: rechazo,
+              "_token": "{{ csrf_token() }}",
+            },
+            method: 'POST',
+            success: function(data) {
+              //location.reload()
+            },
+            error: function(data) {
+              console.log(data);
+            }
+          }); //cierre ajax == rechazo ==
+        } //cierre de else
+      }); //cierre function guardar
+    }); //cierre de function cuando abre ventana modal
+  }); //cierre function get
+
 
   $("#crearModal").on('hidden.bs.modal', function() {
 
@@ -174,96 +254,13 @@
     $('#f_creacion_a').empty();
     $('#periodo_atencion_a').empty();
     $('#pass').empty();
-
-  });
-
-  let val = 0;
-
-  $('#aceptar').on('click', function() {
-    $('#sec1').removeAttr('hidden');
-    $('#cancelar').removeAttr('hidden');
-    $('#rechazar').hide();
-    $('#aceptar').hide();
-    val = 1;
-  });
-
-  $('#rechazar').on('click', function() {
-    $('#sec2').removeAttr('hidden');
-    $('#cancelar').removeAttr('hidden');
-    $('#aceptar').hide();
-    $('#rechazar').hide();
+    $('#aceptar').show();
+    $('#rechazar').show();
+    $('#guardar').attr('hidden', true);
+    $('#cancelar').attr('hidden', true);
     val = 0;
-  });
+  }); //cierre acciones al cierre modal
 
-  $('#cancelar').on('click', function() {
-    if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)) {
-      $('#sec1').attr('hidden', true);
-      $('#sec2').attr('hidden', true);
-      $('#aceptar').show();
-      $('#rechazar').show();
-      $('#cancelar').hide();
-    }
-  });
-
-  $('#guardar').on('click', function() {
-    if (val != 0) {
-      let idac = $('.DetallesAsignacion').data('id');
-      //console.log(idac);
-      let pass = $('#pass').val();
-      $.ajax({
-        url: 'aceptarActividad',
-        data: {
-          id: idac,
-          pass: pass,
-          "_token": "{{ csrf_token() }}",
-        },
-        method: 'POST',
-        success: function(data) {
-          $('#btn-mostrar').removeAttr('hidden');
-          $('#pass').val('');
-          $('#sec1').hide();
-          $('#sec2').hide();
-          $('#cancelar').hide();
-          $('#detalle').hide();
-          //console.log(data);
-        },
-        error: function(data) {
-          console.log(data);
-        }
-      });
-      //En caso de que el usuario rechaze la actividada
-    } else {
-      $('#sec1').hide();
-      $('#sec2').hide();
-      $('#cancelar').hide();
-      $('#detalle').hide();
-      $('#mensaje').removeAttr('hidden');
-
-      let idac_r = $('.DetallesAsignacion').data('id_a');
-      //console.log(idac);
-      let rechazo = $('#razon_r').val();
-      $.ajax({
-        url: 'rechazarActividad',
-        data: {
-          id_a: idac_r,
-          rechazo: rechazo,
-          "_token": "{{ csrf_token() }}",
-        },
-        method: 'POST',
-        success: function(data) {
-          $('#razon_r').val('');
-          $('#sec1').hide();
-          $('#sec2').hide();
-          $('#cancelar').hide();
-          $('#detalle').hide();
-          //console.log(data);
-        },
-        error: function(data) {
-          console.log(data);
-        }
-      });
-    }
-  });
 </script>
 
 @endsection
