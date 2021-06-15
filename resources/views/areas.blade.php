@@ -137,7 +137,7 @@
                 <select class="form-control @error('idtar') is-invalid @enderror" id="idtar" name="idtar" required>
                     <option value="">Selección</option>
                     @foreach($tipos_areas as $tipoarea)
-                      <option value="{{ $tipoarea->idtar }}" {{ (old('idtar', $area_edit->idtar) == $tipoarea->idtar) ? 'selected' : '' }}>{{ $tipoarea->nombre }}</option>
+                      <option value="{{ $tipoarea->idtar }}" {{ (old('idtar', $area_edit->idtar) == $tipoarea->nombre) ? 'selected' : '' }}>{{ $tipoarea->nombre }}</option>
                     @endforeach
                 </select>
                 @error('idtar')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror

@@ -31,6 +31,7 @@ class UsersController extends Controller
                                 'users.app',
                                 'users.apm',
                                 'users.email',
+                                'users.password',
                                 'users.activo',
                                 'tipos_usuarios.nombre as idtu_tipos_usuarios',
                                 'areas.nombre as idar_areas',

@@ -187,7 +187,7 @@
     $('#aceptar').hide();
     val = 1;
   });
-  
+
   $('#rechazar').on('click', function () {
     $('#sec2').removeAttr('hidden');
     $('#cancelar').removeAttr('hidden');
@@ -195,7 +195,7 @@
     $('#rechazar').hide();
     val = 0;
   });
-  
+
   $('#cancelar').on('click', function () {
     if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)){
       $('#sec1').attr('hidden', true);
@@ -236,8 +236,8 @@
       $('#sec1').hide();
       $('#sec2').hide();
       $('#cancelar').hide();
-      $('#detalle').hide(); 
-      $('#mensaje').removeAttr('hidden'); 
+      $('#detalle').hide();
+      $('#mensaje').removeAttr('hidden');
       alert('Haz rechazado esta actividad, por lo que ya no podrás darle seguimiento');
     }
   });

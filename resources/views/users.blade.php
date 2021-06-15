@@ -176,7 +176,7 @@
                     <select class="form-control @error('idtu_tipos_usuarios') is-invalid @enderror" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
                     <option value="">Selección</option>
                     @foreach($tipos_usuarios as $tipousuario)
-                        <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->idtu) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
+                        <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->nombre) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
                     @endforeach
                     </select>
                     @error('idtu_tipos_usuarios')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
@@ -221,7 +221,7 @@
                 <select class="form-control @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
                     <option value="">Selección</option>
                     @foreach($areas as $area)
-                      <option value="{{ $area->idar }}" {{ (old('idar_areas', $user_edit->idar_areas) == $area->idar) ? 'selected' : '' }}>{{ $area->nombre }}</option>
+                      <option value="{{ $area->idar }}" {{ (old('idar_areas', $user_edit->idar_areas) == $area->nombre) ? 'selected' : '' }}>{{ $area->nombre }}</option>
                     @endforeach
                 </select>
                 @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
