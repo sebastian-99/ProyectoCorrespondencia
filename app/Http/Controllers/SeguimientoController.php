@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Session;
+use Brs\FunctionPkg;
 
 class SeguimientoController extends Controller
 {
@@ -64,8 +65,9 @@ class SeguimientoController extends Controller
 
         function ver($idac)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion'><i class='nav-icon fas fa-user-check'></i></a>";
+            return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+            <a class='btn btn-danger' id='mensaje' hidden disabled> X </a>";
         }
 
         foreach ($consult as $c) {
@@ -92,7 +94,27 @@ class SeguimientoController extends Controller
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
     
-}
+    }
+
+    public function aceptarActividad(Request $request){
+        $contraseña = $request->pass;
+        $idac = decrypt($request->id);
+
+        if(password_verify($contraseña, Auth()->User()->password)){
+            $new = new FunctionPkg;
+            $id_user = Auth()->user()->idu;
+            $firma = $new->Encrypt($idac, $id_user, Auth()->User()->nombre);
+            
+            $cons = DB::UPDATE("UPDATE responsables_actividades SET 
+                acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
+                WHERE idu_users = $id_user AND idac_actividades = $idac");
+            return response()->json('aceptado');
+
+        } else {
+            return response()->json('rechazado');   
+        }
+
+    }    
 
 public function DetallesAsignacion($idac)
     {
