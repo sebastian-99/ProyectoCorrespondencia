@@ -9,6 +9,8 @@ use App\Models\Users;
 use App\Models\SeguimientosActividades;
 use DB;
 use Arr;
+use PDF;
+
 class ActividadesController extends Controller
 {
     public function reporte_actividades(){
@@ -141,11 +143,26 @@ class ActividadesController extends Controller
 
         return view('Actividades.reporte_detalles')
         
-        ->with('json', $json);
+        ->with('json', $json)
+        ->with('idac', $idac);
 
     }
 
+    public function pdf($idac){
 
+
+        $idac = decrypt($idac);
+        
+        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area FROM responsables_actividades AS res
+        JOIN users AS us ON us.idu = res.idu_users
+        JOIN areas AS ar ON ar.idar = us.idar_areas
+        JOIN tipos_areas AS ta ON ta.idtar = ar.idtar
+        WHERE idac_actividades = $idac
+        AND res.acuse = 1");
+
+        $pdf = PDF::loadView('Actividades.pdf', compact('data'));
+        return $pdf->stream('PDF de actividades seguimientos.pdf');
+    }
 
 
     public function detallesSeguimiento($idac)
