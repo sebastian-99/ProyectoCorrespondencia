@@ -17,8 +17,8 @@ class ActividadesController extends Controller
 
         $us_id = \Auth()->User()->idu;
 
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje 
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, SUBSTR(ac.asunto, 1,20) AS asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users,  SUBSTR(ac.descripcion, 1 , 30) AS descripcion, porcentaje(ac.idac,$us_id) AS porcentaje 
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -104,6 +104,15 @@ class ActividadesController extends Controller
         WHERE idac_actividades = $idac
         GROUP BY idu_users");
 
+        $boton = DB::table('responsables_actividades as res')
+                    ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
+                    ->where([
+                        ['res.idac_actividades', '=' , $idac],
+                        ['res.acuse', '=' , 1],
+                        ])
+                    ->first();
+
+        
         $array = array();
 
         function recorrer($value){
@@ -144,7 +153,8 @@ class ActividadesController extends Controller
         return view('Actividades.reporte_detalles')
         
         ->with('json', $json)
-        ->with('idac', $idac);
+        ->with('idac', $idac)
+        ->with('boton', $boton);
 
     }
 
@@ -577,8 +587,8 @@ class ActividadesController extends Controller
     {
         $id_u = decrypt($id);
 
-        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, SUBSTR(ac.asunto, 1,20) AS asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, SUBSTR(ac.descripcion, 1,30) AS descripcion,
         porcentaje(ac.idac, $id_u) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
