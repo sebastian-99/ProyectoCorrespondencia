@@ -55,7 +55,9 @@ Route::get('actividades_modificacion/{id}', [ActividadesController::class,'activ
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
 Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');
-
+/* Generación PDF */
+Route::get('pdf/{idac}', [ActividadesController::class, 'pdf'])->name('pdf');
+/* Fin de generación PDF */
 Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
 
 Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
