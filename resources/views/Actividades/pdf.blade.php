@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,42 +11,91 @@
 <body>
     <center><h1 class="text-primary">Reporte de responsables de actividades</h1></center>
     <table class="table table-bordered border-primary">
-        
-        
-        @php
-         $index = 0;   
-        @endphp
-        @foreach ( $data as $key => $valor)
-        
-        @if($index != 2)
-        <tr scope="row">
-            
-            
-            <td>
-                <p>{{$index}}</p>
-                <p>Firma digital por: {{$valor->nombre}}</p>
-                <p>Fecha: {{$valor->fecha_acuse}}</p>
-                <p>Razón: FIRMA DE RECIBIDO</p>
-                <p>&Aacute;rea: {{$valor->area}}</p>
-            </td>
-        </tr>
-            
-            @php
-                $index++;
-                    
-            @endphp
-            
-            @else
-            @php
-                
-            $index = 0;
-                
-                
-            @endphp
-            @endif
-        @endforeach
-        
-        
+    
+    @php
+
+        $out = $insert = array();
+
+        $final = count($data) % 3;
+
+        $pos = count($data) - $final;
+
+        foreach ( $data as $key => $valor)
+        {
+
+            array_push($insert, 
+                array( 
+                    'nombre' => $valor->nombre, 
+                    'fecha_acuse' =>  $valor->fecha_acuse, 
+                    'area' => $valor->area,
+                )
+            );
+
+            if( count($insert) == 3 )
+            {
+                $contenido = "<tr>";
+
+                for( $i=0; $i < count($insert); $i++)
+                {
+                    $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
+
+                    $contenido .= "<p>Firma digital por: ".$insert[$i]['nombre']."</p>";
+
+                    $contenido .= "<p>Fecha: ".$insert[$i]['fecha_acuse']."</p>";
+
+                    $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
+
+                    $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
+
+                    $contenido .= "</div> </div> </td>";
+
+                }
+
+                $contenido .= "</tr>";
+
+                echo $contenido;
+
+                $insert = array();
+            }
+
+            if( $key >= $pos )
+            {
+                array_push($out, 
+                    array( 
+                        'nombre' => $valor->nombre, 
+                        'fecha_acuse' =>  $valor->fecha_acuse, 
+                        'area' => $valor->area,
+                    )
+                );
+            }
+        }
+
+        if( count($out) != 0 )
+        {
+            $contenido = "<tr>";
+
+            for( $i=0; $i < count($out); $i++)
+            {
+                $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
+
+                $contenido .= "<p>Firma digital por: ".$insert[$i]['nombre']."</p>";
+
+                $contenido .= "<p>Fecha: ".$insert[$i]['fecha_acuse']."</p>";
+
+                $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
+
+                $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
+
+                $contenido .= "</div> </div> </td>";
+
+            }
+
+            $contenido .= "</tr>";
+
+            echo $contenido;
+        }
+
+    @endphp
                  
     </table>
     
