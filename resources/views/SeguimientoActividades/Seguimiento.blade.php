@@ -355,6 +355,7 @@
         if (verif_s == 'Completo') {
             $('#porcentaje').val(100);
             $('#porc').html(100);
+            $('#estado_p').prop('disabled', true);
         }      
     }
  
