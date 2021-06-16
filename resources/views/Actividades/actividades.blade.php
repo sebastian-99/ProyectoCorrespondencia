@@ -386,6 +386,7 @@
     
     $("#tipousuario").on("select2:unselecting", function(e) {
         $("#tipousuarioarea").empty();
+        $(this).val(null);
     });
     
 </script>

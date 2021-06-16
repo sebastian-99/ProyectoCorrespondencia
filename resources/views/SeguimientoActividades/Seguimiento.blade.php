@@ -17,7 +17,7 @@
     }
 
     function porcentajeAvance() {
-        document.getElementById('temp').innerHTML = document.getElementById('porcentaje').value;
+        document.getElementById('porc').innerHTML = document.getElementById('porcentaje').value;
     }
 </script>
 
@@ -174,8 +174,8 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="porcentaje" class="form-label">Porcentaje </label>
-                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje" value="{{$max_ai->avance_i}}">
-                            <span id="temp">{{$max_ai->avance_i}}</span>%
+                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje" value="{{$max_ai->avance_i}}" onchange="verificar_p()">
+                            <span id="porc">{{$max_ai->avance_i}}</span>%
 
                         </div>
                     </div>
@@ -183,11 +183,11 @@
                         <div class="mb-3">
                             <label for="estado" class="form-label">Estado Actividad</label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="inlineRadio1" value="Pendiente" checked>
+                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" >
                                 <label class="form-check-label" for="inlineRadio1">Pendiente</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="inlineRadio2" value="Completo">
+                                <input class="form-check-input" type="radio" name="estado" id="estado_c" value="Completo" onchange="verificar_s()">
                                 <label class="form-check-label" for="inlineRadio2">Completo</label>
                             </div>
                         </div>
@@ -338,6 +338,25 @@
 
 
     <script type="text/javascript">
+    //comprobar si el porcentaje de avance es igual 100% marcar estado completado
+    function verificar_p() {
+        var verif_p = document.getElementById("porcentaje").value;
+        if (verif_p == 100) {
+            $('#estado_c').prop("checked", true);
+            $('#estado_p').prop('disabled', true);
+        }else{
+            $('#estado_p').prop("checked", true);
+            $('#estado_p').prop('disabled', false);
+        }                      
+    }
+    function verificar_s() {
+        var verif_s = document.getElementById("estado_c").value;
+        var verif_sp = document.getElementById("estado_p").value;
+        if (verif_s == 'Completo') {
+            $('#porcentaje').val(100);
+            $('#porc').html(100);
+        }      
+    }
  
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
