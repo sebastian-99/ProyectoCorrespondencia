@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sistema\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Actividades;
 use App\Models\ResponsablesActividades as responsablesActividades;
 use App\Models\SeguimientosActividades as seguimientosActividades;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class PanelController extends Controller
 {
+
     public function panel()
     {
         $user = auth()->user()->idu;
@@ -32,17 +34,62 @@ class PanelController extends Controller
         return User::where('idu', $idu)
             ->join('responsables_actividades', 'idu_users', 'users.idu')
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-            ->select('idu')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.fecha_fin', "$hoy")
-            ->get();
+            ->select(
+                'users.idu',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
+            )
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     public function getActividadesPendientes($idu){
         return User::where('idu', $idu)
             ->join('responsables_actividades', 'idu_users', 'users.idu')
-            ->select('idu')
+            ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('responsables_actividades.fecha', null)
-            ->get();
+            ->select(
+                'users.idu',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
+            )
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     public function getActividadesPorMes($idu){
@@ -52,23 +99,74 @@ class PanelController extends Controller
         return User::where('idu', $idu)
             ->join('responsables_actividades', 'idu_users', 'users.idu')
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.fecha_fin','>=', "$mesInicial")
             ->where('actividades.fecha_fin','<=', "$mesFinal")
             ->where('responsables_actividades.fecha', null)
-            ->select('idu','actividades.fecha_fin')
-            ->get();
+            ->select(
+                'users.idu',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
+            )
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     public function getActividadesCerradas($idu){
         $usuario = User::find($idu);
         $total= $usuario->responsables()->count();
         $actividadesConcluidas = $usuario->responsables()->where('fecha','!=', null)->get();
+        if(!request()->ajax()){
+            return [
+                'total' => $total,
+                'concluidas' => $actividadesConcluidas->count()
 
-        return [
-            'total' => $total,
-            'concluidas' => $actividadesConcluidas->count()
+            ];
+        }
+        return User::where('idu', $idu)
+            ->join('responsables_actividades', 'idu_users', 'users.idu')
+            ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
+            ->join('areas','areas.idar','actividades.idar_areas')
+            ->where('responsables_actividades.fecha','!=', null)
+            ->select(
+                'users.idu',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
+            )
+            ->get()
+            ->each(function($collection){
 
-        ];
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     public function getActividadesEnSeguimiento($idu)
@@ -83,12 +181,37 @@ class PanelController extends Controller
                     'actividades.idac',
                     'responsables_actividades.idac_actividades'
             )
+            ->join('areas','areas.idar','actividades.idar_areas')
+            ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->where('responsables_actividades.idu_users', $idu)
             ->select(
-                'actividades.*',
-                'seguimientos_actividades.porcentaje AS porcentaje_seguimiento'
+                'users.idu',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
             )
-            ->get();
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
+
+        if(request()->ajax()){
+            return $actividades;
+        }
+
         return [
             'actividades' => $actividades,
             'total' => $actividades->count(),

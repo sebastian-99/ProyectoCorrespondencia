@@ -9,9 +9,35 @@ moment.locale('es', {
   }
 );
 
+const scriptDataTables = `
+    $('#table tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+
+    $('#table').DataTable({
+        responsive : true,
+        language: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
+        initComplete: function () {
+            this.api().columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        }
+    })
+`
+
+
 $('document').ready(()=>{
 
     const area = new Area()
+    area.rangoSemanal()
 
     const selectTipoArea = $('#select_tipo_area')
     const selectArea = $('#select_area')
@@ -54,10 +80,10 @@ $('document').ready(()=>{
     })
 
     area.generarHtmlDelGrafico('Prorcentaje total de actividades','gauge_chart')
-    area.generarGreficoGauge()
+    //area.generarGreficoGauge()
 
     area.generarHtmlDelGrafico('Estado de las Actividades','pie_chart')
-    area.generarGreficoPie()
+    //area.generarGreficoPie()
 
     $('input:radio[name=rango]').click(()=>{
         const rango = $('input:radio[name=rango]:checked').val()
@@ -117,12 +143,28 @@ $('document').ready(()=>{
                         type: 'GET',
                         url:  `/admin/get-actividades-ṕor-mes/${direccionDeCarrera}/${year}/${mes}`,
                         success: data =>{
-                            area.generarGreficoGauge([[data.area.nombre, data.promedio]])
-                            area.setGraficoPie([
-                                ['sin entregar', data.actividades.incompletas],
-                                ['en proceso', data.actividades.enProceso],
-                                ['completadas', data.actividades.completadas],
-                            ]);
+                            const gaugeChart ={
+                                columns: [[data.area.nombre, data.promedio]],
+                                type: 'gauge',
+                                onclick: (data, i) => {
+                                    const route = `/admin/get-actividades-totales/${$('#select_area').val()}`
+                                    imprimirTablaConAjax(route)
+                                },
+                            }
+                            area.generarGreficoGauge(gaugeChart)
+
+                            const parametrosGrafico = {
+                                columns: [
+                                    ['sin entregar', data.actividades.incompletas],
+                                    ['en proceso', data.actividades.enProceso],
+                                    ['completadas', data.actividades.completadas],
+                                ],
+                                type : 'pie',
+                                onclick: data=>{
+                                    clickGraficoPie(data)
+                                }
+                            }
+                            area.generarGreficoPie(parametrosGrafico);
                         },
                         error: error =>{
                             console.log(error);
@@ -156,32 +198,120 @@ $('document').ready(()=>{
 
     })
 
+    function clickGraficoPie(data){
+        console.log('click');
+        $('#tabla').empty()
+        let route = ''
+        let bandera = true
+        const year = Number($('#year').val())
+        const area = Number($('#select_area').val())
+        const select = $('#rango_inicial').val()
+        switch ($('input:radio[name=rango]:checked').val())
+        {
+            case 'mensual':
+                route = `-por-mes`
+                bandera = false
+                break;
+        }
+        switch(data.index){
+            case 0:
+                route= `get-actividades-sin-entregar${route}/${area}`
+            break;
+            case 1:
+                route= `get-actividades-en-proceso${route}/${area}`
+                break;
+            case 2:
+                route= `get-actividades-completadas${route}/${area}`
+                break;
+        }
+
+        if(bandera){
+            const inicio = moment(year).set({week: select, day: 0}).format('DD-M-YYYY')
+            const fin = moment(year).set({week: select, day: 6}).format('DD-M-YYYY')
+            route=`${route}/${inicio}/${fin}`
+        }else{
+            route= `${route}/${Number(moment().month(select).format('MM'))}`
+        }
+        route = `/admin/${route}/${year}`
+
+        imprimirTablaConAjax(route)
+    }
+    function imprimirTablaConAjax(route){
+        console.log(route)
+        $.ajax({
+            type: 'GET',
+            url: route,
+            success: data=>{
+                const thead = `
+                    <tr>
+                        <th>Turno</th>
+                        <th>Autor</th>
+                        <th>Responsale</th>
+                        <th>Asunto</th>
+                        <th>Descripcion</th>
+                        <th>Periodo</th>
+                        <th>Inportancia</th>
+                        <th>Area Responsable</th>
+                        <th>Acciones</th>
+                    </tr>
+                `
+                let tbody = ''
+                data.forEach(dato => {
+                    tbody += `
+                        <tr>
+                            <td>${dato.turno}</td>
+                            <td>
+                                ${dato.creador.titulo}
+                                ${dato.creador.nombre}
+                                ${dato.creador.app}
+                                ${dato.creador.apm}
+                            </td>
+                            <td>${dato.responsable}</td>
+                            <td>${dato.asunto}</td>
+                            <td>${dato.descripcion}</td>
+                            <td>${dato.periodo}</td>
+                            <td>${dato.importancia}</td>
+                            <td>${dato.area_responsable}</td>
+                            <td>
+                                <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
+                            </td>
+                        </tr>
+                    `
+                });
+                area.imprimirDatosEnTabla(thead,tbody, $('#tabla'),scriptDataTables)
+            },
+            error: error=>{
+                console.error(error);
+            }
+        })
+    }
+
     function resetearAreas(){
         selectArea.empty()
-        selectArea.attr('hidden',true)
+        //selectArea.attr('hidden',true)
         selectArea.empty()
-        radiosDeRangoDeFechas.attr('hidden',true)
+        //radiosDeRangoDeFechas.attr('hidden',true)
         selectRango.attr('hidden',true)
         selectRango.empty()
-        btnFiltrarBusquedas.attr('hidden',true)
+        //btnFiltrarBusquedas.attr('hidden',true)
     }
     function resetearCarreras(){
-        selectArea.attr('hidden',true)
+        //selectArea.attr('hidden',true)
         selectArea.empty()
         radiosDeRangoDeFechas.attr('hidden',true)
-        selectRango.attr('hidden',true)
+        //selectRango.attr('hidden',true)
         selectRango.empty()
-        btnFiltrarBusquedas.attr('hidden',true)
+        //btnFiltrarBusquedas.attr('hidden',true)
     }
     function resetearRadiosDeRangos(){
-        radiosDeRangoDeFechas.attr('hidden',true)
-        selectRango.attr('hidden',true)
+        //radiosDeRangoDeFechas.attr('hidden',true)
+        //selectRango.attr('hidden',true)
         selectRango.empty()
-        btnFiltrarBusquedas.attr('hidden',true)
+        //btnFiltrarBusquedas.attr('hidden',true)
     }
 
     function resetearSelectRangoInicial(){
-        btnFiltrarBusquedas.attr('hidden',true)
+        //btnFiltrarBusquedas.attr('hidden',true)
     }
 
 })

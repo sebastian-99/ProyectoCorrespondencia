@@ -18,7 +18,7 @@
         <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
         </div>
         <div class="col-sm-2">
-        <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank">PDF</a>
+        <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank" {{($boton->boton == 0) ? 'hidden' : ''}}>PDF</a>
         </div>
       </div>
       

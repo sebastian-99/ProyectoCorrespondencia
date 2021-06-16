@@ -21,6 +21,6 @@ class ArchivosSeguimientos extends Model
         'idseac_seguimientos_actividades',
         'nombre',
         'ruta',
-        'detalle',
+        'detalle_a',
     ];
 }

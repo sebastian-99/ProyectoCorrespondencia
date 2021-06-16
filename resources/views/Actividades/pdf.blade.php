@@ -78,13 +78,13 @@
             {
                 $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
-                $contenido .= "<p>Firma digital por: ".$insert[$i]['nombre']."</p>";
+                $contenido .= "<p>Firma digital por: ".$out[$i]['nombre']."</p>";
 
-                $contenido .= "<p>Fecha: ".$insert[$i]['fecha_acuse']."</p>";
+                $contenido .= "<p>Fecha: ".$out[$i]['fecha_acuse']."</p>";
 
                 $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
-                $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
+                $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
 
                 $contenido .= "</div> </div> </td>";
 
