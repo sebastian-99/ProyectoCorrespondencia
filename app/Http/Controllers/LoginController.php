@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
 
-    public function login(Request $reques)
+    public function login()
     {
-
-        $request->validate([
+        return view('login');
+    }
+    /*public Function validar(Request $request)
+    {
+        $this->validate($request[
+            
             'email' => 'required',
             'password' => 'required',
         ]);
-
-        return view('login');
-    }
+    }*/
 }

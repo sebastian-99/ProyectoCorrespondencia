@@ -4,15 +4,15 @@
 	@csrf
 	<div class="form-group">
 		<input type="text" class="form-control rounded-left" placeholder="Correo electrónico" name="email" required>
-		@error('email')
-                <strong>{{ $message }}</strong>
-        @enderror
+		@if($errors->first('email'))
+		<p class ='text-danger'>{{$errors->first('email')}}</p>
+        @endif
 	</div>
 	<div class="form-group d-flex">
 		<input type="password" class="form-control rounded-left" placeholder="Contraseña" name="password" required>
-		@error('password')
-		        <strong>{{ $message }}</strong>
-		@enderror
+		@if($errors->first('password'))
+		<p class ='text-danger'>{{$errors->first('password')}}</p>
+        @endif
 	</div>
 	<div class="form-group d-md-flex">
 	<div>
