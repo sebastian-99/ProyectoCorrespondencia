@@ -340,24 +340,25 @@
     <script type="text/javascript">
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
-        var verif_p = document.getElementById("porcentaje").value;
-        if (verif_p == 100) {
-            $('#estado_c').prop("checked", true);
-            $('#estado_p').prop('disabled', true);
-        }else{
-            $('#estado_p').prop("checked", true);
-            $('#estado_p').prop('disabled', false);
-        }                      
-    }
-    function verificar_s() {
-        var verif_s = document.getElementById("estado_c").value;
-        var verif_sp = document.getElementById("estado_p").value;
-        if (verif_s == 'Completo') {
-            $('#porcentaje').val(100);
-            $('#porc').html(100);
-            $('#estado_p').prop('disabled', true);
-        }      
-    }
+            var verif_p = document.getElementById("porcentaje").value;
+            if (verif_p == 100) {
+                $('#estado_c').prop("checked", true);
+                $('#estado_p').prop('disabled', true);
+            } else {
+                $('#estado_p').prop("checked", true);
+                $('#estado_p').prop('disabled', false);
+            }
+        }
+
+        function verificar_s() {
+            var verif_s = document.getElementById("estado_c").value;
+            var verif_sp = document.getElementById("estado_p").value;
+            if (verif_s == 'Completo') {
+                $('#porcentaje').val(100);
+                $('#porc').html(100);
+                $('#estado_p').prop('disabled', true);
+            }
+        }
  
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
