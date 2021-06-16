@@ -31,6 +31,7 @@ class UsersController extends Controller
                                 'users.app',
                                 'users.apm',
                                 'users.email',
+                                'users.password',
                                 'users.activo',
                                 'tipos_usuarios.nombre as idtu_tipos_usuarios',
                                 'areas.nombre as idar_areas',
@@ -209,7 +210,7 @@ class UsersController extends Controller
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
                     'email' => ['required', 'email', 'max:100', "unique:users,email,$idu,idu"],
-                    'password' => ['required',
+                    'password' => ['nullable',
                         Password::min(8)
                             ->letters()  //Al menos una letra
                             ->mixedCase() //Al menos una minúscula y una mayúscula
