@@ -9,7 +9,34 @@
     
 </head>
 <body>
-    <center><h1 class="text-primary">Reporte de responsables de actividades</h1></center>
+    <center><h1 class="text-primary">REPORTE DE ACUSE DE RECIBIDO</h1></center>
+    <center><h2 class="text-primary">DETALLE DE LA ACTIVIDAD</h2></center>
+
+    <table class="table table-bordered border-primary">
+        <tr>
+            <td scope="row" width='50%'>
+                <div class="row">
+                    <div class="col">
+                        <p>Folio: {{$data[0]->comunicado}}</p>
+                        <p>Asunto: {{$data[0]->asunto}}</p>
+                        <p>Detalle: {{$data[0]->descripcion}}</p>
+                    </div>
+                </div>
+            </td>
+            <td scope="row" width='50%'>
+                <div class="row">
+                    <div class="col">
+                        <p>Fecha creaci&oacute;n: {{$data[0]->fecha_creacion}}</p>
+                        <p>Fecha seguimiento: {{$data[0]->fecha_inicio}}</p>
+                        <p>Fecha termino: {{$data[0]->fecha_fin}}</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        
+    </table>
+    
     <table class="table table-bordered border-primary">
     
     @php
@@ -28,6 +55,7 @@
                     'nombre' => $valor->nombre, 
                     'fecha_acuse' =>  $valor->fecha_acuse, 
                     'area' => $valor->area,
+                    'firma' => $valor->firma,
                 )
             );
 
@@ -47,6 +75,8 @@
 
                     $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
 
+                    //$contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
+
                     $contenido .= "</div> </div> </td>";
 
                 }
@@ -65,6 +95,7 @@
                         'nombre' => $valor->nombre, 
                         'fecha_acuse' =>  $valor->fecha_acuse, 
                         'area' => $valor->area,
+                        'firma' => $valor->firma,
                     )
                 );
             }
@@ -85,6 +116,8 @@
                 $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
                 $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
+
+                //$contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
 
                 $contenido .= "</div> </div> </td>";
 
