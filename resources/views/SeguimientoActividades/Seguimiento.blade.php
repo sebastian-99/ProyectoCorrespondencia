@@ -166,8 +166,8 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="mb-3">
-                            <label for="detalle" class="form-label">Detalle de la actividad</label>                         
-                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required>Escribe el detalle de tu seguimiento...</textarea>
+                            <label for="detalle" class="form-label">Detalle de la actividad</label>
+                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required></textarea>
                         </div>
                     </div>
 
@@ -183,7 +183,7 @@
                         <div class="mb-3">
                             <label for="estado" class="form-label">Estado Actividad</label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" >
+                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" checked>
                                 <label class="form-check-label" for="inlineRadio1">Pendiente</label>
                             </div>
                             <div class="form-check form-check-inline">
@@ -238,8 +238,24 @@
                     <tbody>
                         @if($actividades->archivo1 == "Sin archivo" && $actividades->archivo2 == "Sin archivo" && $actividades->archivo3 == "Sin archivo" )
                         <tr>
-                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>
+                            <td colspan="3">Esta actividad no contiene archivos para atender, solo cuenta con links.</td>
                         </tr>
+                        @if($actividades->link1 != "" || $actividades->link2 != "" || $actividades->link3 != "" )
+                        <thead class="">
+                            <tr style="background-color: #607d8b; color: #ffffff">
+                                <td colspan="3">Links de soporte.</td>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td colspan="3">{{$actividades->link1}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{$actividades->link2}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{$actividades->link3}}</td>
+                        </tr>
+                        @endif
                         @endif
                         @if ($actividades->archivo1 != "Sin archivo")
                         <tr>
@@ -313,7 +329,7 @@
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                     <div class="card-body">
                         <div class="table-responsive">
-                            
+
                             <table class="table table-striped table-bordered" id="tablaModal">
                                 <thead class="text-center">
                                     <tr style="background-color: #858FA3; color: #ffffff">
@@ -338,77 +354,78 @@
 
 
     <script type="text/javascript">
-    //comprobar si el porcentaje de avance es igual 100% marcar estado completado
-    function verificar_p() {
-        var verif_p = document.getElementById("porcentaje").value;
-        if (verif_p == 100) {
-            $('#estado_c').prop("checked", true);
-            $('#estado_p').prop('disabled', true);
-        }else{
-            $('#estado_p').prop("checked", true);
-            $('#estado_p').prop('disabled', false);
-        }                      
-    }
-    function verificar_s() {
-        var verif_s = document.getElementById("estado_c").value;
-        var verif_sp = document.getElementById("estado_p").value;
-        if (verif_s == 'Completo') {
-            $('#porcentaje').val(100);
-            $('#porc').html(100);
-            $('#estado_p').prop('disabled', true);
-        }      
-    }
- 
-    $('body').on('click', '.DetallesArchivos',function(){
-      var id = $(this).data('id');
-     
-      var i = 0;
-      $.get("../DetallesArchivos/" + id, function(data){
-        $('#tablaModal>tbody>tr').remove();
-       while ( i!=1+i){
-         if(data[i].nombre == null){
-           i=i+1;
-           break;
-         }else{
-      
-       $('#modelHeading').html("Detalles Archivos");
-        $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
-      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
-        if(data[i].ruta == 'Sin archivo'){
-        var texto = '<td>No hay archivos disponibles</td>';
-        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-       // $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
-        }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
-        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-      //  $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
+        //comprobar si el porcentaje de avance es igual 100% marcar estado completado
+        function verificar_p() {
+            var verif_p = document.getElementById("porcentaje").value;
+            if (verif_p == 100) {
+                $('#estado_c').prop("checked", true);
+                $('#estado_p').prop('disabled', true);
+            } else {
+                $('#estado_p').prop("checked", true);
+                $('#estado_p').prop('disabled', false);
+            }
         }
-       
-     
-  
-        i=i+1;
-         }
-        }
-      })
-      
-    });
 
-    $("#ajaxModel").on('hidden.bs.modal', function () {
-        
-              $('#tablaModal>tbody>tr').remove();
-            
-    });
-    
-</script>
+        function verificar_s() {
+            var verif_s = document.getElementById("estado_c").value;
+            var verif_sp = document.getElementById("estado_p").value;
+            if (verif_s == 'Completo') {
+                $('#porcentaje').val(100);
+                $('#porc').html(100);
+                $('#estado_p').prop('disabled', true);
+            }
+        }
+
+        $('body').on('click', '.DetallesArchivos', function() {
+            var id = $(this).data('id');
+
+            var i = 0;
+            $.get("../DetallesArchivos/" + id, function(data) {
+                $('#tablaModal>tbody>tr').remove();
+                while (i != 1 + i) {
+                    if (data[i].nombre == null) {
+                        i = i + 1;
+                        break;
+                    } else {
+
+                        $('#modelHeading').html("Detalles Archivos");
+                        $('#ajaxModel').modal('show');
+                        var nombre = "<td><input id='nombre" + i + "' name='nombre" + i + "'  style='width:400px' disabled></td>"
+                        //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+                        if (data[i].ruta == 'Sin archivo') {
+                            var texto = '<td>No hay archivos disponibles</td>';
+                            $('#tablaModal>tbody').append("<tr>" + nombre + texto + "</tr>");
+                            $('#nombre' + i).val(data[i].nombre);
+                            // $('#detalle'+i).val(data[i].detalle);
+                            $('#ruta' + i).val(ruta);
+                            $('#ruta' + i).attr('href', archivo);
+                            $('#ruta' + i).text(texto);
+                        } else if (data[i].ruta != '') {
+                            var ruta = "<td><a download id='ruta" + i + "' name='ruta" + i + "'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+                            var archivo = '{{asset(('
+                            archivos / Seguimientos '))}}/' + data[i].ruta;
+                            $('#tablaModal>tbody').append("<tr>" + nombre + ruta + "</tr>");
+                            $('#nombre' + i).val(data[i].nombre);
+                            //  $('#detalle'+i).val(data[i].detalle);
+                            $('#ruta' + i).val(ruta);
+                            $('#ruta' + i).attr('href', archivo);
+                            $('#ruta' + i).text(texto);
+                        }
+
+
+
+                        i = i + 1;
+                    }
+                }
+            })
+
+        });
+
+        $("#ajaxModel").on('hidden.bs.modal', function() {
+
+            $('#tablaModal>tbody>tr').remove();
+
+        });
+    </script>
 
     @stop
