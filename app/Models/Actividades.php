@@ -63,9 +63,10 @@ class Actividades extends Model
 
     public function getIncompletasAttribute()
     {
-        return $this->where('fecha_fin','<',Carbon::now()->format('Y-m-d'))
+        return $this->where('actividades.fecha_fin','<',Carbon::now()->format('Y-m-d'))
             ->join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->where('responsables_actividades.fecha',null)
+            ->where('actividades.idar_areas',$this->area->idar)
             ->get();
     }
 
@@ -81,9 +82,10 @@ class Actividades extends Model
 
     public function getTotalIncompletasAttribute()
     {
-        return $this->where('fecha_fin','<',Carbon::now()->format('Y-m-d'))
+        return $this->where('actividades.fecha_fin','<',Carbon::now()->format('Y-m-d'))
             ->join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->where('responsables_actividades.fecha',null)
+            ->where('actividades.idar_areas',$this->area->idar)
             ->count();
     }
 

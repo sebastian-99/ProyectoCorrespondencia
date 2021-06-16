@@ -8,6 +8,17 @@
         </script>
     @endsection
 
+    {{-- If para los errores --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     {{--Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
@@ -29,8 +40,8 @@
         	sort
         	search
         	pager
-        	page-size='3'
-        	page-size-options='1,2,3,4,5,10'
+        	page-size='10'
+        	page-size-options='10,15,20,25,30'
         	layout='row'
         	viewport-stop
         	theme='android'
@@ -126,7 +137,7 @@
                 <select class="form-control @error('idtar') is-invalid @enderror" id="idtar" name="idtar" required>
                     <option value="">Selección</option>
                     @foreach($tipos_areas as $tipoarea)
-                      <option value="{{ $tipoarea->idtar }}" {{ (old('idtar', $area_edit->idtar) == $tipoarea->idtar) ? 'selected' : '' }}>{{ $tipoarea->nombre }}</option>
+                      <option value="{{ $tipoarea->idtar }}" {{ (old('idtar', $area_edit->idtar) == $tipoarea->nombre) ? 'selected' : '' }}>{{ $tipoarea->nombre }}</option>
                     @endforeach
                 </select>
                 @error('idtar')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror

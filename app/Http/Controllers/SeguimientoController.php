@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Session;
+use Brs\FunctionPkg;
 
 class SeguimientoController extends Controller
 {
@@ -21,9 +22,9 @@ class SeguimientoController extends Controller
         //Filtrar solo mis actividades que tengo asignadas
         $id_user = Auth()->user()->idu;
 
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
-        porcentaje(ac.idac) AS porcentaje
+        porcentaje(ac.idac, $id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -34,9 +35,15 @@ class SeguimientoController extends Controller
 
         $array = array();
 
+
         function recorrer($value)
         {
-            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+            } else {
+                $arr = null;
+            }
             return $arr;
         }
 
@@ -44,7 +51,7 @@ class SeguimientoController extends Controller
         {
             if (gettype($data) == "array") {
 
-                return $data[0] . " de " . $data[1];
+                return $data['1'][0] . " de " . $data['1'][1];
             } else {
                 return 0;
             }
@@ -53,16 +60,35 @@ class SeguimientoController extends Controller
         function C($data)
         {
             if (gettype($data) == "array") {
-
-                return number_format($data[2], 2, '.', ' ') . '%';
+                return number_format($data['2'], 0, '.', ' ') . '%';
             } else {
-                return 0.00;
+                return 0;
             }
         }
 
         function ver($idac)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+            //consulta para ver si el acuse se recibio
+            $id_user = Auth()->user()->idu;
+
+            $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
+            FROM actividades AS ac
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            WHERE ra.idu_users = $id_user
+            AND ra.idac_actividades = $idac
+            ");
+            if ($ver_acuse[0]->acuse == 2) {
+                return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
+            }
+
+            if ($ver_acuse[0]->acuse == 1) {
+                return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+            } else {
+                $idreac = $ver_acuse[0]->idreac;
+                return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                    <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+                    <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
+            }
         }
 
         foreach ($consult as $c) {
@@ -90,9 +116,59 @@ class SeguimientoController extends Controller
             ->with('json', $json);
     }
 
+    public function aceptarActividad(Request $request)
+    {
+        $contraseña = $request->pass;
+        $idac = decrypt($request->id);
+
+        if (password_verify($contraseña, Auth()->User()->password)) {
+            $new = new FunctionPkg;
+            $id_user = Auth()->user()->idu;
+            $firma = $new->Encrypt($idac, $id_user, Auth()->User()->nombre);
+
+            $cons = DB::UPDATE("UPDATE responsables_actividades SET 
+                acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
+                WHERE idu_users = $id_user AND idac_actividades = $idac");
+            return response()->json('aceptado');
+        } else {
+            return 'Contraseña incorrecta';
+        }
+    }
+
+    public function rechazarActividad(Request $request)
+    {
+        $idac = decrypt($request->id_a);
+        $razon_r = $request->rechazo;
+        $id_user = Auth()->user()->idu;
+
+        $rechazar = DB::UPDATE("UPDATE responsables_actividades SET 
+                acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
+                WHERE idu_users = $id_user AND idac_actividades = $idac");
+        return response()->json('aceptado');
+    }
+
+    public function DetallesAsignacion($idac)
+    {
+        $idac = decrypt($idac);
+        $id_user = Auth()->user()->idu;
+
+
+        $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
+        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
+        
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        WHERE ac.idac = $idac");
+
+        return response()->json($actividad);
+    }
+
     public function Seguimiento($idac)
     {
-        //Encriptar el id de la actividad que se esta consulutando 
+        //Encriptar el id de la actividad que se esta consulutando
         $idac = decrypt($idac);
         $id_user = Auth()->user()->idu;
 
@@ -102,9 +178,9 @@ class SeguimientoController extends Controller
 
         $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area, 
-        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, 
-        ac.status, porcentaje(ac.idac) AS porcentaje
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
+        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3,
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -129,7 +205,7 @@ class SeguimientoController extends Controller
             ->where('users.idu', '=', Auth()->user()->idu)
             ->get();
 
-        //Obtener la fecha actual 
+        //Obtener la fecha actual
         $now = Carbon::now();
 
         //Obtener el responsable que le esta dando seguimiento ala actividad
@@ -155,13 +231,13 @@ class SeguimientoController extends Controller
 
         //Ver quien ha visto su actividad asignada
 
-        $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra  
+        $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac
         AND ra.acuse = 1");
         //dd($atendido);
 
         //Ver el total de personas asignadas a esa actividad
-        $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra  
+        $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac");
 
         //Marca que el usuario le ha empezado a dar seguimiento a su actividad en el campo acuse = 1
@@ -186,6 +262,7 @@ class SeguimientoController extends Controller
                 'responsables_actividades.idac_actividades',
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'arse.idarseg',
+                'arse.detalle_a',
 
             )
             ->where('responsables_actividades.idac_actividades', '=', $idac)
@@ -197,7 +274,7 @@ class SeguimientoController extends Controller
 
         function detalles($idseac, $idarseg)
         {
-            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
             <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . "><i class='nav-icon fas fa-trash'></i></a>";
         }
 
@@ -238,6 +315,8 @@ class SeguimientoController extends Controller
         $porcentaje = $request->porcentaje;
         $estado = $request->estado;
         $ruta = $request->ruta;
+        $detalle_a = $request->detalle_a;
+
 
         $seg_ac = new seguimientosActividades;
         $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
@@ -263,7 +342,7 @@ class SeguimientoController extends Controller
                         'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                         'nombre' => $file->getClientOriginalName(),
                         'ruta' => $file->getClientOriginalName(),
-                        'detalle' => $detalle,
+                        'detalle_a' => $detalle_a,
                     ]);
                 }
             }
@@ -272,7 +351,7 @@ class SeguimientoController extends Controller
                 'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                 'nombre' => 'Sin archivo',
                 'ruta' => 'Sin archivo',
-                'detalle' => $detalle,
+                'detalle_a' => 'No hay detalles que mostrar',
             ]);
         }
 
@@ -284,15 +363,15 @@ class SeguimientoController extends Controller
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
     }
 
-    public function DetallesArchivos($idarc)
-    {
+    public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
-        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta
         FROM archivos_seguimientos AS res
         INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
         WHERE res.idseac_seguimientos_actividades = $idarc");
         return response()->json($query);
     }
+
 
     public function EliminarSeguimiento($idarseg, $idseac)
 
@@ -301,11 +380,11 @@ class SeguimientoController extends Controller
         $idarseg = decrypt($idarseg);
         $idseac = decrypt($idseac);
 
-        $elim = DB::DELETE("DELETE FROM archivos_seguimientos  
+        $elim = DB::DELETE("DELETE FROM archivos_seguimientos
         where idseac_seguimientos_actividades =$idseac
         ");
 
-        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades  
+        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades
         where idseac =$idseac
         ");
 

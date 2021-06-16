@@ -43,7 +43,7 @@
                 sort 
                 search 
                 pager 
-                page-size='3' 
+                page-size='10' 
                 page-size-options='1,2,3,4,5,10' 
                 layout='row' 
                 viewport-stop
@@ -53,8 +53,8 @@
                 data = "{{$json}}">
                 <zg-colgroup>
                     <zg-column index='turno' header='Turno'  width="100" type='number'></zg-column>
-                    <zg-column index='asunto' header='Asunto' width="170" type='text'></zg-column>
-                    <zg-column index='descripcion' header='Descripcion'  type='text'></zg-column>
+                    <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
+                    <zg-column index='descripcion' header='Descripcion'  width='200'></zg-column>
                     <zg-column index='fecha_creacion' header='Fecha creación' width="120" type='text'></zg-column>
                     <zg-column index='creador' header='Creador' width="120" type='text'></zg-column>
                     <zg-column index='periodo' header='Periodo' width="120" type='text'></zg-column>
