@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<root ptr="0x55c81132df00" id="0" symbol="11SwRootFrame" lower="1">
+ <sfxViewShells>
+  <SwView>
+   <SfxViewShell ptr="0x55c8113185e0" id="0"/>
+   <SwCursorShell>
+    <SwViewShell/>
+    <m_pCurrentCursor>
+     <SwPaM>
+      <point>
+       <SwPosition nNode="12" nContent="285"/>
+      </point>
+     </SwPaM>
+    </m_pCurrentCursor>
+   </SwCursorShell>
+  </SwView>
+ </sfxViewShells>
+ <infos>
+  <bounds left="284" top="284" width="15631" height="15840" mbFixSize="false" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+  <prtBounds left="0" top="0" width="15631" height="15840"/>
+ </infos>
+ <page ptr="0x55c811330060" id="1" symbol="11SwPageFrame" upper="0" lower="4">
+  <page_status ValidFlyLayout="true" ValidFlyContent="true" ValidFlyInCnt="true" ValidLayout="true" ValidContent="true"/>
+  <infos>
+   <bounds left="3675" top="284" width="12240" height="15840" mbFixSize="true" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+   <prtBounds left="1134" top="1134" width="9972" height="13572"/>
+  </infos>
+  <header ptr="0x55c81154f9d0" id="4" symbol="13SwHeaderFrame" next="2" upper="1" lower="5" fmtName="CpyDesc" fmtPtr="0x55c80e523a00">
+   <infos>
+    <bounds left="4809" top="1418" width="9972" height="559" mbFixSize="false" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+    <prtBounds left="0" top="0" width="9972" height="276"/>
+   </infos>
+   <txt ptr="0x55c812420800" id="5" symbol="11SwTextFrame" upper="4" txtNodeIndex="6" WritingMode="Horizontal">
+    <infos>
+     <bounds left="4809" top="1418" width="9972" height="276" mbFixSize="false" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+     <prtBounds left="0" top="0" width="9972" height="276"/>
+    </infos>
+Sanchez Rodrigez Jorge *APUNTE IDSGS-72*    <Text nLength="23" nType="PortionType::Text" nHeight="276" nWidth="2375" Portion="Sanchez Rodrigez Jorge "/>
+    <Text nLength="1" nType="PortionType::TabCenter" nHeight="276" nWidth="1601" Portion="*"/>
+    <Text nLength="15" nType="PortionType::Text" nHeight="276" nWidth="2021" Portion="APUNTE IDSGS-72"/>
+    <Text nLength="1" nType="PortionType::TabRight" nHeight="276" nWidth="3975" Portion="*"/>
+    <LineBreak nWidth="9972" Line="Sanchez Rodrigez Jorge *APUNTE IDSGS-72*"/>
+    <Finish/>
+   </txt>
+  </header>
+  <body ptr="0x55c811330160" id="2" symbol="11SwBodyFrame" prev="4" upper="1" lower="3">
+   <infos>
+    <bounds left="4809" top="1977" width="9972" height="13013" mbFixSize="true" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+    <prtBounds left="0" top="0" width="9972" height="13013"/>
+   </infos>
+   <txt ptr="0x55c811330300" id="3" symbol="11SwTextFrame" upper="2" txtNodeIndex="12" WritingMode="Horizontal">
+    <infos>
+     <bounds left="4809" top="1977" width="9972" height="828" mbFixSize="false" mbValidPos="true" mbValidSize="true" mbValidPrtArea="true"/>
+     <prtBounds left="0" top="0" width="9972" height="828"/>
+    </infos>
+La administracion del tiempo es fundamental para alcanzar nuestros objetivos y metas, en ello entran lo habitos y como generar buenos habitos, para tener un mejor rendimiento y ser un buen lides dentro de en equipo de trabajo o grupo detrabajo, para ello se deben formar buebos habitos    <Text nLength="103" nType="PortionType::Text" nHeight="276" nWidth="9943" Portion="La administracion del tiempo es fundamental para alcanzar nuestros objetivos y metas, en ello entran lo"/>
+    <Text nLength="1" nType="PortionType::Hole" Portion=" "/>
+    <LineBreak nWidth="9943" Line="La administracion del tiempo es fundamental para alcanzar nuestros objetivos y metas, en ello entran lo "/>
+    <Text nLength="101" nType="PortionType::Lay" nHeight="276" nWidth="9830" Portion="habitos y como generar buenos habitos, para tener un mejor rendimiento y ser un buen lides dentro de "/>
+    <LineBreak nWidth="9830" Line="habitos y como generar buenos habitos, para tener un mejor rendimiento y ser un buen lides dentro de "/>
+    <Text nLength="80" nType="PortionType::Lay" nHeight="276" nWidth="7757" Portion="en equipo de trabajo o grupo detrabajo, para ello se deben formar buebos habitos"/>
+    <LineBreak nWidth="7757" Line="en equipo de trabajo o grupo detrabajo, para ello se deben formar buebos habitos"/>
+    <Finish/>
+   </txt>
+  </body>
+ </page>
+</root>

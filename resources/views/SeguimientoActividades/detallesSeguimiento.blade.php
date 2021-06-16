@@ -1,11 +1,11 @@
 @extends('layout.layout')
 @section('content')
 @section('header')
-<script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
-    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+<script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
     <script>
       if (es) ZingGrid.registerLanguage(es, 'custom');
-    </script> 
+    </script>
 @endsection
 
 
@@ -20,7 +20,7 @@
     @endforeach
     </div>
     <div class="col-sm-10">
-    <a href="javascript:history.back()"><button class="btn btn-warning">Regresar a responsables</button></a>
+    <a href="{{ route('Detalles', ['id'=>$id_actividad]) }}"><button class="btn btn-warning">Regresar a responsables</button></a>
         </div>
     <div class="col-sm-2">
         <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
@@ -30,14 +30,14 @@
 
 
     <zing-grid
-                lang="custom" 
-                caption='Actividades' 
-                sort 
-                search 
-                pager 
-                page-size='3' 
-                page-size-options='1,2,3,4,5,10' 
-                layout='row' 
+                lang="custom"
+                caption='Actividades'
+                sort
+                search
+                pager
+                page-size='3'
+                page-size-options='1,2,3,4,5,10'
+                layout='row'
                 viewport-stop
                 theme='android'
                 id='zing-grid'
@@ -55,7 +55,7 @@
 
 
 
-  
+
   <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -65,16 +65,16 @@
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                 <div class="card-body">
       <div class="table-responsive">
-     
+
       @foreach ($consult as $c)
     @if ($loop->first)
     <h4>
     <div >Actividad: {{$c->asunto}} </div>
-   <div> Usuario: {{$c->nombre}} </div> 
+   <div> Usuario: {{$c->nombre}} </div>
    @endif
     </h4>
-   
-    
+
+
     @endforeach
         <table class="table table-striped table-bordered" id="tablaModal">
             <thead class="text-center">
@@ -85,15 +85,15 @@
             </thead>
             <tbody>
              <tr class="text-center">
-               
-            
+
+
 
               </tr>
             </tbody>
           </table>
       </div>
     </div>
-                    
+
                 </form>
             </div>
         </div>
@@ -102,10 +102,10 @@
 
 
 <script type="text/javascript">
- 
+
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
-     
+
       var i = 0;
       $.get("../DetallesArchivos/" + id, function(data){
         $('#tablaModal>tbody>tr').remove();
@@ -114,7 +114,7 @@
            i=i+1;
            break;
          }else{
-      
+
        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
@@ -137,21 +137,21 @@
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
         }
-       
-     
-  
+
+
+
         i=i+1;
          }
         }
       })
-      
+
     });
 
     $("#ajaxModel").on('hidden.bs.modal', function () {
-        
+
               $('#tablaModal>tbody>tr').remove();
-            
+
     });
-    
+
 </script>
 @endsection
