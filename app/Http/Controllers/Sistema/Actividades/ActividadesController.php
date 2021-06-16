@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Actividades as actividades;
 use App\Models\Areas as areas;
 use App\Models\TiposAreas as tiposAreas;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,6 @@ class ActividadesController extends Controller
             $mes->startOfMonth()->format('Y-m-d'),
             $mes->endOfMonth()->format('Y-m-d')
         );
-
         $actividades = $this->estadisticasDeActividades($actividades);
         if(!$actividades) return;
         return response()->json([
@@ -73,9 +73,12 @@ class ActividadesController extends Controller
 
     private function getActividadesṔorRango(areas $areas, $inicio, $fin)
     {
-        return $areas->actividades()
-            ->where('actividades.fecha_fin','>=',"$inicio")
-            ->where('actividades.fecha_fin','<=',"$fin")
+        $inicio = new Carbon($inicio);
+        $fin = new Carbon($fin);
+        return actividades::join('areas','areas.idar','actividades.idar_areas')
+            ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
+            ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
+            ->where('areas.idar',$areas->idar)
             ->get();
     }
 
@@ -120,16 +123,31 @@ class ActividadesController extends Controller
     {
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.idar_areas', $areas->idar)
             ->select(
                 'users.idu',
-                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS nombre"),
-                'actividades.asunto','actividades.fecha_inicio', 'actividades.fecha_fin',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
                 'actividades.importancia',
                 'responsables_actividades.idreac',
-                'actividades.idac'
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
             )
-            ->get();
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     public function getActividadesCompletadas(areas $areas, $inicio, $fin , $year)
@@ -138,19 +156,34 @@ class ActividadesController extends Controller
         $fin = new Carbon($fin);
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
             ->where('responsables_actividades.fecha','!=',null)
             ->select(
                 'users.idu',
-                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS nombre"),
-                'actividades.asunto','actividades.fecha_inicio', 'actividades.fecha_fin',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
                 'actividades.importancia',
                 'responsables_actividades.idreac',
-                'actividades.idac'
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
             )
-            ->get();
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
     public function getActividadesEnProceso(areas $areas, $inicio, $fin, $year)
     {
@@ -158,19 +191,34 @@ class ActividadesController extends Controller
         $fin = new Carbon($fin);
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
             ->where('responsables_actividades.fecha',null)
             ->select(
                 'users.idu',
-                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS nombre"),
-                'actividades.asunto','actividades.fecha_inicio', 'actividades.fecha_fin',
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
                 'actividades.importancia',
                 'responsables_actividades.idreac',
-                'actividades.idac'
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
             )
-            ->get();
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
     public function getActividadesSinEntregar(areas $areas, $inicio, $fin, $year)
     {
@@ -178,19 +226,35 @@ class ActividadesController extends Controller
         $fin = new Carbon($fin);
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
+            ->join('areas','areas.idar','actividades.idar_areas')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
             ->where('actividades.fecha_fin','<',Carbon::now()->format('Y-m-d'))
             ->where('responsables_actividades.fecha',null)
             ->select(
-                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS nombre"),
                 'users.idu',
-                'actividades.asunto','actividades.fecha_inicio', 'actividades.fecha_fin',
-                'actividades.importancia','actividades.idac',
-                'responsables_actividades.idreac'
+                DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
+                'actividades.turno',
+                'actividades.asunto',
+                'actividades.descripcion',
+                'actividades.created_at AS fecha_creacion',
+                DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                'actividades.importancia',
+                'responsables_actividades.idreac',
+                'actividades.idac',
+                'actividades.idu_users AS creador_id',
+                'areas.nombre AS area_responsable'
             )
-            ->get();
+            ->get()
+            ->each(function($collection){
+
+                $collection->creador = User::where('idu',$collection->creador_id)
+                    ->select('idu','titulo', 'nombre', 'app','apm')->first();
+
+                return $collection;
+
+            });
     }
 
     private function getfechasPorMes($mes,$year){

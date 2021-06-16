@@ -20,10 +20,17 @@ Auth::routes();
  */
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/panel', [PanelController::class,'panel']);
 Route::get('/', function () {
     return view('auth.login');
 });
+
+Route::get('/panel', [PanelController::class,'panel']);
+Route::get('/panel/get-actividades-hoy/{idu}', [PanelController::class,'getActividadesHoy']);
+Route::get('/panel/get-actividades-pendientes/{idu}', [PanelController::class,'getActividadesPendientes']);
+Route::get('/panel/get-actividades-por-mes/{idu}', [PanelController::class,'getActividadesPorMes']);
+Route::get('/panel/get-actividades-cerradas/{idu}', [PanelController::class,'getActividadesCerradas']);
+Route::get('/panel/get-actividades-en-seguimiento/{idu}', [PanelController::class,'getActividadesEnSeguimiento']);
+
 
 
 
