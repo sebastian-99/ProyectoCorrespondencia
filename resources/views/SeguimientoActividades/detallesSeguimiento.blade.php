@@ -56,47 +56,47 @@
 
 
   
-  <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h4 class="modal-title" id="modelHeading"></h4></div>
-            <div class="modal-body">
-                <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
-                <div class="card-body">
-      <div class="table-responsive">
+       <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
+       <div class="modal-dialog modal-lg">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h4 class="modal-title" id="modelHeading"></h4></div>
+               <div class="modal-body">
+                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
+                 <div class="card-body">
+                  <div class="table-responsive">
      
-      @foreach ($consult as $c)
-    @if ($loop->first)
-    <h4>
-    <div >Actividad: {{$c->asunto}} </div>
-   <div> Usuario: {{$c->nombre}} </div> 
-   @endif
-    </h4>
+                      @foreach ($consult as $c)
+                     @if ($loop->first)
+                      <h4>
+                        <div >Actividad: {{$c->asunto}} </div>
+                         <div> Usuario: {{$c->nombre}} </div> 
+                    @endif
+                      </h4>
    
     
-    @endforeach
-        <table class="table table-striped table-bordered" id="tablaModal">
-            <thead class="text-center">
-              <tr style="background-color: #858FA3; color: #ffffff">
-                <th scope="col">Nombre </th>
-                <th scope="col">Archivo</th>
-              </tr>
-            </thead>
-            <tbody>
-             <tr class="text-center">
+                      @endforeach
+               <table class="table table-striped table-bordered" id="tablaModal">
+                  <thead class="text-center">
+                     <tr style="background-color: #858FA3; color: #ffffff">
+                       <th scope="col">Nombre </th>
+                       <th scope="col">Archivo</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center">
                
             
 
-              </tr>
-            </tbody>
-          </table>
-      </div>
-    </div>
+                    </tr>
+                </tbody>
+             </table>
+           </div>
+     </div>
                     
-                </form>
-            </div>
-        </div>
+        </form>
+      </div>
+      </div>
   </div>
 
 
@@ -118,29 +118,28 @@
        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
-      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+
         if(data[i].ruta == 'Sin archivo'){
         var texto = '<td>No hay archivos disponibles</td>';
         $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-       // $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
-        }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
-        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-      //  $('#detalle'+i).val(data[i].detalle);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
         }
-       
-     
-  
-        i=i+1;
+
+        else 
+
+        if(data[i].ruta != '' ){
+        var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
+        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }
+         i=i+1;
          }
         }
       })
