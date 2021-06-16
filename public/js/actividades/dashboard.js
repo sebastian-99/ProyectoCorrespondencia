@@ -245,13 +245,13 @@ $('document').ready(()=>{
                 const thead = `
                     <tr>
                         <th>Turno</th>
+                        <th>Autor</th>
                         <th>Responsale</th>
                         <th>Asunto</th>
                         <th>Descripcion</th>
                         <th>Periodo</th>
                         <th>Inportancia</th>
                         <th>Area Responsable</th>
-                        <th>Autor</th>
                         <th>Acciones</th>
                     </tr>
                 `
@@ -260,18 +260,18 @@ $('document').ready(()=>{
                     tbody += `
                         <tr>
                             <td>${dato.turno}</td>
-                            <td>${dato.responsable}</td>
-                            <td>${dato.asunto}</td>
-                            <td>${dato.descripcion}</td>
-                            <td>${dato.periodo}</td>
-                            <td>${dato.importancia}</td>
-                            <td>${dato.area_responsable}</td>
                             <td>
                                 ${dato.creador.titulo}
                                 ${dato.creador.nombre}
                                 ${dato.creador.app}
                                 ${dato.creador.apm}
                             </td>
+                            <td>${dato.responsable}</td>
+                            <td>${dato.asunto}</td>
+                            <td>${dato.descripcion}</td>
+                            <td>${dato.periodo}</td>
+                            <td>${dato.importancia}</td>
+                            <td>${dato.area_responsable}</td>
                             <td>
                                 <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
                             </td>
