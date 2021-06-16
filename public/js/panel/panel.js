@@ -53,12 +53,10 @@ $(document).ready(()=>{
 
 
     function imprimirTablaConAjax(route){
-        console.log(route)
         $.ajax({
             type: 'GET',
             url: route,
             success: data=>{
-                console.log(data)
                 const thead = `
                     <tr>
                         <th>Turno</th>
