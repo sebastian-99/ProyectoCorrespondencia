@@ -188,7 +188,7 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino" value="{{($consul[0]->hora_fin == '00:00:00') ? null : $consul[0]->hora_fin }}" required>
+                                <input class="form-control" type="time" name="horatermino" id="horatermino" value="{{($consul[0]->hora_fin == '00:00:00') ? null : $consul[0]->hora_fin }}">
                             </div>
                         </div>
                     </div>
@@ -308,12 +308,12 @@
                                     <strong>Estado actividad:</strong>
                                     <br>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="estado" id="estado" value="1" {{($consul[0]->status == 1)? 'checked' : ''}}>
-                                        <label class="form-check-label" for="estado">Activo</label>
+                                        <input class="form-check-input" type="radio" name="estado" id="estado2" value="1" {{($consul[0]->status == 1)? 'checked' : ''}}>
+                                        <label class="form-check-label" for="estado2">Desarrollo</label>
                                       </div>
                                       <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="estado" id="estado2" value="2" {{($consul[0]->status == 2)? 'checked' : ''}}>
-                                        <label class="form-check-label" for="estado2">Desarrollo</label>
+                                        <input class="form-check-input" type="radio" name="estado" id="estado" value="2" {{($consul[0]->status == 2)? 'checked' : ''}}>
+                                        <label class="form-check-label" for="estado">Concluida</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="estado" id="estado3" value="3" {{($consul[0]->status == 3)? 'checked' : ''}}>

@@ -266,12 +266,12 @@
                                     <strong>Estado actividad:</strong>
                                     <br>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="estado" id="estado" value="1" checked>
-                                        <label class="form-check-label" for="estado">Concluida</label>
+					<input class="form-check-input" type="radio" name="estado" id="estado2" value="1" checked>
+                                        <label class="form-check-label" for="estado2">Desarrollo</label>
                                       </div>
                                       <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="estado" id="estado2" value="2">
-                                        <label class="form-check-label" for="estado2">Desarrollo</label>
+                                        <input class="form-check-input" type="radio" name="estado" id="estado" value="2" >
+                                        <label class="form-check-label" for="estado">Concluida</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="estado" id="estado3" value="3">
