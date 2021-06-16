@@ -167,7 +167,7 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="detalle" class="form-label">Detalle de la actividad</label>                         
-                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required>Escribe el detalle de tu seguimiento...</textarea>
+                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required></textarea>
                         </div>
                     </div>
 
@@ -183,7 +183,7 @@
                         <div class="mb-3">
                             <label for="estado" class="form-label">Estado Actividad</label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" >
+                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" checked>
                                 <label class="form-check-label" for="inlineRadio1">Pendiente</label>
                             </div>
                             <div class="form-check form-check-inline">

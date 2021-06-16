@@ -55,6 +55,7 @@
                     'nombre' => $valor->nombre, 
                     'fecha_acuse' =>  $valor->fecha_acuse, 
                     'area' => $valor->area,
+                    'firma' => $valor->firma,
                 )
             );
 
@@ -74,6 +75,8 @@
 
                     $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
 
+                    //$contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
+
                     $contenido .= "</div> </div> </td>";
 
                 }
@@ -92,6 +95,7 @@
                         'nombre' => $valor->nombre, 
                         'fecha_acuse' =>  $valor->fecha_acuse, 
                         'area' => $valor->area,
+                        'firma' => $valor->firma,
                     )
                 );
             }
@@ -112,6 +116,8 @@
                 $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
                 $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
+
+                //$contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
 
                 $contenido .= "</div> </div> </td>";
 

@@ -165,7 +165,7 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
 
         $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area,
-        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion , ac.fecha_inicio, ac.fecha_fin 
+        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion , ac.fecha_inicio, ac.fecha_fin, res.firma 
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
