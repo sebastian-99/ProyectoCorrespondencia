@@ -14,9 +14,7 @@
         <div class="col-sm-11">
           <h3>Responsables de la actividad</h3>
         </div>
-        <div class="col-sm-2">
-        <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
-        </div>
+
         <div class="col-sm-2">
         <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank" {{($boton->boton == 0) ? 'hidden' : ''}}>PDF</a>
         </div>
