@@ -124,34 +124,6 @@
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
       $('#pass').empty();
-<<<<<<< HEAD
-
-    });
-
-    let val = 0;
-
-  $('#aceptar').on('click', function () {
-    $('#sec1').removeAttr('hidden');
-    $('#cancelar').removeAttr('hidden');
-    $('#rechazar').hide();
-    $('#aceptar').hide();
-    val = 1;
-  });
-
-  $('#rechazar').on('click', function () {
-    $('#sec2').removeAttr('hidden');
-    $('#cancelar').removeAttr('hidden');
-    $('#aceptar').hide();
-    $('#rechazar').hide();
-    val = 0;
-  });
-
-  $('#cancelar').on('click', function () {
-    if ($('#sec1').attr('hidden', false) || $('#sec2').attr('hidden', false)){
-      $('#sec1').attr('hidden', true);
-      $('#sec2').attr('hidden', true);
-=======
->>>>>>> 816cbe1044dd8028f15a4892137e8263452a4331
       $('#aceptar').show();
       $('#rechazar').show();
       $('#guardar').attr('hidden', true);
@@ -291,19 +263,4 @@
 
 </script>
 
-<<<<<<< HEAD
-    } else {
-      $('#sec1').hide();
-      $('#sec2').hide();
-      $('#cancelar').hide();
-      $('#detalle').hide();
-      $('#mensaje').removeAttr('hidden');
-      alert('Haz rechazado esta actividad, por lo que ya no podrás darle seguimiento');
-    }
-  });
-  </script>
-
-  @endsection
-=======
 @endsection
->>>>>>> 816cbe1044dd8028f15a4892137e8263452a4331

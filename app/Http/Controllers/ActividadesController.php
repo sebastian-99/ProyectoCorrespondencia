@@ -368,7 +368,7 @@ class ActividadesController extends Controller
                     hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
                     importancia, archivo1, archivo2, archivo3, link1, link2, link3)
                     VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
-                    '$horadeinicio', '$fechainicio', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
+                    '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
                     '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
 
 
