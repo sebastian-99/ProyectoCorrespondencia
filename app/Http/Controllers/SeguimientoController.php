@@ -262,6 +262,7 @@ class SeguimientoController extends Controller
                 'responsables_actividades.idac_actividades',
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'arse.idarseg',
+                'arse.detalle_a',
 
             )
             ->where('responsables_actividades.idac_actividades', '=', $idac)
@@ -273,7 +274,7 @@ class SeguimientoController extends Controller
 
         function detalles($idseac, $idarseg)
         {
-            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
             <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . "><i class='nav-icon fas fa-trash'></i></a>";
         }
 
@@ -314,6 +315,8 @@ class SeguimientoController extends Controller
         $porcentaje = $request->porcentaje;
         $estado = $request->estado;
         $ruta = $request->ruta;
+        $detalle_a = $request->detalle_a;
+
 
         $seg_ac = new seguimientosActividades;
         $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
@@ -339,7 +342,7 @@ class SeguimientoController extends Controller
                         'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                         'nombre' => $file->getClientOriginalName(),
                         'ruta' => $file->getClientOriginalName(),
-                        'detalle' => $detalle,
+                        'detalle_a' => $detalle_a,
                     ]);
                 }
             }
@@ -348,7 +351,7 @@ class SeguimientoController extends Controller
                 'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                 'nombre' => 'Sin archivo',
                 'ruta' => 'Sin archivo',
-                'detalle' => $detalle,
+                'detalle_a' => 'No hay detalles que mostrar',
             ]);
         }
 
@@ -360,15 +363,15 @@ class SeguimientoController extends Controller
         return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
     }
 
-    public function DetallesArchivos($idarc)
-    {
+    public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
-        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta
         FROM archivos_seguimientos AS res
         INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
         WHERE res.idseac_seguimientos_actividades = $idarc");
         return response()->json($query);
     }
+
 
     public function EliminarSeguimiento($idarseg, $idseac)
 

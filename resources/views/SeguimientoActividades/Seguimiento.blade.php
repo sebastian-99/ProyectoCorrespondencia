@@ -166,17 +166,15 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="mb-3">
-                            <label for="detalle" class="form-label">Detalle de la actividad</label>
-                            <div class="form-floating">
-                                <textarea class="form-control" name="detalle" placeholder="Detalle de la actividad" id="detalle" required></textarea>
-                            </div>
+                            <label for="detalle" class="form-label">Detalle de la actividad</label>                         
+                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required>Escribe el detalle de tu seguimiento...</textarea>
                         </div>
                     </div>
 
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="porcentaje" class="form-label">Porcentaje </label>
-                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje">
+                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje" value="{{$max_ai->avance_i}}">
                             <span id="temp">{{$max_ai->avance_i}}</span>%
 
                         </div>
@@ -196,7 +194,7 @@
                     </div>
 
 
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <label for="ruta[]" class="form-label">Seleccione Archivo</label>
                             <input class="form-control form-control-sm" id="ruta[]" name="ruta[]" type="file" multiple>
@@ -204,10 +202,10 @@
                     </div>
 
 
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="detalle" class="form-label">Detalle Evidencia</label>
-                            <input type="text" class="form-control form-control-sm" id="detalle" name="detalle" placeholder="Detalle de la evidencia" required>
+                            <input type="text" class="form-control form-control-sm" id="detalle" name="detalle_a" placeholder="Detalle de la evidencia">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -290,7 +288,7 @@
                 <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,3,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
-                        <zg-column index='detalle' header='Detalle' width="200" type='text'></zg-column>
+                        <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
                         <zg-column index='estado' header='Status' width="200" type='text'></zg-column>
                         <zg-column index='porcentaje' header='% Avance' width="150" type='text'></zg-column>
@@ -315,18 +313,16 @@
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                     <div class="card-body">
                         <div class="table-responsive">
-
+                            
                             <table class="table table-striped table-bordered" id="tablaModal">
                                 <thead class="text-center">
-                                    <tr style="background-color: #607d8b; color: #ffffff">
+                                    <tr style="background-color: #858FA3; color: #ffffff">
                                         <th scope="col">Nombre </th>
                                         <th scope="col">Archivo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="text-center">
-
-
 
                                     </tr>
                                 </tbody>
@@ -342,133 +338,57 @@
 
 
     <script type="text/javascript">
-        $('body').on('click', '.DetallesArchivos', function() {
-            var id = $(this).data('id');
-
-            var i = 0;
-            $.get("../DetallesArchivos/" + id, function(data) {
-                $('#tablaModal>tbody>tr').remove();
-                while (i != 1 + i) {
-                    if (data[i].nombre == null) {
-                        i = i + 1;
-                        break;
-                    } else {
-
-                        $('#modelHeading').html("Detalles Archivos");
-                        $('#ajaxModel').modal('show');
-                        var nombre = "<td><input id='nombre" + i + "' name='nombre" + i + "'  style='width:400px' disabled></td>"
-                        //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
-                        if (data[i].ruta == '') {
-                            var texto = '<td>no hay archivos disponibles</td>';
-                            $('#tablaModal>tbody').append("<tr>" + nombre + texto + "</tr>");
-                            $('#nombre' + i).val(data[i].nombre);
-                            // $('#detalle'+i).val(data[i].detalle);
-                            $('#ruta' + i).val(ruta);
-                            $('#ruta' + i).attr('href', archivo);
-                            $('#ruta' + i).text(texto);
-                        } else if (data[i].ruta != '') {
-                            var ruta = "<td><a download id='ruta" + i + "' name='ruta" + i + "'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
-                            var archivo = '{{asset(('
-                            Seguimientos '))}}/' + data[i].ruta;
-                            $('#tablaModal>tbody').append("<tr>" + nombre + ruta + "</tr>");
-                            $('#nombre' + i).val(data[i].nombre);
-                            //  $('#detalle'+i).val(data[i].detalle);
-                            $('#ruta' + i).val(ruta);
-                            $('#ruta' + i).attr('href', archivo);
-                            $('#ruta' + i).text(texto);
-                        }
-
-
-
-                        i = i + 1;
-                    }
-                }
-            })
-
-        });
-
-        $("#ajaxModel").on('hidden.bs.modal', function() {
-
-            $('#tablaModal>tbody>tr').remove();
-
-        });
-    </script>
-
-    <script>
-        var elementoPadre1 = document.querySelector(".inputDiv.i1");
-        var elementoPadre2 = document.querySelector(".inputDiv.i2");
-        var inputsRy = [];
-
-        function Input() {
-            //<input type="range" value="35" min="0" max="100" autocomplete="off" step="1">
-            this.att = {};
-            this.att.type = "range";
-            this.att.value = 35;
-            this.att.min = 0;
-            this.att.max = 100;
-            this.att.autocomplete = "off";
-            this.att.step = "1";
-            this.input;
-            this.output;
-
-            this.crear = function(elementoPadre) {
-                // crea un nuevo elemento input
-                this.input = document.createElement("input");
-                //para cada propiedad del objeto att establece un nuevo atributo del elemento input
-                for (var name in this.att) {
-                    if (this.att.hasOwnProperty(name)) {
-                        this.input.setAttribute(name, this.att[name]);
-                    }
-                }
-                // crea un nuevo elemento div
-                this.output = document.createElement("div");
-                // establece el valor del atributo class del nuevo div
-                this.output.setAttribute("class", "output");
-                // y el contenido (innerHTML) de este
-                this.output.innerHTML = this.att.value;
-
-                // inserta los dos elementos creados al final  del elemento Padre 
-                elementoPadre.appendChild(this.input);
-                elementoPadre.appendChild(this.output);
-            }
-
-            this.actualizar = function() {
-                this.output.innerHTML = this.input.value;
-                this.att.value = this.input.value;
-            }
+ 
+    $('body').on('click', '.DetallesArchivos',function(){
+      var id = $(this).data('id');
+     
+      var i = 0;
+      $.get("../DetallesArchivos/" + id, function(data){
+        $('#tablaModal>tbody>tr').remove();
+       while ( i!=1+i){
+         if(data[i].nombre == null){
+           i=i+1;
+           break;
+         }else{
+      
+       $('#modelHeading').html("Detalles Archivos");
+        $('#ajaxModel').modal('show');
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
+      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+        if(data[i].ruta == 'Sin archivo'){
+        var texto = '<td>No hay archivos disponibles</td>';
+        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+       // $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }else if(data[i].ruta != '' ){
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
+        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+      //  $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
         }
-
-        // setup
-        var i = new Input();
-        i.crear(elementoPadre1);
-        inputsRy.push(i);
-
-        var i2 = new Input();
-        i2.att.value = 70;
-        i2.att.min = 20;
-        i2.att.max = 120;
-        i2.crear(elementoPadre2);
-        inputsRy.push(i2);
-
-        for (var n = 0; n < inputsRy.length; n++) {
-            (function(n) {
-                inputsRy[n].input.addEventListener("input", function() {
-                    inputsRy[n].actualizar();
-                }, false)
-            }(n));
+       
+     
+  
+        i=i+1;
+         }
         }
+      })
+      
+    });
 
-        /* Draw
-        function Draw(){
-         requestId = window.requestAnimationFrame(Draw); 
-          for( var n = 0; n< inputsRy.length; n++){
-            inputsRy[n].update();
-          }
-        }
-
-        requestId = window.requestAnimationFrame(Draw);
-        */
-        // JavaScript Document
-    </script>
+    $("#ajaxModel").on('hidden.bs.modal', function () {
+        
+              $('#tablaModal>tbody>tr').remove();
+            
+    });
+    
+</script>
 
     @stop

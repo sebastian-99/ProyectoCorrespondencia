@@ -219,7 +219,7 @@ class ActividadesController extends Controller
 
     public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
-        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle, res.ruta
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta
         FROM archivos_seguimientos AS res
         INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
         WHERE res.idseac_seguimientos_actividades = $idarc");
