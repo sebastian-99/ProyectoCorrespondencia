@@ -189,7 +189,7 @@
       $('#comunicado').val(data[0].comunicado);
       $('#turno').val(data[0].turno);
       $('#creador').val(data[0].creador);
-      $('#area').val(data[0].turno);
+      $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio);
 

@@ -153,7 +153,9 @@ class ActividadesController extends Controller
 
         return view('Actividades.reporte_detalles')
 
-        ->with('json', $json);
+        ->with('json', $json)
+        ->with('idac', $idac)
+        ->with('boton', $boton);
 
     }
 
@@ -559,7 +561,6 @@ class ActividadesController extends Controller
         link1 = '$link', link2 = '$link2', link3 = '$link3'
         WHERE idac = $id");
 
-        return redirect()->route('reporte_actividades');
 
         /* $consul = DB::table('actividades')->max('idac');
 
@@ -567,6 +568,12 @@ class ActividadesController extends Controller
 
             DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
         } */
+	
+	if (Auth()->User()->idtu_tipos_usuarios == 3) {
+            return redirect()->route('reporte_actividades');
+        }else{
+            return redirect()->route('actividades_creadas',['id'=>encrypt(Auth()->User()->idu)]);
+        }
 
     }
 
