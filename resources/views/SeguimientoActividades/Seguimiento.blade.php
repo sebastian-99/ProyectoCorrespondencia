@@ -8,6 +8,19 @@
 <script>
     if (es) ZingGrid.registerLanguage(es, 'custom');
 </script>
+
+<script>
+    addEventListener('load', inicio, false);
+
+    function inicio() {
+        document.getElementById('porcentaje').addEventListener('change', porcentajeAvance, false);
+    }
+
+    function porcentajeAvance() {
+        document.getElementById('temp').innerHTML = document.getElementById('porcentaje').value;
+    }
+</script>
+
 <style>
     body {
         color: #4D4D4D;
@@ -20,14 +33,11 @@
 <input type="hidden" value="{{$actividades->idac}}" name="idac">
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <h3 class="display-6">Detalle del turno: {{$actividades->turno}}</h3>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <h3 class="display-6">Comunicado: {{$actividades->comunicado}}</h3>
-    </div>
-    <div class="col-sm-4">
-        <h3 class="display-6">Oficio: UTVT/SEP/000011</h3>
     </div>
 </div>
 
@@ -36,7 +46,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="bd-intro ps-lg-4">
-                    <div class="d-md-flex flex-md-row-reverse align-items-center justify-content-between">
+                    <div class="d-md-flex align-items-center justify-content-between">
                         <h1 class="bd-title" id="content">{{$actividades->asunto}}</h1>
                     </div>
                     <p class="bd-lead">{{$actividades->descripcion}}</p>
@@ -110,14 +120,16 @@
             <div class="card-body">
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
-                        <h3 class="bd-title">Avance</h3>
+                        <h3 class="bd-title">Avance de tu actividad</h3>
                     </div>
                     <p class="bd-lead"></p>
-                    <p class="bd-lead"><h6>{{$max_ai->avance_i}}%</h6></p> 
-                    <div class="d-md-flex align-items-center justify-content-between">
+                    <p class="bd-lead">
+                        <h6>{{$max_ai->avance_i}}%</h6>
+                    </p>
+                    <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
                     </div>
-                   <input class="form-control form-control-sm bg-success"  value="En tiempo" type="text" disabled>
+                    <input class="form-control form-control-sm bg-success" value="En tiempo" type="text" disabled>-->
 
 
                 </div>
@@ -164,21 +176,9 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="porcentaje" class="form-label">Porcentaje </label>
-                            <input class="form-control" type="range" list="tickmarks" id="porcentaje" name="porcentaje" value="{{$max_ai->avance_i}}">
-                            
-                            <datalist id="tickmarks">
-                                <option value="0" label="0%">
-                                <option value="10">
-                                <option value="20">
-                                <option value="30">
-                                <option value="40">
-                                <option value="50" label="50%">
-                                <option value="60">
-                                <option value="70">
-                                <option value="80">
-                                <option value="90">
-                                <option value="100" label="100%">
-                            </datalist>
+                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje">
+                            <span id="temp">{{$max_ai->avance_i}}</span>%
+
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -306,92 +306,169 @@
 
 <!-- Modal-->
 <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-            <h4 class="modal-title" id="modelHeading"></h4></div>
+                <h4 class="modal-title" id="modelHeading"></h4>
+            </div>
             <div class="modal-body">
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
-                <div class="card-body">
-      <div class="table-responsive">
-     
-        <table class="table table-striped table-bordered" id="tablaModal">
-            <thead class="text-center">
-              <tr style="background-color: #607d8b; color: #ffffff">
-                <th scope="col">Nombre </th>
-                <th scope="col">Archivo</th>
-              </tr>
-            </thead>
-            <tbody>
-             <tr class="text-center">
-               
-            
+                    <div class="card-body">
+                        <div class="table-responsive">
 
-              </tr>
-            </tbody>
-          </table>
-      </div>
-    </div>
-                    
+                            <table class="table table-striped table-bordered" id="tablaModal">
+                                <thead class="text-center">
+                                    <tr style="background-color: #607d8b; color: #ffffff">
+                                        <th scope="col">Nombre </th>
+                                        <th scope="col">Archivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center">
+
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
-  </div>
+    </div>
 
 
 
-<script type="text/javascript">
- 
-    $('body').on('click', '.DetallesArchivos',function(){
-      var id = $(this).data('id');
-     
-      var i = 0;
-      $.get("../DetallesArchivos/" + id, function(data){
-        $('#tablaModal>tbody>tr').remove();
-       while ( i!=1+i){
-         if(data[i].nombre == null){
-           i=i+1;
-           break;
-         }else{
-      
-       $('#modelHeading').html("Detalles Archivos");
-        $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
-      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
-        if(data[i].ruta == ''){
-        var texto = '<td>no hay archivos disponibles</td>';
-        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-       // $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
-        }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
-        var archivo = '{{asset(('Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-      //  $('#detalle'+i).val(data[i].detalle);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
+    <script type="text/javascript">
+        $('body').on('click', '.DetallesArchivos', function() {
+            var id = $(this).data('id');
+
+            var i = 0;
+            $.get("../DetallesArchivos/" + id, function(data) {
+                $('#tablaModal>tbody>tr').remove();
+                while (i != 1 + i) {
+                    if (data[i].nombre == null) {
+                        i = i + 1;
+                        break;
+                    } else {
+
+                        $('#modelHeading').html("Detalles Archivos");
+                        $('#ajaxModel').modal('show');
+                        var nombre = "<td><input id='nombre" + i + "' name='nombre" + i + "'  style='width:400px' disabled></td>"
+                        //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+                        if (data[i].ruta == '') {
+                            var texto = '<td>no hay archivos disponibles</td>';
+                            $('#tablaModal>tbody').append("<tr>" + nombre + texto + "</tr>");
+                            $('#nombre' + i).val(data[i].nombre);
+                            // $('#detalle'+i).val(data[i].detalle);
+                            $('#ruta' + i).val(ruta);
+                            $('#ruta' + i).attr('href', archivo);
+                            $('#ruta' + i).text(texto);
+                        } else if (data[i].ruta != '') {
+                            var ruta = "<td><a download id='ruta" + i + "' name='ruta" + i + "'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+                            var archivo = '{{asset(('
+                            Seguimientos '))}}/' + data[i].ruta;
+                            $('#tablaModal>tbody').append("<tr>" + nombre + ruta + "</tr>");
+                            $('#nombre' + i).val(data[i].nombre);
+                            //  $('#detalle'+i).val(data[i].detalle);
+                            $('#ruta' + i).val(ruta);
+                            $('#ruta' + i).attr('href', archivo);
+                            $('#ruta' + i).text(texto);
+                        }
+
+
+
+                        i = i + 1;
+                    }
+                }
+            })
+
+        });
+
+        $("#ajaxModel").on('hidden.bs.modal', function() {
+
+            $('#tablaModal>tbody>tr').remove();
+
+        });
+    </script>
+
+    <script>
+        var elementoPadre1 = document.querySelector(".inputDiv.i1");
+        var elementoPadre2 = document.querySelector(".inputDiv.i2");
+        var inputsRy = [];
+
+        function Input() {
+            //<input type="range" value="35" min="0" max="100" autocomplete="off" step="1">
+            this.att = {};
+            this.att.type = "range";
+            this.att.value = 35;
+            this.att.min = 0;
+            this.att.max = 100;
+            this.att.autocomplete = "off";
+            this.att.step = "1";
+            this.input;
+            this.output;
+
+            this.crear = function(elementoPadre) {
+                // crea un nuevo elemento input
+                this.input = document.createElement("input");
+                //para cada propiedad del objeto att establece un nuevo atributo del elemento input
+                for (var name in this.att) {
+                    if (this.att.hasOwnProperty(name)) {
+                        this.input.setAttribute(name, this.att[name]);
+                    }
+                }
+                // crea un nuevo elemento div
+                this.output = document.createElement("div");
+                // establece el valor del atributo class del nuevo div
+                this.output.setAttribute("class", "output");
+                // y el contenido (innerHTML) de este
+                this.output.innerHTML = this.att.value;
+
+                // inserta los dos elementos creados al final  del elemento Padre 
+                elementoPadre.appendChild(this.input);
+                elementoPadre.appendChild(this.output);
+            }
+
+            this.actualizar = function() {
+                this.output.innerHTML = this.input.value;
+                this.att.value = this.input.value;
+            }
         }
-       
-     
-  
-        i=i+1;
-         }
-        }
-      })
-      
-    });
 
-    $("#ajaxModel").on('hidden.bs.modal', function () {
-        
-              $('#tablaModal>tbody>tr').remove();
-            
-    });
-    
-</script>
+        // setup
+        var i = new Input();
+        i.crear(elementoPadre1);
+        inputsRy.push(i);
+
+        var i2 = new Input();
+        i2.att.value = 70;
+        i2.att.min = 20;
+        i2.att.max = 120;
+        i2.crear(elementoPadre2);
+        inputsRy.push(i2);
+
+        for (var n = 0; n < inputsRy.length; n++) {
+            (function(n) {
+                inputsRy[n].input.addEventListener("input", function() {
+                    inputsRy[n].actualizar();
+                }, false)
+            }(n));
+        }
+
+        /* Draw
+        function Draw(){
+         requestId = window.requestAnimationFrame(Draw); 
+          for( var n = 0; n< inputsRy.length; n++){
+            inputsRy[n].update();
+          }
+        }
+
+        requestId = window.requestAnimationFrame(Draw);
+        */
+        // JavaScript Document
+    </script>
 
     @stop

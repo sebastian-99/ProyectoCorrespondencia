@@ -17,8 +17,8 @@ class ActividadesController extends Controller
 
         $us_id = \Auth()->User()->idu;
 
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje 
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, SUBSTR(ac.asunto, 1,20) AS asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users,  SUBSTR(ac.descripcion, 1 , 30) AS descripcion, porcentaje(ac.idac,$us_id) AS porcentaje 
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -96,7 +96,7 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, us.nombre AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -104,6 +104,15 @@ class ActividadesController extends Controller
         WHERE idac_actividades = $idac
         GROUP BY idu_users");
 
+        $boton = DB::table('responsables_actividades as res')
+                    ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
+                    ->where([
+                        ['res.idac_actividades', '=' , $idac],
+                        ['res.acuse', '=' , 1],
+                        ])
+                    ->first();
+
+        
         $array = array();
 
         function recorrer($value){
@@ -133,7 +142,7 @@ class ActividadesController extends Controller
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
-                                    'porcentaje' =>  $c->porcentaje,
+                                    'porcentaje' =>  $c->porcentaje.'%',
                                     'estado' => $c->estado,
                                     'acuse' => $c->acuse,
                                     'operaciones' => btn($c->idreac),
@@ -144,7 +153,8 @@ class ActividadesController extends Controller
         return view('Actividades.reporte_detalles')
         
         ->with('json', $json)
-        ->with('idac', $idac);
+        ->with('idac', $idac)
+        ->with('boton', $boton);
 
     }
 
@@ -168,7 +178,7 @@ class ActividadesController extends Controller
     public function detallesSeguimiento($idac)
 	{
         $idac = decrypt($idac);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,'. ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre, arch.ruta, act.asunto
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -186,7 +196,7 @@ class ActividadesController extends Controller
         function btn($idac){
 
             return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>DetallesArchivos</a>";
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
             }
         foreach($consult as $c){
 
@@ -577,8 +587,8 @@ class ActividadesController extends Controller
     {
         $id_u = decrypt($id);
 
-        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, SUBSTR(ac.asunto, 1,20) AS asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, 
+        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, SUBSTR(ac.descripcion, 1,30) AS descripcion,
         porcentaje(ac.idac, $id_u) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users

@@ -23,7 +23,7 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
         porcentaje(ac.idac, $id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -36,38 +36,59 @@ class SeguimientoController extends Controller
         $array = array();
 
 
-        function recorrer($value){
+        function recorrer($value)
+        {
             if (gettype($value) == "string") {
                 $val = explode('*', $value);
-                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
-            }else{
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+            } else {
                 $arr = null;
             }
             return $arr;
         }
 
-        function AB($data){
-            if(gettype($data) == "array"){
+        function AB($data)
+        {
+            if (gettype($data) == "array") {
 
-                return $data['1'][0]." de ".$data['1'][1];
-            }else{
+                return $data['1'][0] . " de " . $data['1'][1];
+            } else {
                 return 0;
             }
         }
 
-        function C($data){
-            if(gettype($data) == "array"){
-                return number_format($data['2'], 0, '.', ' ').'%';
-            }else{
+        function C($data)
+        {
+            if (gettype($data) == "array") {
+                return number_format($data['2'], 0, '.', ' ') . '%';
+            } else {
                 return 0;
             }
         }
 
         function ver($idac)
         {
-            return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
-            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
-            <a class='btn btn-danger' id='mensaje' hidden disabled> X </a>";
+            //consulta para ver si el acuse se recibio
+            $id_user = Auth()->user()->idu;
+
+            $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
+            FROM actividades AS ac
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            WHERE ra.idu_users = $id_user
+            AND ra.idac_actividades = $idac
+            ");
+            if ($ver_acuse[0]->acuse == 2) {
+                return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
+            }
+
+            if ($ver_acuse[0]->acuse == 1) {
+                return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+            } else {
+                $idreac = $ver_acuse[0]->idreac;
+                return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                    <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+                    <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
+            }
         }
 
         foreach ($consult as $c) {
@@ -93,30 +114,40 @@ class SeguimientoController extends Controller
 
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
-    
     }
 
-    public function aceptarActividad(Request $request){
+    public function aceptarActividad(Request $request)
+    {
         $contraseña = $request->pass;
         $idac = decrypt($request->id);
 
-        if(password_verify($contraseña, Auth()->User()->password)){
+        if (password_verify($contraseña, Auth()->User()->password)) {
             $new = new FunctionPkg;
             $id_user = Auth()->user()->idu;
             $firma = $new->Encrypt($idac, $id_user, Auth()->User()->nombre);
-            
+
             $cons = DB::UPDATE("UPDATE responsables_actividades SET 
                 acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
             return response()->json('aceptado');
-
         } else {
-            return response()->json('rechazado');   
+            return 'Contraseña incorrecta';
         }
+    }
 
-    }    
+    public function rechazarActividad(Request $request)
+    {
+        $idac = decrypt($request->id_a);
+        $razon_r = $request->rechazo;
+        $id_user = Auth()->user()->idu;
 
-public function DetallesAsignacion($idac)
+        $rechazar = DB::UPDATE("UPDATE responsables_actividades SET 
+                acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
+                WHERE idu_users = $id_user AND idac_actividades = $idac");
+        return response()->json('aceptado');
+    }
+
+    public function DetallesAsignacion($idac)
     {
         $idac = decrypt($idac);
         $id_user = Auth()->user()->idu;

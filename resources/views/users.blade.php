@@ -213,7 +213,7 @@
               </div>
               <div class="form-group">
                 <label for="password">Contraseña:</label>
-                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password', $user_edit->password) }}" required>
+                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" title="Para editar su contraseña, ingrese una nueva">
                 @error('password')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group">
