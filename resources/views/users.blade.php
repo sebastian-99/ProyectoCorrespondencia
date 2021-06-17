@@ -119,7 +119,6 @@
                 <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" title="Debe ingresar 8 carácteres, una mayúscula y un número 'Ejem1234'" required>
                 @error('password')<p class="form-control-feedback text-danger" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, una mayúscula y un número</p>@enderror
               </div>
-
               <div class="form-group">
                 <label for="idar_areas">Área: <b class="text-danger">*</b></label>
                 <select class="form-select @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
@@ -172,6 +171,7 @@
                 </div>
               <div class="">
                 <label for="">Imagen:</label>
+                <img src="{{ asset("storage/imagenes_perfil/$user->imagen") }}" height="80">
                 <input type="file" class="form-control" id="imagen" name="imagen">
               </div><br>
               <div class="form-group">

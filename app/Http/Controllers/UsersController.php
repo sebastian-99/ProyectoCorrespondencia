@@ -222,18 +222,31 @@ class UsersController extends Controller
                     ]);
                 }
 
+                if($request->password != null){
+                    $actualizar = $usuario->update([
+                        'idtu_tipos_usuarios' => $request->idtu_tipos_usuarios,
+                        'titulo'   => $request->titulo,
+                        'nombre'   => $request->nombre,
+                        'app'      => $request->app,
+                        'apm'      => $request->apm,
+                        'email'    => $request->email,
+                        'password' => Hash::make($request->password),
+                        'idar_areas' => $request->idar_areas,
+                        'activo'   => $request->activo
+                    ]);
 
-                $actualizar = $usuario->update([
-                    'idtu_tipos_usuarios' => $request->idtu_tipos_usuarios,
-                    'titulo'   => $request->titulo,
-                    'nombre'   => $request->nombre,
-                    'app'      => $request->app,
-                    'apm'      => $request->apm,
-                    'email'    => $request->email,
-                    'password' => Hash::make($request->password),
-                    'idar_areas' => $request->idar_areas,
-                    'activo'   => $request->activo
-                ]);
+                } else {
+                    $actualizar = $usuario->update([
+                        'idtu_tipos_usuarios' => $request->idtu_tipos_usuarios,
+                        'titulo'   => $request->titulo,
+                        'nombre'   => $request->nombre,
+                        'app'      => $request->app,
+                        'apm'      => $request->apm,
+                        'email'    => $request->email,
+                        'idar_areas' => $request->idar_areas,
+                        'activo'   => $request->activo
+                    ]);
+                }
 
                 return redirect()->route('users.index')->with('mensaje', 'Se ha actualizado correctamente');
             } else {

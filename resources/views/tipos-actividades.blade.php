@@ -82,8 +82,8 @@
 
               <div class="form-group">
                 <label for="nombre">Nombre: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" placeholder="Ingresa el nombre del tipo de actividad" title="El nombre admite solo letras y espacios" required>
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-success">Crear</button>
@@ -118,17 +118,16 @@
               @method('PATCH')
               <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $tipoactividad_edit->nombre) }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $tipoactividad_edit->nombre) }}" title="El nombre admite solo letras y espacios">
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="activo">Activo:</label>
-                <select class="form-control @error('activo') is-invalid @enderror" id="activo" name="activo" required>
+                <select class="form-control" id="activo" name="activo" >
                   <option value="">Selección</option>
                   <option value="1" {{ (old('activo', $tipoactividad_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                   <option value="0" {{ (old('activo', $tipoactividad_edit->activo) == 0) ? 'selected' : '' }}>No</option>
                 </select>
-                @error('activo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Actualizar</button>
