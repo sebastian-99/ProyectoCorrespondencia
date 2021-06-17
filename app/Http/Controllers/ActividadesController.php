@@ -137,18 +137,33 @@ class ActividadesController extends Controller
 
         //}
 
+          // $data = recorrer($c->porcentaje);
+
+
+        function Acuse($data){
+
+
+            if ($data == 1){
+                 $acuse = "Recibido";
+             }else{
+                 $acuse = "No recibido";
+             }
+             return $acuse;
+          }
+
         foreach($query as $c){
 
-           // $data = recorrer($c->porcentaje);
+             $data = Acuse($c->acuse);
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
                                     'porcentaje' =>  $c->porcentaje.'%',
                                     'estado' => $c->estado,
-                                    'acuse' => $c->acuse,
+                                    'acuse' => $data,
                                     'operaciones' => btn($c->idreac),
                                     ));
         }
+
         $json = json_encode($array);
 
         return view('Actividades.reporte_detalles')

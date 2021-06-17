@@ -8,7 +8,6 @@
 
 
 
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -170,7 +169,7 @@
               </li>
             </ul>
           </li>
-          
+
           @endif
           @if(Auth()->user()->idtu_tipos_usuarios == 1)
           <li class="nav-item has-treeview">

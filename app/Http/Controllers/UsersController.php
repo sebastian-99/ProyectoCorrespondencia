@@ -90,30 +90,25 @@ class UsersController extends Controller
         $request->validate([
             'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:tipos_usuarios,idtu'],
             'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
-            'titulo' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
-                        í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
-                        Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ,.]*$/", 'min:3', 'max:70'],
+            'titulo' => ['required', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
             'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                         í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                         Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
+                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
             'app'    => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                         í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                         Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
+                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
             'apm'   => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                         í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                         Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
+                        Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
             'email' => ['required', 'email', 'max:100', "unique:users,email"],
             'password' => ['required',
                        Password::min(8)
                        ->letters()  //Al menos una letra
                        ->mixedCase() //Al menos una minúscula y una mayúscula
                        ->numbers() //Al menos un número
-                       ->symbols() //Al menos un símbolo
-                       ->uncompromised() //No debe estar comprometida
                         ],
             'idar_areas'  => ['required', 'integer', 'exists:areas,idar']
         ]);
@@ -191,32 +186,27 @@ class UsersController extends Controller
 
             if($usuario){
                 $request->validate([
-                    'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:tipos_usuarios,idtu'],
+                    'idtu_tipos_usuarios'   => ['nullable', 'integer', 'exists:tipos_usuarios,idtu'],
                     'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
-                    'titulo' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                    'titulo' => ['nullable', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
+                    'nombre' => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ,.]*$/", 'min:3', 'max:70'],
-                    'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
-                                í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
-                                Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'app'    => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
+                    'app'    => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
-                    'apm'   => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                    'apm'   => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
-                    'email' => ['required', 'email', 'max:100', "unique:users,email,$idu,idu"],
+                    'email' => ['nullable', 'email', 'max:100', "unique:users,email,$idu,idu"],
                     'password' => ['nullable',
                         Password::min(8)
                             ->letters()  //Al menos una letra
                             ->mixedCase() //Al menos una minúscula y una mayúscula
                             ->numbers() //Al menos un número
-                            ->symbols() //Al menos un símbolo
-                            ->uncompromised() //No debe estar comprometida
                         ],
                     'idar_areas'  => ['required', 'integer', 'exists:areas,idar'],
                     'activo' => ['required', 'boolean']
@@ -231,6 +221,7 @@ class UsersController extends Controller
                         'imagen' => $nombre_imagen
                     ]);
                 }
+
 
                 $actualizar = $usuario->update([
                     'idtu_tipos_usuarios' => $request->idtu_tipos_usuarios,

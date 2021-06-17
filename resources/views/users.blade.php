@@ -8,16 +8,6 @@
         </script>
     @endsection
 
-        {{-- If para los errores --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
 {{-- Inicia Reporte --}}
     <div class="card">
@@ -87,58 +77,58 @@
               @method('POST')
                 <div class="form-group">
                 <label for="idtu_tipos_usuarios">Tipo Usuario: <b class="text-danger">*</b></label>
-                <select class="form-control @error('idtu_tipos_usuarios') is-invalid @enderror" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
+                <select class="form-select" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
                   <option value="">Selección</option>
                   @foreach($tipos_usuarios as $tipo_usuario)
                     <option value="{{ $tipo_usuario->idtu }}" {{ (old('idtu_tipos_usuarios') == $tipo_usuario->idtu) ? 'selected' : '' }}>{{ $tipo_usuario->nombre }}</option>
                   @endforeach
                 </select>
-                @error('idtu_tipos_usuarios')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+
               </div>
               <div class="">
                 <label for="">Imagen:</label>
-                <input type="file" class="form-control @error('imagen') is-invalid @enderror" id="imagen" name="imagen">
-                @error('imagen')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="file" class="form-control" id="imagen" name="imagen">
               </div><br>
               <div class="form-group">
                 <label for="titulo">Título: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo') }}" required>
-                @error('titulo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo') }}" placeholder="Ingresa tu titulo" title="Debe ingresar un titulo abreviado 'Ejm.'" required>
+                @error('titulo')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">Debe ser abreviado y con punto</p>@enderror
               </div>
               <div class="form-group">
-                <label for="nombre">Nombre: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <label for="nombre">Nombre (S): <b class="text-danger">*</b></label>
+                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" placeholder="Ingresa tu nombre" title="El nombre admite solo letras y espacios" required>
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="app">Apellido Paterno: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('app') is-invalid @enderror" id="app" name="app" value="{{ old('app') }}" required>
-                @error('app')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('app') is-invalid @enderror" id="app" name="app" value="{{ old('app') }}" placeholder="Ingresa tu apellido paterno" title="El apellido admite solo letras y espacios" required>
+                @error('app')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El apellido admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="apm">Apellido Materno: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('apm') is-invalid @enderror" id="apm" name="apm" value="{{ old('apm') }}" required>
-                @error('apm')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('apm') is-invalid @enderror" id="apm" name="apm" value="{{ old('apm') }}" placeholder="Ingresa tu apellido materno" title="El apellido admite solo letras y espacios" required>
+                @error('apm')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El apellido admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="email">Correo: <b class="text-danger">*</b></label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
-                @error('email')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Ingresa un correo válido" required>
+                @error('email')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El correo admite @, gmail, outlook, hotmail</p>@enderror
               </div>
               <div class="form-group">
                 <label for="password">Contraseña: <b class="text-danger">*</b></label>
-                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" required>
-                @error('password')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" title="Debe ingresar 8 carácteres, una mayúscula y un número 'Ejem1234'" required>
+                @error('password')<p class="form-control-feedback text-danger" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, una mayúscula y un número</p>@enderror
               </div>
+
               <div class="form-group">
                 <label for="idar_areas">Área: <b class="text-danger">*</b></label>
-                <select class="form-control @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
+                <select class="form-select @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
                     <option value="">Selección</option>
                     @foreach($areas as $area)
                       <option value="{{ $area->idar }}" {{ (old('idar_areas') == $area->idar) ? 'selected' : '' }}>{{ $area->nombre }}</option>
                     @endforeach
                 </select>
-                @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;"></p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-success">Crear</button>
@@ -173,62 +163,60 @@
               @method('PATCH')
                 <div class="form-group">
                     <label for="idtu_tipos_usuarios">Tipo Usuario:</label>
-                    <select class="form-control @error('idtu_tipos_usuarios') is-invalid @enderror" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
+                    <select class="form-select" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios">
                     <option value="">Selección</option>
                     @foreach($tipos_usuarios as $tipousuario)
                         <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->nombre) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
                     @endforeach
                     </select>
-                    @error('idtu_tipos_usuarios')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
                 </div>
               <div class="">
                 <label for="">Imagen:</label>
-                <input type="file" class="form-control @error('imagen') is-invalid @enderror" id="imagen" name="imagen">
-                @error('imagen')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="file" class="form-control" id="imagen" name="imagen">
               </div><br>
               <div class="form-group">
                 <label for="titulo">Título:</label>
-                <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo', $user_edit->titulo) }}" required>
-                @error('titulo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo', $user_edit->titulo) }}">
+                @error('titulo')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">Debe ser abreviado y con punto</p>@enderror
               </div>
               <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $user_edit->nombre) }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $user_edit->nombre) }}">
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="app">Apellido Paterno:</label>
-                <input type="text" class="form-control @error('app') is-invalid @enderror" id="app" name="app" value="{{ old('app', $user_edit->app) }}" required>
-                @error('app')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('app') is-invalid @enderror" id="app" name="app" value="{{ old('app', $user_edit->app) }}">
+                @error('app')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El apellido admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="apm">Apellido Materno:</label>
-                <input type="text" class="form-control @error('apm') is-invalid @enderror" id="apm" name="apm" value="{{ old('apm', $user_edit->apm) }}" required>
-                @error('apm')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('apm') is-invalid @enderror" id="apm" name="apm" value="{{ old('apm', $user_edit->apm) }}">
+                @error('apm')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El apellido admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="email">Correo:</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user_edit->email) }}" required>
-                @error('email')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user_edit->email) }}">
+                @error('email')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El correo admite @, gmail, outlook, hotmail</p>@enderror
               </div>
               <div class="form-group">
                 <label for="password">Contraseña:</label>
-                <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" title="Para editar su contraseña, ingrese una nueva">
-                @error('password')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" title="Para cambiar su contraseña debe ingresar una nueva que contenga 8 carácteres, una mayúscula y un número 'Ejem1234'">
+                @error('password')<p class="form-control-feedback text-danger" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, una mayúscula y un número</p>@enderror
               </div>
               <div class="form-group">
                 <label for="idar_areas">Área:</label>
-                <select class="form-control @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas" required>
+                <select class="form-select @error('idar_areas') is-invalid @enderror" id="idar_areas" name="idar_areas">
                     <option value="">Selección</option>
                     @foreach($areas as $area)
                       <option value="{{ $area->idar }}" {{ (old('idar_areas', $user_edit->idar_areas) == $area->nombre) ? 'selected' : '' }}>{{ $area->nombre }}</option>
                     @endforeach
                 </select>
-                @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                @error('idar_areas')<p class="text-danger" style="font-size: 14px; font-style: italic;"></p>@enderror
               </div>
               <div class="form-group">
                 <label for="activo">Activo:</label>
-                <select class="form-control @error('activo') is-invalid @enderror" id="activo" name="activo" required>
+                <select class="form-select @error('activo') is-invalid @enderror" id="activo" name="activo">
                   <option value="">Selección</option>
                   <option value="1" {{ (old('activo', $user_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                   <option value="0" {{ (old('activo', $user_edit->activo) == 0) ? 'selected' : '' }}>No</option>
@@ -250,4 +238,6 @@
     </div>
 {{-- Termina Modal de editar --}}
  @endforeach
+
 @endsection
+

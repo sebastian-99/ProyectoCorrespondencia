@@ -354,8 +354,13 @@
 
 
     <script type="text/javascript">
+<<<<<<< HEAD
         //comprobar si el porcentaje de avance es igual 100% marcar estado completado
         function verificar_p() {
+=======
+    //comprobar si el porcentaje de avance es igual 100% marcar estado completado
+    function verificar_p() {
+>>>>>>> 587c8dc6a36f19e191481368088c65e5da718a6c
             var verif_p = document.getElementById("porcentaje").value;
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
@@ -364,6 +369,54 @@
                 $('#estado_p').prop("checked", true);
                 $('#estado_p').prop('disabled', false);
             }
+<<<<<<< HEAD
+=======
+        }
+
+        function verificar_s() {
+            var verif_s = document.getElementById("estado_c").value;
+            var verif_sp = document.getElementById("estado_p").value;
+            if (verif_s == 'Completo') {
+                $('#porcentaje').val(100);
+                $('#porc').html(100);
+                $('#estado_p').prop('disabled', true);
+            }
+        }
+ 
+    $('body').on('click', '.DetallesArchivos',function(){
+      var id = $(this).data('id');
+     
+      var i = 0;
+      $.get("../DetallesArchivos/" + id, function(data){
+        $('#tablaModal>tbody>tr').remove();
+       while ( i!=1+i){
+         if(data[i].nombre == null){
+           i=i+1;
+           break;
+         }else{
+      
+       $('#modelHeading').html("Detalles Archivos");
+        $('#ajaxModel').modal('show');
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
+      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+        if(data[i].ruta == 'Sin archivo'){
+        var texto = '<td>No hay archivos disponibles</td>';
+        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+       // $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+        }else if(data[i].ruta != '' ){
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
+        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#nombre'+i).val(data[i].nombre);
+      //  $('#detalle'+i).val(data[i].detalle);
+        $('#ruta'+i).val(ruta);
+        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).text(texto);
+>>>>>>> 587c8dc6a36f19e191481368088c65e5da718a6c
         }
 
         function verificar_s() {
