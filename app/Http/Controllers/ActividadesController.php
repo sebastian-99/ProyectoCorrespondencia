@@ -137,18 +137,33 @@ class ActividadesController extends Controller
 
         //}
 
+          // $data = recorrer($c->porcentaje);
+
+
+        function Acuse($data){
+
+
+            if ($data == 1){
+                 $acuse = "Recibido";
+             }else{
+                 $acuse = "No recibido";
+             }
+             return $acuse;
+          }
+
         foreach($query as $c){
 
-           // $data = recorrer($c->porcentaje);
+             $data = Acuse($c->acuse);
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
                                     'porcentaje' =>  $c->porcentaje.'%',
                                     'estado' => $c->estado,
-                                    'acuse' => $c->acuse,
+                                    'acuse' => $data,
                                     'operaciones' => btn($c->idreac),
                                     ));
         }
+
         $json = json_encode($array);
 
         return view('Actividades.reporte_detalles')
@@ -164,10 +179,13 @@ class ActividadesController extends Controller
 
         $idac = decrypt($idac);
 
-        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area FROM responsables_actividades AS res
+        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area,
+        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion , ac.fecha_inicio, ac.fecha_fin, res.firma 
+        FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
         JOIN tipos_areas AS ta ON ta.idtar = ar.idtar
+        JOIN actividades AS ac ON ac.idac = res.idac_actividades
         WHERE idac_actividades = $idac
         AND res.acuse = 1");
 

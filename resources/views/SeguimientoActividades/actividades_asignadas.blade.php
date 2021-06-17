@@ -89,7 +89,7 @@
         </div>
         <div id="sec2" hidden>
           <label>Describe la situación del porque rechazas la actividad</label>
-          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" rows="5" required>Yo estoy rechazando esta actividad por los siguientes motivos:</Textarea>
+          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" rows="5" required></Textarea>
         </div>
 
       </div>

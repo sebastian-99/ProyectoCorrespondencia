@@ -18,7 +18,7 @@
             </div>
             <div class="card-body">
                 <div class="container">
-                    <h4 class="text-right mb -3">Actividades del mes de enero</h4>
+                    <h4 class="text-right mb -3" >Reporte de Actividades</h4>
                 </div>
                 <div class="form-row" id="dashboard_panel">
                     <div class="form-group col-md-4">
