@@ -24,9 +24,7 @@
 <h5 align=center>Sistema de Seguimiento de Oficios</h5>
 </div>
 <br>
-@if(Session::has('mensaje'))
-<div class="alert alert-danger">{{Session::get('mensaje')}}</div>
-@endif
+
 
 @yield('contenido')
 

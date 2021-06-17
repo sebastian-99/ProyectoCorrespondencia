@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ValidarLogin;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-
-    public function login()
+    
+    public function login(ValidarLogin $request)
     {
-        return view('login');
+    
+        return 'hola';
     }
-    /*public Function validar(Request $request)
-    {
-        $this->validate($request[
-            
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-    }*/
+    
+   
 }
