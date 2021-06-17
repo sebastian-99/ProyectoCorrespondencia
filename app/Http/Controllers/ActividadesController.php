@@ -228,7 +228,7 @@ class ActividadesController extends Controller
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
                              'estado' => $c->estado,
-                             'porcentaje' => $c->porcentaje,
+                             'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac),
                              ));
         }
@@ -322,7 +322,6 @@ class ActividadesController extends Controller
         $horadeinicio = $r->horadeinicio;
         $horatermino = $r->horatermino;
         $detalleactividad = $r->detalleactividad;
-
         if($r->file('archivos') != null){
 
             $file = $r->file('archivos');
@@ -397,7 +396,25 @@ class ActividadesController extends Controller
         for($i=0; $i < count($tipousuarioarea); $i++){
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
+              
+            
+            //---------------------------llenado de otras tablas---------------
+
+
+              $idreac_responsables_actividades = DB::table('responsables_actividades')->max('idreac');
+             
+              DB::INSERT("INSERT INTO seguimientos_actividades (idreac_responsables_actividades , fecha , detalle,estado) 
+              VALUES ('$idreac_responsables_actividades','$fechacreacion','sin detalles','pendiente')");
+
+
+              $idseac_seguimientos_actividades = DB::table('seguimientos_actividades')->max('idseac');
+
+              DB::INSERT("INSERT INTO archivos_seguimientos (idseac_seguimientos_actividades, nombre, ruta, detalle_a)
+              VALUES ('$idseac_seguimientos_actividades','Sin archivo','Sin archivo','Sin archivo')");
+                  //---------------------------fin del llenado----------------------
         }
+
+          
 
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
             return redirect()->route('reporte_actividades');

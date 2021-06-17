@@ -27,8 +27,8 @@
                 sort 
                 search 
                 pager 
-                page-size='3' 
-                page-size-options='1,2,3,4,5,10' 
+                page-size='10' 
+                page-size-options='10,20,50' 
                 layout='row' 
                 viewport-stop
                 theme='android'
