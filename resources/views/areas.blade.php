@@ -8,17 +8,6 @@
         </script>
     @endsection
 
-    {{-- If para los errores --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     {{--Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
@@ -83,17 +72,16 @@
               <div class="form-group">
                 <label for="nombre">Nombre: <b class="text-danger">*</b></label>
                 <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="idtar">Tipo de Área: <b class="text-danger">*</b></label>
-                <select class="form-control @error('idtar') is-invalid @enderror" id="idtar" name="idtar" required>
+                <select class="form-control" id="idtar" name="idtar" required>
                     <option value="">Selección</option>
                     @foreach($tipos_areas as $tipoarea)
                       <option value="{{ $tipoarea->idtar }}" {{ (old('idtar') == $tipoarea->idtar) ? 'selected' : '' }}>{{ $tipoarea->nombre }}</option>
                     @endforeach
                 </select>
-                @error('idtar')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-success">Crear</button>
@@ -129,8 +117,8 @@
               @method('PATCH')
               <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $area_edit->nombre) }}" required>
-                @error('nombre')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
+                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $area_edit->nombre) }}" placeholder="Ingresa el nombre del área" title="El nombre admite solo letras y espacios" required>
+                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
               </div>
               <div class="form-group">
                 <label for="idtar">Tipo de Área:</label>
@@ -144,12 +132,11 @@
               </div>
               <div class="form-group">
                 <label for="activo">Activo:</label>
-                <select class="form-control @error('activo') is-invalid @enderror" id="activo" name="activo" required>
+                <select class="form-control" id="activo" name="activo" required>
                   <option value="">Selección</option>
                   <option value="1" {{ (old('activo', $area_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                   <option value="0" {{ (old('activo', $area_edit->activo) == 0) ? 'selected' : '' }}>No</option>
                 </select>
-                @error('activo')<p class="text-danger" style="font-size: 14px; font-style: italic;">{{ $message }}</p>@enderror
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Actualizar</button>
