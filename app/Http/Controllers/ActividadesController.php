@@ -627,7 +627,6 @@ class ActividadesController extends Controller
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
 
-
         $array = array();
 
         function recorrer($value){

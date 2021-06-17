@@ -41,7 +41,7 @@
                     <zg-column index='periodo' header='Periodo' width="120" type='text'></zg-column>
                     <zg-column index='importancia' header='Importancia' width="120" type='text'></zg-column>
                     <zg-column index='nombre' header='Area responsable' width="120" type='text'></zg-column>
-                    <zg-column index='C' header='Acance' width="100" type='text'></zg-column>
+                    <zg-column index='C' header='Avance' width="100" type='text'></zg-column>
                     <zg-column index='AB' header='Atendido por' width="100" type='text'></zg-column>
                     <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="120" type='text'></zg-column>
         	</zg-colgroup>
