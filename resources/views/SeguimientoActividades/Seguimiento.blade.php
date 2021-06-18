@@ -197,8 +197,8 @@
 
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="ruta[]" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfile"><i class='fa fa-plus-circle'></i></a>
-                            <input class="form-control form-control-sm" id="ruta[]" name="ruta[]" type="file" multiple>
+                            <label for="archivo" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfile"><i class='fa fa-plus-circle'></i></a>
+                            <input class="form-control form-control-sm" id="archivo" name="ruta[]" type="file" multiple>
                         </div>
                     </div>
 
@@ -273,18 +273,18 @@
                     <center>
                     <h4>Archivos del seguimiento</h4>
                     </center><br>
-                    <table class="table table-responsive">
+                    <table class="table table-responsive" id="tablefiles">
                         <thead class="">
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
-                                <th scope="col">Nombre archivo</th>
-                                <th scope="col">Detalle (link)</th>
+                                <th scope="col">Detalle evidencia</th>
                             </tr>
                         </thead>
                         <tbody>
                             {{-- Aqui van los archivos que se van agregando al seguimiento --}}
                         </tbody>
                     </table>
+                    <a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfiles"><i class='fa fa-plus-circle'></i></a>Agregar archivos
                 </div>
             </div>
         </div>
@@ -358,6 +358,8 @@
 
 
     <script type="text/javascript">
+    var fname=null
+    var dname=null
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
@@ -380,27 +382,47 @@
             }
         }
     //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
+    var f = 0;
     $('body').on('click', '#addfile',function(){
-        var valruta = document.getElementById('ruta[]').value;
+        var valruta = document.getElementById('archivo').value;
         var valdet_a = document.getElementById('detalle_a').value;
-        
+        dname = valdet_a;
+       
         if(valruta != ''){
             $('#evidencefiles').prop('hidden', false);
 
-            var evidencia_file = "<td><input id='nuevo_f' name='nuevo_f' disabled></td>" ;
-            var evidencia_det = "<td><input id='nuevo_d' name='nuevo_d' disabled></td>" ;
+           
 
-            $('#newfile').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
-            $('#nuevo_f').val(valruta);
-            $('#nuevo_d').val(valdet_a);
-            $('#ruta[]').reset();
-            $('#detalle_a').reset();
             
+
+            var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='form-control form-control-sm' disabled style='width:250px'></td>" ;
+            var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
+            //remplazar la ruta C:/faker/ y obtner el nombre original del archivo
+            
+            var filename = valruta.replace(/^.*\\/, "");
+            fname = valruta;
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#nuevo_f'+f).val(filename);
+            $('#nuevo_d'+f).val(valdet_a);
+            $('input[type="file"]').val('');
+            $('#detalle_a').val('');
+
+            f=f+1;
+        
+      
                
         }else{
              alert('Antes de agregar mas archivos, sube un archivo');
         }
-    });   
+    }); 
+    $('body').on('click', '#addfiles',function(){
+        
+        $('#detalle_a').val(dname);
+        $('#archivo').val(fname);
+        console.log(dname);
+        console.log(filename);
+
+    });  
 
  //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
