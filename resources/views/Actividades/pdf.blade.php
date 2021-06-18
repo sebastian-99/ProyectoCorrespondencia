@@ -82,6 +82,7 @@
                     'fecha_acuse' =>  $valor->fecha_acuse, 
                     'area' => $valor->area,
                     'firma' => $valor->firma,
+                    'firma2' => $valor->firma2,
                 )
             );
 
@@ -102,6 +103,7 @@
                     $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
 
                     $contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
+                    $contenido .= "<p>".$insert[$i]['firma2']."<p>";
 
                     $contenido .= "</div> </div> </td>";
 
@@ -122,6 +124,7 @@
                         'fecha_acuse' =>  $valor->fecha_acuse, 
                         'area' => $valor->area,
                         'firma' => $valor->firma,
+                        'firma2' => $valor->firma2,
                     )
                 );
             }
@@ -144,6 +147,7 @@
                 $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
 
                 $contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
+                $contenido .= "<p>".$insert[$i]['firma2']."<p>";
 
                 $contenido .= "</div> </div> </td>";
 
