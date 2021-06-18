@@ -15,7 +15,7 @@ use App\Http\Controllers\EncryptController;
 
 Auth::routes();
 /*
- * Cambiar Auth::routes() por rutas a solo usar, 
+ * Cambiar Auth::routes() por rutas a solo usar,
  * ya que la ruta /register permite inserción de usuarios.
  */
 

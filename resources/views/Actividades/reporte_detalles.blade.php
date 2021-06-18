@@ -14,9 +14,7 @@
         <div class="col-sm-11">
           <h3>Responsables de la actividad</h3>
         </div>
-        <div class="col-sm-2">
-        <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
-        </div>
+
         <div class="col-sm-2">
         <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank" {{($boton->boton == 0) ? 'hidden' : ''}}>PDF</a>
         </div>
@@ -29,8 +27,8 @@
                 sort 
                 search 
                 pager 
-                page-size='3' 
-                page-size-options='1,2,3,4,5,10' 
+                page-size='10' 
+                page-size-options='10,20,50' 
                 layout='row' 
                 viewport-stop
                 theme='android'
