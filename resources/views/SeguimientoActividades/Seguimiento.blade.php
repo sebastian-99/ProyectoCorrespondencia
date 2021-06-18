@@ -14,6 +14,7 @@
 
     function inicio() {
         document.getElementById('porcentaje').addEventListener('change', porcentajeAvance, false);
+        document.getElementById('porcentaje').addEventListener('mousemove', porcentajeAvance, false);
     }
 
     function porcentajeAvance() {
@@ -196,7 +197,7 @@
 
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="ruta[]" class="form-label">Seleccione Archivo</label>
+                            <label for="ruta[]" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfile"><i class='fa fa-plus-circle'></i></a>
                             <input class="form-control form-control-sm" id="ruta[]" name="ruta[]" type="file" multiple>
                         </div>
                     </div>
@@ -205,7 +206,7 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="detalle" class="form-label">Detalle Evidencia</label>
-                            <input type="text" class="form-control form-control-sm" id="detalle" name="detalle_a" placeholder="Detalle de la evidencia">
+                            <input type="text" class="form-control form-control-sm" id="detalle_a" name="detalle_a" placeholder="Detalle de la evidencia">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -220,8 +221,6 @@
     </div>
 
     <div class="col-sm-7">
-
-
         <div class="card">
             <div class="card-body">
                 <center>
@@ -268,6 +267,27 @@
 
             </div>
         </div>
+        <div class="card" id="evidencefiles" hidden>
+            <div class="card-body">
+                <div id="newfile">
+                    <center>
+                    <h4>Archivos del seguimiento</h4>
+                    </center><br>
+                    <table class="table table-responsive">
+                        <thead class="">
+                            <tr style="background-color: #607d8b; color: #ffffff">
+                                <th scope="col">Archivo</th>
+                                <th scope="col">Nombre archivo</th>
+                                <th scope="col">Detalle (link)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- Aqui van los archivos que se van agregando al seguimiento --}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-sm-12">
         <div class="card">
@@ -285,7 +305,7 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,3,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
+                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
@@ -359,7 +379,30 @@
                 $('#estado_p').prop('disabled', true);
             }
         }
- 
+    //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
+    $('body').on('click', '#addfile',function(){
+        var valruta = document.getElementById('ruta[]').value;
+        var valdet_a = document.getElementById('detalle_a').value;
+        
+        if(valruta != ''){
+            $('#evidencefiles').prop('hidden', false);
+
+            var evidencia_file = "<td><input id='nuevo_f' name='nuevo_f' disabled></td>" ;
+            var evidencia_det = "<td><input id='nuevo_d' name='nuevo_d' disabled></td>" ;
+
+            $('#newfile').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#nuevo_f').val(valruta);
+            $('#nuevo_d').val(valdet_a);
+            $('#ruta[]').reset();
+            $('#detalle_a').reset();
+            
+               
+        }else{
+             alert('Antes de agregar mas archivos, sube un archivo');
+        }
+    });   
+
+ //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
      

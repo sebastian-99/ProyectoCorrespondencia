@@ -317,6 +317,8 @@ class SeguimientoController extends Controller
         $ruta = $request->ruta;
         $detalle_a = $request->detalle_a;
 
+        //dd($ruta, $detalle, $detalle_a);
+
 
         $seg_ac = new seguimientosActividades;
         $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
