@@ -29,10 +29,10 @@
 
 
 <body>
-    <div class="container">
+    <div>
         <div class="row">
-            <div align="left"><img src="{{asset('images/Edomex.png')}}" height="60" alt=""></div>
-            <div align="right"><img src="{{asset('images/logoUTVT.png')}}" height="60" alt=""></div>
+            <div align="left"><img src="{{public_path('images/Edomex.png')}}" height="60" alt=""></div>
+            <div align="right"><img src="{{public_path('images/logoUTVT.png')}}" height="90" alt=""></div>
         </div>
     </div>
     <h1>REPORTE DE ACUSE DE RECIBIDO</h1><br>
@@ -63,7 +63,7 @@
         
     </table>
     
-    <table class="table table-bordered border-primary" style="border-color: #0B821D">
+    <table class="table table-bordered" style="border-color: #0B821D">
     
     @php
 
