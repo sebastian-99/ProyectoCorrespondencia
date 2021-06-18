@@ -8,27 +8,53 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
 </head>
+<style>
+    *{
+        padding: 0;
+        font-family: arial;
+    }
+    h1 {
+        font-size: 25px;
+        text-align: center;
+        color: #0B821D;
+    }
+    h2 {
+        font-size: 22px;
+        text-align: center;
+    }
+    p {
+        text-align: center;
+    }
+</style>
+
+
 <body>
-    <center><h1 class="text-primary">REPORTE DE ACUSE DE RECIBIDO</h1></center>
-    <center><h2 class="text-primary">DETALLE DE LA ACTIVIDAD</h2></center>
+    <div class="container">
+        <div class="row">
+            <div align="left"><img src="{{asset('images/Edomex.png')}}" height="60" alt=""></div>
+            <div align="right"><img src="{{asset('images/logoUTVT.png')}}" height="60" alt=""></div>
+        </div>
+    </div>
+    <h1>REPORTE DE ACUSE DE RECIBIDO</h1><br>
+    <h2>DETALLE DE LA ACTIVIDAD</h2>
 
     <table class="table table-bordered border-primary">
         <tr>
             <td scope="row" width='50%'>
                 <div class="row">
                     <div class="col">
-                        <p>Folio: {{$data[0]->comunicado}}</p>
-                        <p>Asunto: {{$data[0]->asunto}}</p>
-                        <p>Detalle: {{$data[0]->descripcion}}</p>
+                        <p>Folio: <b>{{$data[0]->comunicado}}</b></p>
+                        <p>Asunto: <b>{{$data[0]->asunto}}</b></p>
+                        <p>Detalle: <b>{{$data[0]->descripcion}}</b></p>
                     </div>
                 </div>
             </td>
             <td scope="row" width='50%'>
                 <div class="row">
                     <div class="col">
-                        <p>Fecha creaci&oacute;n: {{$data[0]->fecha_creacion}}</p>
-                        <p>Fecha seguimiento: {{$data[0]->fecha_inicio}}</p>
-                        <p>Fecha termino: {{$data[0]->fecha_fin}}</p>
+                        <p>Fecha creaci&oacute;n: <b>{{$data[0]->fecha_creacion}}</b></p>
+                        <p>Fecha seguimiento: <b>{{$data[0]->fecha_inicio}}</b></p>
+                        <p>Fecha termino: <b>{{$data[0]->fecha_fin}}</b></p>
                     </div>
                 </div>
             </td>
@@ -37,7 +63,7 @@
         
     </table>
     
-    <table class="table table-bordered border-primary">
+    <table class="table table-bordered border-primary" style="border-color: #0B821D">
     
     @php
 
@@ -67,15 +93,15 @@
                 {
                     $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
-                    $contenido .= "<p>Firma digital por: ".$insert[$i]['nombre']."</p>";
+                    $contenido .= "<p>Nombre: ".$insert[$i]['nombre']."</p>";
 
                     $contenido .= "<p>Fecha: ".$insert[$i]['fecha_acuse']."</p>";
 
-                    $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
+                    //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
                     $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
 
-                    //$contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
+                    $contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
 
                     $contenido .= "</div> </div> </td>";
 
@@ -109,15 +135,15 @@
             {
                 $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
-                $contenido .= "<p>Firma digital por: ".$out[$i]['nombre']."</p>";
+                $contenido .= "<p>Nombre: ".$out[$i]['nombre']."</p>";
 
                 $contenido .= "<p>Fecha: ".$out[$i]['fecha_acuse']."</p>";
 
-                $contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
+                //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
                 $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
 
-                //$contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
+                $contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
 
                 $contenido .= "</div> </div> </td>";
 
