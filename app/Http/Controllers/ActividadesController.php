@@ -97,7 +97,8 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
+        res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -122,8 +123,15 @@ class ActividadesController extends Controller
         }
 
 
-        function btn($idac){
-            return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+        function btn($idac,$data,$rechazo){
+            if($data == 0){
+                return ("No existen detalles");
+           
+            }else if($data == 1){
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+            }else if($data == 2){
+                return ("Razon: $rechazo" );
+            }
         }
 
      //  function C($data){
@@ -145,6 +153,8 @@ class ActividadesController extends Controller
 
             if ($data == 1){
                  $acuse = "Recibido";
+             }else if($data == 2){
+                 $acuse = "Rechazado";
              }else{
                  $acuse = "No recibido";
              }
@@ -160,7 +170,7 @@ class ActividadesController extends Controller
                                     'porcentaje' =>  $c->porcentaje.'%',
                                     'estado' => $c->estado,
                                     'acuse' => $data,
-                                    'operaciones' => btn($c->idreac),
+                                    'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo),
                                     ));
         }
 
@@ -200,7 +210,7 @@ class ActividadesController extends Controller
 
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto, arch.ruta
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -215,10 +225,13 @@ class ActividadesController extends Controller
           $arr = (gettype($value) == "string") ? explode('-', $value) : null;
             return $arr;
         }
-        function btn($idac){
-
+        function btn($idac,$ruta){
+            if ($ruta == "Sin archivo"){
+                return "Sin archivos";
+            }else{
             return "
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                }
             }
         foreach($consult as $c){
 
@@ -228,8 +241,8 @@ class ActividadesController extends Controller
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
                              'estado' => $c->estado,
-                             'porcentaje' => $c->porcentaje,
-                             'operaciones' => btn($c->idseac),
+                             'porcentaje' => $c->porcentaje.'%',
+                             'operaciones' => btn($c->idseac,$c->ruta),
                              ));
         }
         $json = json_encode($array);
@@ -322,7 +335,6 @@ class ActividadesController extends Controller
         $horadeinicio = $r->horadeinicio;
         $horatermino = $r->horatermino;
         $detalleactividad = $r->detalleactividad;
-
         if($r->file('archivos') != null){
 
             $file = $r->file('archivos');
@@ -397,7 +409,25 @@ class ActividadesController extends Controller
         for($i=0; $i < count($tipousuarioarea); $i++){
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
+              
+            
+            //---------------------------llenado de otras tablas---------------
+
+
+              $idreac_responsables_actividades = DB::table('responsables_actividades')->max('idreac');
+             
+              DB::INSERT("INSERT INTO seguimientos_actividades (idreac_responsables_actividades , fecha , detalle,estado) 
+              VALUES ('$idreac_responsables_actividades','$fechacreacion','sin detalles','pendiente')");
+
+
+              $idseac_seguimientos_actividades = DB::table('seguimientos_actividades')->max('idseac');
+
+              DB::INSERT("INSERT INTO archivos_seguimientos (idseac_seguimientos_actividades, nombre, ruta, detalle_a)
+              VALUES ('$idseac_seguimientos_actividades','Sin archivo','Sin archivo','Sin archivo')");
+                  //---------------------------fin del llenado----------------------
         }
+
+          
 
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
             return redirect()->route('reporte_actividades');
@@ -626,7 +656,6 @@ class ActividadesController extends Controller
         WHERE ac.idu_users = $id_u
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-
 
         $array = array();
 
