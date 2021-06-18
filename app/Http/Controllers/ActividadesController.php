@@ -97,7 +97,8 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
+        res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -122,8 +123,15 @@ class ActividadesController extends Controller
         }
 
 
-        function btn($idac){
-            return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+        function btn($idac,$data,$rechazo){
+            if($data == 0){
+                return ("No existen detalles");
+           
+            }else if($data == 1){
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+            }else if($data == 2){
+                return ("Razon: $rechazo" );
+            }
         }
 
      //  function C($data){
@@ -145,6 +153,8 @@ class ActividadesController extends Controller
 
             if ($data == 1){
                  $acuse = "Recibido";
+             }else if($data == 2){
+                 $acuse = "Rechazado";
              }else{
                  $acuse = "No recibido";
              }
@@ -160,7 +170,7 @@ class ActividadesController extends Controller
                                     'porcentaje' =>  $c->porcentaje.'%',
                                     'estado' => $c->estado,
                                     'acuse' => $data,
-                                    'operaciones' => btn($c->idreac),
+                                    'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo),
                                     ));
         }
 
@@ -200,7 +210,7 @@ class ActividadesController extends Controller
 
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto, arch.ruta
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -215,10 +225,13 @@ class ActividadesController extends Controller
           $arr = (gettype($value) == "string") ? explode('-', $value) : null;
             return $arr;
         }
-        function btn($idac){
-
+        function btn($idac,$ruta){
+            if ($ruta == "Sin archivo"){
+                return "Sin archivos";
+            }else{
             return "
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                }
             }
         foreach($consult as $c){
 
@@ -229,7 +242,7 @@ class ActividadesController extends Controller
                              'detalle' =>  $c->detalle,
                              'estado' => $c->estado,
                              'porcentaje' => $c->porcentaje.'%',
-                             'operaciones' => btn($c->idseac),
+                             'operaciones' => btn($c->idseac,$c->ruta),
                              ));
         }
         $json = json_encode($array);
