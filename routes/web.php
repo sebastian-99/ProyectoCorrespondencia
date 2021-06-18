@@ -60,7 +60,7 @@ Route::get('actividades', [ActividadesController::class,'actividades'])->name('c
 Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
-Route::POST('updateRechazo/{idacRec}', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');
+Route::post('updateRechazo', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');
 
 Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
 Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');

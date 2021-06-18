@@ -8,6 +8,7 @@
       if (es) ZingGrid.registerLanguage(es, 'custom');
     </script> 
 @endsection
+
 <div class="card">
 <div class="card-header">
       <div class="row">
@@ -41,10 +42,9 @@
                     <zg-column index='porcentaje' filter ="disabled" header='Avance' width="120" type='text'></zg-column>
                     <zg-column index='estado' header='Estado' width="120" type='text'></zg-column>
                     <zg-column index='acuse' filter ="disabled" header='Acuse' width="100" type='text'></zg-column>
+                    @csrf
                     <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="200" type='text'></zg-column>
                 </zg-colgroup>
               </zing-grid>
 
-
-             
   @endsection

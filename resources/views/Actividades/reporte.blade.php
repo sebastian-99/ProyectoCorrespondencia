@@ -38,6 +38,7 @@
                 </p>
                 @endif  
               <zing-grid
+              
                 lang="custom" 
                 caption='Reporte de oficios' 
                 sort 

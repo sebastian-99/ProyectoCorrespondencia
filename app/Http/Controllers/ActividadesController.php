@@ -124,12 +124,11 @@ class ActividadesController extends Controller
 
 
         function btn($idac,$data,$rechazo){
-           $idac = encrypt($idac);
             if($data == 0){
                 return ("No existen detalles");
            
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', $idac)."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
             }else if($data == 2){
                 return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create'>Ver</a>
                 <div class='modal fade' id='create'>
@@ -142,7 +141,15 @@ class ActividadesController extends Controller
                     $rechazo
                     </div>
                     <div class='modal-footer'>
-                    <a href=".route('updateRechazo', $idac)." class='btn btn-success pull-right' >Reactivar</a>
+                    <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
+                    <input type='hidden' name='_token' value=". csrf_token() .">
+                    <div class='card-footer'>
+                    <input type='hidden' value=".$idac." name='idreac'>
+                    <input type='hidden' value='0' name='acuse'>
+                    <input type='hidden' value='' name='razon_rechazo'>
+                    <button type='submit' class='btn btn-primary'>Reactivar</button>    
+                </div>
+                </form>
                     </div>
                   </div>
                 </div>
@@ -200,11 +207,13 @@ class ActividadesController extends Controller
 
     }
     
-    public function updateRechazo(Request $idacRec){
-        $idacRec = decrypt($idacRec);
-        DB::UPDATE("UPDATE responsables_actividades SET acuse = '0', razon_rechazo =NULL
-        WHERE IDREAC = $idacRec");
-        return "aaa";
+    public function updateRechazo(Request $c){
+        $idreac = $c->idreac;
+        $acuse = $c->acuse;
+        $razon_rechazo = $c->razon_rechazo;
+        DB::UPDATE("UPDATE responsables_actividades SET  acuse ='$acuse', razon_rechazo = '$razon_rechazo'
+        WHERE idreac = $idreac");
+
     }
 
     public function pdf($idac){
