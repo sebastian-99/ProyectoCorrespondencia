@@ -97,7 +97,7 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,'.', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo, us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
         res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
@@ -124,13 +124,29 @@ class ActividadesController extends Controller
 
 
         function btn($idac,$data,$rechazo){
+           $idac = encrypt($idac);
             if($data == 0){
                 return ("No existen detalles");
            
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', $idac)."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
             }else if($data == 2){
-                return ("Razon: $rechazo" );
+                return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create'>Ver</a>
+                <div class='modal fade' id='create'>
+                <div class='modal-dialog'>
+                  <div class='modal-content'>
+                     <div class='modal-header'>        
+                       <h4>Razon del rechazo</h4>
+                    </div>
+                    <div class='modal-body'>
+                    $rechazo
+                    </div>
+                    <div class='modal-footer'>
+                    <a href=".route('updateRechazo', $idac)." class='btn btn-success pull-right' >Reactivar</a>
+                    </div>
+                  </div>
+                </div>
+              </div>";
             }
         }
 
@@ -182,6 +198,13 @@ class ActividadesController extends Controller
         ->with('idac', $idac)
         ->with('boton', $boton);
 
+    }
+    
+    public function updateRechazo(Request $idacRec){
+        $idacRec = decrypt($idacRec);
+        DB::UPDATE("UPDATE responsables_actividades SET acuse = '0', razon_rechazo =NULL
+        WHERE IDREAC = $idacRec");
+        return "aaa";
     }
 
     public function pdf($idac){
