@@ -7,6 +7,7 @@
 	@error('email')
     <div class="alert alert-danger">{{ $message }}</div>
 	@enderror
+	</div>
 	<div class="form-group d-flex">
 		<input type="password" class="form-control rounded-left" class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password" required>
 	@error('password')
