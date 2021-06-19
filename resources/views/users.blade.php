@@ -8,16 +8,19 @@
         </script>
     @endsection
 
-
 {{-- Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
+            @if (Session::has('mensaje'))
+                <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger"><p>¡Ocurrio un error inesperado, revisa nuevamente el formulario!</p></div>
+            @endif
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Usuarios</h2>
-                      <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal">
-                        Crear
-                      </a>
+                      <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal">Crear</a>
                 </div>
             </div>
         </div>
@@ -171,7 +174,7 @@
                 </div>
               <div class="">
                 <label for="">Imagen:</label>
-                <img src="{{ asset("storage/imagenes_perfil/$user->imagen") }}" height="80">
+                <img src="{{ asset("storage/imagenes_perfil/$user_edit->imagen") }}" height="80">
                 <input type="file" class="form-control" id="imagen" name="imagen">
               </div><br>
               <div class="form-group">

@@ -9,19 +9,16 @@
     @endsection
 
     {{-- If para los errores --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     {{--Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
+            @if (Session::has('mensaje'))
+                <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger"><p>¡Ocurrio un error inesperado, revisa nuevamente el formulario!</p></div>
+            @endif
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Tipos de Actividades</h2>
@@ -123,7 +120,7 @@
               </div>
               <div class="form-group">
                 <label for="activo">Activo:</label>
-                <select class="form-control" id="activo" name="activo" >
+                <select class="form-select" id="activo" name="activo" >
                   <option value="">Selección</option>
                   <option value="1" {{ (old('activo', $tipoactividad_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                   <option value="0" {{ (old('activo', $tipoactividad_edit->activo) == 0) ? 'selected' : '' }}>No</option>
