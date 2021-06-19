@@ -8,13 +8,18 @@
       if (es) ZingGrid.registerLanguage(es, 'custom');
     </script> 
 @endsection
+
 <div class="card">
 <div class="card-header">
       <div class="row">
         <div class="col-sm-11">
           <h3>Responsables de la actividad</h3>
         </div>
-
+        @if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
         <div class="col-sm-2">
         <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank" {{($boton->boton == 0) ? 'hidden' : ''}}>PDF</a>
         </div>
@@ -27,8 +32,8 @@
                 sort 
                 search 
                 pager 
-                page-size='3' 
-                page-size-options='1,2,3,4,5,10' 
+                page-size='10' 
+                page-size-options='10,20,50' 
                 layout='row' 
                 viewport-stop
                 theme='android'
@@ -41,10 +46,9 @@
                     <zg-column index='porcentaje' filter ="disabled" header='Avance' width="120" type='text'></zg-column>
                     <zg-column index='estado' header='Estado' width="120" type='text'></zg-column>
                     <zg-column index='acuse' filter ="disabled" header='Acuse' width="100" type='text'></zg-column>
+                    @csrf
                     <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="200" type='text'></zg-column>
                 </zg-colgroup>
               </zing-grid>
-
-
 
   @endsection
