@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Areas;
 use App\Models\TiposAreas;
 use Illuminate\Http\Request;
+use Session;
 
 class AreasController extends Controller
 {
@@ -70,7 +71,7 @@ class AreasController extends Controller
                     'nombre'  => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
                     'idtar'   => ['required', 'integer', 'exists:tipos_areas,idtar'],
             ]);
 
@@ -79,8 +80,8 @@ class AreasController extends Controller
                         'nombre' => $request->nombre,
                         'idtar'  => $request->idtar
             ]);
-
-        return redirect()->route('areas.index')->with('mensaje', 'Se ha guardado correctamente');
+        Session::flash('mensaje', 'El área se ha creado exitosamente');
+        return redirect()->route('areas.index');
     }
 
     /**
@@ -132,12 +133,12 @@ class AreasController extends Controller
                          ->first();
             if($area){
                 $request->validate([
-                    'nombre'  => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                    'nombre'  => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'idtar'   => ['required', 'integer', 'exists:tipos_areas,idtar'],
-                    'activo' => ['required', 'boolean']
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
+                    'idtar'   => ['nullable', 'integer', 'exists:tipos_areas,idtar'],
+                    'activo' => ['nullable', 'boolean']
                 ]);
 
                 $actualizar = $area->update([
@@ -145,8 +146,8 @@ class AreasController extends Controller
                     'idtar'  => $request->idtar,
                     'activo' => $request->activo
                 ]);
-
-                return redirect()->route('areas.index')->with('mensaje', 'Se ha actualizado correctamente');
+                Session::flash('mensaje', 'El área se ha actualizado exitosamente');
+                return redirect()->route('areas.index');
             } else {
                 abort(404);
                 }
