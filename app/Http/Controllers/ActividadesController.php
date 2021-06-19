@@ -132,28 +132,23 @@ class ActividadesController extends Controller
             }else if($data == 2){
                 return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
                 <div class='modal fade' id='create$idac'>
-                <div class='modal-dialog'>
-                  <div class='modal-content'>
-                     <div class='modal-header'>        
-                       <h4>Razon del rechazo</h4>
-                    </div>
-                    <div class='modal-body'>
-                    $rechazo
-                    </div>
-                    <div class='modal-footer'>
-                    <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
-                    <input type='hidden' name='_token' value=". csrf_token() .">
-                    <div class='card-footer'>
-                    <input type='hidden' value=".$idac." name='idreac'>
-                    <input type='hidden' value='0' name='acuse'>
-                    <input type='hidden' value='' name='razon_rechazo'>
-                    <button type='submit' class='btn btn-primary'>Reactivar</button>    
-                </div>
-                </form>
-                    </div>
-                  </div>
-                </div>
-              </div>";
+                  <div class='modal-dialog'>
+                      <div class='modal-content'>
+                          <div class='modal-header'>        
+                               <h4>Razon del rechazo</h4>
+                          </div>
+                          <div class='modal-body'>
+                                 $rechazo
+                                 <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
+                                 <input type='hidden' name='_token' value=". csrf_token() .">
+                                 <input type='hidden' value=".$idac." name='idreac'>        
+                                 <button type='submit' class='btn btn-primary'>Reactivar</button>    
+                            </form>
+                          </div>
+                          
+                         </div>
+                     </div>
+               </div>";
             }
         }
 
@@ -209,8 +204,8 @@ class ActividadesController extends Controller
     
     public function updateRechazo(Request $c){
         $idreac = $c->idreac;
-        $acuse = $c->acuse;
-        $razon_rechazo = $c->razon_rechazo;
+        $acuse = 0;
+        $razon_rechazo = NULL;
         DB::UPDATE("UPDATE responsables_actividades SET  acuse ='$acuse', razon_rechazo = '$razon_rechazo'
         WHERE idreac = $idreac");
         return back()->with('message', 'El usuario se ha reactivado en la actividad');
