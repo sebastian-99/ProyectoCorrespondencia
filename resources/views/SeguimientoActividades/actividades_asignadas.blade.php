@@ -47,7 +47,7 @@
       </div>
 
       <div class="container">
-        <div class="accordion" id="accordionExample">
+        <!--<div class="accordion" id="accordionExample">
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingThree">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -55,7 +55,7 @@
               </button>
             </h2>
             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
+              <div class="accordion-body">-->
                 <div class="row">
                   <div class="col-sm-12 mb-3" id="asunto_a"></div>
                 </div>
@@ -64,8 +64,8 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-4 mb-3" id="importancia_a"></div>
-                  <div class="col-sm-4 mb-3" id="comunicado_a"></div>
-                  <div class="col-sm-4 mb-3" id="turno_a"></div>
+                  <div class="col-sm-5 mb-3" id="comunicado_a"></div>
+                  <div class="col-sm-3 mb-3" id="turno_a"></div>
                 </div>
                 <div class="row">
                   <div class="col-sm-6 mb-3" id="creador_a"></div>
@@ -75,10 +75,10 @@
                   <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
                   <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
                 </div>
-              </div>
+              <!--</div>
             </div>
-          </div>
-        </div>
+          </div>{{-- cierre de acordion--}}
+        </div>{{-- cierre de acordion-item --}}-->
         <div>
           <div id="sec1" hidden>
             <label>Ingresa tu contraseña para confirmación</label>
@@ -191,7 +191,7 @@
       $('#creador').val(data[0].creador);
       $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
-      $('#periodo').val(data[0].fecha_inicio);
+      $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
 
       //Guardar informacion de recibo de actividad
 

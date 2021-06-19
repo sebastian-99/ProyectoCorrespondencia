@@ -250,14 +250,22 @@
                         <tr>
                             <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo1}}</td>
-                            <td>{{$actividades->link1}}</td>
+                            <td>
+                            @if ($actividades->link1 != "Sin Link")
+                                <a href="{{$actividades->link1}}" target="_blank">{{$actividades->link1}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
                         @if ($actividades->archivo2 != "Sin archivo")
                         <tr>
                             <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo2}}</td>
-                            <td>{{$actividades->link2}}</td>
+                            <td>
+                            @if ($actividades->link2 != "Sin Link")
+                                <a href="{{$actividades->link2}}" target="_blank">{{$actividades->link2}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
 
@@ -265,7 +273,11 @@
                         <tr>
                             <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo1}}</td>
-                            <td>{{$actividades->link3}}</td>
+                            <td>
+                            @if ($actividades->link3 != "Sin Link")
+                                <a href="{{$actividades->link3}}" target="_blank">{{$actividades->link3}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
                     </tbody>
@@ -284,13 +296,13 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {{-- Aqui van los archivos que se van agregando al seguimiento --}}
                         </tbody>
                     </table>
-                    <a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfiles"><i class='fa fa-plus-circle'></i></a>Agregar archivos
                 </div>
             </div>
         </div>
@@ -311,7 +323,7 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
+                <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
@@ -333,18 +345,19 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modelHeading"></h4>
+                <h4 class="modal-title" id="modelHeading"></h4><p id="fecha_info"></p>
             </div>
             <div class="modal-body">
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                     <div class="card-body">
                         <div class="table-responsive">
-                            
-                            <table class="table table-striped table-bordered" id="tablaModal">
+                         <div id="det_seg"></div>   
+                            <table class="table table-sm table-striped table-bordered" id="tablaModal">
                                 <thead class="text-center">
                                     <tr style="background-color: #858FA3; color: #ffffff">
                                         <th scope="col">Nombre </th>
-                                        <th scope="col">Archivo</th>
+                                        <th scope="col">Detalle de evidencia</th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -398,11 +411,11 @@
         
             var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
             var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
-            
+            var dropButton = "<td><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></td>" ;
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+dropButton+"</tr>");
             $('#nuevo_f'+f).val(filename);
             $('#nuevo_d'+f).val(valdet_a);
             $('#archivo'+g).prop('hidden', true);
@@ -430,29 +443,31 @@
       $.get("../DetallesArchivos/" + id, function(data){
         $('#tablaModal>tbody>tr').remove();
        while ( i!=1+i){
-         if(data[i].nombre == null){
+         if(!data[i]){
            i=i+1;
            break;
          }else{
       
-       $('#modelHeading').html("Detalles Archivos");
+        $('#modelHeading').html("Detalles de tus archivos subidos");
+        $('#fecha_info').html("<p>" + '  ( ' + data[i].fecha + ' )' + "</p>");
+        $('#det_seg').html("<h4>" + data[0].detalle + "</h4><br>");
         $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
-      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:100%' disabled class='form-control form-control-sm'></td>"
+        var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:100%' disabled class='form-control form-control-sm'></td>"
         if(data[i].ruta == 'Sin archivo'){
         var texto = '<td>No hay archivos disponibles</td>';
         $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-       // $('#detalle'+i).val(data[i].detalle);
+        $('#detalle'+i).val(data[i].detalle);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
         }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-sm btn-danger' ><i class='fa fa-download'></i></a></td>"
         var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-      //  $('#detalle'+i).val(data[i].detalle);
+        $('#detalle'+i).val(data[i].detalle_a);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
