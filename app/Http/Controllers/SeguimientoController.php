@@ -312,62 +312,65 @@ class SeguimientoController extends Controller
 
     public function AgregarSeguimiento(Request $request)
     {
-        $idseac = $request->idseac;
-        $idreac_responsables_actividades = $request->idreac_responsables_actividades;
-        $idseac_seguimientos_actividades = $request->idseac_seguimientos_actividades;
-        $now = Carbon::now();
-        $detalle = $request->detalle;
-        $porcentaje = $request->porcentaje;
-        $estado = $request->estado;
-        $ruta = $request->ruta;
-        $detalle_a = $request->detalle_a;
-
-
-        $seg_ac = new seguimientosActividades;
-        $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
-        $seg_ac->fecha = $now;
-        $seg_ac->detalle = $request->detalle;
-        $seg_ac->porcentaje = $request->porcentaje;
-        $seg_ac->estado = $request->estado;
-
-        $seg_ac->save();
-
-        //Insertar archivos en tabla archivos_seguimientos
-
-        $max_size = (int) ini_get('upload_max_filesize') * 10240;
-        $user_id = Auth()->user()->idu;
-        $files = $request->file('ruta');
-
-        if ($request->hasFile('ruta')) {
-
-            foreach ($files as $file) {
-                if (Storage::putFileAs('/Seguimientos/', $file, $file->getClientOriginalName())) {
-
-                    archivosSeguimientos::create([
-                        'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
-                        'nombre' => $file->getClientOriginalName(),
-                        'ruta' => $file->getClientOriginalName(),
-                        'detalle_a' => $detalle_a,
-                    ]);
-                }
-            }
-        } else {
-            archivosSeguimientos::create([
-                'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
-                'nombre' => 'Sin archivo',
-                'ruta' => 'Sin archivo',
-                'detalle_a' => 'No hay detalles que mostrar',
-            ]);
-        }
-
-
-
-        $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
-
-        Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
-        return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
+        return DB::transaction( function() use($request){
+            
+             $idseac = $request->idseac;
+             $idreac_responsables_actividades = $request->idreac_responsables_actividades;
+             $idseac_seguimientos_actividades = $request->idseac_seguimientos_actividades;
+             $now = Carbon::now();
+             $detalle = $request->detalle;
+             $porcentaje = $request->porcentaje;
+             $estado = $request->estado;
+     
+         
+     
+             $seg_ac = new seguimientosActividades;
+             $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
+             $seg_ac->fecha = $now;
+             $seg_ac->detalle = $request->detalle;
+             $seg_ac->porcentaje = $request->porcentaje;
+             $seg_ac->estado = $request->estado;
+     
+             $seg_ac->save();
+     
+             //Insertar archivos en tabla archivos_seguimientos
+     
+             $max_size = (int) ini_get('upload_max_filesize') * 10240;
+             $user_id = Auth()->user()->idu;
+             $files = $request->file('ruta');
+     
+             if ($request->hasFile('ruta')) {
+     
+                 foreach ($files as $index=>$file) {
+                     if (Storage::putFileAs('/Seguimientos/', $file, $file->getClientOriginalName())) {
+     
+                         archivosSeguimientos::create([
+                             'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
+                             'nombre' => $file->getClientOriginalName(),
+                             'ruta' => $file->getClientOriginalName(),
+                             'detalle_a' => $request->detalle_a[$index],
+                         ]);
+                     }
+                 }
+             } else {
+                 archivosSeguimientos::create([
+                     'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
+                     'nombre' => 'Sin archivo',
+                     'ruta' => 'Sin archivo',
+                     'detalle_a' => 'No hay detalles que mostrar',
+                 ]);
+             }
+     
+     
+     
+             $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
+     
+             Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
+             return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
+         
+        });
+        
     }
-
     public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
         $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta

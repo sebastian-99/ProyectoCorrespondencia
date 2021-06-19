@@ -76,7 +76,7 @@
                     <div class="row">
                         <!--Inicio seccion izquierda-->
                         <!--Primera sección-->
-                    
+
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -107,11 +107,11 @@
                                 <div class="form-group">
                                     <strong>Actividad Creada por:</strong>
                                     <input type="text" class="form-control" id="actividadcreador" value ="{{$consul[0]->titulo. ' ' . $consul[0]->nombre . ' ' . $consul[0]->app . ' ' . $consul[0]->apm}}" readonly>
-                                    
+
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="row">
@@ -119,11 +119,11 @@
                                 <div class="form-group">
                                     <strong>Tipo de usuario - Detalle:</strong>
                                     <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="Administrador - Dirección de area de control escolar" readonly>
-                                    
+
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     </div>
                     <!--fin Segunda sección-->
@@ -206,14 +206,14 @@
                     <!--Novena sección-->
                     <div class="row">
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="arvhivos" name="archivos">
                                 @if($consul[0]->archivo1 != null)
                                     <label for="">{{$consul[0]->archivo1}}</label>
                                     <input type="hidden" name="archivosoculto" value="{{$consul[0]->archivo1}}">
                                 @endif
-                                             
+
                             </div>
                         </div>
                         <div class="col-xs-1 col-sm-1 col-md-1">
@@ -222,15 +222,15 @@
                             </div>
                         </div>
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                            
+                            <div class="form-group">
                                 <strong>Link de soportes:</strong>
                                 <input type="text" class="form-control" id="link" name="link"  value="{{($consul[0]->link1 == 'Sin Link') ? '' : $consul[0]->link1}}">
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     <div class="row" id="oculto">
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="archivos" name="archivos2">
                                 @if($consul[0]->archivo2 != null)
@@ -240,39 +240,39 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                            
+                            <div class="form-group">
                                 <strong>Link de soportes:</strong>
                                 <input type="text" class="form-control" id="link" name="link2" value="{{($consul[0]->link2 == 'Sin Link') ? '' : $consul[0]->link2}}">
                             </div>
                         </div>
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="archivos" name="archivos3">
                                 @if($consul[0]->archivo3 != null)
                                     <label for="">{{$consul[0]->archivo3}}</label>
                                     <input type="hidden" name="archivosoculto3" >
-                                @endif                   
+                                @endif
                             </div>
                         </div>
-                        
+
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                            
+                            <div class="form-group">
                                 <strong>Link de soportes:</strong>
                                 <input type="text" class="form-control" id="link" name="link3" value="{{($consul[0]->link3 == 'Sin Link') ? '' : $consul[0]->link3}}">
                             </div>
                         </div>
-                    
+
                     </div>
                     <!--Fin Novena sección-->
                 </div>
                 <div class="col-xs-1 col-sm-1 col-md-1 sep">
                     <span class="sepText">
-                                    
+
                                 </span>
-              
+
                   </div>
                     <!--Parte derecha-->
                     <div class="col-xs-6 col-sm-6 col-md-6">
@@ -285,7 +285,7 @@
                                     <select class="form-control" name="tipousuario[]" id="tipousuario" multiple="multiple" required>
                                     @foreach($tipous as $tu)
                                         <option selected value="{{$tu->idar}}">{{$tu->nombre}}</option>
-                                    @endforeach                    
+                                    @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
                                         @foreach($users as $tu)
                                             <option selected value="{{$tu->idu}}">{{$tu->usuario}}</option>
-                                        @endforeach 
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -341,15 +341,15 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Enviar</button>    
+                            <button type="submit" class="btn btn-primary">Enviar</button>
                         </div>
                     </div>
-                
+
             </div>
             </form>
         </div>
-                
-        
+
+
     </div>
 
 <script>
@@ -361,16 +361,16 @@
 
         suma = suma + 1;
         console.log(suma);
-        
+
         $("#oculto").append(`<div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <strong>Archivos soporte:</strong>
-                                <input type="file" class="form-control" id="archivos" name="archivos${suma}">                    
+                                <input type="file" class="form-control" id="archivos" name="archivos${suma}">
                             </div>
                         </div>
-                        
+
                         <div class="col-xs-11 col-sm-11 col-md-11">
-                            <div class="form-group">                            
+                            <div class="form-group">
                                 <strong>Link de soportes:</strong>
                                 <input type="text" class="form-control" id="link" name="link${suma}">
                             </div>
@@ -385,12 +385,12 @@
 
      $("#tipousuario").select2({
         closeOnSelect : false,
-        
+
       });
 
      $("#tipousuarioarea").select2({
         closeOnSelect : false,
-        
+
       });
 
 
@@ -406,12 +406,12 @@
             url : "{{route('ajax_tipousuarios')}}",
             success:function(data){
 
-               
-               
+
+
                 for(let i = data.length - 1; i >= 0; i--){
-                    
+
                     $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
-                    
+
                 }
 
             },error:function(data){
@@ -424,10 +424,10 @@
 
     });
 
-   
-    
-    
-    
+
+
+
+
 </script>
-    
+
 @endsection
