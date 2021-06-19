@@ -14,6 +14,7 @@
 
     function inicio() {
         document.getElementById('porcentaje').addEventListener('change', porcentajeAvance, false);
+        document.getElementById('porcentaje').addEventListener('mousemove', porcentajeAvance, false);
     }
 
     function porcentajeAvance() {
@@ -196,8 +197,11 @@
 
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="ruta[]" class="form-label">Seleccione Archivo</label>
-                            <input class="form-control form-control-sm" id="ruta[]" name="ruta[]" type="file" multiple>
+                            <label for="archivo" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
+                            <input class="form-control form-control-sm archivo" id="archivo0" name="ruta[]" type="file">
+                            <div id="nuevoInputfile">
+                                {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
+                            </div>
                         </div>
                     </div>
 
@@ -205,7 +209,10 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="detalle" class="form-label">Detalle Evidencia</label>
-                            <input type="text" class="form-control form-control-sm" id="detalle_a" name="detalle_a" placeholder="Detalle de la evidencia">
+                            <input type="text" class="form-control form-control-sm detalle_a" id="detalle_a0" name="detalle_a[]" placeholder="Detalle de la evidencia">
+                            <div id="nuevoInputdetalle">
+                                {{-- Aqui se van agregando más inputs para agregar un nuevo detalle del archivo --}}
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -220,8 +227,6 @@
     </div>
 
     <div class="col-sm-7">
-
-
         <div class="card">
             <div class="card-body">
                 <center>
@@ -268,6 +273,27 @@
 
             </div>
         </div>
+        <div class="card" id="evidencefiles" hidden>
+            <div class="card-body">
+                <div id="newfile">
+                    <center>
+                    <h4>Archivos del seguimiento</h4>
+                    </center><br>
+                    <table class="table table-responsive" id="tablefiles">
+                        <thead class="">
+                            <tr style="background-color: #607d8b; color: #ffffff">
+                                <th scope="col">Archivo</th>
+                                <th scope="col">Detalle evidencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- Aqui van los archivos que se van agregando al seguimiento --}}
+                        </tbody>
+                    </table>
+                    <a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfiles"><i class='fa fa-plus-circle'></i></a>Agregar archivos
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-sm-12">
         <div class="card">
@@ -285,7 +311,7 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,3,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
+                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
@@ -304,7 +330,7 @@
 
 <!-- Modal-->
 <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modelHeading"></h4>
@@ -335,9 +361,9 @@
         </div>
     </div>
 
-
-
     <script type="text/javascript">
+    var fname=null
+    var dname=null
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
@@ -359,7 +385,44 @@
                 $('#estado_p').prop('disabled', true);
             }
         }
- 
+    //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
+    var f = 1;
+    var g = 0;
+    $('body').on('click', '#addfile',function(){
+        var valruta = document.getElementById('archivo'+g).value;
+        var valdet_a = document.getElementById('detalle_a'+g).value;
+        dname = valdet_a;
+       
+        if(valruta != ''){
+            $('#evidencefiles').prop('hidden', false);
+        
+            var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
+            var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
+            
+            //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
+            var filename = valruta.replace(/^.*\\/, "");
+            fname = valruta;
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#nuevo_f'+f).val(filename);
+            $('#nuevo_d'+f).val(valdet_a);
+            $('#archivo'+g).prop('hidden', true);
+            $('#detalle_a'+g).prop('hidden', true);
+            
+            var newInputFile = "<input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'>" ;
+            var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
+
+            $('#nuevoInputfile').append(newInputFile);
+            $('#nuevoInputdetalle').append(newInputText);
+            
+            f=f+1;
+            g=g+1;           
+                                       
+        }else{
+             alert('Antes de agregar mas archivos, sube un archivo');
+        }
+    }); 
+
+ //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
      
