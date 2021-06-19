@@ -22,9 +22,7 @@
     <div class="col-sm-10">
     <a href="{{ route('Detalles', ['id'=>$id_actividad]) }}"><button class="btn btn-warning">Regresar a responsables</button></a>
         </div>
-    <div class="col-sm-2">
-        <a href="#" onclick="javascritp:window.self.close();"><button class="btn btn-danger">Cerrar</button></a>
-        </div>
+   
     </div>
     </div>
 

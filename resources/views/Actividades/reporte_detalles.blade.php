@@ -15,7 +15,11 @@
         <div class="col-sm-11">
           <h3>Responsables de la actividad</h3>
         </div>
-
+        @if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
         <div class="col-sm-2">
         <a href="{{route('pdf',['idac' => encrypt($idac)])}}" class="btn btn-primary" target="_blank" {{($boton->boton == 0) ? 'hidden' : ''}}>PDF</a>
         </div>

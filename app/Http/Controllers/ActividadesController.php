@@ -42,7 +42,7 @@ class ActividadesController extends Controller
 
         function btn($idac, $activo){
 
-            return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
 
         }
 
@@ -97,7 +97,7 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo, us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
         res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
@@ -130,8 +130,8 @@ class ActividadesController extends Controller
             }else if($data == 1){
                 return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
             }else if($data == 2){
-                return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create'>Ver</a>
-                <div class='modal fade' id='create'>
+                return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                <div class='modal fade' id='create$idac'>
                 <div class='modal-dialog'>
                   <div class='modal-content'>
                      <div class='modal-header'>        
@@ -213,7 +213,7 @@ class ActividadesController extends Controller
         $razon_rechazo = $c->razon_rechazo;
         DB::UPDATE("UPDATE responsables_actividades SET  acuse ='$acuse', razon_rechazo = '$razon_rechazo'
         WHERE idreac = $idreac");
-
+        return back()->with('message', 'El usuario se ha reactivado en la actividad');
     }
 
     public function pdf($idac){
@@ -705,11 +705,11 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }else{
-                return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }
