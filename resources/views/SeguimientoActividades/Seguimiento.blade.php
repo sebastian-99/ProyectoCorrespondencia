@@ -296,7 +296,7 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
-                                <th scope="col"></th>
+                                <!--<th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>-->
                             </tr>
                         </thead>
                         <tbody>
@@ -375,8 +375,9 @@
     </div>
 
     <script type="text/javascript">
-    var fname=null
-    var dname=null
+    var fname=null;
+    var dname=null;
+    
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
@@ -405,17 +406,17 @@
         var valruta = document.getElementById('archivo'+g).value;
         var valdet_a = document.getElementById('detalle_a'+g).value;
         dname = valdet_a;
+        
        
         if(valruta != ''){
             $('#evidencefiles').prop('hidden', false);
         
             var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
             var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
-            var dropButton = "<td><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></td>" ;
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+dropButton+"</tr>");
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
             $('#nuevo_f'+f).val(filename);
             $('#nuevo_d'+f).val(valdet_a);
             $('#archivo'+g).prop('hidden', true);
@@ -425,7 +426,7 @@
             var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
 
             $('#nuevoInputfile').append(newInputFile);
-            $('#nuevoInputdetalle').append(newInputText);
+            $('#nuevoInputdetalle').append(newInputText);          
             
             f=f+1;
             g=g+1;           
@@ -433,7 +434,21 @@
         }else{
              alert('Antes de agregar mas archivos, sube un archivo');
         }
-    }); 
+    });
+    //var h=0;
+    //var i =1;
+    //$('body').on('click', '#dropfile',function(){
+    //   alert('Estas seguro de que quieres eliminar este archivo?');
+    //   $('#nuevo_f'+i).remove();
+    // $('#nuevo_d'+i).remove();
+    // $('#dropfile'+i).remove();
+    // $('#archivo'+h).remove();
+    //    $('#detalle_a'+h).remove();
+    //    h=h+1;
+    //    i=i+1;
+    //});     
+
+    
 
  //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
