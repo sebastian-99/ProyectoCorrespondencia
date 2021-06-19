@@ -1,5 +1,14 @@
 @extends('layout.layout')
 @section('content')
+@section('header')
+    
+    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+    <script>
+      if (es) ZingGrid.registerLanguage(es, 'custom');
+    </script> 
+    
+@endsection
 <style type="text/css">
     html {
  box-sizing: border-box;
@@ -285,6 +294,9 @@
                                     <select class="form-control" name="tipousuario[]" id="tipousuario" multiple="multiple" required>
                                     @foreach($tipous as $tu)
                                         <option selected value="{{$tu->idar}}">{{$tu->nombre}}</option>
+                                    @endforeach
+                                    @foreach ($no_seleccionar as $no)
+                                        <option value="{{$no->idar}}">{{$no->nombre}}</option>
                                     @endforeach                    
                                     </select>
                                 </div>
@@ -297,6 +309,9 @@
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
                                         @foreach($users as $tu)
                                             <option selected value="{{$tu->idu}}">{{$tu->usuario}}</option>
+                                        @endforeach 
+                                        @foreach($no_seleccionar_user as $no)
+                                            <option value="{{$no->idu}}">{{$no->usuario}}</option>
                                         @endforeach 
                                     </select>
                                 </div>
@@ -343,7 +358,37 @@
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Enviar</button>    
                         </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                               
+                                    
+                                            <zing-grid
+                                            lang="custom" 
+                                            caption='Reporte de oficios' 
+                                            sort 
+                                            search 
+                                            pager 
+                                            page-size='10' 
+                                            page-size-options='1,2,3,4,5,10' 
+                                            layout='row' 
+                                            viewport-stop
+                                            theme='android'
+                                            id='zing-grid'
+                                            filter
+                                            data = "{{$json}}">
+                                            <zg-colgroup>
+                                                <zg-column index='personas' header='Nombre' type='text'></zg-column>
+                                                <zg-column index='areas' header='Área' type='text'></zg-column>
+                                            </zg-colgroup>
+                                          </zing-grid>
+                                        
+                                
+                            </div>
+                        </div>
                     </div>
+                    
                 
             </div>
             </form>
@@ -394,10 +439,10 @@
       });
 
 
-    $("#tipousuario").on('change',function(e){
+    $("#tipousuario").on('click',function(e){
         let tipo_u = $("#tipousuario").val();
         //console.log(tipo_u);
-        $("#tipousuarioarea").empty();
+        //$("#tipousuarioarea").empty();
         $.ajax({
             type:'GET',
             data:{
@@ -410,7 +455,10 @@
                
                 for(let i = data.length - 1; i >= 0; i--){
                     
-                    $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
+                    /* if(data[i].idu == 3){
+                    } */
+                        alert(data[i].idu);
+                    //$("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
                     
                 }
 
