@@ -18,6 +18,24 @@
       </div>
     </div>
   </div>
+  @if (Session::has('message'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Contraseña correcta.</strong> {{Session::get('message')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+  @if (Session::has('rechazo'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>¡Alerta!</strong> {{Session::get('rechazo')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+  @if (Session::has('message2'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error!</strong> {{Session::get('message2')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
   <div class="card-body">
     <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
       <zg-colgroup>
@@ -45,7 +63,7 @@
         <h5 class="modal-title" id="exampleModalLabel">Actividad para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-
+      
       <div class="container">
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
@@ -89,7 +107,7 @@
         </div>
         <div id="sec2" hidden>
           <label>Describe la situación del porque rechazas la actividad</label>
-          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" rows="5" required></Textarea>
+          <Textarea class="form-control" name="rechazo" id="razon_r" value="{{old('rechazo')}}" rows="5" required></Textarea>
         </div>
 
       </div>
@@ -100,7 +118,7 @@
         <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-primary" id="guardar" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="submit" class="btn btn-outline-primary" id="guardar" data-dismiss="modal"></button>
       </div>
     </div>
   </div>
@@ -230,7 +248,8 @@
             },
             method: 'POST',
             success: function(data) {
-              //location.reload()
+              location.reload();
+              //alert('no funciona');
             },
             error: function(data) {
               console.log(data);
