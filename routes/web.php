@@ -13,16 +13,10 @@ use App\Http\Controllers\TiposActividadesController;
 
 use App\Http\Controllers\EncryptController;
 
-Auth::routes();
-/*
- * Cambiar Auth::routes() por rutas a solo usar,
- * ya que la ruta /register permite inserción de usuarios.
- */
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::redirect('/', 'login');
+Auth::routes();
+
 
 Route::get('/panel', [PanelController::class,'panel']);
 Route::get('/panel/get-actividades-hoy/{idu}', [PanelController::class,'getActividadesHoy']);

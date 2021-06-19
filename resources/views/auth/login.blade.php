@@ -3,16 +3,20 @@
 <form method="POST" action="{{ route('login') }}">
 	@csrf
 	<div class="form-group">
-		<input type="text" class="form-control rounded-left"  class="@error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" required>
+		<input type="text" class="form-control rounded-left"  class="@error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" >
 	@error('email')
-    <div class="alert alert-danger">{{ $message }}</div>
-	@enderror
-	<div class="form-group d-flex">
-		<input type="password" class="form-control rounded-left" class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password" required>
-	@error('password')
-    <div class="alert alert-danger">{{ $message }}</div>
+    <div class="alert-danger">{{ $message }}</div>
 	@enderror
 	</div>
+
+	<div class="form-group">
+		<input type="password" class="form-control rounded-left"  class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password" >
+	@error('password')
+    <div class="alert-danger">{{ $message }}</div>
+	@enderror
+	</div>
+	
+
 	<div class="form-group d-md-flex">
 	<div>
 		<a href="{{ route('password.request') }}">{{ "¿Olvidaste tu contraseña?" }}</a>

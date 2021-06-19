@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\UserResetPassword;
 
 class User extends Authenticatable
 {
@@ -54,6 +55,11 @@ class User extends Authenticatable
     public function responsables()
     {
         return $this->hasMany(ResponsablesActividades::class,'idu_users', $this->primary_key);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new UserResetPassword($token));
     }
 
 }
