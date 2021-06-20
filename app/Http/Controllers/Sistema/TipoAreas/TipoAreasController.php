@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sistema\TipoAreas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Actividades;
+use App\Models\Areas;
 use App\Models\TiposActividades;
 use App\Models\User;
 use Carbon\Carbon;
@@ -33,9 +34,11 @@ class TipoAreasController extends Controller
         );
         $actividades = $this->estadisticasDeActividades($actividades);
         if(!$actividades) return;
+        $area = Areas::where('idtac_tipos_actividades',$tiposActividades->idtac)
+            ->with('promedio');
         return response()->json([
             'area' => $tiposActividades,
-            'promedio' => $tiposActividades->promedio,
+            'promedio' => $area->promedio,
             'actividades' => $actividades,
         ]);
     }
