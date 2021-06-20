@@ -197,7 +197,13 @@
               <li class="nav-item">
                 <a href="{{ url('admin/actividades/dashboard')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Gr&aacute;ficas seguimientos</p>
+                  <p>Gr&aacute;ficas por departameto</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/dashboard/'.auth()->user()->idu)}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Mis Estadísticas</p>
                 </a>
               </li>
             </ul>
