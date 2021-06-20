@@ -129,9 +129,11 @@ class SeguimientoController extends Controller
             $cons = DB::UPDATE("UPDATE responsables_actividades SET 
                 acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
-            return response()->json('aceptado');
+            Session::flash('message', 'Ahora podrás darle seguimiento a esta actividad');
+            //return response()->json('aceptado');
         } else {
-            return 'Contraseña incorrecta';
+            Session::flash('message2', 'Contraseña incorrecta, favor de verificar que la contraseña este escrita correctamente');
+            //return 'Contraseña incorrecta';
         }
     }
 
@@ -144,6 +146,10 @@ class SeguimientoController extends Controller
         $rechazar = DB::UPDATE("UPDATE responsables_actividades SET 
                 acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
+        Session::flash('rechazo', 'Usted ha rechazado la actividad, por lo que no se ha bloqueado la actividad, para desbloquear la actividad deberá ponerse en contacto con el creador de la actividad');
+            //return response()->json('aceptado');
+        
+        
         return response()->json('aceptado');
     }
 
@@ -367,7 +373,7 @@ class SeguimientoController extends Controller
     }
     public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
-        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta
+        $query = DB::SELECT("SELECT res.idarseg, res.nombre, res.detalle_a, res.ruta, seg.detalle, seg.fecha
         FROM archivos_seguimientos AS res
         INNER JOIN seguimientos_actividades AS seg ON seg.idseac = res.idseac_seguimientos_actividades
         WHERE res.idseac_seguimientos_actividades = $idarc");

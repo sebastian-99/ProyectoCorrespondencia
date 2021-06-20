@@ -13,16 +13,10 @@ use App\Http\Controllers\TiposActividadesController;
 
 use App\Http\Controllers\EncryptController;
 
-Auth::routes();
-/*
- * Cambiar Auth::routes() por rutas a solo usar,
- * ya que la ruta /register permite inserción de usuarios.
- */
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::redirect('/', 'login');
+Auth::routes();
+
 
 Route::get('/panel', [PanelController::class,'panel']);
 Route::get('/panel/get-actividades-hoy/{idu}', [PanelController::class,'getActividadesHoy']);
@@ -58,6 +52,8 @@ Route::get('reporte_actividades', [ActividadesController::class,'reporte_activid
 Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
 Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
 Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
+Route::get('quitar_ajax', [ActividadesController::class,'quitar_ajax'])->name('quitar_ajax');
+Route::get('quitar_ajax2', [ActividadesController::class,'quitar_ajax2'])->name('quitar_ajax2');
 Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
 Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
 Route::post('updateRechazo', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');

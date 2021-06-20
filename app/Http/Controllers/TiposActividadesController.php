@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TiposActividades;
+use Session;
 
 class TiposActividadesController extends Controller
 {
@@ -59,7 +60,10 @@ class TiposActividadesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'nombre' => ['required', 'string', 'max:60']
+            'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                                í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
+                                Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"]
         ]);
 
         $guardar = TiposActividades::query()
@@ -67,8 +71,8 @@ class TiposActividadesController extends Controller
                 'nombre' => $request->nombre
             ]);
 
-
-        return redirect()->route('tipos-actividades.index')->with('success', 'Se ha guardado correctamente');
+        Session::flash('mensaje', 'El tipo de área se ha creado exitosamente');
+        return redirect()->route('tipos-actividades.index');
     }
 
     /**
@@ -120,19 +124,19 @@ class TiposActividadesController extends Controller
                                             ->first();
             if ($tipo_actividad) {
                 $request->validate([
-                    'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
+                    'nombre' => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
                                 í,î,ï,ł,ń,ò,ó,ô,ö,õ,ø,ù,ú,û,ü,ų,ū,ÿ,ý,ż,ź,ñ,ç,č,š,ž,À,Á,Â,Ä,Ã,Å,
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
-                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3', 'max:70'],
-                    'activo' => ['required', 'boolean']
+                                Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
+                    'activo' => ['nullable', 'boolean']
                 ]);
 
                 $actualizar = $tipo_actividad->update([
                     'nombre' => $request->nombre,
                     'activo' => $request->activo
                 ]);
-
-                return redirect()->route('tipos-actividades.index')->with('mensaje', 'Se ha actualizado correctamente');
+                Session::flash('mensaje', 'El tipo de área se ha actualizado exitosamente');
+                return redirect()->route('tipos-actividades.index');
 
             } else {
                 abort(404);

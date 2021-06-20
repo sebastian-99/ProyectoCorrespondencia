@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
+use Session;
 
 class UsersController extends Controller
 {
@@ -133,7 +134,8 @@ class UsersController extends Controller
             'idar_areas' => $request->idar_areas
         ]);
 
-        return redirect()->route('users.index')->with('mensaje', 'Se ha guardado correctamente');
+        Session::flash('mensaje', 'El usuario se ha creado exitosamente');
+        return redirect()->route('users.index');
     }
 
     /**
@@ -247,8 +249,8 @@ class UsersController extends Controller
                         'activo'   => $request->activo
                     ]);
                 }
-
-                return redirect()->route('users.index')->with('mensaje', 'Se ha actualizado correctamente');
+                Session::flash('mensaje', 'El usuario se ha actualizado exitosamente');
+                return redirect()->route('users.index');
             } else {
                 abort(404);
             }
