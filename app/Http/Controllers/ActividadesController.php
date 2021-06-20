@@ -444,9 +444,12 @@ class ActividadesController extends Controller
         ->join('users', 'users.idu', '=', 'actividades.idu_users')
         ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
         ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=' , 'users.idtu_tipos_usuarios')
+        ->join('tipos_actividades', 'tipos_actividades.idtac', '=' , 'actividades.idtac_tipos_actividades')
         ->select(
             'actividades.idac',
+            'tipos_actividades.nombre as nombre_actividad',
             'actividades.asunto',
+            'actividades.idtac_tipos_actividades',
             'actividades.descripcion',
             'actividades.fecha_creacion',
             'actividades.turno',
@@ -471,7 +474,7 @@ class ActividadesController extends Controller
             'actividades.link3',
         )
         ->get();
-        return $consul;
+        
         $personas = DB::SELECT("SELECT CONCAT(us.titulo, ' ' , us.nombre, ' ', us.app, ' ', us.apm) AS nombre, ar.nombre AS nombre_area
                                 FROM responsables_actividades AS re
                                 INNER JOIN actividades AS ac ON ac.idac = re.idac_actividades
@@ -541,9 +544,10 @@ class ActividadesController extends Controller
         AND ar.idar IN (" . implode(',', $array4) . ")");
 
         $tipo_actividad = DB::table('tipos_actividades')
+        ->whereNotIn('idtac',[$consul[0]->idtac_tipos_actividades])
         ->orderBy('nombre','Asc')
         ->get();
-
+        
 
         return view('Actividades.modificar_actividad')
         ->with('consul', $consul)
@@ -553,6 +557,37 @@ class ActividadesController extends Controller
         ->with('json', $json)
         ->with('no_seleccionar', $no_seleccionar)
         ->with('no_seleccionar_user', $no_seleccionar_user);
+    }
+
+
+    public function quitar_ajax(Request $request){
+
+        $val = $request->val;
+        $id = $request->id;
+
+        $consul = DB::SELECT("SELECT * FROM responsables_actividades AS re
+                        WHERE re.idu_users = $val
+                        AND re.idac_actividades = $id");
+
+
+        return response()->json($consul);
+    }
+
+    public function quitar_ajax2(Request $request){
+
+        $val = $request->val;
+        $id = $request->id;
+
+        $consul = DB::SELECT("SELECT COUNT(re.acuse) AS contar FROM users AS us
+        INNER JOIN responsables_actividades AS re ON re.idu_users = us.idu
+        WHERE re.acuse = 1
+        AND re.idac_actividades = $id
+        AND us.idar_areas = $val");
+
+        $consul2 = DB::SELECT("SELECT us.idu FROM users AS us
+        INNER JOIN areas AS ar ON ar. idar = us.idar_areas
+        WHERE ar.idar = $val");
+        return response()->json([$consul, $consul2]);
     }
 
     public function update_actividades(Request $r){
@@ -660,14 +695,20 @@ class ActividadesController extends Controller
         link1 = '$link', link2 = '$link2', link3 = '$link3'
         WHERE idac = $id");
 
-
-        /* $consul = DB::table('actividades')->max('idac');
+        
 
         for($i=0; $i < count($tipousuarioarea); $i++){
-
-            DB::INSERT("INSERT INTO participantes (idac ,id_users) VALUES ($consul,'$tipousuarioarea[$i]')");
-        } */
-	
+    
+            $prueba = DB::SELECT("SELECT idu_users FROM responsables_actividades WHERE idac_actividades= $id AND idu_users = $tipousuarioarea[$i]");
+            
+            if(count($prueba) == 0){
+                DB::INSERT("INSERT INTO responsables_actividades(idu_users, idac_actividades) VALUES ($tipousuarioarea[$i] , $id)");
+            }
+            
+            
+        }
+        
+        
 	if (Auth()->User()->idtu_tipos_usuarios == 3) {
             return redirect()->route('reporte_actividades');
         }else{
@@ -688,8 +729,8 @@ class ActividadesController extends Controller
         }else{
             DB::UPDATE("UPDATE actividades SET activo = '1' WHERE idac = $id");
         }
-
-        return redirect()->route('reporte_actividades');
+        
+        return redirect()->route('actividades_creadas',['id'=>encrypt(Auth()->User()->idu)]);
     }
 
     public function actividades_creadas($id)
@@ -725,11 +766,11 @@ class ActividadesController extends Controller
 
             if($activo == 1){
                 return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }else{
                 return "<a target='_blank' class='btn btn-success btn-sm' onclick=window.open(this.href,this.target,width=600,height=800); href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activar</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }
         }
@@ -782,7 +823,7 @@ class ActividadesController extends Controller
 
 
         $json = json_encode($array);
-
+        
         return view ('Actividades.actividadescreadas', compact('json'));
 
     }
