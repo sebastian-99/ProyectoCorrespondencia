@@ -12,6 +12,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
 
 use App\Http\Controllers\EncryptController;
+use App\Http\Controllers\Sistema\TipoAreas\TipoAreasController;
 
 Auth::routes();
 /*
@@ -80,4 +81,19 @@ Route::get('hello',function(){
     return view('hello');
 });*/
 Route::get('hello', [EncryptController::class,'index']);
+
+Route::get('/dashboard/{user}',[TipoAreasController::class,'dashboard']);
+Route::get('/dashboard/{user}/get-actividades-ṕor-mes/{tiposActividades}/{year}/{mes}',[TipoAreasController::class,'getActividadesṔorMes']);
+Route::get('/dashboard/{user}/get-actividades-ṕor-rango-de-fechas/{tiposActividades}/{inicio}/{fin}',[TipoAreasController::class,'getActividadesṔorRangoDeFechas']);
+Route::get('/dashboard/{user}/get-actividades-totales/{tiposActividades}',[TipoAreasController::class,'getActividadesTotales']);
+Route::get('/dashboard/{user}/seguimiento/{idac}', [TipoAreasController::class,'seguimiento']);
+
+Route::get('/dashboard/{user}/get-actividades-completadas-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesCompletadasPorMes']);
+Route::get('/dashboard/{user}/get-actividades-en-proceso-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesEnProcesoPorMes']);
+Route::get('/dashboard/{user}/get-actividades-sin-entregar-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesSinEntregarPorMes']);
+
+Route::get('/dashboard/{user}/get-actividades-completadas/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesCompletadas']);
+Route::get('/dashboard/{user}/get-actividades-en-proceso/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesEnProceso']);
+Route::get('/dashboard/{user}/get-actividades-sin-entregar/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesSinEntregar']);
+
 

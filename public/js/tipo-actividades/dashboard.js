@@ -45,31 +45,6 @@ $('document').ready(()=>{
     const selectRango = $('#rango_inicial')
     const btnFiltrarBusquedas = $('#filtrar_busquedas')
     const inputYear = $('#year')
-    selectTipoArea.change(()=>{
-
-        if (!selectTipoArea.val()){
-            resetearAreas()
-            return
-        }
-        selectArea.removeAttr('hidden')
-        area.procesarPeticionDeSelect(selectArea)
-
-        $.ajax({
-            type : 'GET',
-            url : `/admin/getAreasPorTipoArea/${selectTipoArea.val()}`,
-            success : response =>{
-                selectArea.empty()
-                selectArea.append('<option value="">-Direccion de carrera-</option>')
-                response.area.forEach(area =>{
-                    const template = `<option value="${area.idar}" > ${area.nombre}</option>`
-                    selectArea.append(template)
-                })
-            },
-            error: error =>{
-            },
-        })
-    })
-
 
     selectArea.change(()=>{
         if (!selectArea.val()){
@@ -131,7 +106,7 @@ $('document').ready(()=>{
     btnFiltrarBusquedas.click(()=>{
 
         //const areaAdministrativa = selectArea.val()
-        const direccionDeCarrera = selectArea.val()
+        const tipoActividad = selectArea.val()
         const rangoInicial = Number(selectRango.val())
         const year = inputYear.val()
 
@@ -141,13 +116,14 @@ $('document').ready(()=>{
                     const mes = Number(moment().month(rangoInicial).format('MM'))
                     $.ajax({
                         type: 'GET',
-                        url:  `/admin/get-actividades-ṕor-mes/${direccionDeCarrera}/${year}/${mes}`,
+                        url:  `/dashboard/${user_id}/get-actividades-ṕor-mes/${tipoActividad}/${year}/${mes}`,
                         success: data =>{
                             const gaugeChart ={
                                 columns: [[data.area.nombre, data.promedio]],
                                 type: 'gauge',
                                 onclick: (data, i) => {
-                                    const route = `/admin/get-actividades-totales/${$('#select_area').val()}`
+                                    const route = `/dashboard/${user_id}/get-actividades-totales/${$('#select_area').val()}`
+                                    console.log(route);
                                     imprimirTablaConAjax(route)
                                 },
                             }
@@ -176,7 +152,7 @@ $('document').ready(()=>{
                     const diaFinallDeLaSemana = moment(year).set({week: rangoInicial, day: 6}).format('DD-MM-YYYY')
                     $.ajax({
                         type: 'GET',
-                        url:  `/admin/get-actividades-ṕor-rango-de-fechas/${direccionDeCarrera}/${diaInicialDeLaSemana}/${diaFinallDeLaSemana}`,
+                        url:  `/dashboard/${user_id}/get-actividades-ṕor-rango-de-fechas/${tipoActividad}/${diaInicialDeLaSemana}/${diaFinallDeLaSemana}`,
                         success: data =>{
                             area.generarGreficoGauge([[data.area.nombre, data.promedio]])
                             area.setGraficoPie([
@@ -232,7 +208,7 @@ $('document').ready(()=>{
         }else{
             route= `${route}/${Number(moment().month(select).format('MM'))}`
         }
-        route = `/admin/${route}/${year}`
+        route = `/dashboard/${user_id}/${route}/${year}`
 
         imprimirTablaConAjax(route)
     }
@@ -291,14 +267,14 @@ $('document').ready(()=>{
         //selectArea.attr('hidden',true)
         selectArea.empty()
         //radiosDeRangoDeFechas.attr('hidden',true)
-        selectRango.attr('hidden',true)
+        //selectRango.attr('hidden',true)
         selectRango.empty()
         //btnFiltrarBusquedas.attr('hidden',true)
     }
     function resetearCarreras(){
         //selectArea.attr('hidden',true)
         selectArea.empty()
-        //radiosDeRangoDeFechas.attr('hidden',true)
+        radiosDeRangoDeFechas.attr('hidden',true)
         //selectRango.attr('hidden',true)
         selectRango.empty()
         //btnFiltrarBusquedas.attr('hidden',true)
