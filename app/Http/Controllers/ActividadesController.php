@@ -787,21 +787,12 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-<<<<<<< HEAD
-                return "<a  class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
-            }else{
-                return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-=======
                 return "<a target='_blank' class='btn btn-success btn-sm' href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-danger mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }else{
                 return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-primary mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activar</a>
->>>>>>> a52f590968475b731c98db54465492129d292cfe
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }
         }
