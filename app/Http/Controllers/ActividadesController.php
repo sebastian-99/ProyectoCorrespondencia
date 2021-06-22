@@ -19,7 +19,7 @@ class ActividadesController extends Controller
         $us_id = \Auth()->User()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        CONCAT(DATE_FORMAT(ac.fecha_inicio, '%d-%m-%Y'), ' al ', DATE_FORMAT(ac.fecha_fin, '%d-%m-%Y')) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
         ac.status
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -100,11 +100,11 @@ class ActividadesController extends Controller
 
             array_push($array, array('idac' => $c->idac,
                                     'turno' => $c->turno,
-                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
-                                    'periodo' => $c->periodo,
+                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
                                     'importancia' => $c->importancia,
                                     'nombre' => $c->nombre,
                                     'activo' => $c->activo,
@@ -793,7 +793,7 @@ class ActividadesController extends Controller
         $id_u = decrypt($id);
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        CONCAT(DATE_FORMAT(ac.fecha_inicio, '%d-%m-%Y'), ' al ', DATE_FORMAT(ac.fecha_fin,'%d-%m-%Y')) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
         porcentaje(ac.idac, $id_u) AS porcentaje, ac.status
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -885,11 +885,11 @@ class ActividadesController extends Controller
 
             array_push($array, array('idac' => $c->idac,
                                     'turno' => $c->turno,
-                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
-                                    'periodo' => $c->periodo,
+                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
                                     'importancia' => $c->importancia,
                                     'nombre' => $c->nombre,
                                     'activo' => $c->activo,

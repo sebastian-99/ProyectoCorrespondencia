@@ -40,16 +40,16 @@
     <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
-        <zg-column index='fecha_creacion' header='Fecha de creacion' width="100" type='text'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
+        <zg-column index='descripcion' header='Descripción' width="200" type='text'></zg-column>
+        <zg-column index='fecha_creacion' header='Fecha de creación' width="200" type='text'></zg-column>
         <zg-column index='creador' header='Creador' width="200" type='text'></zg-column>
-        <zg-column index='periodo' header='Periodo' width="150" type='text'></zg-column>
-        <zg-column index='importancia' header='Importancia' width="100" type='text'></zg-column>
-        <zg-column index='area' header='Àrea' width="100" type='text'></zg-column>
-        <zg-column index='recibo' header='Atendido por' width="100" type='text'></zg-column>
-        <zg-column index='porcentaje' header='Avance individual' width="100" type='text'></zg-column>
-
-        <zg-column align="center" filter="disabled" index='operaciones' header='Operaciones' width="100" type='text'></zg-column>
+        <zg-column index='periodo' header='Periodo' width="220" type='text'></zg-column>
+        <zg-column index='importancia' header='Importancia' width="130" type='text'></zg-column>
+        <zg-column index='area' header='Área' width="170" type='text'></zg-column>
+        <zg-column index='porcentaje' header='Avance individual' width="180" type='text'></zg-column>
+        <zg-column index='estado' header='Estado' width="210" type='text'></zg-column>
+        <zg-column align="center" filter="disabled" index='operaciones' header='Operaciones' width="150" type='text'></zg-column>
       </zg-colgroup>
     </zing-grid>
   </div>

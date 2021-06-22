@@ -58,7 +58,7 @@
                     <zg-column index='descripcion' header='Descripcion'  width='200'></zg-column>
                     <zg-column index='fecha_creacion' header='Fecha creación' width="200" type='text'></zg-column>
                     <zg-column index='creador' header='Creador' width="200" type='text'></zg-column>
-                    <zg-column index='periodo' header='Periodo' width="210" type='text'></zg-column>
+                    <zg-column index='periodo' header='Periodo' width="220" type='text'></zg-column>
                     <zg-column index='importancia' header='Importancia' width="130" type='text'></zg-column>
                     <zg-column index='nombre' header='Area responsable' width="170" type='text'></zg-column>
                     <zg-column index='C' header='Avance' width="120" type='text'></zg-column>
