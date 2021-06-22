@@ -184,11 +184,12 @@ class SeguimientoController extends Controller
         $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3,
+        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, ta.nombre as tipo_act,
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
 
 
@@ -279,21 +280,29 @@ class SeguimientoController extends Controller
 
         function detalles($idseac, $idarseg)
         {
-            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . "><i class='nav-icon fas fa-trash'></i></a>";
+            return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' hidden><i class='nav-icon fas fa-trash'></i></a></div>";
+        }
+
+        
+        foreach ($seguimientos as $seg_ac) {
+           $turno = 1;
         }
 
         foreach ($seguimientos as $seg_ac) {
 
+            
             array_push($array_sa, array(
 
-                'idseac' => $seg_ac->idseac,
+                'idseac' => $turno,
                 'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('D MMMM h:mm a'),
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
                 'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg),
             ));
+            $turno = $turno +1;
         }
 
         $json_sa = json_encode($array_sa);
