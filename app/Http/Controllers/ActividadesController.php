@@ -42,7 +42,7 @@ class ActividadesController extends Controller
 
         function btn($idac, $activo){
 
-            return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
 
         }
 
@@ -98,12 +98,13 @@ class ActividadesController extends Controller
     public function Detalles($idac){
         $idac = decrypt($idac);
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
+        res.acuse, res.idreac, seg.estado, seg.porcentaje AS porcentaje, razon_rechazo, max(idseac)
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
-        JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
+        LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
+        
         GROUP BY idu_users");
 
         $boton = DB::table('responsables_actividades as res')
@@ -237,14 +238,16 @@ class ActividadesController extends Controller
 
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, us.nombre, arch.ruta, act.asunto, arch.ruta
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre, 
+        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
+        INNER JOIN areas AS ar ON us.idar_areas = ar.idar
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac");
+            GROUP BY idseac desc");
 
         $array = array();
 
@@ -260,17 +263,23 @@ class ActividadesController extends Controller
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
                 }
             }
+        $turno = 0;
         foreach($consult as $c){
-
+         
+          $turno = $turno+1;
+           }
+        foreach($consult as $c){
+         
          // $data = recorrer($c->porcentaje);
-
-          array_push($array, array('idseac' => $c->idseac,
+           
+          array_push($array, array('idseac' => $turno,
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
                              'estado' => $c->estado,
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
+                             $turno = $turno-1;
         }
         $json = json_encode($array);
 
@@ -438,20 +447,6 @@ class ActividadesController extends Controller
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
               
             
-            //---------------------------llenado de otras tablas---------------
-
-
-              $idreac_responsables_actividades = DB::table('responsables_actividades')->max('idreac');
-             
-              DB::INSERT("INSERT INTO seguimientos_actividades (idreac_responsables_actividades , fecha , detalle,estado) 
-              VALUES ('$idreac_responsables_actividades','$fechacreacion','sin detalles','pendiente')");
-
-
-              $idseac_seguimientos_actividades = DB::table('seguimientos_actividades')->max('idseac');
-
-              DB::INSERT("INSERT INTO archivos_seguimientos (idseac_seguimientos_actividades, nombre, ruta, detalle_a)
-              VALUES ('$idseac_seguimientos_actividades','Sin archivo','Sin archivo','Sin archivo')");
-                  //---------------------------fin del llenado----------------------
         }
 
           
@@ -700,11 +695,11 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-                return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<a  class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }else{
-                return "<a target='_blank' class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
                 <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
             }

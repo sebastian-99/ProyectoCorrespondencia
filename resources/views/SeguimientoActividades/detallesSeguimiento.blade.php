@@ -15,7 +15,7 @@
     <div class="col-sm-11">
     @foreach ($consult as $c)
     @if ($loop->first)
-    <h3>Reporte de actividades de: {{$c->nombre}} </h3>
+    <h3>Reporte de actividades de: ``{{$c->nombre}}´´ Area: ``{{$c->nombre_ar}}´´ </h3>
     @endif
     @endforeach
     </div>
@@ -42,12 +42,12 @@
                 filter
                 data = "{{$json}}">
                 <zg-colgroup>
-                    <zg-column index='idseac' header='No. Seguimeinto' width="170" type='text'></zg-column>
-                    <zg-column index='fecha' header='Fecha de avance' width="170" type='text'></zg-column>
-                    <zg-column index='detalle' header='Detalles' width="500" type='text'></zg-column>
-                    <zg-column index='estado' header='Estado' width="100" type='text'></zg-column>
-                    <zg-column index='porcentaje' filter ="disabled" header='Porcentaje' width="130" type='text'></zg-column>
-                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="150" type='text'></zg-column>
+                    <zg-column index='idseac' header='No. Seguimeinto' width="" type='text'></zg-column>
+                    <zg-column index='fecha' header='Fecha de avance' width="" type='text'></zg-column>
+                    <zg-column index='detalle' header='Detalles' width="600" type='text'></zg-column>
+                    <zg-column index='estado' header='Estado' width="" type='text'></zg-column>
+                    <zg-column index='porcentaje' filter ="disabled" header='Porcentaje' width="" type='text'></zg-column>
+                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="" type='text'></zg-column>
                 </zg-colgroup>
               </zing-grid>
 
@@ -69,6 +69,7 @@
                       <h4>
                         <div >Actividad: {{$c->asunto}} </div>
                          <div> Usuario: {{$c->nombre}} </div> 
+                         <div> Area: {{$c->nombre_ar}} </div> 
                     @endif
                       </h4>
    
@@ -78,6 +79,7 @@
                   <thead class="text-center">
                      <tr style="background-color: #858FA3; color: #ffffff">
                        <th scope="col">Nombre </th>
+                       <th scope="col">Detalles</th>
                        <th scope="col">Archivo</th>
                      </tr>
                   </thead>
@@ -107,39 +109,21 @@
       var i = 0;
       $.get("../DetallesArchivos/" + id, function(data){
         $('#tablaModal>tbody>tr').remove();
-       while ( i!=1+i){
-         if(data[i].nombre == null){
-           i=i+1;
-           break;
-         }else{
+for (i=0;i<=data.length-1;i++){
 
        $('#modelHeading').html("Detalles Archivos");
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
+        var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"'  style='width:400px' disabled></td>"
 
-        if(data[i].ruta == 'Sin archivo'){
-        var texto = '<td>No hay archivos disponibles</td>';
-        $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
+        var ruta_a = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+        var archivo = "{{asset(('archivos/Seguimientos'))}}/"+data[i].ruta;
+        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta_a+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-        $('#ruta'+i).val(ruta);
+        $('#detalle'+i).val(data[i].detalle_a);
+      
         $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
-        }
-
-        else 
-
-        if(data[i].ruta != '' ){
-        var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
-        var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
-        $('#nombre'+i).val(data[i].nombre);
-        $('#ruta'+i).val(ruta);
-        $('#ruta'+i).attr('href',archivo);
-        $('#ruta'+i).text(texto);
-        }
-         i=i+1;
-         }
-        }
+}
       })
 
     });

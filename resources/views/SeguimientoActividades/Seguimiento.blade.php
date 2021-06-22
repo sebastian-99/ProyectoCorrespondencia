@@ -194,14 +194,17 @@
                         </div>
                     </div>
 
-
+                    
                     <div class="col-sm-12">
                         <div class="form-group">
+                       
                             <label for="archivo" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
                             <input class="form-control form-control-sm archivo" id="archivo0" name="ruta[]" type="file">
+                         
                             <div id="nuevoInputfile">
                                 {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
                             </div>
+                     
                         </div>
                     </div>
 
@@ -220,7 +223,7 @@
                         <button class="btn btn-sm btn-success">Guardar seguimiento</button>
 
                     </div>
-
+                    </table>
                 </form>
             </div>
         </div>
@@ -270,6 +273,8 @@
                         @endif
                     </tbody>
                 </table>
+          
+
 
             </div>
         </div>
@@ -284,6 +289,7 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -364,6 +370,11 @@
     <script type="text/javascript">
     var fname=null
     var dname=null
+
+    
+    //////////////////////////
+
+    /////////////////////////////
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
@@ -398,31 +409,31 @@
         
             var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
             var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
-            
+          
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+boton+"</tr>");
             $('#nuevo_f'+f).val(filename);
             $('#nuevo_d'+f).val(valdet_a);
-            $('#archivo'+g).prop('hidden', true);
-            $('#detalle_a'+g).prop('hidden', true);
-            
-            var newInputFile = "<input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'>" ;
+            $('#archivo'+g).prop('hidden', false);
+            $('#detalle_a'+g).prop('hidden', false);
+           
+            var newInputFile = "<td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td>" ;
             var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
 
             $('#nuevoInputfile').append(newInputFile);
+        
             $('#nuevoInputdetalle').append(newInputText);
-            
+           
             f=f+1;
-            g=g+1;           
-                                       
+            g=g+1;                       
         }else{
              alert('Antes de agregar mas archivos, sube un archivo');
         }
     }); 
-
- //--------------------------------------------------------------------------------------------------------------
+   
+    //----------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
      

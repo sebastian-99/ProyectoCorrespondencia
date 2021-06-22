@@ -41,13 +41,12 @@
                 filter
                 data = "{{$json}}">
                 <zg-colgroup>
-                    <zg-column index='nombre_us' header='Nombre atendio' width="250" type='text'></zg-column>
-                    <zg-column index='nombre_ar' header='Cargo' width="150" type='text'></zg-column>
-                    <zg-column index='porcentaje' filter ="disabled" header='Avance' width="120" type='text'></zg-column>
-                    <zg-column index='estado' header='Estado' width="120" type='text'></zg-column>
-                    <zg-column index='acuse' filter ="disabled" header='Acuse' width="100" type='text'></zg-column>
-                    @csrf
-                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="200" type='text'></zg-column>
+                    <zg-column index='nombre_us' header='Nombre atendio' width="" type='text'></zg-column>
+                    <zg-column index='nombre_ar' header='Cargo' width="" type='text'></zg-column>
+                    <zg-column index='porcentaje' filter ="disabled" header='Avance' width="" type='text'></zg-column>
+                    <zg-column index='estado' header='Estado' width="" type='text'></zg-column>
+                    <zg-column index='acuse' filter ="disabled" header='Acuse' width="" type='text'></zg-column>  
+                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="" type='text'></zg-column>
                 </zg-colgroup>
               </zing-grid>
 
