@@ -5,14 +5,14 @@
 	<div class="form-group">
 		<input type="text" class="form-control rounded-left"  class="@error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" >
 	@error('email')
-    <div class="alert-danger">{{ $message }}</div>
+    <div class="form-text text-danger">{{ $message }}</div>
 	@enderror
 	</div>
 
 	<div class="form-group">
 		<input type="password" class="form-control rounded-left"  class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password" >
 	@error('password')
-    <div class="alert-danger">{{ $message }}</div>
+    <div class="form-text text-danger">{{ $message }}</div>
 	@enderror
 	</div>
 	

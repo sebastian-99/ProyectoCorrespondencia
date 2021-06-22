@@ -45,7 +45,7 @@ class UserResetPassword extends Notification
     {
         return (new MailMessage)
                     ->subject('Restablecer Contraseña')
-                    ->greeting('Hola, que tal:'. " " . $notifiable->nombre)
+                    ->greeting('Hola, que tal:'. " " . $notifiable->titulo. " " . $notifiable->nombre. " " . $notifiable->app. " " . $notifiable->apm)
                     ->line('Haz clic en el siguiente botón para restablecer tu contraseña.')
                     ->action('Restablecer contraseña', url('/password/reset/'.  $this->token ))
                     ->line(Lang::get('Este enlace de restablecimiento de contraseña caducará en :count minutos.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
