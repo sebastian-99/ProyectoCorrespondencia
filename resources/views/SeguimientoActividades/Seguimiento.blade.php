@@ -144,10 +144,10 @@
                     </div>
                     <p class="bd-lead"></p>
                     <p class="bd-lead">
-                        <center><h5>Individual: {{$max_ai->avance_i}}%</h5></center>
+                        <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}} %"></center>
                     </p>
                     <p class="bd-lead">
-                        <center><h5>Total: {{$max_ai->avance_i}}%</h5></center>
+                        <center><h5>Total: {{$general}}%</h5></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="col-sm-2">
 
-                        <button class="btn btn-sm btn-success">Guardar seguimiento</button>
+                        <button type="submit" class="btn btn-sm btn-success" onclick="this.hidden=true;">Guardar seguimiento</button>
 
                     </div>
                     </table>
@@ -326,7 +326,7 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
-                                <!--<th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>-->
+                                <th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -411,6 +411,12 @@
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
+            var vp = document.getElementById("porc_ind").value;
+            if(verif_p < vp){
+                alert('El porcentaje no puede ser menos que el ultimo anterior');
+                $('#porc').html(vp);
+                $('#porcentaje').val(vp);
+            }
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
@@ -464,18 +470,18 @@
              alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
         }
     });
-    //var h=0;
-    //var i =1;
-    //$('body').on('click', '#dropfile',function(){
-    //   alert('Estas seguro de que quieres eliminar este archivo?');
-    //   $('#nuevo_f'+i).remove();
-    // $('#nuevo_d'+i).remove();
-    // $('#dropfile'+i).remove();
-    // $('#archivo'+h).remove();
-    //    $('#detalle_a'+h).remove();
-    //    h=h+1;
-    //    i=i+1;
-    //});     
+    var h=0;
+    var i =1;
+    $('body').on('click', '#dropfile',function(){
+       alert('Estas seguro de que quieres eliminar este archivo?');
+       $('#nuevo_f'+i).remove();
+     $('#nuevo_d'+i).remove();
+     $('#dropfile'+i).remove();
+     $('#archivo'+h).remove();
+        $('#detalle_a'+h).remove();
+        h=h+1;
+        i=i+1;
+    });     
 
     
 
