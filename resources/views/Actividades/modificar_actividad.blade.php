@@ -1,13 +1,13 @@
 @extends('layout.layout')
 @section('content')
 @section('header')
-    
-    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
-    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+
+    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
     <script>
       if (es) ZingGrid.registerLanguage(es, 'custom');
-    </script> 
-    
+    </script>
+
 @endsection
 <style type="text/css">
     html {
@@ -128,7 +128,7 @@
                                 <div class="form-group">
                                     <strong>Tipo de usuario - Detalle:</strong>
                                     <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$consul[0]->tipo_usuario . ' - ' . $consul[0]->nombre_area}}" readonly>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -298,7 +298,7 @@
                                     @endforeach
                                     @foreach ($no_seleccionar as $no)
                                         <option value="{{$no->idar}}">{{$no->nombre}}</option>
-                                    @endforeach                    
+                                    @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -310,10 +310,10 @@
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
                                         @foreach($users as $tu)
                                             <option selected value="{{$tu->idu}}">{{$tu->usuario}}</option>
-                                        @endforeach 
+                                        @endforeach
                                         @foreach($no_seleccionar_user as $no)
                                             <option value="{{$no->idu}}">{{$no->usuario}}</option>
-                                        @endforeach 
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -363,17 +363,17 @@
                         <br>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                               
-                                    
+
+
                                             <zing-grid
-                                            lang="custom" 
-                                            caption='Personas que ya estan dando seguimiento' 
-                                            sort 
-                                            search 
-                                            pager 
-                                            page-size='10' 
-                                            page-size-options='1,2,3,4,5,10' 
-                                            layout='row' 
+                                            lang="custom"
+                                            caption='Personas que ya estan dando seguimiento'
+                                            sort
+                                            search
+                                            pager
+                                            page-size='10'
+                                            page-size-options='1,2,3,4,5,10'
+                                            layout='row'
                                             viewport-stop
                                             theme='android'
                                             id='zing-grid'
@@ -384,13 +384,13 @@
                                                 <zg-column index='areas' header='Área' type='text'></zg-column>
                                             </zg-colgroup>
                                           </zing-grid>
-                                        
-                                
+
+
                             </div>
                         </div>
                     </div>
-                    
-                
+
+
             </div>
             </form>
         </div>
@@ -441,8 +441,8 @@
 
 
     $("#tipousuario").on('select2:select',function(e){
-        
-        
+
+
         let tipo_u = $("#tipousuario").val();
         $(this).attr("disabled",true);
         $("#tipousuarioarea").attr("disabled",true);
@@ -459,10 +459,10 @@
                 $("#tipousuarioarea").attr("disabled",false);
 
                 for(let i = data.length - 1; i >= 0; i--){
-                    
-                  
+
+
                     $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change');
-                            
+
                 }
 
                     },error:function(data){
@@ -470,18 +470,18 @@
                         console.log(data);
 
                     }
-                }); 
-                        
+                });
+
 
 
     });
 
 
-    
+
 
 
     $("#tipousuarioarea").on("select2:unselecting", function(e){
-    
+
         //console.log(e.params.args.data.id);
         e.preventDefault();
         $(this).attr("disabled", true);
@@ -497,17 +497,17 @@
             },
             url:"{{route('quitar_ajax')}}",
             success:function(data){
-                
+
 
                 if(data[0].acuse == 1){
                     alert("Tiene una actividad");
                 }else{
                     $(`#tipousuarioarea option[value='${data[0].idu_users}']`).remove();
-                    
+
                 }
                 $("#tipousuarioarea").attr("disabled", false);
-                
-            
+
+
             },
             error:function(error){
                 console.log(error);
@@ -515,8 +515,8 @@
         });
 
     });
-   
-    
+
+
     $("#tipousuario").on("select2:unselecting",function(e){
 
         e.preventDefault();
@@ -542,7 +542,7 @@
                     $(`#tipousuario option[value='${val}']`).remove();
 
                     console.log(data[1].length);
-                    
+
                     if(data[1].length > 0){
 
                         for(let i = data[1].length - 1; i >= 0; i-- ){
@@ -550,11 +550,11 @@
                             $(`#tipousuarioarea option[value='${data[1][i].idu}']`).remove();
                         }
                     }
-                   
+
                 }
                 $("#tipousuario").attr("disabled", false);
                 $("#tipousuarioarea").attr("disabled", false);
-                
+
             },
             error(error){
                 console.log(error);
@@ -562,7 +562,7 @@
         });
 
     });
-    
+
 </script>
 
 @endsection
