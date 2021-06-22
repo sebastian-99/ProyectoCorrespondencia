@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Sistema\TipoAreas;
 use App\Http\Controllers\Controller;
 use App\Models\Actividades;
 use App\Models\Areas;
+use App\Models\ResponsablesActividades;
+use App\Models\SeguimientosActividades;
 use App\Models\TiposActividades;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class TipoAreasController extends Controller
 {
     public function seguimiento($idac){
-        return redirect()->route('detallesSeguimiento',[ 'idac' => encrypt($idac) ]);
+        return redirect()->route('Seguimiento',[ 'idac' => encrypt($idac) ]);
     }
     public function dashboard(User $user)
     {
@@ -32,13 +34,18 @@ class TipoAreasController extends Controller
             $mes->startOfMonth()->format('Y-m-d'),
             $mes->endOfMonth()->format('Y-m-d')
         );
+        $totalActividadesPorMes = $actividades->count();
         $actividades = $this->estadisticasDeActividades($actividades);
         if(!$actividades) return;
-        $area = Areas::where('idtac_tipos_actividades',$tiposActividades->idtac)
-            ->with('promedio');
+
+        $actividadesTotales = ResponsablesActividades::where('idu_users',$user->idu)
+            ->count();
+
+        $promedio = ($totalActividadesPorMes / $actividadesTotales)*100;
+
         return response()->json([
             'area' => $tiposActividades,
-            'promedio' => $area->promedio,
+            'promedio' => number_format( $promedio, 2),
             'actividades' => $actividades,
         ]);
     }
@@ -46,12 +53,18 @@ class TipoAreasController extends Controller
     public function getActividadesṔorRangoDeFechas(User $user, TiposActividades $tiposActividades, $inicio, $fin)
     {
         $actividades = $this->getActividadesṔorRango($user, $tiposActividades, $inicio, $fin);
-
+        $totalActividadesPorRango = $actividades->count();
         $actividades = $this->estadisticasDeActividades($actividades);
+
         if(!$actividades) return;
+        $actividadesTotales = ResponsablesActividades::where('idu_users',$user->idu)
+            ->count();
+
+        $promedio = ($totalActividadesPorRango / $actividadesTotales)*100;
+
         return response()->json([
             'area' => $tiposActividades,
-            'promedio' => $tiposActividades->promedio,
+            'promedio' => number_format( $promedio, 2),
             'actividades' => $actividades,
         ]);
     }
@@ -62,22 +75,22 @@ class TipoAreasController extends Controller
         $fin = new Carbon($fin);
         return Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->join('users','users.idu','actividades.idu_users')
-            ->where('users.idu', $user->idu)
-            ->where('tipos_actividades.idtac', $tiposActividades->idtac )
+            ->join('responsables_actividades','responsables_actividades.idac_actividades','actividades.idac')
             ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
-            ->where('actividades.idtac_tipos_actividades',$tiposActividades->idac)
+            ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
+            ->where('responsables_actividades.idu_users',$user->idu)
             ->get();
     }
 
-    private function estadisticasDeActividades($tipoActividades)
+    private function estadisticasDeActividades($actividades)
     {
-        if( !is_array($tipoActividades) && empty($tipoActividades) ) return;
+        if( !is_array($actividades) && empty($actividades) ) return;
         $completadas = null;
         $enProceso = null;
         $incompletas = null;
-        foreach($tipoActividades AS $tipoActividad){
-            $actividad = Actividades::find($tipoActividad->idtac_tipos_actividades);
+        foreach($actividades AS $actividad){
+            $actividad = Actividades::find($actividad->idac);
             $completadas += $actividad->total_completadas;
             $enProceso += $actividad->total_en_proceso;
             $incompletas += $actividad->total_incompletas;
@@ -127,13 +140,16 @@ class TipoAreasController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
 
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
+                $collection->seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->first();
 
                 return $collection;
 
@@ -165,13 +181,16 @@ class TipoAreasController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
 
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
+                $collection->seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->first();
 
                 return $collection;
 
@@ -202,14 +221,17 @@ class TipoAreasController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
 
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
-
+                $collection->seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->first();
                 return $collection;
 
             });
@@ -240,13 +262,16 @@ class TipoAreasController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
 
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
+                $collection->seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->first();
 
                 return $collection;
 
