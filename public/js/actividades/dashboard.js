@@ -298,7 +298,7 @@ $('document').ready(()=>{
     function resetearCarreras(){
         //selectArea.attr('hidden',true)
         selectArea.empty()
-        radiosDeRangoDeFechas.attr('hidden',true)
+        //radiosDeRangoDeFechas.attr('hidden',true)
         //selectRango.attr('hidden',true)
         selectRango.empty()
         //btnFiltrarBusquedas.attr('hidden',true)

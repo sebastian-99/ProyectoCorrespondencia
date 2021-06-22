@@ -34,17 +34,18 @@
 <input type="hidden" value="{{$actividades->idac}}" name="idac">
 
 <div class="row">
-    <div class="col-sm-6">
-        <h3 class="display-6">Detalle del turno: {{$actividades->turno}}</h3>
-    </div>
-    <div class="col-sm-6">
-        <h3 class="display-6">Comunicado: {{$actividades->comunicado}}</h3>
-    </div>
+    
 </div>
 
 <div class="card">
     <div class="card-body">
         <div class="row">
+        <div class="col-sm-6">
+        <h4 class="">Detalle del turno: {{$actividades->turno}}</h4>
+    </div>
+    <div class="col-sm-6">
+        <h4 class="">Comunicado: {{$actividades->comunicado}}</h4>
+    </div>
             <div class="col-sm-12">
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
@@ -58,26 +59,24 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-8">
 
         <div class="card">
             <div class="card-body">
-
+            <center>
+                    <h4>Detalles de la actividad</h4>
+                </center><br>
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
-                            <th scope="col">Turno</th>
-                            <th scope="col">Creación</th>
-                            <th scope="col">Creado por </th>
-                            <th scope="col">Periodo atención </th>
-
-                            <th scope="col">Área Responsable</th>
+                            <th scope="col" style='width:200px'>Fecha de creación</th>
+                            <th scope="col" style='width:250px'>Actividad creada por </th>
+                            <th scope="col" style='width:190px'>Periodo de atención </th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{{$actividades->turno}}</th>
 
                             <td> {{ Carbon\Carbon::parse($actividades->fecha_creacion)->locale('es')->isoFormat('D MMMM h:mm a') }}</td>
                             <td>{{$actividades->creador}} </td>
@@ -85,18 +84,16 @@
                                 {{ Carbon\Carbon::parse($actividades->fecha_inicio)->locale('es')->isoFormat('D MMMM') }} al
                                 {{ Carbon\Carbon::parse($actividades->fecha_fin)->locale('es')->isoFormat('D MMMM') }}
                             </td>
-                            <td>{{$actividades->nombre_area}}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table><br>
 
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
                             <th scope="col">Atendido por</th>
-                            <th scope="col">Nombre atendió</th>
-                            <th scope="col">Cargo</th>
-                            <th scope="col">Acuse Recibido</th>
+                            <th scope="col" style='width:250px'>Nombre atendió</th>
+                            <th scope="col" style='width:150px'>Cargo</th>
                             <th scope="col">Nivel atención </th>
 
                         </tr>
@@ -106,8 +103,28 @@
                             <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
                             <td>{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</td>
                             <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
-                            <td>Si</td>
                             <td>{{$actividades->importancia}}</td>
+
+                        </tr>
+                    </tbody>
+                </table><br>
+                <table class="table table-responsive table-striped">
+                    <thead class="">
+                        <tr style="background-color: #607d8b; color: #ffffff">
+                        <th scope="col" style='width:214px'>Área Responsable</th>
+                        <th scope="col" style='width:214px'>Acuse de Recibido</th>
+                        <th scope="col" style='width:214px'>Tipo de actividad </th>
+                            
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>{{$actividades->nombre_area}}</td>
+                            <td>Si</td>
+                            <td>{{$actividades->tipo_act}}</td>
+                            
+                           
 
                         </tr>
                     </tbody>
@@ -116,16 +133,21 @@
 
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
-                        <h3 class="bd-title">Avance de tu actividad</h3>
+                    <center>
+                    <h4>Avance de la actividad</h4>
+                </center><br>
                     </div>
                     <p class="bd-lead"></p>
                     <p class="bd-lead">
-                        <h6>{{$max_ai->avance_i}}%</h6>
+                        <center><h5>Individual: {{$max_ai->avance_i}}%</h5></center>
+                    </p>
+                    <p class="bd-lead">
+                        <center><h5>Total: {{$max_ai->avance_i}}%</h5></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -152,6 +174,9 @@
                             <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
                         </div>
                     </div>-->
+                    <center>
+                    <h4>Dar un nuevo seguimiento</h4>
+                </center><br>
                     <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
 
                     <div class="col-sm-12">
@@ -235,12 +260,12 @@
                 <center>
                     <h4>Archivos de la actividad</h4>
                 </center><br>
-                <table class="table table-responsive">
+                <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
                             <th scope="col">Archivo</th>
-                            <th scope="col">Nombre archivo</th>
-                            <th scope="col">Detalle (link)</th>
+                            <th scope="col" style='width:250px'>Nombre del archivo</th>
+                            <th scope="col" style='width:250px'>Detalle (link)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -253,14 +278,22 @@
                         <tr>
                             <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo1}}</td>
-                            <td>{{$actividades->link1}}</td>
+                            <td>
+                            @if ($actividades->link1 != "Sin Link")
+                                <a href="{{$actividades->link1}}" target="_blank">{{$actividades->link1}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
                         @if ($actividades->archivo2 != "Sin archivo")
                         <tr>
                             <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo2}}</td>
-                            <td>{{$actividades->link2}}</td>
+                            <td>
+                            @if ($actividades->link2 != "Sin Link")
+                                <a href="{{$actividades->link2}}" target="_blank">{{$actividades->link2}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
 
@@ -268,7 +301,11 @@
                         <tr>
                             <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
                             <td>{{$actividades->archivo1}}</td>
-                            <td>{{$actividades->link3}}</td>
+                            <td>
+                            @if ($actividades->link3 != "Sin Link")
+                                <a href="{{$actividades->link3}}" target="_blank">{{$actividades->link3}}</a>
+                            @endif    
+                            </td>
                         </tr>
                         @endif
                     </tbody>
@@ -289,14 +326,13 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
-                                <th scope="col">Acciones</th>
+                                <!--<th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>-->
                             </tr>
                         </thead>
                         <tbody>
                             {{-- Aqui van los archivos que se van agregando al seguimiento --}}
                         </tbody>
                     </table>
-                    <a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success" id="addfiles"><i class='fa fa-plus-circle'></i></a>Agregar archivos
                 </div>
             </div>
         </div>
@@ -317,9 +353,9 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
+                <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
-                        <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
+                        <zg-column index='idseac' header='No. Seguimiento' width="" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
                         <zg-column index='estado' header='Status' width="200" type='text'></zg-column>
@@ -339,18 +375,19 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modelHeading"></h4>
+                <h4 class="modal-title" id="modelHeading"></h4><p id="fecha_info"></p>
             </div>
             <div class="modal-body">
                 <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                     <div class="card-body">
                         <div class="table-responsive">
-                            
-                            <table class="table table-striped table-bordered" id="tablaModal">
+                         <div id="det_seg"></div>   
+                            <table class="table table-sm table-striped table-bordered" id="tablaModal">
                                 <thead class="text-center">
                                     <tr style="background-color: #858FA3; color: #ffffff">
                                         <th scope="col">Nombre </th>
-                                        <th scope="col">Archivo</th>
+                                        <th scope="col">Detalle de evidencia</th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -368,13 +405,9 @@
     </div>
 
     <script type="text/javascript">
-    var fname=null
-    var dname=null
-
+    var fname=null;
+    var dname=null;
     
-    //////////////////////////
-
-    /////////////////////////////
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
@@ -403,13 +436,13 @@
         var valruta = document.getElementById('archivo'+g).value;
         var valdet_a = document.getElementById('detalle_a'+g).value;
         dname = valdet_a;
+        
        
-        if(valruta != ''){
+        if(valruta != '' && valdet_a != ''){
             $('#evidencefiles').prop('hidden', false);
         
             var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
             var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
-          
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
@@ -423,17 +456,30 @@
             var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
 
             $('#nuevoInputfile').append(newInputFile);
-        
-            $('#nuevoInputdetalle').append(newInputText);
-           
+            $('#nuevoInputdetalle').append(newInputText);          
+            
             f=f+1;
             g=g+1;                       
         }else{
-             alert('Antes de agregar mas archivos, sube un archivo');
+             alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
         }
-    }); 
-   
-    //----------------------------------------------------------------------------------------------
+    });
+    //var h=0;
+    //var i =1;
+    //$('body').on('click', '#dropfile',function(){
+    //   alert('Estas seguro de que quieres eliminar este archivo?');
+    //   $('#nuevo_f'+i).remove();
+    // $('#nuevo_d'+i).remove();
+    // $('#dropfile'+i).remove();
+    // $('#archivo'+h).remove();
+    //    $('#detalle_a'+h).remove();
+    //    h=h+1;
+    //    i=i+1;
+    //});     
+
+    
+
+ //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
      
@@ -441,29 +487,31 @@
       $.get("../DetallesArchivos/" + id, function(data){
         $('#tablaModal>tbody>tr').remove();
        while ( i!=1+i){
-         if(data[i].nombre == null){
+         if(!data[i]){
            i=i+1;
            break;
          }else{
       
-       $('#modelHeading').html("Detalles Archivos");
+        $('#modelHeading').html("Detalles de tus archivos subidos");
+        $('#fecha_info').html("<p>" + '  ( ' + data[i].fecha + ' )' + "</p>");
+        $('#det_seg').html("<h4>" + data[0].detalle + "</h4><br>");
         $('#ajaxModel').modal('show');
-        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:400px' disabled></td>"
-      //  var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:400px' disabled></td>"
+        var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:100%' disabled class='form-control form-control-sm'></td>"
+        var detalle = "<td><input id='detalle"+i+"' name='detalle"+i+"' style='width:100%' disabled class='form-control form-control-sm'></td>"
         if(data[i].ruta == 'Sin archivo'){
         var texto = '<td>No hay archivos disponibles</td>';
         $('#tablaModal>tbody').append("<tr>"+nombre+texto+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-       // $('#detalle'+i).val(data[i].detalle);
+        $('#detalle'+i).val(data[i].detalle);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);
         }else if(data[i].ruta != '' ){
-          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-danger' ><i class='fa fa-file'></i></a></td>"
+          var ruta = "<td><a download id='ruta"+i+"' name='ruta"+i+"'class='btn btn-sm btn-danger' ><i class='fa fa-download'></i></a></td>"
         var archivo = '{{asset(('archivos/Seguimientos'))}}/'+data[i].ruta;
-        $('#tablaModal>tbody').append("<tr>"+nombre+ruta+"</tr>");
+        $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
-      //  $('#detalle'+i).val(data[i].detalle);
+        $('#detalle'+i).val(data[i].detalle_a);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
         $('#ruta'+i).text(texto);

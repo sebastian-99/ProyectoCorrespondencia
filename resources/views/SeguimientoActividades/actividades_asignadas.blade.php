@@ -18,20 +18,38 @@
       </div>
     </div>
   </div>
+  @if (Session::has('message'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Contraseña correcta.</strong> {{Session::get('message')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+  @if (Session::has('rechazo'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>¡Alerta!</strong> {{Session::get('rechazo')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+  @if (Session::has('message2'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error!</strong> {{Session::get('message2')}}.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
   <div class="card-body">
     <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
       <zg-colgroup>
-        <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
-        <zg-column index='fecha_creacion' header='Fecha de creacion' width="100" type='text'></zg-column>
+        <zg-column index='turno' header='Turno' width="" type='text'></zg-column>
+        <zg-column index='fecha_creacion' header='Fecha de creacion' width="" type='text'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
         <zg-column index='creador' header='Creador' width="200" type='text'></zg-column>
-        <zg-column index='periodo' header='Periodo' width="150" type='text'></zg-column>
-        <zg-column index='importancia' header='Importancia' width="100" type='text'></zg-column>
-        <zg-column index='area' header='Àrea' width="100" type='text'></zg-column>
-        <zg-column index='recibo' header='Atendido por' width="100" type='text'></zg-column>
-        <zg-column index='porcentaje' header='Avance individual' width="100" type='text'></zg-column>
+        <zg-column index='periodo' header='Periodo' width="" type='text'></zg-column>
+        <zg-column index='importancia' header='Importancia' width="" type='text'></zg-column>
+        <zg-column index='area' header='Àrea' width="" type='text'></zg-column>
+        <zg-column index='recibo' header='Atendido por' width="" type='text'></zg-column>
+        <zg-column index='porcentaje' header='Avance individual' width="" type='text'></zg-column>
 
-        <zg-column align="center" filter="disabled" index='operaciones' header='Operaciones' width="100" type='text'></zg-column>
+        <zg-column align="center" filter="disabled" index='operaciones' header='Operaciones' width="" type='text'></zg-column>
       </zg-colgroup>
     </zing-grid>
   </div>
@@ -45,9 +63,9 @@
         <h5 class="modal-title" id="exampleModalLabel">Actividad para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-
+      
       <div class="container">
-        <div class="accordion" id="accordionExample">
+        <!--<div class="accordion" id="accordionExample">
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingThree">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -55,7 +73,7 @@
               </button>
             </h2>
             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
+              <div class="accordion-body">-->
                 <div class="row">
                   <div class="col-sm-12 mb-3" id="asunto_a"></div>
                 </div>
@@ -64,8 +82,8 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-4 mb-3" id="importancia_a"></div>
-                  <div class="col-sm-4 mb-3" id="comunicado_a"></div>
-                  <div class="col-sm-4 mb-3" id="turno_a"></div>
+                  <div class="col-sm-5 mb-3" id="comunicado_a"></div>
+                  <div class="col-sm-3 mb-3" id="turno_a"></div>
                 </div>
                 <div class="row">
                   <div class="col-sm-6 mb-3" id="creador_a"></div>
@@ -75,10 +93,10 @@
                   <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
                   <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
                 </div>
-              </div>
+              <!--</div>
             </div>
-          </div>
-        </div>
+          </div>{{-- cierre de acordion--}}
+        </div>{{-- cierre de acordion-item --}}-->
         <div>
           <div id="sec1" hidden>
             <label>Ingresa tu contraseña para confirmación</label>
@@ -89,7 +107,7 @@
         </div>
         <div id="sec2" hidden>
           <label>Describe la situación del porque rechazas la actividad</label>
-          <Textarea class="form-control" name="rechazo" id="razon_r" name="razon_r" rows="5" required></Textarea>
+          <Textarea class="form-control" name="rechazo" id="razon_r" value="{{old('rechazo')}}" rows="5" required></Textarea>
         </div>
 
       </div>
@@ -100,7 +118,7 @@
         <button type="button" class="btn btn-secondary" id="rechazar">Rechazar actividad</button>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-primary" id="guardar" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="submit" class="btn btn-outline-primary" id="guardar" data-dismiss="modal"></button>
       </div>
     </div>
   </div>
@@ -191,7 +209,7 @@
       $('#creador').val(data[0].creador);
       $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
-      $('#periodo').val(data[0].fecha_inicio);
+      $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
 
       //Guardar informacion de recibo de actividad
 
@@ -230,7 +248,8 @@
             },
             method: 'POST',
             success: function(data) {
-              //location.reload()
+              location.reload();
+              //alert('no funciona');
             },
             error: function(data) {
               console.log(data);
