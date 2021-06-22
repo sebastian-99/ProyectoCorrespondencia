@@ -34,17 +34,18 @@
 <input type="hidden" value="{{$actividades->idac}}" name="idac">
 
 <div class="row">
-    <div class="col-sm-6">
-        <h3 class="display-6">Detalle del turno: {{$actividades->turno}}</h3>
-    </div>
-    <div class="col-sm-6">
-        <h3 class="display-6">Comunicado: {{$actividades->comunicado}}</h3>
-    </div>
+    
 </div>
 
 <div class="card">
     <div class="card-body">
         <div class="row">
+        <div class="col-sm-6">
+        <h4 class="">Detalle del turno: {{$actividades->turno}}</h4>
+    </div>
+    <div class="col-sm-6">
+        <h4 class="">Comunicado: {{$actividades->comunicado}}</h4>
+    </div>
             <div class="col-sm-12">
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
@@ -58,26 +59,24 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-8">
 
         <div class="card">
             <div class="card-body">
-
+            <center>
+                    <h4>Detalles de la actividad</h4>
+                </center><br>
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
-                            <th scope="col">Turno</th>
-                            <th scope="col">Creación</th>
-                            <th scope="col">Creado por </th>
-                            <th scope="col">Periodo atención </th>
-
-                            <th scope="col">Área Responsable</th>
+                            <th scope="col" style='width:200px'>Fecha de creación</th>
+                            <th scope="col" style='width:250px'>Actividad creada por </th>
+                            <th scope="col" style='width:190px'>Periodo de atención </th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{{$actividades->turno}}</th>
 
                             <td> {{ Carbon\Carbon::parse($actividades->fecha_creacion)->locale('es')->isoFormat('D MMMM h:mm a') }}</td>
                             <td>{{$actividades->creador}} </td>
@@ -85,18 +84,16 @@
                                 {{ Carbon\Carbon::parse($actividades->fecha_inicio)->locale('es')->isoFormat('D MMMM') }} al
                                 {{ Carbon\Carbon::parse($actividades->fecha_fin)->locale('es')->isoFormat('D MMMM') }}
                             </td>
-                            <td>{{$actividades->nombre_area}}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table><br>
 
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
                             <th scope="col">Atendido por</th>
-                            <th scope="col">Nombre atendió</th>
-                            <th scope="col">Cargo</th>
-                            <th scope="col">Acuse Recibido</th>
+                            <th scope="col" style='width:250px'>Nombre atendió</th>
+                            <th scope="col" style='width:150px'>Cargo</th>
                             <th scope="col">Nivel atención </th>
 
                         </tr>
@@ -106,8 +103,28 @@
                             <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
                             <td>{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</td>
                             <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
-                            <td>Si</td>
                             <td>{{$actividades->importancia}}</td>
+
+                        </tr>
+                    </tbody>
+                </table><br>
+                <table class="table table-responsive table-striped">
+                    <thead class="">
+                        <tr style="background-color: #607d8b; color: #ffffff">
+                        <th scope="col" style='width:214px'>Área Responsable</th>
+                        <th scope="col" style='width:214px'>Acuse de Recibido</th>
+                        <th scope="col" style='width:214px'>Tipo de actividad </th>
+                            
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>{{$actividades->nombre_area}}</td>
+                            <td>Si</td>
+                            <td>{{$actividades->tipo_act}}</td>
+                            
+                           
 
                         </tr>
                     </tbody>
@@ -116,16 +133,21 @@
 
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
-                        <h3 class="bd-title">Avance de tu actividad</h3>
+                    <center>
+                    <h4>Avance de la actividad</h4>
+                </center><br>
                     </div>
                     <p class="bd-lead"></p>
                     <p class="bd-lead">
-                        <h6>{{$max_ai->avance_i}}%</h6>
+                        <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}} %"></center>
+                    </p>
+                    <p class="bd-lead">
+                        <center><h5>Total: {{$general}}%</h5></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -152,6 +174,9 @@
                             <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
                         </div>
                     </div>-->
+                    <center>
+                    <h4>Dar un nuevo seguimiento</h4>
+                </center><br>
                     <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
 
                     <div class="col-sm-12">
@@ -194,14 +219,17 @@
                         </div>
                     </div>
 
-
+                    
                     <div class="col-sm-12">
                         <div class="form-group">
+                       
                             <label for="archivo" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
                             <input class="form-control form-control-sm archivo" id="archivo0" name="ruta[]" type="file">
+                         
                             <div id="nuevoInputfile">
                                 {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
                             </div>
+                     
                         </div>
                     </div>
 
@@ -217,10 +245,10 @@
                     </div>
                     <div class="col-sm-2">
 
-                        <button class="btn btn-sm btn-success">Guardar seguimiento</button>
+                        <button type="submit" class="btn btn-sm btn-success" onclick="this.hidden=true;">Guardar seguimiento</button>
 
                     </div>
-
+                    </table>
                 </form>
             </div>
         </div>
@@ -232,12 +260,12 @@
                 <center>
                     <h4>Archivos de la actividad</h4>
                 </center><br>
-                <table class="table table-responsive">
+                <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
                             <th scope="col">Archivo</th>
-                            <th scope="col">Nombre archivo</th>
-                            <th scope="col">Detalle (link)</th>
+                            <th scope="col" style='width:250px'>Nombre del archivo</th>
+                            <th scope="col" style='width:250px'>Detalle (link)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -282,6 +310,8 @@
                         @endif
                     </tbody>
                 </table>
+          
+
 
             </div>
         </div>
@@ -296,7 +326,7 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
-                                <!--<th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>-->
+                                <th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -325,7 +355,7 @@
                 @endif
                 <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
                     <zg-colgroup>
-                        <zg-column index='idseac' header='No- Seguimiento' width="100" type='text'></zg-column>
+                        <zg-column index='idseac' header='No. Seguimiento' width="" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
                         <zg-column index='estado' header='Status' width="200" type='text'></zg-column>
@@ -381,6 +411,12 @@
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
+            var vp = document.getElementById("porc_ind").value;
+            if(verif_p < vp){
+                alert('El porcentaje no puede ser menos que el ultimo anterior');
+                $('#porc').html(vp);
+                $('#porcentaje').val(vp);
+            }
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
@@ -408,7 +444,7 @@
         dname = valdet_a;
         
        
-        if(valruta != ''){
+        if(valruta != '' && valdet_a != ''){
             $('#evidencefiles').prop('hidden', false);
         
             var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
@@ -416,37 +452,36 @@
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+boton+"</tr>");
             $('#nuevo_f'+f).val(filename);
             $('#nuevo_d'+f).val(valdet_a);
-            $('#archivo'+g).prop('hidden', true);
-            $('#detalle_a'+g).prop('hidden', true);
-            
-            var newInputFile = "<input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'>" ;
+            $('#archivo'+g).prop('hidden', false);
+            $('#detalle_a'+g).prop('hidden', false);
+           
+            var newInputFile = "<td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td>" ;
             var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
 
             $('#nuevoInputfile').append(newInputFile);
             $('#nuevoInputdetalle').append(newInputText);          
             
             f=f+1;
-            g=g+1;           
-                                       
+            g=g+1;                       
         }else{
-             alert('Antes de agregar mas archivos, sube un archivo');
+             alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
         }
     });
-    //var h=0;
-    //var i =1;
-    //$('body').on('click', '#dropfile',function(){
-    //   alert('Estas seguro de que quieres eliminar este archivo?');
-    //   $('#nuevo_f'+i).remove();
-    // $('#nuevo_d'+i).remove();
-    // $('#dropfile'+i).remove();
-    // $('#archivo'+h).remove();
-    //    $('#detalle_a'+h).remove();
-    //    h=h+1;
-    //    i=i+1;
-    //});     
+    var h=0;
+    var i =1;
+    $('body').on('click', '#dropfile',function(){
+       alert('Estas seguro de que quieres eliminar este archivo?');
+       $('#nuevo_f'+i).remove();
+     $('#nuevo_d'+i).remove();
+     $('#dropfile'+i).remove();
+     $('#archivo'+h).remove();
+        $('#detalle_a'+h).remove();
+        h=h+1;
+        i=i+1;
+    });     
 
     
 

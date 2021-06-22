@@ -23,8 +23,8 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users, 
-        porcentaje(ac.idac, $id_user) AS porcentaje
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -32,6 +32,7 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
+        /* return $consult; */
 
         $array = array();
 
@@ -60,10 +61,49 @@ class SeguimientoController extends Controller
         function C($data)
         {
             if (gettype($data) == "array") {
-                return number_format($data['2'], 0, '.', ' ') . '%';
+                return number_format($data['2'], 0, '.', ' ');
             } else {
                 return 0;
             }
+        }
+
+        function D($status, $end_date, $data, $acuse)
+        {
+            if (gettype($data) == "array") {
+                $data = number_format($data['2'], 0, '.', ' ');
+            } else {
+                $data = 0;
+            }
+            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+            
+            //return ($data > $end_date ? "es mayor" : "No es mayor");
+
+            if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
+
+                return "En proceso – En Tiempo";
+
+            }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
+
+                return "Concluido – En tiempo";
+                
+            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
+
+                return "En proceso - fuera de Tiempo";
+
+            }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
+
+                return "Concluido – Fuera de Tiempo";
+
+            }elseif($acuse == 2 && $acuse == 2){
+                    
+                    return "Acuse rechazado";
+
+            }elseif($status == 3){
+    
+                    return "Cancelado";
+                
+            }
+            
         }
 
         function ver($idac)
@@ -98,18 +138,20 @@ class SeguimientoController extends Controller
             array_push($array, array(
 
                 'turno' => $c->turno,
-                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D MMMM h:mm a'),
+                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                 'asunto' => $c->asunto,
+                'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' - ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'area' => $c->area,
                 'recibo' => AB($data),
-                'porcentaje' =>  C($data),
+                'porcentaje' => C($data) . '%',
+                'estado' =>  D($c->status,$c->fecha_fin,$data, $c->acuse),
                 'operaciones' => ver($c->idac),
             ));
         }
-
+        
         $json = json_encode($array);
 
         return view('SeguimientoActividades.actividades_asignadas')
@@ -184,12 +226,16 @@ class SeguimientoController extends Controller
         $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3,
+        ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, ta.nombre as tipo_act,
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
+        $general = explode('*', $actividades[0]->porcentaje)[2];
+
+        //dd($actividades[0]->porcentaje);
 
 
         //Obtener datos del usuario
@@ -277,23 +323,40 @@ class SeguimientoController extends Controller
 
         $array_sa = array();
 
-        function detalles($idseac, $idarseg)
+
+        function detalles($idseac, $idarseg, $max, $min)
         {
-            return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . "><i class='nav-icon fas fa-trash'></i></a>";
+    
+             
+            if($max == $min){
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+            }else{
+                return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
+            }
+
+            
+        }
+
+        
+        foreach ($seguimientos as $seg_ac) {
+           $turno = 1;
         }
 
         foreach ($seguimientos as $seg_ac) {
 
+            
             array_push($array_sa, array(
 
-                'idseac' => $seg_ac->idseac,
+                'idseac' => $turno,
                 'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('D MMMM h:mm a'),
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $general, $seg_ac->porcentaje),
             ));
+            $turno = $turno +1;
         }
 
         $json_sa = json_encode($array_sa);
@@ -307,7 +370,8 @@ class SeguimientoController extends Controller
             ->with('now', $now)
             ->with('atendido', $atendido[0])
             ->with('total_at', $total_at[0])
-            ->with('max_ai', $max_ai[0]);
+            ->with('max_ai', $max_ai[0])
+            ->with('general', $general);
     }
 
     public function AgregarSeguimiento(Request $request)
