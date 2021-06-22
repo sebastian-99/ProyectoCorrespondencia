@@ -154,17 +154,17 @@
               </li>
               @endif
               <li class="nav-item">
+                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades creadas</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('actividades_asignadas') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades</p>
                   <br>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>asignadas</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ver actividades creadas</p>
                 </a>
               </li>
             </ul>
