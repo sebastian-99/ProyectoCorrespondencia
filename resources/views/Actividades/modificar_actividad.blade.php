@@ -73,13 +73,13 @@
 </style>
 
     <div class="card">
-        <div class="card-header" style="background: #FFCA28; color:#ffff; text-align: center;">
-            <strong>Gesti&oacute;n de Actividades</strong>
+        <div class="card-header bg-success text-light" style="text-align: center;">
+            <h2>modificaci&oacute;n gesti&oacute;n de actividades</h2>
         </div>
             <div class="card-body">
             <div class="row">
                 <div class="col-xs-5 col-sm-5 col-md-5">
-                <form action="{{route('update_actividades')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('update_actividades')}}" id="form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" value="{{$consul[0]->idac}}" name="idac">
                     <div class="row">
@@ -357,7 +357,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Enviar</button>
+                            <button type="submit" id="button" class="btn btn-primary">Enviar</button>
                         </div>
                         <br>
                         <br>
@@ -539,8 +539,12 @@
                     alert("hay gente aqui");
                 }else{
 
-                    $(`#tipousuario option[value='${val}']`).remove();
+                    $(`#tipousuario option[value='${val}']`).attr('selected', false).trigger('change');
+                    
+                    //$("#tipousuario").remove();
 
+                    
+                    //alert(data[1][0].nombre);
                     console.log(data[1].length);
                     
                     if(data[1].length > 0){
@@ -563,6 +567,11 @@
 
     });
     
+    $("#form").submit(function(event){
+        
+        $("#button").prop("disabled", true);
+       
+    });
 </script>
 
 @endsection
