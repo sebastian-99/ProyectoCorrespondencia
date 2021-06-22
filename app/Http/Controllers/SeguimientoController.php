@@ -192,6 +192,8 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
 
+        dd($actividades[0]->porcentaje);
+
 
         //Obtener datos del usuario
         $user = DB::table('users')
@@ -283,7 +285,7 @@ class SeguimientoController extends Controller
     
              return "<div class='btn-group me-2' role='group' aria-label='Second group'>
             <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' hidden><i class='nav-icon fas fa-trash'></i></a></div>";
+            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
 
             
         }

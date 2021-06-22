@@ -51,7 +51,7 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                         <h1 class="bd-title" id="content">{{$actividades->asunto}}</h1>
                     </div>
-                    <p class="bd-lead">{{$actividades->descripcion}}</p>
+                    <p class="bd-lead">{{$actividades->porcentaje}}</p>
                 </div>
             </div>
         </div>
@@ -242,7 +242,7 @@
                     </div>
                     <div class="col-sm-2">
 
-                        <button class="btn btn-sm btn-success">Guardar seguimiento</button>
+                        <button type="submit" class="btn btn-sm btn-success" onclick="this.hidden=true;">Guardar seguimiento</button>
 
                     </div>
 
@@ -321,7 +321,7 @@
                             <tr style="background-color: #607d8b; color: #ffffff">
                                 <th scope="col">Archivo</th>
                                 <th scope="col">Detalle evidencia</th>
-                                <!--<th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>-->
+                                <th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -460,18 +460,18 @@
              alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
         }
     });
-    //var h=0;
-    //var i =1;
-    //$('body').on('click', '#dropfile',function(){
-    //   alert('Estas seguro de que quieres eliminar este archivo?');
-    //   $('#nuevo_f'+i).remove();
-    // $('#nuevo_d'+i).remove();
-    // $('#dropfile'+i).remove();
-    // $('#archivo'+h).remove();
-    //    $('#detalle_a'+h).remove();
-    //    h=h+1;
-    //    i=i+1;
-    //});     
+    var h=0;
+    var i =1;
+    $('body').on('click', '#dropfile',function(){
+       alert('Estas seguro de que quieres eliminar este archivo?');
+       $('#nuevo_f'+i).remove();
+     $('#nuevo_d'+i).remove();
+     $('#dropfile'+i).remove();
+     $('#archivo'+h).remove();
+        $('#detalle_a'+h).remove();
+        h=h+1;
+        i=i+1;
+    });     
 
     
 
