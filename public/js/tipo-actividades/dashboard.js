@@ -249,7 +249,7 @@ $('document').ready(()=>{
                             <td>${dato.importancia}</td>
                             <td>${dato.area_responsable}</td>
                             <td>
-                                <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
+                                ${ dato.firma ? `<a href="/seguimiento/${dato.idac}" class="btn btn-link">Ver Detalle</a>`: 'No tienes acuse de recibido'}
                             </td>
                         </tr>
                     `
