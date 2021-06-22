@@ -51,7 +51,7 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                         <h1 class="bd-title" id="content">{{$actividades->asunto}}</h1>
                     </div>
-                    <p class="bd-lead">{{$actividades->porcentaje}}</p>
+                    <p class="bd-lead">{{$actividades->descripcion}}</p>
                 </div>
             </div>
         </div>
@@ -144,10 +144,10 @@
                     </div>
                     <p class="bd-lead"></p>
                     <p class="bd-lead">
-                        <center><h5>Individual: {{$max_ai->avance_i}}%</h5></center>
+                        <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}} %"></center>
                     </p>
                     <p class="bd-lead">
-                        <center><h5>Total: {{$max_ai->avance_i}}%</h5></center>
+                        <center><h5>Total: {{$general}}%</h5></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -406,6 +406,12 @@
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
             var verif_p = document.getElementById("porcentaje").value;
+            var vp = document.getElementById("porc_ind").value;
+            if(verif_p < vp){
+                alert('El porcentaje no puede ser menos que el ultimo anterior');
+                $('#porc').html(vp);
+                $('#porcentaje').val(vp);
+            }
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);

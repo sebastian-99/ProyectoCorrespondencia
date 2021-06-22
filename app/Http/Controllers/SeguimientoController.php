@@ -233,8 +233,9 @@ class SeguimientoController extends Controller
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
+        $general = explode('*', $actividades[0]->porcentaje)[2];
 
-        dd($actividades[0]->porcentaje);
+        //dd($actividades[0]->porcentaje);
 
 
         //Obtener datos del usuario
@@ -322,12 +323,18 @@ class SeguimientoController extends Controller
 
         $array_sa = array();
 
-        function detalles($idseac, $idarseg)
+
+        function detalles($idseac, $idarseg, $max, $min)
         {
     
-             return "<div class='btn-group me-2' role='group' aria-label='Second group'>
-            <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+             
+            if($max == $min){
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+            }else{
+                return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
+            }
 
             
         }
@@ -347,7 +354,7 @@ class SeguimientoController extends Controller
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $general, $seg_ac->porcentaje),
             ));
             $turno = $turno +1;
         }
@@ -363,7 +370,8 @@ class SeguimientoController extends Controller
             ->with('now', $now)
             ->with('atendido', $atendido[0])
             ->with('total_at', $total_at[0])
-            ->with('max_ai', $max_ai[0]);
+            ->with('max_ai', $max_ai[0])
+            ->with('general', $general);
     }
 
     public function AgregarSeguimiento(Request $request)
