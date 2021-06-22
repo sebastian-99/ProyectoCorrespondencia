@@ -64,13 +64,13 @@
 </style>
 
     <div class="card">
-        <div class="card-header" style="background: #FFCA28; color:#ffff; text-align: center;">
-            <strong>Gesti&oacute;n de Actividades</strong>
+        <div class="card-header bg-success text-light" style="text-align: center;">
+            <h2>Gesti&oacute;n de actividades</h2>
         </div>
             <div class="card-body">
             <div class="row">
                 <div class="col-xs-5 col-sm-5 col-md-5">
-                <form action="{{route('insert_actividad')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('insert_actividad')}}" method="POST" enctype="multipart/form-data" id="form">
                 @csrf
                     <div class="row">
                         <!--Inicio seccion izquierda-->
@@ -299,7 +299,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Enviar</button>    
+                            <button type="submit" id="button"class="btn btn-primary" readonly>Enviar</button>    
                         </div>
                     </div>
                 
@@ -352,7 +352,9 @@
       });
 
 
-    $("#tipousuario").on('change',function(e){
+    $("#tipousuario").on('select2:select',function(e){
+        
+        $("#tipousuarioarea").attr("disabled", true);
         let tipo_u = $("#tipousuario").val();
         //console.log(tipo_u);
         /* $("#tipousuarioarea").empty(); */
@@ -371,6 +373,7 @@
                     $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
                     
                 }
+                $("#tipousuarioarea").attr("disabled", false);
 
             },error:function(data){
 
@@ -389,6 +392,11 @@
         $(this).val(null);
     });
     
+    $("#form").submit(function(event){
+        
+        $("#button").prop("disabled", true);
+       
+    });
 </script>
     
 @endsection
