@@ -19,7 +19,8 @@ class ActividadesController extends Controller
         $us_id = \Auth()->User()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -33,7 +34,7 @@ class ActividadesController extends Controller
         function recorrer($value){
             if (gettype($value) == "string") {
                 $val = explode('*', $value);
-                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1],'3' => $val[2]);
             }else{
                 $arr = null;
             }
@@ -67,24 +68,51 @@ class ActividadesController extends Controller
 
         }
 
+        function D($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data['3'], 0, '.', ' ').'%';
+
+            }else{
+
+                return 0;
+
+            }
+
+        }
+
+        function E($status){
+
+            if($status == 1){
+                return "En proceso";
+            }elseif($status == 2){
+                return "Concluido";
+            }else{
+                return "Cancelado";
+            }
+
+        }
+
         foreach($consult as $c){
 
             $data = recorrer($c->porcentaje);
 
             array_push($array, array('idac' => $c->idac,
                                     'turno' => $c->turno,
-                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
-                                    'periodo' => $c->periodo,
+                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
                                     'importancia' => $c->importancia,
                                     'nombre' => $c->nombre,
                                     'activo' => $c->activo,
                                     'acuse' => $c->acuse,
                                     'idu_users' => $c->idu_users,
                                     'AB' => AB($data),
-                                    'C' =>  C($data),
+                                    'C' =>  D($data),
+                                    'E' => E($c->status),
                                     'operaciones' => btn($c->idac, $c->activo),
                                     ));
         }
@@ -606,7 +634,7 @@ class ActividadesController extends Controller
         AND re.idac_actividades = $id
         AND us.idar_areas = $val");
 
-        $consul2 = DB::SELECT("SELECT us.idu FROM users AS us
+        $consul2 = DB::SELECT("SELECT us.idu, ar.nombre FROM users AS us
         INNER JOIN areas AS ar ON ar. idar = us.idar_areas
         WHERE ar.idar = $val");
         return response()->json([$consul, $consul2]);
@@ -760,8 +788,8 @@ class ActividadesController extends Controller
         $id_u = decrypt($id);
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        CONCAT(ac.fecha_inicio, ' al ', ac.fecha_fin) AS periodo, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac, $id_u) AS porcentaje
+        ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -770,13 +798,13 @@ class ActividadesController extends Controller
         WHERE ac.idu_users = $id_u
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-
+        
         $array = array();
 
         function recorrer($value){
             if (gettype($value) == "string") {
                 $val = explode('*', $value);
-                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1]);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1], '3' =>$val[2]);
             }else{
                 $arr = null;
             }
@@ -818,6 +846,32 @@ class ActividadesController extends Controller
 
         }
 
+        function D($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data['3'], 0, '.', ' ').'%';
+
+            }else{
+
+                return 0;
+
+            }
+
+        }
+
+        function E($status){
+
+            if($status == 1){
+                return "En proceso";
+            }elseif($status == 2){
+                return "Concluido";
+            }else{
+                return "Cancelado";
+            }
+
+        }
+
 
 
         foreach($ac_cre as $c){
@@ -826,22 +880,22 @@ class ActividadesController extends Controller
 
             array_push($array, array('idac' => $c->idac,
                                     'turno' => $c->turno,
-                                    'fecha_creacion' => $c->fecha_creacion,
+                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
-                                    'periodo' => $c->periodo,
+                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
                                     'importancia' => $c->importancia,
                                     'nombre' => $c->nombre,
                                     'activo' => $c->activo,
                                     'acuse' => $c->acuse,
                                     'idu_users' => $c->idu_users,
                                     'AB' => AB($data),
-                                    'C' =>  C($data),
+                                    'C' =>  D($data),
+                                    'E' =>  E($c->status),
                                     'operaciones' => btn($c->idac, $c->activo),
                                     ));
         }
-
 
 
         $json = json_encode($array);
