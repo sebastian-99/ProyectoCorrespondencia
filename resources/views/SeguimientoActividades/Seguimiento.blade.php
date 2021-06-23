@@ -452,20 +452,21 @@
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
             var filename = valruta.replace(/^.*\\/, "");
             fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+boton+"</tr>");
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+"</tr>");
             $('#nuevo_f'+f).val(filename);
             $('#nuevo_d'+f).val(valdet_a);
-            $('#archivo'+g).prop('hidden', false);
-            $('#detalle_a'+g).prop('hidden', false);
-           
-            var newInputFile = "<td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td>" ;
+            $('#archivo'+g).prop('hidden', true);
+            $('#detalle_a'+g).prop('hidden', true);
+            
+            var newInputFile = "<input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'>" ;
             var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
 
             $('#nuevoInputfile').append(newInputFile);
             $('#nuevoInputdetalle').append(newInputText);          
             
             f=f+1;
-            g=g+1;                       
+            g=g+1;           
+                                       
         }else{
              alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
         }
