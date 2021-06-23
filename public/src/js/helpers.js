@@ -18,7 +18,11 @@ function validar(){
     email    = document.getElementById("email").value;
     password = document.getElementById("password").value;
 
-    if(titulo.length>4){
+    if(titulo === "" || nombre === "" || app === "" || apm === "" || email === "" || password === ""){
+        alert("Los campos son obligatorios");
+        return false;
+    }
+    else if(titulo.length>4){
         alert("El titulo debe ser abreviado y con punto");
         return false;
     }
@@ -44,13 +48,5 @@ function validar(){
     }
 }
 
-//function validar_email(valor){
-   /* re=/^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/; */
-  /* re=/^([\da-z_\-.]+)@([\da-z\-.]+)\.([a-z\-.]{1,})$/i;
-  if(!re.exec(valor)){
-    return false;
-  }else{
-    return true;
-  }
-}
-*/
+
+

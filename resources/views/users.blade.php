@@ -117,8 +117,8 @@
              </div>
               <div class="form-group">
                 <label for="password">Contraseña: <b class="text-danger">*</b></label>
-                <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" title="Debe ingresar 8 carácteres, una mayúscula y un número 'Ejem1234'" required minLength="8">
-                <p class="form-control-feedback" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, una mayúscula y un número</p>
+                <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" title="Debe ingresar 8 carácteres, una mayúscula y un número 'Ejem1234'" maxLength="8" pattern="^([A-Za-z 0-9]{8})$">
+                <p class="form-control-feedback" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, letras y números 'Ejem1234'</p>
               </div>
               <div class="form-group">
                 <label for="idar_areas">Área: <b class="text-danger">*</b></label>
@@ -157,7 +157,7 @@
           </div>
           <div class="modal-body">
 
-            <form action="{{ route('users.update', ['user' => $user_edit->idu]) }}" method="POST" enctype="multipart/form-data" onsubmit="return validar();">
+            <form action="{{ route('users.update', ['user' => $user_edit->idu]) }}" method="POST" enctype="multipart/form-data">
               @csrf
               @method('PATCH')
                 <div class="form-group">
@@ -201,8 +201,8 @@
               </div>
               <div class="form-group">
                 <label for="password">Contraseña:</label>
-                <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" title="Para cambiar su contraseña debe ingresar una nueva que contenga 8 carácteres, una mayúscula y un número 'Ejem1234'" minLength="8">
-                <p class="form-control-feedback" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, una mayúscula y un número</p>
+                <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" title="Para cambiar su contraseña debe ingresar una nueva que contenga 8 carácteres, una mayúscula y un número 'Ejem1234'" maxLength="8" pattern="^([A-Za-z 0-9]{8})$">
+                <p class="form-control-feedback" style="font-size: 14px; font-style: italic;">La contraseña debe ser minimo 8 carácteres, letras y números 'Ejem1234'</p>
               </div>
               <div class="form-group">
                 <label for="idar_areas">Área:</label>
