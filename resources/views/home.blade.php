@@ -73,8 +73,8 @@
                     <div data-route="#" class="card col-lg-6 col-sm-12" style="background-color:#1d283a; cursor: pointer;">
                         <div class="card-body text-white">
                             <div class="row text-center">
-                                <div class="col-lg-4 col-sm-12">
-                                    <i class="fa fa-clock-o mt-5 pt-5" aria-hidden="true" style="font-size: 80px"></i>
+                                <div class="col-lg-4 col-sm-12 mt-3">
+                                    <i class="fas fa-user-clock" aria-hidden="true" style="font-size: 80px"></i>
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
                                     <div id="actividades_cerradas">
