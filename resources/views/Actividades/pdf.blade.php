@@ -4,19 +4,18 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
     <title>PDF de acuse recibido de actividades</title> 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{public_path('src/css/pdf.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <style>
     h1 {
         font-family: Arial;
-        font-size: 25px;
+        font-size: 20px;
         text-align: center;
         color: #0B821D;
     }
     h2 {
         font-family: Arial;
-        font-size: 22px;
+        font-size: 17px;
         text-align: center;
     }
     div p {
@@ -51,6 +50,7 @@
         <div align="right">
             <div>
                 <img src="{{public_path('images/logoGob.png')}}" height="35" align="left">
+                <!--<img src="{{public_path('images/logoGob.png')}}" height="35" align="left">-->
                 <img src="{{public_path('images/logoUTVT.png')}}" height="35" alt="">
                 <img src="{{public_path('images/Edomex.png')}}" height="35" alt="">
             </div>
@@ -59,7 +59,7 @@
     <br><br>
     <center><p>“2021. Año de la Consumación de la Independencia y la Grandeza de México".</p></center>
     <h1 style="font-family: Arial;">REPORTE DE ACUSE DE RECIBIDO</h1><br>
-    <h2>DETALLE DE LA ACTIVIDAD</h2>
+    <p><h2>DETALLE DE LA ACTIVIDAD</h2></p><br><br>
 
     <table class="table table-bordered border-primary">
         <tr>
@@ -74,7 +74,7 @@
             </td>
             <td width='50%'>
                 <div>
-                    <div>
+                    <div style="font-family: Arial;">
                         <p>Fecha creaci&oacute;n: <b>{{$data[0]->fecha_creacion}}</b></p>
                         <p>Fecha seguimiento: <b>{{$data[0]->fecha_inicio}}</b></p>
                         <p>Fecha termino: <b>{{$data[0]->fecha_fin}}</b></p>
@@ -86,7 +86,7 @@
         
     </table>
     
-    <table class="table table-bordered" style="border-color: #0B821D">
+    <table class="table table-bordered border-primary">
     
     @php
 
@@ -98,7 +98,6 @@
 
         foreach ( $data as $key => $valor)
         {
-
             array_push($insert, 
                 array( 
                     'nombre' => $valor->nombre, 
@@ -113,8 +112,8 @@
             {
                 $contenido = "<tr>";
 
-                for( $i=0; $i < count($insert); $i++)
-                {
+                for( $i=0; $i < count($insert); $i++){
+                
                     $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
                     $contenido .= "<p>Nombre: <b>".$insert[$i]['nombre']."</b></p>";
