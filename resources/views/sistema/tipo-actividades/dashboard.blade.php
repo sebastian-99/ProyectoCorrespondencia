@@ -17,9 +17,6 @@
                 <h2>Medidor de mis Actividades </h2>
             </div>
             <div class="card-body">
-                <div class="container">
-                    <h4 class="text-right mb -3" >Reporte de Actividades</h4>
-                </div>
                 <div class="form-row" id="dashboard_panel">
                     <div class="form-group col-md-4">
                         <select class="custom-select mt-3" name="areas" id="select_area" >

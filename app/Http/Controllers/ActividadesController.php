@@ -125,19 +125,13 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-<<<<<<< HEAD
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, seg.porcentaje AS porcentaje, razon_rechazo, max(idseac)
-=======
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us,
         res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
->>>>>>> aly
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
-        
         GROUP BY idu_users");
 
         $boton = DB::table('responsables_actividades as res')
@@ -478,27 +472,8 @@ class ActividadesController extends Controller
         for($i=0; $i < count($tipousuarioarea); $i++){
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
-<<<<<<< HEAD
               
             
-=======
-
-
-            //---------------------------llenado de otras tablas---------------
-
-
-              $idreac_responsables_actividades = DB::table('responsables_actividades')->max('idreac');
-
-              DB::INSERT("INSERT INTO seguimientos_actividades (idreac_responsables_actividades , fecha , detalle,estado)
-              VALUES ('$idreac_responsables_actividades','$fechacreacion','sin detalles','pendiente')");
-
-
-              $idseac_seguimientos_actividades = DB::table('seguimientos_actividades')->max('idseac');
-
-              DB::INSERT("INSERT INTO archivos_seguimientos (idseac_seguimientos_actividades, nombre, ruta, detalle_a)
-              VALUES ('$idseac_seguimientos_actividades','Sin archivo','Sin archivo','Sin archivo')");
-                  //---------------------------fin del llenado----------------------
->>>>>>> aly
         }
 
 
@@ -839,13 +814,13 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-                return "<a  class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a><div>";
             }else{
-                return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
                 <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a></div>";
             }
         }
 

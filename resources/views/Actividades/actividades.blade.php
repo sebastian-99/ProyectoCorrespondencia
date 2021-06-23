@@ -299,11 +299,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-<<<<<<< HEAD
                             <button type="submit" id="button"class="btn btn-primary" readonly>Enviar</button>    
-=======
-                            <button type="submit" class="btn btn-primary">Enviar</button>
->>>>>>> aly
                         </div>
                     </div>
 
@@ -395,16 +391,12 @@
         $("#tipousuarioarea").empty();
         $(this).val(null);
     });
-<<<<<<< HEAD
     
     $("#form").submit(function(event){
         
         $("#button").prop("disabled", true);
        
     });
-=======
-
->>>>>>> aly
 </script>
 
 @endsection

@@ -249,7 +249,7 @@ $('document').ready(()=>{
                             <td>${dato.importancia}</td>
                             <td>${dato.area_responsable}</td>
                             <td>
-                                ${ dato.firma ? `<a href="/seguimiento/${dato.idac}" class="btn btn-link">Ver Detalle</a>`: 'No tienes acuse de recibido'}
+                                <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
                             </td>
                         </tr>
                     `

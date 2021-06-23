@@ -88,7 +88,7 @@ $(document).ready(()=>{
                             <td>${dato.importancia}</td>
                             <td>${dato.area_responsable}</td>
                             <td>
-                                <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
+                                <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
                             </td>
                         </tr>
                     `

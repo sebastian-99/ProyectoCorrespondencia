@@ -566,16 +566,12 @@
         });
 
     });
-<<<<<<< HEAD
     
     $("#form").submit(function(event){
         
         $("#button").prop("disabled", true);
        
     });
-=======
-
->>>>>>> aly
 </script>
 
 @endsection
