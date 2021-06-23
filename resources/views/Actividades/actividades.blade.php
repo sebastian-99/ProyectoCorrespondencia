@@ -355,6 +355,9 @@
     $("#tipousuario").on('select2:select',function(e){
         
         $("#tipousuarioarea").attr("disabled", true);
+
+        $(this).attr("disabled", true);
+
         let tipo_u = $("#tipousuario").val();
         //console.log(tipo_u);
         /* $("#tipousuarioarea").empty(); */
@@ -374,15 +377,15 @@
 
                 }
                 $("#tipousuarioarea").attr("disabled", false);
-
+                $("#tipousuario").attr("disabled", false);
             },error:function(data){
 
                 console.log(data);
 
             }
         });
-
-
+       
+       
     });
 
 

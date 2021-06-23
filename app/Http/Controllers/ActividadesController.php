@@ -43,7 +43,7 @@ class ActividadesController extends Controller
 
         function btn($idac, $activo){
 
-            return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>";
 
         }
 
@@ -72,7 +72,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 0, '.', ' ').'%';
+                return number_format($data['3'], 1, '.', ' ').'%';
 
             }else{
 
@@ -814,13 +814,13 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a><div>";
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></i></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></i></a><div>";
             }else{
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activo</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a></div>";
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></a></div>";
             }
         }
 
@@ -849,7 +849,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 0, '.', ' ').'%';
+                return number_format($data['3'], 1, '.', ' ').'%';
 
             }else{
 
