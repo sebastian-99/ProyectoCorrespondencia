@@ -12,7 +12,9 @@
     <div class="card">
         <div class="card-header">
             @if (Session::has('mensaje'))
-                <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
+                <div class="alert alert-success">{{ Session::get('mensaje') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                </div>
             @endif
             @if ($errors->any())
                 <div class="alert alert-danger"><p>¡Ocurrio un error inesperado, revisa nuevamente el formulario!</p></div>
@@ -20,9 +22,7 @@
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Áreas</h2>
-                    <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal">
-                        Crear
-                    </a>
+                    <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal"><i class="fas fa-plus-square"></i></a>
                 </div>
             </div>
         </div>

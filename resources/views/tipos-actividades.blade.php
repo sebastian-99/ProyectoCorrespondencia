@@ -8,23 +8,17 @@
         </script>
     @endsection
 
-    {{-- If para los errores --}}
-
     {{--Inicia Reporte --}}
     <div class="card">
         <div class="card-header">
             @if (Session::has('mensaje'))
                 <div class="alert alert-success">{{ Session::get('mensaje') }}</div>
             @endif
-            @if ($errors->any())
-                <div class="alert alert-danger"><p>¡Ocurrio un error inesperado, revisa nuevamente el formulario!</p></div>
-            @endif
+
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Tipos de Actividades</h2>
-                    <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal">
-                        Crear
-                    </a>
+                    <a href="#crear" class="btn btn-success" data-toggle="modal" data-target="#crearModal"><i class="fas fa-plus-square"></i></a>
                 </div>
             </div>
         </div>
@@ -76,11 +70,17 @@
             <form action="{{ route('tipos-actividades.store') }}" method="POST" enctype="multipart/form-data">
               @csrf
               @method('POST')
+                @if ($errors->any())
+                    <div class="alert alert-danger"><p>¡Ocurrio un error inesperado!</p></div>
+                @endif
 
               <div class="form-group">
                 <label for="nombre">Nombre: <b class="text-danger">*</b></label>
                 <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" placeholder="Ingresa el nombre del tipo de actividad" title="El nombre admite solo letras y espacios" required>
-                @error('nombre')<p class="form-control-feedback" style="font-size: 14px; font-style: italic;">El nombre admite solo letras y espacios</p>@enderror
+                @if ( $errors->has ('nombre'))
+                    <p>{{ $errors->first('nombre') }}</p>
+                @endif
+
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-success">Crear</button>

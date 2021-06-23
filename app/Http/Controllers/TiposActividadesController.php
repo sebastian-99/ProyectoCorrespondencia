@@ -19,10 +19,10 @@ class TiposActividadesController extends Controller
 
         function btn($idtac, $activo){
             if($activo == 1){
-                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\">Desactivar</a>"
-                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idtac\">Editar</a>";
+                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\"><i class='fas fa-power-off'></i></a>"
+                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idtac\"><i class='fas fa-edit'></i></a>";
             } else {
-                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\">Activar</a>";
+                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\"><i class='fas fa-lightbulb'></i></a>";
             }
 
             return $botones;

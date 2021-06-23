@@ -23,8 +23,13 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+<<<<<<< HEAD
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse
+=======
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users,
+        porcentaje(ac.idac, $id_user) AS porcentaje
+>>>>>>> aly
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
@@ -168,7 +173,7 @@ class SeguimientoController extends Controller
             $id_user = Auth()->user()->idu;
             $firma = $new->Encrypt($idac, $id_user, Auth()->User()->nombre);
 
-            $cons = DB::UPDATE("UPDATE responsables_actividades SET 
+            $cons = DB::UPDATE("UPDATE responsables_actividades SET
                 acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
             Session::flash('message', 'Ahora podrás darle seguimiento a esta actividad');
@@ -185,13 +190,13 @@ class SeguimientoController extends Controller
         $razon_r = $request->rechazo;
         $id_user = Auth()->user()->idu;
 
-        $rechazar = DB::UPDATE("UPDATE responsables_actividades SET 
+        $rechazar = DB::UPDATE("UPDATE responsables_actividades SET
                 acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
         Session::flash('rechazo', 'Usted ha rechazado la actividad, por lo que no se ha bloqueado la actividad, para desbloquear la actividad deberá ponerse en contacto con el creador de la actividad');
             //return response()->json('aceptado');
-        
-        
+
+
         return response()->json('aceptado');
     }
 
@@ -203,7 +208,7 @@ class SeguimientoController extends Controller
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-        
+
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -377,7 +382,7 @@ class SeguimientoController extends Controller
     public function AgregarSeguimiento(Request $request)
     {
         return DB::transaction( function() use($request){
-            
+
              $idseac = $request->idseac;
              $idreac_responsables_actividades = $request->idreac_responsables_actividades;
              $idseac_seguimientos_actividades = $request->idseac_seguimientos_actividades;
@@ -385,29 +390,29 @@ class SeguimientoController extends Controller
              $detalle = $request->detalle;
              $porcentaje = $request->porcentaje;
              $estado = $request->estado;
-     
-         
-     
+
+
+
              $seg_ac = new seguimientosActividades;
              $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
              $seg_ac->fecha = $now;
              $seg_ac->detalle = $request->detalle;
              $seg_ac->porcentaje = $request->porcentaje;
              $seg_ac->estado = $request->estado;
-     
+
              $seg_ac->save();
-     
+
              //Insertar archivos en tabla archivos_seguimientos
-     
+
              $max_size = (int) ini_get('upload_max_filesize') * 10240;
              $user_id = Auth()->user()->idu;
              $files = $request->file('ruta');
-     
+
              if ($request->hasFile('ruta')) {
-     
+
                  foreach ($files as $index=>$file) {
                      if (Storage::putFileAs('/Seguimientos/', $file, $file->getClientOriginalName())) {
-     
+
                          archivosSeguimientos::create([
                              'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                              'nombre' => $file->getClientOriginalName(),
@@ -424,16 +429,16 @@ class SeguimientoController extends Controller
                      'detalle_a' => 'No hay detalles que mostrar',
                  ]);
              }
-     
-     
-     
+
+
+
              $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
-     
+
              Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
              return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
-         
+
         });
-        
+
     }
     public function DetallesArchivos($idarc){
         $idarc = decrypt($idarc);
