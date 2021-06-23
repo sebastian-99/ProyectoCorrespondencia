@@ -23,13 +23,8 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-<<<<<<< HEAD
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse
-=======
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area, ra.acuse, ra.idu_users,
-        porcentaje(ac.idac, $id_user) AS porcentaje
->>>>>>> aly
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
