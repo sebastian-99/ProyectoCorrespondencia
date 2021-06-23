@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
     Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
     Route::post('updateRechazo', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');
+    Route::get('EliminarResponsables/{idreac}', [ActividadesController::class, 'EliminarResponsables'])->name('EliminarResponsables');
 
     Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
     Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
