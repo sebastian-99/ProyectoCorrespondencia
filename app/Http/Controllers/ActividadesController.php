@@ -265,7 +265,7 @@ class ActividadesController extends Controller
 
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre, 
+        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
         arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
@@ -292,13 +292,13 @@ class ActividadesController extends Controller
             }
         $turno = 0;
         foreach($consult as $c){
-         
+
           $turno = $turno+1;
            }
         foreach($consult as $c){
-         
+
          // $data = recorrer($c->porcentaje);
-           
+
           array_push($array, array('idseac' => $turno,
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
@@ -472,8 +472,8 @@ class ActividadesController extends Controller
         for($i=0; $i < count($tipousuarioarea); $i++){
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
-              
-            
+
+
         }
 
 
@@ -797,7 +797,7 @@ class ActividadesController extends Controller
         WHERE ac.idu_users = $id_u
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        
+
         $array = array();
 
         function recorrer($value){

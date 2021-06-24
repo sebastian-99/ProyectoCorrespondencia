@@ -299,7 +299,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" id="button"class="btn btn-primary" readonly>Enviar</button>    
+                            <button type="submit" id="button"class="btn btn-primary" readonly>Enviar</button>
                         </div>
                     </div>
 
@@ -353,7 +353,7 @@
 
 
     $("#tipousuario").on('select2:select',function(e){
-        
+
         $("#tipousuarioarea").attr("disabled", true);
 
         $(this).attr("disabled", true);
@@ -394,11 +394,11 @@
         $("#tipousuarioarea").empty();
         $(this).val(null);
     });
-    
+
     $("#form").submit(function(event){
-        
+
         $("#button").prop("disabled", true);
-       
+
     });
 </script>
 

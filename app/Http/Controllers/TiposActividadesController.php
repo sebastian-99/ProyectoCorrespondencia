@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TiposActividades;
-use Session;
 
 class TiposActividadesController extends Controller
 {
@@ -20,7 +19,7 @@ class TiposActividadesController extends Controller
         function btn($idtac, $activo){
             if($activo == 1){
                 $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\"><i class='fas fa-power-off'></i></a>"
-                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idtac\"><i class='fas fa-edit'></i></a>";
+                         ."<a href=" . route('tipos-actividades.edit', $idtac) . " class=\"btn btn-primary mt-1\"> <i class='fas fa-edit'></i> </a>";
             } else {
                 $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-tipos-actividades-$idtac')\"><i class='fas fa-lightbulb'></i></a>";
             }
@@ -41,7 +40,7 @@ class TiposActividadesController extends Controller
 
         $json = json_encode($array);
 
-        return view('tipos-actividades', compact('json', 'tipos_actividades'));
+        return view('tipos-actividades.index', compact('json', 'tipos_actividades'));
     }
 
 
@@ -71,8 +70,7 @@ class TiposActividadesController extends Controller
                 'nombre' => $request->nombre
             ]);
 
-        Session::flash('mensaje', 'El tipo de área se ha creado exitosamente');
-        return redirect()->route('tipos-actividades.index');
+        return redirect()->route('tipos-actividades.index')->with('mensaje', 'El tipo de actividad se ha creado exitosamente');
     }
 
     /**
@@ -99,18 +97,10 @@ class TiposActividadesController extends Controller
      */
     public function edit($idtac)
     {
-        if ($idtac){
-            $tipo_actividad = TiposActividades::query()
+            $tipos_actividades = TiposActividades::query()
                                               ->where('idtac', $idtac)
-                                              ->first();
-            if ($tipo_actividad) {
-                return view('tipos-actividades.edit', compact('tipo_actividad'));
-            } else {
-                abort(404);
-            }
-        } else {
-            abort(404);
-        }
+                                              ->get();
+                return view('tipos-actividades.edit', compact('tipos_actividades'));
     }
 
     /**
@@ -135,8 +125,7 @@ class TiposActividadesController extends Controller
                     'nombre' => $request->nombre,
                     'activo' => $request->activo
                 ]);
-                Session::flash('mensaje', 'El tipo de área se ha actualizado exitosamente');
-                return redirect()->route('tipos-actividades.index');
+                return redirect()->route('tipos-actividades.index')->with('mensaje', 'El tipo de actividad se ha actualizado exitosamente');
 
             } else {
                 abort(404);
