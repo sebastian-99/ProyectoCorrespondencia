@@ -27,8 +27,6 @@
   <link rel="stylesheet" href="{{asset('src/css/custom.css')}}">
   <!-- Helpers JS -->
   <script src="{{ asset('src/js/helpers.js') }}"></script>
-  {{-- Modal --}}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -109,26 +107,28 @@
               <p>Administraci&oacute;n<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('tipos-actividades')}}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Tipos de actividades</p>
-                </a>
-            </li>
 
-            <li class="nav-item">
-                <a href="{{ url('areas')}}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Áreas</p>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a href="{{ url('users')}}" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <p>Usuarios</p>
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a href="{{ url('users')}}" class="nav-link">
-                  <i class="fas fa-user"></i>
-                  <p>Usuarios</p>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a href="{{ url('areas')}}" class="nav-link">
+                    <i class="fas fa-chart-area"></i>
+                    <p>Áreas</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('tipos-actividades')}}" class="nav-link">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Tipos de actividades</p>
+                    </a>
+                </li>
+
             </ul>
           </li>
         @endif

@@ -26,8 +26,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panel/get-actividades-cerradas/{idu}', [PanelController::class,'getActividadesCerradas']);
     Route::get('/panel/get-actividades-en-seguimiento/{idu}', [PanelController::class,'getActividadesEnSeguimiento']);
 
-    Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+
+//////////////////////////////////////////////  U S U A R I O S  ///////////////////////////////////////////////////////////////
     Route::resource('users', UsersController::class, ['names' => 'users']);
+
+
+
+
+
+    Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+
     Route::resource('areas', AreasController::class, ['names' => 'areas']);
     //Seguimiento de actividades
     Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
@@ -50,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
     Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
     Route::post('updateRechazo', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');
+    Route::get('EliminarResponsables/{idreac}', [ActividadesController::class, 'EliminarResponsables'])->name('EliminarResponsables');
 
     Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
     Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
