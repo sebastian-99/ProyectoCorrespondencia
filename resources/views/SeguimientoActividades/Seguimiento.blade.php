@@ -221,28 +221,30 @@
 
                     
                     <div class="col-sm-12">
+                    <div class="col-sm-12">
                         <div class="form-group">
                        
-                            <label for="archivo" class="form-label">Seleccione Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
-                            <input class="form-control form-control-sm archivo" id="archivo0" name="ruta[]" type="file">
+                            <label for="archivo" class="form-label">Agregar Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
+                           
                          
-                            <div id="nuevoInputfile">
+                         
+                        </div>
+                    </div>
+
+
+              
+                        <div class="form-group">
+                       
+                            
+                         <table><tr>
+                            <td><div id="nuevoInputfile">
                                 {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
-                            </div>
-                     
+                            </div></td>
+                            </tr>
+                            </table>
                         </div>
                     </div>
 
-
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="detalle" class="form-label">Detalle Evidencia</label>
-                            <input type="text" class="form-control form-control-sm detalle_a" id="detalle_a0" name="detalle_a[]" placeholder="Detalle de la evidencia">
-                            <div id="nuevoInputdetalle">
-                                {{-- Aqui se van agregando más inputs para agregar un nuevo detalle del archivo --}}
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-sm-2">
 
                         <button class="btn btn-sm btn-success">Guardar seguimiento</button>
@@ -433,36 +435,32 @@
     var f = 1;
     var g = 0;
     $('body').on('click', '#addfile',function(){
-        var valruta = document.getElementById('archivo'+g).value;
-        var valdet_a = document.getElementById('detalle_a'+g).value;
-        dname = valdet_a;
+      //  var valruta = document.getElementById('archivo'+g).value;
+        //var valdet_a = document.getElementById('detalle_a'+g).value;
+       // dname = valdet_a;
         
        
-        if(valruta != '' && valdet_a != ''){
+      
             $('#evidencefiles').prop('hidden', false);
         
-            var evidencia_file = "<td><input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td>" ;
-            var evidencia_det = "<td><textarea id='nuevo_d"+f+"' name='nuevo_d"+f+"' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea></td>" ;
+            var evidencia_file = "<input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td><textarea id='nuevo_d"+f+"' name='detalle_a[]' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea><td>" ;
             //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
-            var filename = valruta.replace(/^.*\\/, "");
-            fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+evidencia_det+boton+"</tr>");
-            $('#nuevo_f'+f).val(filename);
-            $('#nuevo_d'+f).val(valdet_a);
+           // var filename = valruta.replace(/^.*\\/, "");
+         //   fname = valruta;
+            $('#tablefiles>tbody').append("<tr>"+evidencia_file+"</tr>");
+          //  $('#nuevo_f'+f).val(filename);
+          //  $('#nuevo_d'+f).val(valdet_a);
             $('#archivo'+g).prop('hidden', false);
             $('#detalle_a'+g).prop('hidden', false);
            
-            var newInputFile = "<td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td>" ;
-            var newInputText = "<input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'>" ;
+            var newInputFile = "<tr><td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td><td><input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'></td><td><input type='button' class='borrar' value='Eliminar' /></td></tr>" ;
 
             $('#nuevoInputfile').append(newInputFile);
-            $('#nuevoInputdetalle').append(newInputText);          
+     
             
             f=f+1;
             g=g+1;                       
-        }else{
-             alert('Antes de agregar mas archivos, sube un archivo e ingresa un detalle de evidencia');
-        }
+        
     });
     //var h=0;
     //var i =1;
@@ -476,7 +474,10 @@
     //    h=h+1;
     //    i=i+1;
     //});     
-
+    $(document).on('click', '.borrar', function (event) {
+    event.preventDefault();
+    $(this).closest('tr').remove();
+        });
     
 
  //--------------------------------------------------------------------------------------------------------------
