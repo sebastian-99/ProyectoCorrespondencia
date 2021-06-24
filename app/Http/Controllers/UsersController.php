@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
-use Session;
 
 class UsersController extends Controller
 {
@@ -45,8 +44,8 @@ class UsersController extends Controller
 
         function btn($idu, $activo){
             if($activo == 1){
-                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-usuario-$idu')\"><i class='fas fa-power-off'></i></a>"
-                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idu\"><i class='fas fa-user-edit'></i></a>";
+                $botones = "<a href=\"#eliminar-usuario-\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-usuario-$idu')\"><i class='fas fa-power-off'></i></a>"
+                         . "<a href= ". route('users.edit', $idu ) ." class=\"btn btn-primary mt-1\"> <i class='fas fa-user-alt'></i> </a>";
             } else {
                 $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-usuario-$idu')\"><i class='fas fa-lightbulb'></i></a>";
             }
@@ -72,7 +71,7 @@ class UsersController extends Controller
 
         $json = json_encode($array);
 
-        return view('users', compact('json', 'usuarios', 'areas', 'tipos_usuarios'));
+        return view('users.index', compact('json', 'usuarios', 'areas', 'tipos_usuarios'));
     }
 
     /**
@@ -80,7 +79,16 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $areas = Areas::join('tipos_areas', 'tipos_areas.idtar', '=', 'areas.idtar')
+                        ->select(
+                        'areas.idar',
+                        'areas.nombre as idar_areas',
+                        'tipos_areas.nombre as nombretipo',
+                            )
+                        ->get();
+        $tipos_usuarios = TiposUsuarios::all();
+        return view( 'users.create', compact('tipos_usuarios', 'areas'));
+
     }
 
     /**
@@ -88,6 +96,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:tipos_usuarios,idtu'],
             'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
@@ -105,12 +114,7 @@ class UsersController extends Controller
                         Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                         Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/"],
             'email' => ['required', 'email', 'max:100', "unique:users,email"],
-            'password' => ['required',
-                       Password::min(8)
-                       ->letters()  //Al menos una letra
-                       ->mixedCase() //Al menos una minúscula y una mayúscula
-                       ->numbers() //Al menos un número
-                        ],
+            'password' => ['required'],
             'idar_areas'  => ['required', 'integer', 'exists:areas,idar']
         ]);
 
@@ -134,8 +138,7 @@ class UsersController extends Controller
             'idar_areas' => $request->idar_areas
         ]);
 
-        Session::flash('mensaje', 'El usuario se ha creado exitosamente');
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('mensaje', 'El usuario se ha creado exitosamente');
     }
 
     /**
@@ -162,18 +165,21 @@ class UsersController extends Controller
      */
     public function edit($idu)
     {
-        if ($idu){
-            $usuario = User::query()
+            $areas = Areas::join('tipos_areas', 'tipos_areas.idtar', '=', 'areas.idtar')
+                            ->select(
+                                'areas.idar',
+                                'areas.nombre as idar_areas',
+                                'tipos_areas.nombre as nombretipo',
+
+                            )
+                            ->get();
+
+            $tipos_usuarios = TiposUsuarios::all();
+            $usuarios = User::query()
                            ->where('idu', $idu)
-                           ->first();
-            if ($usuario) {
-                return view('users.edit', compact('usuario'));
-            } else {
-                abort(404);
-            }
-        } else {
-            abort(404);
-        }
+                           ->get();
+
+            return view('users.edit', compact('usuarios', 'tipos_usuarios', 'areas'));
     }
 
     /**
@@ -204,12 +210,7 @@ class UsersController extends Controller
                                 Ą,Ć,Č,Ė,Ę,È,É,Ê,Ë,Ì,Í,Î,Ï,Į,Ł,Ń,Ò,Ó,Ô,Ö,Õ,Ø,Ù,Ú,Û,Ü,Ų,Ū,Ÿ,Ý,Ż,Ź,
                                 Ñ,ß,Ç,Œ,Æ,Č,Š,Ž,∂,ð, ]*$/", 'min:3'],
                     'email' => ['nullable', 'email', 'max:100', "unique:users,email,$idu,idu"],
-                    'password' => ['nullable',
-                        Password::min(8)
-                            ->letters()  //Al menos una letra
-                            ->mixedCase() //Al menos una minúscula y una mayúscula
-                            ->numbers() //Al menos un número
-                        ],
+                    'password' => ['nullable'],
                     'idar_areas'  => ['required', 'integer', 'exists:areas,idar'],
                     'activo' => ['required', 'boolean']
                 ]);
@@ -249,8 +250,7 @@ class UsersController extends Controller
                         'activo'   => $request->activo
                     ]);
                 }
-                Session::flash('mensaje', 'El usuario se ha actualizado exitosamente');
-                return redirect()->route('users.index');
+                return redirect()->route('users.index')->with('mensaje', 'El usuario se ha actualizado exitosamente');
             } else {
                 abort(404);
             }
