@@ -367,12 +367,18 @@ class SeguimientoController extends Controller
 
         $array_sa = array();
 
+        $ultimo_seg=DB::SELECT("SELECT sa.idseac FROM seguimientos_actividades AS sa
+        INNER JOIN responsables_actividades AS ra ON ra.idreac = sa.idreac_responsables_actividades
+        WHERE ra.idac_actividades = $idac 
+        AND ra.idu_users = $id_user
+        ORDER BY sa.idseac DESC LIMIT 1");
+       
 
-        function detalles($idseac, $idarseg, $max, $min)
+        function detalles($idseac, $idarseg, $ultimo)
         {
     
              
-            if($max == $min){
+            if($idseac == $ultimo){
                 return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                 <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
@@ -398,7 +404,7 @@ class SeguimientoController extends Controller
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $general1, $seg_ac->porcentaje),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac),
             ));
             $turno = $turno +1;
         }
@@ -430,8 +436,6 @@ class SeguimientoController extends Controller
              $detalle = $request->detalle;
              $porcentaje = $request->porcentaje;
              $estado = $request->estado;
-
-
 
              $seg_ac = new seguimientosActividades;
              $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
