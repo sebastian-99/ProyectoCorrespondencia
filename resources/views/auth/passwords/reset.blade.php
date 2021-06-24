@@ -7,19 +7,16 @@
     @csrf
     <b>Correo Electrónico:</b>
     <input type="hidden" name="token" value="{{ $token }}">
-    <div class="form-group d-md-flex">
-        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
-    </div>
-    <div class="form-group ">
-        @error('email')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-    </div>
+    <div class="form-group">
+    <input type="text" class="form-control rounded-left"  class="@error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" value="{{email}}" >
+	@error('email')
+    <div class="form-text text-danger">{{ $message }}</div>
+	@enderror
+	</div>
+
     <b>Nueva Contraseña:</b>
     <div class="form-group">
-		<input type="password" class="form-control rounded-left"  class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password" >
+		<input type="password" class="form-control rounded-left"  class="@error('password') is-invalid @enderror" placeholder="Contraseña" name="password"  >
 	@error('password')
     <div class="form-text text-danger" role"alert">{{ $message }}</div>
 	@enderror
