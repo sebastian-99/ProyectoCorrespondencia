@@ -17,9 +17,6 @@
                 <h2>Medidor de Actividades realizadas por Area  Administrativa</h2>
             </div>
             <div class="card-body">
-                <div class="container">
-                    <h4 class="text-right mb -3" >Reporte de Actividades</h4>
-                </div>
                 <div class="form-row" id="dashboard_panel">
                     <div class="form-group col-md-4">
                         <select class="custom-select" name="areas" id="select_tipo_area">

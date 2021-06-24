@@ -43,7 +43,7 @@ class ActividadesController extends Controller
 
         function btn($idac, $activo){
 
-            return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>";
+            return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>";
 
         }
 
@@ -72,7 +72,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 0, '.', ' ').'%';
+                return number_format($data['3'], 1, '.', ' ').'%';
 
             }else{
 
@@ -134,7 +134,6 @@ class ActividadesController extends Controller
         JOIN areas AS ar ON ar.idar = us.idar_areas
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
-        
         GROUP BY idu_users");
 
         $boton = DB::table('responsables_actividades as res')
@@ -162,7 +161,7 @@ class ActividadesController extends Controller
         function btn($idac,$data,$rechazo,$idreac){
             if($data == 0){
                 return ("No existen detalles");
-           
+
             }else if($data == 1){
                 return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
             }else if($data == 2){
@@ -171,7 +170,7 @@ class ActividadesController extends Controller
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
-                          <div class='modal-header'>        
+                          <div class='modal-header'>
                                <h4>Razon del rechazo</h4>
                           </div>
                           <div class='modal-body'>
@@ -301,7 +300,7 @@ class ActividadesController extends Controller
         
 
     }
-    
+
     public function updateRechazo(Request $c){
         $idreac = $c->idreac;
         $acuse = 0;
@@ -563,7 +562,7 @@ class ActividadesController extends Controller
             
         }
 
-          
+
 
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
             return redirect()->route('reporte_actividades');
@@ -610,7 +609,7 @@ class ActividadesController extends Controller
             'actividades.link3',
         )
         ->get();
-        
+
         $personas = DB::SELECT("SELECT CONCAT(us.titulo, ' ' , us.nombre, ' ', us.app, ' ', us.apm) AS nombre, ar.nombre AS nombre_area
                                 FROM responsables_actividades AS re
                                 INNER JOIN actividades AS ac ON ac.idac = re.idac_actividades
@@ -639,21 +638,21 @@ class ActividadesController extends Controller
         INNER JOIN areas AS a ON a.idar = u.idar_areas
         WHERE ac.idac = $id
         GROUP BY a.nombre");
-       
-        
+
+
         $array2 = array();
-        
+
         foreach($tipous as $t){
             array_push($array2, $t->idar,);
         }
-        
+
         $no_seleccionar = DB::SELECT("SELECT *
         FROM areas AS ar
         WHERE ar.idar NOT IN (" . implode(',', $array2) . ")");
 
-        
-        
-        
+
+
+
         //return $tipous;
         //return $no_seleccionar;
 
@@ -672,7 +671,7 @@ class ActividadesController extends Controller
             array_push($array3, $us->idu);
             array_push($array4, $us->idar);
         }
-        
+
         $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario
         FROM users AS us
         INNER JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -683,7 +682,7 @@ class ActividadesController extends Controller
         ->whereNotIn('idtac',[$consul[0]->idtac_tipos_actividades])
         ->orderBy('nombre','Asc')
         ->get();
-        
+
 
         return view('Actividades.modificar_actividad')
         ->with('consul', $consul)
@@ -831,20 +830,20 @@ class ActividadesController extends Controller
         link1 = '$link', link2 = '$link2', link3 = '$link3'
         WHERE idac = $id");
 
-        
+
 
         for($i=0; $i < count($tipousuarioarea); $i++){
-    
+
             $prueba = DB::SELECT("SELECT idu_users FROM responsables_actividades WHERE idac_actividades= $id AND idu_users = $tipousuarioarea[$i]");
-            
+
             if(count($prueba) == 0){
                 DB::INSERT("INSERT INTO responsables_actividades(idu_users, idac_actividades) VALUES ($tipousuarioarea[$i] , $id)");
             }
-            
-            
+
+
         }
-        
-        
+
+
 	if (Auth()->User()->idtu_tipos_usuarios == 3) {
             return redirect()->route('reporte_actividades');
         }else{
@@ -865,7 +864,7 @@ class ActividadesController extends Controller
         }else{
             DB::UPDATE("UPDATE actividades SET activo = '1' WHERE idac = $id");
         }
-        
+
         return redirect()->route('actividades_creadas',['id'=>encrypt(Auth()->User()->idu)]);
     }
 
@@ -901,13 +900,13 @@ class ActividadesController extends Controller
 
 
             if($activo == 1){
-                return "<a  class='btn btn-success btn-sm' href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Desactivar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></i></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></i></a><div>";
             }else{
-                return "<a class='btn btn-success btn-sm'  href=".route('Detalles', ['id' => encrypt($idac)]) .">Detalle</a>
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('activacion',['id' => encrypt($idac), 'activo' => encrypt($activo)]).">Activar</a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)]).">Modificar</a>";
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></a></div>";
             }
         }
 
@@ -936,7 +935,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 0, '.', ' ').'%';
+                return number_format($data['3'], 1, '.', ' ').'%';
 
             }else{
 
@@ -985,7 +984,7 @@ class ActividadesController extends Controller
 
 
         $json = json_encode($array);
-        
+
         return view ('Actividades.actividadescreadas', compact('json'));
 
     }

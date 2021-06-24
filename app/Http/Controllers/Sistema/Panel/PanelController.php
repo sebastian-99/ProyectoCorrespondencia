@@ -17,7 +17,6 @@ class PanelController extends Controller
     public function panel()
     {
         $user = auth()->user()->idu;
-
         $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
 
         return view('home',[
@@ -48,7 +47,8 @@ class PanelController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -67,6 +67,7 @@ class PanelController extends Controller
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
             ->join('areas','areas.idar','actividades.idar_areas')
             ->where('responsables_actividades.fecha', null)
+            ->where('responsables_actividades.firma', null)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -79,7 +80,8 @@ class PanelController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -115,7 +117,8 @@ class PanelController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -156,7 +159,8 @@ class PanelController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -196,7 +200,8 @@ class PanelController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){

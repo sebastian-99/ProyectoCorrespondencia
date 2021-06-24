@@ -6,3 +6,47 @@ function formSubmit($IdForm)
         $form.submit();
     }
 }
+
+
+
+function validar(){
+    var titulo, nombre, app, apm, email, password, expresion;
+    titulo   = document.getElementById("titulo").value;
+    nombre   = document.getElementById("nombre").value;
+    app      = document.getElementById("app").value;
+    apm      = document.getElementById("apm").value;
+    email    = document.getElementById("email").value;
+    password = document.getElementById("password").value;
+
+    if(titulo === "" || nombre === "" || app === "" || apm === "" || email === "" || password === ""){
+        alert("Los campos son obligatorios");
+        return false;
+    }
+    else if(titulo.length>4){
+        alert("El titulo debe ser abreviado y con punto");
+        return false;
+    }
+    else if(nombre.length>30){
+        alert("El nombre admite solo 30 caracteres");
+        return false;
+    }
+    else if(app.length>30){
+        alert("El apellido paterno admite solo 30 caracteres");
+        return false;
+    }
+    else if(apm.length>30){
+        alert("El apellido materno admite solo 30 caracteres");
+        return false;
+    }
+    else if(email.length>100){
+        alert("El correo es muy largo");
+        return false;
+    }
+    else if(password.length>8){
+        alert("La contraseña admite solo 8 caracteres");
+        return false;
+    }
+}
+
+
+

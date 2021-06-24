@@ -44,7 +44,7 @@
                     <zg-column index='C' header='Avance' width="120" type='text'></zg-column>
                     <zg-column index='AB' header='Atendido por' width="135" type='text'></zg-column>
                     <zg-column index='E' header='Estatus' width="120" type='text'></zg-column>
-                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' width="150" type='text'></zg-column>
+                    <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' type='text'></zg-column>
         	</zg-colgroup>
     	</zing-grid>
 	</div>

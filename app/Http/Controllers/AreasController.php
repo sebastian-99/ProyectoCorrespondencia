@@ -28,10 +28,10 @@ class AreasController extends Controller
 
         function btn($idar, $activo){
             if($activo == 1){
-                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\">Desactivar</a>"
-                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idar\">Editar</a>";
+                $botones = "<a href=\"#eliminar\" class=\"btn btn-danger mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\"><i class='fas fa-power-off'></i></a>"
+                         . "<a href=\"#editar\" class=\"btn btn-primary mt-1\" data-toggle=\"modal\" data-target=\"#editarModal-$idar\"><i class='fas fa-edit'></i></a>";
             } else {
-                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\">Activar</a>";
+                $botones = "<a href=\"#activar\" class=\"btn btn-info mt-1\" onclick=\"formSubmit('eliminar-area-$idar')\"><i class='fas fa-lightbulb'></i></a>";
             }
 
             return $botones;
