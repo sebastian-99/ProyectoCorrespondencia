@@ -127,7 +127,7 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
         $us_id = \Auth()->User()->idu;
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, seg.porcentaje AS porcentaje, razon_rechazo, max(idseac), ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios
+        res.acuse, res.idreac, seg.estado, max(seg.porcentaje) AS porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios
         FROM responsables_actividades AS res
         JOIN actividades AS ac ON ac.idac = res.idac_actividades
         JOIN users AS us ON us.idu = res.idu_users
