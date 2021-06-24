@@ -8,7 +8,7 @@ function formSubmit($IdForm)
 }
 
 
-
+/*
 function validar(){
     var titulo, nombre, app, apm, email, password, expresion;
     titulo   = document.getElementById("titulo").value;
@@ -18,7 +18,13 @@ function validar(){
     email    = document.getElementById("email").value;
     password = document.getElementById("password").value;
 
-    if(titulo.length>4){
+    expresion = /^([A-Za-z 0-9]){8}$/;
+
+    if(titulo === "" || nombre === "" || app === "" || apm === "" || email === "" || password === ""){
+        alert("Los campos son obligatorios");
+        return false;
+    }
+    else if(titulo.length>4){
         alert("El titulo debe ser abreviado y con punto");
         return false;
     }
@@ -38,8 +44,13 @@ function validar(){
         alert("El correo es muy largo");
         return false;
     }
+
     else if(password.length>8){
         alert("La contraseña admite solo 8 caracteres");
+        return false;
+    }
+    else if(!expresion.test(password)){
+        alert("La contraseña no es valida");
         return false;
     }
 }

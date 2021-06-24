@@ -32,7 +32,6 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        /* return $consult; */
 
         $array = array();
 
@@ -61,7 +60,7 @@ class SeguimientoController extends Controller
         function C($data)
         {
             if (gettype($data) == "array") {
-                return number_format($data['2'], 0, '.', ' ');
+                return number_format($data['2'], 1, '.', ' ').'%';
             } else {
                 return 0;
             }
@@ -70,7 +69,7 @@ class SeguimientoController extends Controller
         function D($status, $end_date, $data, $acuse)
         {
             if (gettype($data) == "array") {
-                $data = number_format($data['2'], 0, '.', ' ');
+                $data = number_format($data['2'], 1, '.', ' ');
             } else {
                 $data = 0;
             }
@@ -96,12 +95,14 @@ class SeguimientoController extends Controller
 
             }elseif($acuse == 2 && $acuse == 2){
                     
-                    return "Acuse rechazado";
+                return "Acuse rechazado";
 
             }elseif($status == 3){
     
-                    return "Cancelado";
+                return "Cancelado";
                 
+            }else{
+                return "Sin aceptar acuse";
             }
             
         }
@@ -146,7 +147,7 @@ class SeguimientoController extends Controller
                 'importancia' => $c->importancia,
                 'area' => $c->area,
                 'recibo' => AB($data),
-                'porcentaje' => C($data) . '%',
+                'porcentaje' => C($data),
                 'estado' =>  D($c->status,$c->fecha_fin,$data, $c->acuse),
                 'operaciones' => ver($c->idac),
             ));
