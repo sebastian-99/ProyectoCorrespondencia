@@ -317,27 +317,7 @@
 
             </div>
         </div>
-        <div class="card" id="evidencefiles" hidden>
-            <div class="card-body">
-                <div id="newfile">
-                    <center>
-                    <h4>Archivos del seguimiento</h4>
-                    </center><br>
-                    <table class="table table-responsive" id="tablefiles">
-                        <thead class="">
-                            <tr style="background-color: #607d8b; color: #ffffff">
-                                <th scope="col">Archivo</th>
-                                <th scope="col">Detalle evidencia</th>
-                                <th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{-- Aqui van los archivos que se van agregando al seguimiento --}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+       
     </div>
     <div class="col-sm-12">
         <div class="card">
