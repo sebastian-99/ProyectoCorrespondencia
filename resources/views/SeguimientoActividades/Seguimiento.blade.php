@@ -147,7 +147,16 @@
                         <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}} %"></center>
                     </p>
                     <p class="bd-lead">
-                        <center><h5>Total: {{$general}}%</h5></center>
+                        <center><h5>Total:</h5></center>
+                    </p>
+                    <p class="bd-lead">
+                        <center><h5>{{$general}}%</h5></center>
+                    </p><br><br>
+                    <p class="bd-lead">
+                        <center><h5>Estado de la actividad:</h5></center>
+                    </p>
+                    <p class="bd-lead">
+                        <center><h6>{{$est_act}}</h6></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -163,10 +172,73 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-5">
+<div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data">
+                <center>
+                    <h4>Archivos de la actividad</h4>
+                </center><br>
+                <table class="table table-responsive table-striped">
+                    <thead class="">
+                        <tr style="background-color: #607d8b; color: #ffffff">
+                            <th scope="col" style='width:33.3%'>Archivo</th>
+                            <th scope="col" style='width:33.3%'>Nombre del archivo</th>
+                            <th scope="col" style='width:33.3%'>Detalle (link)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($actividades->archivo1 == "Sin archivo" && $actividades->archivo2 == "Sin archivo" && $actividades->archivo3 == "Sin archivo" )
+                        <tr>
+                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>
+                        </tr>
+                        @endif
+                        @if ($actividades->archivo1 != "Sin archivo")
+                        <tr>
+                            <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$actividades->archivo1}}</td>
+                            <td>
+                            @if ($actividades->link1 != "Sin Link")
+                                <a href="{{$actividades->link1}}" target="_blank">{{$actividades->link1}}</a>
+                            @endif    
+                            </td>
+                        </tr>
+                        @endif
+                        @if ($actividades->archivo2 != "Sin archivo")
+                        <tr>
+                            <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$actividades->archivo2}}</td>
+                            <td>
+                            @if ($actividades->link2 != "Sin Link")
+                                <a href="{{$actividades->link2}}" target="_blank">{{$actividades->link2}}</a>
+                            @endif    
+                            </td>
+                        </tr>
+                        @endif
+
+                        @if ($actividades->archivo3 != "Sin archivo")
+                        <tr>
+                            <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$actividades->archivo1}}</td>
+                            <td>
+                            @if ($actividades->link3 != "Sin Link")
+                                <a href="{{$actividades->link3}}" target="_blank">{{$actividades->link3}}</a>
+                            @endif    
+                            </td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+          
+
+
+            </div>
+        </div>
+       
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data" id="form">
                     @csrf
                     <!--<div class="col-sm-4">
                         <div class="mb-3">
@@ -247,7 +319,7 @@
 
                     <div class="col-sm-2">
 
-                        <button type="submit" class="btn btn-sm btn-success" onclick="this.hidden=true;">Guardar seguimiento</button>
+                        <button type="submit" class="btn btn-sm btn-success" id="dar_seg">Guardar seguimiento</button>
 
                     </div>
                     </table>
@@ -256,89 +328,6 @@
         </div>
     </div>
 
-    <div class="col-sm-7">
-        <div class="card">
-            <div class="card-body">
-                <center>
-                    <h4>Archivos de la actividad</h4>
-                </center><br>
-                <table class="table table-responsive table-striped">
-                    <thead class="">
-                        <tr style="background-color: #607d8b; color: #ffffff">
-                            <th scope="col">Archivo</th>
-                            <th scope="col" style='width:250px'>Nombre del archivo</th>
-                            <th scope="col" style='width:250px'>Detalle (link)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if($actividades->archivo1 == "Sin archivo" && $actividades->archivo2 == "Sin archivo" && $actividades->archivo3 == "Sin archivo" )
-                        <tr>
-                            <td colspan="3">Esta actividad no contiene archivos para atender.</td>
-                        </tr>
-                        @endif
-                        @if ($actividades->archivo1 != "Sin archivo")
-                        <tr>
-                            <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo1}}</td>
-                            <td>
-                            @if ($actividades->link1 != "Sin Link")
-                                <a href="{{$actividades->link1}}" target="_blank">{{$actividades->link1}}</a>
-                            @endif    
-                            </td>
-                        </tr>
-                        @endif
-                        @if ($actividades->archivo2 != "Sin archivo")
-                        <tr>
-                            <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo2}}</td>
-                            <td>
-                            @if ($actividades->link2 != "Sin Link")
-                                <a href="{{$actividades->link2}}" target="_blank">{{$actividades->link2}}</a>
-                            @endif    
-                            </td>
-                        </tr>
-                        @endif
-
-                        @if ($actividades->archivo3 != "Sin archivo")
-                        <tr>
-                            <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo1}}</td>
-                            <td>
-                            @if ($actividades->link3 != "Sin Link")
-                                <a href="{{$actividades->link3}}" target="_blank">{{$actividades->link3}}</a>
-                            @endif    
-                            </td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
-          
-
-
-            </div>
-        </div>
-        <div class="card" id="evidencefiles" hidden>
-            <div class="card-body">
-                <div id="newfile">
-                    <center>
-                    <h4>Archivos del seguimiento</h4>
-                    </center><br>
-                    <table class="table table-responsive" id="tablefiles">
-                        <thead class="">
-                            <tr style="background-color: #607d8b; color: #ffffff">
-                                <th scope="col">Archivo</th>
-                                <th scope="col">Detalle evidencia</th>
-                                <th scope="col"><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger dropfile' id='dropfile'><i class='fa fa-minus-circle'></i></a></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{-- Aqui van los archivos que se van agregando al seguimiento --}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -485,6 +474,13 @@
     $(this).closest('tr').remove();
         });
     
+
+// ------------------------------------------------------------------------------------------------
+$("#form").submit(function(event){
+        
+        $("#dar_seg").prop("disabled", true);
+       
+    });
 
  //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
