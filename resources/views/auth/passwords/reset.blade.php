@@ -7,10 +7,20 @@
     @csrf
     <b>Correo Electrónico:</b>
     <input type="hidden" name="token" value="{{ $token }}">
-    <div class="form-group">
-    <input type="text" class="form-control rounded-left"  class="@error('email') is-invalid @enderror" placeholder="Correo electrónico" name="email" value="{{$email}}" >
+    <div class="form-group" hidden>
+
+    <input 
+    id="email" 
+    type="email"
+    class="form-control rounded-left"  
+    class="@error('email') is-invalid @enderror" 
+    placeholder="Correo electrónico" 
+    name="email" 
+    value="{{ $email ?? old('email') }}" 
+    >
     <i style="color:red;">Es obligatorio colocar tu correo </i>
-	@error('email')
+	
+    @error('email')
     <div class="form-text text-danger">{{ $message }}</div>
 	@enderror
 	</div>
