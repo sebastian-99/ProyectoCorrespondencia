@@ -187,7 +187,7 @@
     
 
     <footer>
-        <div><img src="{{public_path('images/Abajo.jpg')}}" width="100%" ></div>
+        <div><img src="{{public_path('images/Abajo.JPG')}}" width="100%" ></div>
     </footer>
 </body>
 </html>
