@@ -48,7 +48,7 @@ $('document').ready(()=>{
 
     selectArea.change(()=>{
         if (!selectArea.val()){
-            radiosDeRangoDeFechas.attr('hidden',true)
+            //radiosDeRangoDeFechas.attr('hidden',true)
             return
         }
         radiosDeRangoDeFechas.removeAttr('hidden')
@@ -292,3 +292,8 @@ $('document').ready(()=>{
 
 })
 
+/*
+    Calcular seguimiento
+    porcentajes
+    estilos panel
+*/
