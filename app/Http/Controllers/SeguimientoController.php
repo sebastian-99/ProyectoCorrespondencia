@@ -235,7 +235,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
         $general = explode('*', $actividades[0]->porcentaje)[2];
-        $general = number_format($general, 2, '.', ' ');
+        $general = number_format($general, 0);
         $general1 = explode('*', $actividades[0]->porcentaje)[1];
 
         $end_date = $actividades[0]->fecha_fin;
