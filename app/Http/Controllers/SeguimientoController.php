@@ -60,7 +60,7 @@ class SeguimientoController extends Controller
         function C($data)
         {
             if (gettype($data) == "array") {
-                return number_format($data['2'], 1, '.', ' ').'%';
+                return number_format($data['2'], 0, '.', ' ').'%';
             } else {
                 return 0;
             }

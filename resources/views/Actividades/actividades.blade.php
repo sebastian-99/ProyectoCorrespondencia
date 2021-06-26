@@ -358,9 +358,11 @@
 
         $(this).attr("disabled", true);
 
-        let tipo_u = $("#tipousuario").val();
-        //console.log(tipo_u);
+        //let tipo_u = $("#tipousuario").val();
+        let tipo_u = e.params.data.id;
+        
         /* $("#tipousuarioarea").empty(); */
+        
         $.ajax({
             type:'GET',
             data:{
@@ -370,12 +372,14 @@
             success:function(data){
 
 
+                console.log(data);
 
                 for(let i = data.length - 1; i >= 0; i--){
 
                     $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
 
                 }
+
                 $("#tipousuarioarea").attr("disabled", false);
                 $("#tipousuario").attr("disabled", false);
             },error:function(data){

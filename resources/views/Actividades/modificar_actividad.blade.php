@@ -296,9 +296,11 @@
                                     @foreach($tipous as $tu)
                                         <option selected value="{{$tu->idar}}">{{$tu->nombre}}</option>
                                     @endforeach
-                                    @foreach ($no_seleccionar as $no)
-                                        <option value="{{$no->idar}}">{{$no->nombre}}</option>
-                                    @endforeach
+                                    @if($no_seleccionar != null)
+                                        @foreach ($no_seleccionar as $no)
+                                            <option value="{{$no->idar}}">{{$no->nombre}}</option>
+                                        @endforeach
+                                    @endif
                                     </select>
                                 </div>
                             </div>
@@ -309,11 +311,13 @@
                                     <label>&nbsp;</label>
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
                                         @foreach($users as $tu)
-                                            <option selected value="{{$tu->idu}}">{{$tu->usuario}}</option>
+                                            <option selected value="{{$tu->idu}}">{{$tu->usuario . " - " . $tu->nombre_area}}</option>
                                         @endforeach
-                                        @foreach($no_seleccionar_user as $no)
-                                            <option value="{{$no->idu}}">{{$no->usuario}}</option>
-                                        @endforeach
+                                        @if($no_seleccionar_user != null)
+                                            @foreach($no_seleccionar_user as $no)
+                                                <option value="{{$no->idu}}">{{$no->usuario . ' - ' . $no->nombre_area}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -443,7 +447,8 @@
     $("#tipousuario").on('select2:select',function(e){
 
 
-        let tipo_u = $("#tipousuario").val();
+        //let tipo_u = $("#tipousuario").val();
+        let tipo_u = e.params.data.id;
         $(this).attr("disabled",true);
         $("#tipousuarioarea").attr("disabled",true);
         //console.log(tipo_u);
@@ -487,7 +492,7 @@
         $(this).attr("disabled", true);
         let val = e.params.args.data.id;
         let id = {{$consul[0]->idac}};
-
+        console.log(val);
 
         $.ajax({
             type:"GET",
@@ -498,11 +503,12 @@
             url:"{{route('quitar_ajax')}}",
             success:function(data){
 
-
-                if(data[0].acuse == 1){
+                
+                if(data.length >= 1 && data[0].acuse == 1){
                     alert("Tiene una actividad");
                 }else{
-                    $(`#tipousuarioarea option[value='${data[0].idu_users}']`).remove();
+                    
+                    $(`#tipousuarioarea option[value='${val}']`).prop('selected', false).trigger('change');
 
                 }
                 $("#tipousuarioarea").attr("disabled", false);
@@ -534,12 +540,12 @@
             url: "{{route('quitar_ajax2')}}",
             success:function(data){
 
-                //console.log(data[1][0].idu);
-                if(data[0][0].contar >=1){
+                console.log(data[1][0].idu);
+                if(data[0][0].contar == 1){
                     alert("hay gente aqui");
                 }else{
 
-                    $(`#tipousuario option[value='${val}']`).attr('selected', false).trigger('change');
+                    $(`#tipousuario option[value='${val}']`).prop('selected', false).trigger('change');
                     
                     //$("#tipousuario").remove();
 
