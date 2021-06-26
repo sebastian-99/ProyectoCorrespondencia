@@ -227,31 +227,31 @@ class ActividadesController extends Controller
               $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
               
               //return ($data > $end_date ? "es mayor" : "No es mayor");
-              if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 0){
+              if($date <= $end_date && $data < 100 && $acuse == 0){
   
                 return "En proceso – En Tiempo";
 
-            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 0){
+            }elseif($date >= $end_date  && $data < 100 && $acuse == 0){
   
                 return "En proceso – Fuera de tiempo";
 
-            }elseif($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
+            }elseif($date <= $end_date  && $data < 100 && $acuse == 1){
   
                   return "En proceso – En Tiempo";
   
-              }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
+              }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
   
                   return "Concluido – En tiempo";
                   
-              }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
+              }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
   
                   return "En proceso - Fuera de Tiempo";
   
-              }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
+              }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
   
                   return "Concluido – Fuera de Tiempo";
   
-              }elseif($acuse == 2 && $acuse == 2){
+              }elseif($acuse == 2){
                       
                       return "Acuse rechazado";
   
@@ -337,7 +337,7 @@ class ActividadesController extends Controller
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
         $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
-        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar
+        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -345,7 +345,7 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac desc");
+            GROUP BY idseac asc");
 
         $array = array();
 
@@ -361,23 +361,68 @@ class ActividadesController extends Controller
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
                 }
             }
-        $turno = 0;
-        foreach($consult as $c){
 
-          $turno = $turno+1;
-           }
-        foreach($consult as $c){
+            function D($status, $end_date, $data, $acuse)
+            {
+                if (gettype($data) == "array") {
+                    $data = number_format($data['2'], 0, '.', ' ');
+                } else {
+                    $data = 0;
+                }
+  
+                $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+                
+                //return ($data > $end_date ? "es mayor" : "No es mayor");
+                if($date <= $end_date && $data < 100 && $acuse == 0){
+    
+                  return "En proceso – En Tiempo";
+  
+              }elseif($date >= $end_date  && $data < 100 && $acuse == 0){
+    
+                  return "En proceso – Fuera de tiempo";
+  
+              }elseif($date <= $end_date  && $data < 100 && $acuse == 1){
+    
+                    return "En proceso – En Tiempo";
+    
+                }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
+    
+                    return "Concluido – En tiempo";
+                    
+                }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
+    
+                    return "En proceso - Fuera de Tiempo";
+    
+                }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
+    
+                    return "Concluido – Fuera de Tiempo";
+    
+                }elseif($acuse == 2){
+                        
+                        return "Acuse rechazado";
+    
+                }elseif($status == 3){
+        
+                        return "Cancelado";
+                    
+                }
+                
+            }
 
-         // $data = recorrer($c->porcentaje);
+        $turno = 1;
+    
+        foreach($consult as $c){
+        
+            $data = recorrer($c->porcentaje);
 
           array_push($array, array('idseac' => $turno,
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
-                             'estado' => $c->estado,
+                             'estado' =>  D($c->status_ac,$c->fecha_fin,$data, $c->acuse),
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
-                             $turno = $turno-1;
+                             $turno = $turno+1;
         }
         $json = json_encode($array);
 
