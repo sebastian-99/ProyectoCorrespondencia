@@ -163,10 +163,10 @@ class ActividadesController extends Controller
                 return ("No existen detalles");
 
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
             }else if($data == 2){
                 if (Auth()->User()->idtu_tipos_usuarios == 3) {
-                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -181,7 +181,7 @@ class ActividadesController extends Controller
                  </div>
                </div>";
                 }else {
-                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -193,7 +193,7 @@ class ActividadesController extends Controller
                                         <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
                                              <input type='hidden' name='_token' value=". csrf_token() .">
                                              <input type='hidden' value=".$idac." name='idreac'>        
-                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' >Eliminar</a>
+                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
                                         </form>
                                 </div>
                           </div>
@@ -227,31 +227,31 @@ class ActividadesController extends Controller
               $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
               
               //return ($data > $end_date ? "es mayor" : "No es mayor");
-              if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 0){
+              if($date <= $end_date && $data < 100 && $acuse == 0){
   
                 return "En proceso – En Tiempo";
 
-            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 0){
+            }elseif($date >= $end_date && $data < 100 && $acuse == 0){
   
                 return "En proceso – Fuera de tiempo";
 
-            }elseif($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
+            }elseif($date <= $end_date && $data < 100 && $acuse == 1){
   
                   return "En proceso – En Tiempo";
   
-              }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
+              }elseif($date <= $end_date && $data == 100 && $acuse == 1){
   
                   return "Concluido – En tiempo";
                   
-              }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
+              }elseif($date >= $end_date && $data < 100 && $acuse == 1){
   
                   return "En proceso - Fuera de Tiempo";
   
-              }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
+              }elseif($date >= $end_date && $data == 100 && $acuse == 1){
   
                   return "Concluido – Fuera de Tiempo";
   
-              }elseif($acuse == 2 && $acuse == 2){
+              }elseif($acuse == 2){
                       
                       return "Acuse rechazado";
   
@@ -345,7 +345,7 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac desc");
+            GROUP BY idseac ASC");
 
         $array = array();
 
@@ -358,14 +358,12 @@ class ActividadesController extends Controller
                 return "Sin archivos";
             }else{
             return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
                 }
             }
-        $turno = 0;
-        foreach($consult as $c){
+        $turno = 1;
+        
 
-          $turno = $turno+1;
-           }
         foreach($consult as $c){
 
          // $data = recorrer($c->porcentaje);
@@ -377,7 +375,7 @@ class ActividadesController extends Controller
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
-                             $turno = $turno-1;
+                             $turno = $turno+1;
         }
         $json = json_encode($array);
 

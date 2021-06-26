@@ -69,7 +69,7 @@ class SeguimientoController extends Controller
         function D($status, $end_date, $data, $acuse)
         {
             if (gettype($data) == "array") {
-                $data = number_format($data['2'], 1, '.', ' ');
+                $data = number_format($data['2'], 0, '.', ' ');
             } else {
                 $data = 0;
             }
@@ -77,23 +77,23 @@ class SeguimientoController extends Controller
             
             //return ($data > $end_date ? "es mayor" : "No es mayor");
 
-            if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
+            if($date <= $end_date && $data < 100 && $acuse == 1){
 
                 return "En proceso – En Tiempo";
 
-            }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
+            }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
 
                 return "Concluido – En tiempo";
                 
-            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
+            }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
 
-                return "En proceso - fuera de Tiempo";
+                return "En proceso - Fuera de Tiempo";
 
-            }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
+            }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
 
                 return "Concluido – Fuera de Tiempo";
 
-            }elseif($acuse == 2 && $acuse == 2){
+            }elseif($acuse == 2){
                     
                 return "Acuse rechazado";
 
