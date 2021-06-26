@@ -345,7 +345,7 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac desc");
+            GROUP BY idseac ASC");
 
         $array = array();
 
@@ -361,11 +361,9 @@ class ActividadesController extends Controller
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
                 }
             }
-        $turno = 0;
-        foreach($consult as $c){
+        $turno = 1;
+        
 
-          $turno = $turno+1;
-           }
         foreach($consult as $c){
 
          // $data = recorrer($c->porcentaje);
@@ -377,7 +375,7 @@ class ActividadesController extends Controller
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
-                             $turno = $turno-1;
+                             $turno = $turno+1;
         }
         $json = json_encode($array);
 
