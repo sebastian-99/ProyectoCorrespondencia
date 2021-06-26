@@ -82,7 +82,7 @@
                                         <select class="form-select" id="idar_areas" name="idar_areas">
                                             <option value="">Selección</option>
                                             @foreach($areas as $area)
-                                                <option value="{{ $area->idar }}" {{ ($user_edit->idar_areas == $area->idar) ? 'selected' : '' }}>{{ $area->idar_areas . ' - ' . $area->nombretipo }}</option>
+                                                <option value="{{ $area->idar }}" {{ ($user_edit->idar_areas == $area->idar) ? 'selected' : '' }}>{{ $area->nombretipo . ' - ' . $area->idar_areas }}</option>
                                             @endforeach
                                         </select>
                                     </div>
