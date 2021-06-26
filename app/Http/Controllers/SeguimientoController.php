@@ -69,7 +69,7 @@ class SeguimientoController extends Controller
         function D($status, $end_date, $data, $acuse)
         {
             if (gettype($data) == "array") {
-                $data = number_format($data['2'], 1, '.', ' ');
+                $data = number_format($data['2'], 0, '.', ' ');
             } else {
                 $data = 0;
             }
@@ -77,23 +77,23 @@ class SeguimientoController extends Controller
             
             //return ($data > $end_date ? "es mayor" : "No es mayor");
 
-            if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
+            if($date <= $end_date && $data < 100 && $acuse == 1){
 
                 return "En proceso – En Tiempo";
 
-            }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
+            }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
 
                 return "Concluido – En tiempo";
                 
-            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
+            }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
 
-                return "En proceso - fuera de Tiempo";
+                return "En proceso - Fuera de Tiempo";
 
-            }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
+            }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
 
                 return "Concluido – Fuera de Tiempo";
 
-            }elseif($acuse == 2 && $acuse == 2){
+            }elseif($acuse == 2){
                     
                 return "Acuse rechazado";
 
@@ -204,7 +204,6 @@ class SeguimientoController extends Controller
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -240,7 +239,6 @@ class SeguimientoController extends Controller
 
         $end_date = $actividades[0]->fecha_fin;
 
-        //dd($actividades[0]->porcentaje);
 
 
         //Obtener datos del usuario
@@ -278,12 +276,52 @@ class SeguimientoController extends Controller
             ->where('idac', $idac)
             ->get();
 
-        //Porcenteje mas alto del de avance
+            //Porcenteje mas alto del de avance
         $max_ai = DB::SELECT("SELECT MAX(seg.porcentaje) AS avance_i
         FROM responsables_actividades AS res
         JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac AND idu_users = $id_user
         ");
+
+               //ver el estado de la actividad
+        $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+              
+        //return ($data > $end_date ? "es mayor" : "No es mayor");
+        if($date <= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 0){
+
+         $est_act = "En proceso – En Tiempo";
+
+      }elseif($date <= $end_date && $max_ai[0]->avance_i == 100 && $resp[0]->acuse == 1){
+
+        $est_act = "Concluido – En tiempo";
+         
+     }elseif($date >= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 0){
+
+         $est_act = "En proceso – Fuera de tiempo";
+
+      }elseif($date <= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 1){
+
+           $est_act = "En proceso – En Tiempo";
+
+        }elseif($date >= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 1){
+
+           $est_act = "En proceso - Fuera de Tiempo";
+
+        }elseif($date >= $end_date && $max_ai[0]->avance_i == 100 && $resp[0]->acuse == 1){
+
+           $est_act = "Concluido – Fuera de Tiempo";
+
+        }elseif($resp[0]->acuse == 2 && $resp[0]->acuse == 2){
+                
+               $est_act = "Acuse rechazado";
+
+        }elseif($actividades[0]->status == 3){
+
+               $est_act = "Cancelado";
+            
+        }
+
+        
 
         //Ver quien ha visto su actividad asignada
 
@@ -328,12 +366,18 @@ class SeguimientoController extends Controller
 
         $array_sa = array();
 
+        $ultimo_seg=DB::SELECT("SELECT sa.idseac FROM seguimientos_actividades AS sa
+        INNER JOIN responsables_actividades AS ra ON ra.idreac = sa.idreac_responsables_actividades
+        WHERE ra.idac_actividades = $idac 
+        AND ra.idu_users = $id_user
+        ORDER BY sa.idseac DESC LIMIT 1");
+       
 
-        function detalles($idseac, $idarseg, $max, $min)
+        function detalles($idseac, $idarseg, $ultimo)
         {
     
              
-            if($max == $min){
+            if($idseac == $ultimo){
                 return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                 <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idseac)."  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                 <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
@@ -359,7 +403,7 @@ class SeguimientoController extends Controller
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $general, $seg_ac->porcentaje),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac),
             ));
             $turno = $turno +1;
         }
@@ -376,7 +420,8 @@ class SeguimientoController extends Controller
             ->with('atendido', $atendido[0])
             ->with('total_at', $total_at[0])
             ->with('max_ai', $max_ai[0])
-            ->with('general', $general);
+            ->with('general', $general)
+            ->with('est_act', $est_act);
     }
 
     public function AgregarSeguimiento(Request $request)
@@ -390,8 +435,6 @@ class SeguimientoController extends Controller
              $detalle = $request->detalle;
              $porcentaje = $request->porcentaje;
              $estado = $request->estado;
-
-
 
              $seg_ac = new seguimientosActividades;
              $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
