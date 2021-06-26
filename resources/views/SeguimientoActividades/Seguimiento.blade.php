@@ -140,18 +140,19 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                     <center>
                     <h4>Avance de la actividad</h4>
-                </center><br>
+                    </center><br><br><br><br>
                     </div>
-                    <p class="bd-lead"></p>
+                    <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
-                        <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}}"></center>
-                    </p>
+                        <h5>Individual: </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}}">%
+                    </p></div><br><br><br>
+                    <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
-                        <center><h5>Total:</h5></center>
-                    </p>
-                    <p class="bd-lead">
-                        <center><h5>{{$general}}%</h5></center>
-                    </p><br><br>
+                       <h5>Total:</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text"  value="{{$general}}">%
+                    </p></div>
+                    
+                    
+                    <br><br>
                     <p class="bd-lead">
                         <center><h5>Estado de la actividad:</h5></center>
                     </p>
