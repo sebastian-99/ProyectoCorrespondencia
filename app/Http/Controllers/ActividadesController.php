@@ -127,7 +127,7 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
         $us_id = \Auth()->User()->idu;
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, max(seg.porcentaje) AS porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios
+        res.acuse, res.idreac, seg.estado, Max(seg.porcentaje) as porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios, Max(seg.created_at) as created_at
         FROM responsables_actividades AS res
         JOIN actividades AS ac ON ac.idac = res.idac_actividades
         JOIN users AS us ON us.idu = res.idu_users
@@ -135,7 +135,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
         GROUP BY idu_users");
-
+   
         $boton = DB::table('responsables_actividades as res')
                     ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
                     ->where([
@@ -147,26 +147,25 @@ class ActividadesController extends Controller
 
         $array = array();
 
-        function recorrer($value)
-        {
-            if (gettype($value) == "string") {
-                $val = explode('*', $value);
-                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
-            } else {
-                $arr = null;
-            }
-            return $arr;
-        }
+       function por($porcentaje,$acuse){
+           if($acuse == 0){
+               return "0%";
+           }elseif($acuse == 2){
+               return "0%";
+           }else{
+               return $porcentaje;
+           }
+       }
 
         function btn($idac,$data,$rechazo,$idreac){
             if($data == 0){
                 return ("No existen detalles");
 
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
             }else if($data == 2){
                 if (Auth()->User()->idtu_tipos_usuarios == 3) {
-                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -181,7 +180,7 @@ class ActividadesController extends Controller
                  </div>
                </div>";
                 }else {
-                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -193,7 +192,7 @@ class ActividadesController extends Controller
                                         <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
                                              <input type='hidden' name='_token' value=". csrf_token() .">
                                              <input type='hidden' value=".$idac." name='idreac'>        
-                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' >Eliminar</a>
+                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
                                         </form>
                                 </div>
                           </div>
@@ -203,65 +202,40 @@ class ActividadesController extends Controller
                 }
             }
         }
+       
+   
 
-     //  function C($data){
+        function D($porcentaje, $fecha_fin, $created_at, $acuse)
+        {
+         
+           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+            
+          //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
+          if($acuse == 2){
+                    
+            return "Acuse rechazado";
 
-       //     if(gettype($data) == "array"){
+         }elseif($created_at <= $fecha_fin && $porcentaje < 100){
 
-         //       return number_format($data[2], 2, '.', ' ').'%';
-           // }else{
-             //   return 0.00;
-            //}
-
-        //}
-
-          // $data = recorrer($c->porcentaje);
-          function D($status, $end_date, $data, $acuse)
-          {
-              if (gettype($data) == "array") {
-                  $data = number_format($data['2'], 0, '.', ' ');
-              } else {
-                  $data = 0;
-              }
-
-              $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
-              
-              //return ($data > $end_date ? "es mayor" : "No es mayor");
-              if($date <= $end_date && $data < 100 && $acuse == 0){
-  
                 return "En proceso – En Tiempo";
 
-            }elseif($date >= $end_date  && $data < 100 && $acuse == 0){
-  
-                return "En proceso – Fuera de tiempo";
+            }elseif($created_at <= $fecha_fin   && $porcentaje == 100){
 
-            }elseif($date <= $end_date  && $data < 100 && $acuse == 1){
-  
-                  return "En proceso – En Tiempo";
-  
-              }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
-  
-                  return "Concluido – En tiempo";
-                  
-              }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
-  
-                  return "En proceso - Fuera de Tiempo";
-  
-              }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
-  
-                  return "Concluido – Fuera de Tiempo";
-  
-              }elseif($acuse == 2){
-                      
-                      return "Acuse rechazado";
-  
-              }elseif($status == 3){
-      
-                      return "Cancelado";
-                  
-              }
-              
-          }
+                return "Concluido – En tiempo";
+                
+      }elseif($created_at >= $fecha_fin  && $porcentaje < 100){
+
+               return "En proceso - Fuera de Tiempo";
+
+           }elseif($created_at >= $fecha_fin  && $porcentaje == 100){
+
+               return "Concluido – Fuera de Tiempo";
+
+           }else{
+               return "Sin aceptar estado";
+            }
+            
+        }
 
         function Acuse($data){
 
@@ -279,12 +253,12 @@ class ActividadesController extends Controller
         foreach($query as $c){
 
              $data1 = Acuse($c->acuse);
-             $data = recorrer($c->porcentaje);
+            $porcentaje = por($c->porcentaje,$c->acuse);
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
-                                    'porcentaje' =>  $c->porcentaje.'%',
-                                    'estado' =>  D($c->status_ac,$c->fecha_fin,$data, $c->acuse),
+                                    'porcentaje' =>  $porcentaje,
+                                    'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->created_at,$c->acuse),
                                     'acuse' => $data1,
                                     'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo,$c->idreac,$us_id),
                                     ));
@@ -337,7 +311,7 @@ class ActividadesController extends Controller
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
         $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
-        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse
+        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse, re.created_at
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -345,12 +319,18 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac asc");
+            GROUP BY idseac ASC");
 
         $array = array();
 
-        function recorrer($value){
-          $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+        function recorrer($value)
+        {
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+            } else {
+                $arr = null;
+            }
             return $arr;
         }
         function btn($idac,$ruta){
@@ -358,53 +338,44 @@ class ActividadesController extends Controller
                 return "Sin archivos";
             }else{
             return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
                 }
             }
 
-            function D($status, $end_date, $data, $acuse)
+        
+            function D($status_ac, $fecha_fin, $updated_at, $estado)
             {
-                if (gettype($data) == "array") {
-                    $data = number_format($data['2'], 0, '.', ' ');
-                } else {
-                    $data = 0;
-                }
-  
-                $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+             
+               $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
                 
-                //return ($data > $end_date ? "es mayor" : "No es mayor");
-                if($date <= $end_date && $data < 100 && $acuse == 0){
+              //  return ($updated_at > $fecha_fin ? "es mayor" : "No es mayor");
     
-                  return "En proceso – En Tiempo";
-  
-              }elseif($date >= $end_date  && $data < 100 && $acuse == 0){
-    
-                  return "En proceso – Fuera de tiempo";
-  
-              }elseif($date <= $end_date  && $data < 100 && $acuse == 1){
+               if($updated_at <= $fecha_fin && $estado == "Pendiente"){
     
                     return "En proceso – En Tiempo";
     
-                }elseif($date <= $end_date  && $data == 100 && $acuse == 1){
+                }elseif($updated_at <= $fecha_fin   && $estado == "Completo"){
     
                     return "Concluido – En tiempo";
                     
-                }elseif($date >= $end_date  && $data < 100 && $acuse == 1){
+          }elseif($updated_at >= $fecha_fin  && $estado == "Pendiente"){
     
-                    return "En proceso - Fuera de Tiempo";
+                   return "En proceso - Fuera de Tiempo";
     
-                }elseif($date >= $end_date  && $data == 100 && $acuse == 1){
+               }elseif($updated_at >= $fecha_fin  && $estado == "Completo"){
     
-                    return "Concluido – Fuera de Tiempo";
+                   return "Concluido – Fuera de Tiempo";
     
-                }elseif($acuse == 2){
+               }elseif($estado == 2){
                         
-                        return "Acuse rechazado";
+                   return "Acuse rechazado";
     
                 }elseif($status == 3){
         
-                        return "Cancelado";
+                    return "Cancelado";
                     
+               }else{
+                   return "Sin aceptar estado";
                 }
                 
             }
@@ -413,12 +384,12 @@ class ActividadesController extends Controller
     
         foreach($consult as $c){
         
-            $data = recorrer($c->porcentaje);
+         
 
           array_push($array, array('idseac' => $turno,
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
-                             'estado' =>  D($c->status_ac,$c->fecha_fin,$data, $c->acuse),
+                             'estado' =>  D($c->status_ac,$c->fecha_fin,$c->created_at,$c->estado),
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
