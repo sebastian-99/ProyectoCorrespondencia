@@ -72,7 +72,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 1, '.', ' ').'%';
+                return number_format($data['3'], 0, '.', ' ').'%';
 
             }else{
 
@@ -467,7 +467,7 @@ class ActividadesController extends Controller
         $id = $request->tipo_u;
         $id_seleccionado;
 
-        for($b=0; $b < count($id); $b++){
+        /* for($b=0; $b < count($id); $b++){
 
             $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
@@ -477,13 +477,19 @@ class ActividadesController extends Controller
 
             $id_seleccionado[$b] = $consul;
 
-        }
+        } */
 
-        $id_sacado = Arr::flatten($consul);
+        //$id_sacado = Arr::flatten($consul);
+
+        $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
+            INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
+            INNER JOIN areas AS a ON a.idar = u.idar_areas
+            WHERE u.idtu_tipos_usuarios NOT IN(1)
+            AND a.idar = $id");
 
 
 
-        return response()->json($id_sacado);
+        return response()->json($consul);
     }
 
     public function insert_actividad(Request $r){
@@ -625,7 +631,6 @@ class ActividadesController extends Controller
             'actividades.link3',
         )
         ->get();
-
         $personas = DB::SELECT("SELECT CONCAT(us.titulo, ' ' , us.nombre, ' ', us.app, ' ', us.apm) AS nombre, ar.nombre AS nombre_area
                                 FROM responsables_actividades AS re
                                 INNER JOIN actividades AS ac ON ac.idac = re.idac_actividades
@@ -634,6 +639,7 @@ class ActividadesController extends Controller
                                 WHERE re.acuse = 1
                                 AND re.idac_actividades = $id
                                 ORDER BY ar.nombre ASC");
+       
         $array = array();
 
         foreach($personas as $personas){
@@ -655,16 +661,22 @@ class ActividadesController extends Controller
         WHERE ac.idac = $id
         GROUP BY a.nombre");
 
-
+       
         $array2 = array();
 
         foreach($tipous as $t){
             array_push($array2, $t->idar,);
         }
+        
+        if(count($array2) > 1){
 
         $no_seleccionar = DB::SELECT("SELECT *
         FROM areas AS ar
         WHERE ar.idar NOT IN (" . implode(',', $array2) . ")");
+        }else{
+            $no_seleccionar =DB::SELECT("SELECT *
+            FROM areas AS ar");
+        }
 
 
 
@@ -673,13 +685,13 @@ class ActividadesController extends Controller
         //return $no_seleccionar;
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario,
-        a.idar
+        a.idar, a.nombre AS nombre_area
         FROM actividades AS ac
         INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
         INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idar_areas
         WHERE ac.idac = $id");
-
+       
         $array3 = array();
         $array4 = array();
 
@@ -688,12 +700,19 @@ class ActividadesController extends Controller
             array_push($array4, $us->idar);
         }
 
-        $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario
-        FROM users AS us
-        INNER JOIN areas AS ar ON ar.idar = us.idar_areas
-        WHERE us.idu NOT IN(" . implode(',', $array3) . ")
-        AND ar.idar IN (" . implode(',', $array4) . ")");
+        if(count($array3) > 1 && count($array4) > 1){
 
+            $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario,
+            ar.nombre AS nombre_area
+            FROM users AS us
+            INNER JOIN areas AS ar ON ar.idar = us.idar_areas
+            WHERE us.idu NOT IN(" . implode(',', $array3) . ")
+            AND ar.idar IN (" . implode(',', $array4) . ")
+            AND us.idtu_tipos_usuarios NOT IN(1)");
+        }else{
+            $no_seleccionar_user = null;
+        }
+        
         $tipo_actividad = DB::table('tipos_actividades')
         ->whereNotIn('idtac',[$consul[0]->idtac_tipos_actividades])
         ->orderBy('nombre','Asc')
@@ -833,9 +852,20 @@ class ActividadesController extends Controller
 
         $tipousuario = $r->tipousuario;
         $tipousuarioarea = $r->tipousuarioarea;
-
+      
         $estado = $r->estado;
         $importancia = $r->importancia;
+
+        
+        //return $tipousuarioarea;
+        //return array("36", "38", "red");
+        
+
+        
+
+        //return $array;
+
+        //return count(array_diff($array,$tipousuarioarea));
 
 
         DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
@@ -847,17 +877,39 @@ class ActividadesController extends Controller
         WHERE idac = $id");
 
 
+        $array = array();
+        $no_dentro = DB::SELECT("SELECT idu_users 
+        FROM responsables_actividades 
+        WHERE idac_actividades= $id");
+
+        foreach($no_dentro as $no){
+            array_push($array, $no->idu_users);
+        }
+
+        foreach($array as $a){
+
+             
+            (in_array($a, $tipousuarioarea) ? "" : DB::DELETE("DELETE FROM responsables_actividades WHERE idu_users = $a AND idac_actividades = $id"));
+            
+        }
+    
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            $prueba = DB::SELECT("SELECT idu_users FROM responsables_actividades WHERE idac_actividades= $id AND idu_users = $tipousuarioarea[$i]");
+            $prueba = DB::SELECT("SELECT idu_users 
+            FROM responsables_actividades 
+            WHERE idac_actividades= $id 
+            AND idu_users = $tipousuarioarea[$i]");
 
             if(count($prueba) == 0){
                 DB::INSERT("INSERT INTO responsables_actividades(idu_users, idac_actividades) VALUES ($tipousuarioarea[$i] , $id)");
             }
 
-
+           
+        
+          
         }
+
 
 
 	if (Auth()->User()->idtu_tipos_usuarios == 3) {
@@ -951,7 +1003,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 1, '.', ' ').'%';
+                return number_format($data['3'], 0, '.', ' ').'%';
 
             }else{
 
