@@ -153,7 +153,7 @@ class ActividadesController extends Controller
            }elseif($acuse == 2){
                return "0%";
            }else{
-               return $porcentaje;
+               return $porcentaje."%";
            }
        }
 
