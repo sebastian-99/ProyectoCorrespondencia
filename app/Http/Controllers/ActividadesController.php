@@ -125,9 +125,11 @@ class ActividadesController extends Controller
 
     public function Detalles($idac){
         $idac = decrypt($idac);
-        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us,
-        res.acuse, res.idreac, seg.estado, MAX(seg.porcentaje) AS porcentaje, razon_rechazo
+        $us_id = \Auth()->User()->idu;
+        $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
+        res.acuse, res.idreac, seg.estado, max(seg.porcentaje) AS porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios
         FROM responsables_actividades AS res
+        JOIN actividades AS ac ON ac.idac = res.idac_actividades
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
@@ -145,20 +147,26 @@ class ActividadesController extends Controller
 
         $array = array();
 
-        function recorrer($value){
-            $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+        function recorrer($value)
+        {
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+            } else {
+                $arr = null;
+            }
             return $arr;
         }
 
-
-        function btn($idac,$data,$rechazo){
+        function btn($idac,$data,$rechazo,$idreac){
             if($data == 0){
                 return ("No existen detalles");
 
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
             }else if($data == 2){
-                return "<a href='#' class='btn btn-danger pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                if (Auth()->User()->idtu_tipos_usuarios == 3) {
+                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -167,16 +175,32 @@ class ActividadesController extends Controller
                           </div>
                           <div class='modal-body'>
                                  $rechazo
-                                 <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
-                                 <input type='hidden' name='_token' value=". csrf_token() .">
-                                 <input type='hidden' value=".$idac." name='idreac'>
-                                 <button type='submit' class='btn btn-primary'>Reactivar</button>
-                            </form>
+                                </div>
                           </div>
-
-                         </div>
                      </div>
+                 </div>
                </div>";
+                }else {
+                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
+                <div class='modal fade' id='create$idac'>
+                  <div class='modal-dialog'>
+                      <div class='modal-content'>
+                          <div class='modal-header'>        
+                               <h4>Razon del rechazo</h4>
+                          </div>
+                          <div class='modal-body'>
+                                 $rechazo        
+                                        <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
+                                             <input type='hidden' name='_token' value=". csrf_token() .">
+                                             <input type='hidden' value=".$idac." name='idreac'>        
+                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
+                                        </form>
+                                </div>
+                          </div>
+                     </div>
+                 </div>
+               </div>";
+                }
             }
         }
 
@@ -192,7 +216,52 @@ class ActividadesController extends Controller
         //}
 
           // $data = recorrer($c->porcentaje);
+          function D($status, $end_date, $data, $acuse)
+          {
+              if (gettype($data) == "array") {
+                  $data = number_format($data['2'], 0, '.', ' ');
+              } else {
+                  $data = 0;
+              }
 
+              $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+              
+              //return ($data > $end_date ? "es mayor" : "No es mayor");
+              if($date <= $end_date && $data < 100 && $acuse == 0){
+  
+                return "En proceso – En Tiempo";
+
+            }elseif($date >= $end_date && $data < 100 && $acuse == 0){
+  
+                return "En proceso – Fuera de tiempo";
+
+            }elseif($date <= $end_date && $data < 100 && $acuse == 1){
+  
+                  return "En proceso – En Tiempo";
+  
+              }elseif($date <= $end_date && $data == 100 && $acuse == 1){
+  
+                  return "Concluido – En tiempo";
+                  
+              }elseif($date >= $end_date && $data < 100 && $acuse == 1){
+  
+                  return "En proceso - Fuera de Tiempo";
+  
+              }elseif($date >= $end_date && $data == 100 && $acuse == 1){
+  
+                  return "Concluido – Fuera de Tiempo";
+  
+              }elseif($acuse == 2){
+                      
+                      return "Acuse rechazado";
+  
+              }elseif($status == 3){
+      
+                      return "Cancelado";
+                  
+              }
+              
+          }
 
         function Acuse($data){
 
@@ -209,14 +278,15 @@ class ActividadesController extends Controller
 
         foreach($query as $c){
 
-             $data = Acuse($c->acuse);
+             $data1 = Acuse($c->acuse);
+             $data = recorrer($c->porcentaje);
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
                                     'porcentaje' =>  $c->porcentaje.'%',
-                                    'estado' => $c->estado,
-                                    'acuse' => $data,
-                                    'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo),
+                                    'estado' =>  D($c->status_ac,$c->fecha_fin,$data, $c->acuse),
+                                    'acuse' => $data1,
+                                    'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo,$c->idreac,$us_id),
                                     ));
         }
 
@@ -227,6 +297,7 @@ class ActividadesController extends Controller
         ->with('json', $json)
         ->with('idac', $idac)
         ->with('boton', $boton);
+        
 
     }
 
@@ -274,7 +345,7 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac desc");
+            GROUP BY idseac ASC");
 
         $array = array();
 
@@ -287,14 +358,12 @@ class ActividadesController extends Controller
                 return "Sin archivos";
             }else{
             return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
                 }
             }
-        $turno = 0;
-        foreach($consult as $c){
+        $turno = 1;
+        
 
-          $turno = $turno+1;
-           }
         foreach($consult as $c){
 
          // $data = recorrer($c->porcentaje);
@@ -306,7 +375,7 @@ class ActividadesController extends Controller
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
-                             $turno = $turno-1;
+                             $turno = $turno+1;
         }
         $json = json_encode($array);
 
@@ -325,6 +394,21 @@ class ActividadesController extends Controller
         return response()->json($query);
     }
 
+    public function EliminarResponsables($idreac)
+
+    {
+        //$ultimo = archivosSeguimientos::find('idarse')->orderBy('idarse')->desc();
+        $idreac = decrypt($idreac);
+
+
+        $elim = DB::DELETE("DELETE FROM responsables_actividades
+        where idreac =$idreac
+        ");
+
+      
+
+        return back()->with('message2', 'El usuario se ha eliminado de la actividad');;
+    }
 
 
     public function actividades(){

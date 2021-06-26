@@ -1,57 +1,79 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PDF de actividades seguimientos</title>
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+    <title>PDF de acuse recibido de actividades</title> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    
 </head>
 <style>
-    *{
-        padding: 0;
-        font-family: arial;
-    }
-    h1 {
-        font-size: 25px;
+    .titulo p {
+        font-family: Helvetica;
+        font-size: 16pt;
         text-align: center;
         color: #0B821D;
     }
-    h2 {
-        font-size: 22px;
+    .sub p{
+        font-family: Helvetica;
+        font-size: 14pt;
         text-align: center;
     }
-    p {
-        text-align: center;
+    div p {
+        font-family: Helvetica;
+        font-size: 12pt;
+        text-align: left;
+        line-height: 1.5em;
     }
+
+    footer {
+        position: fixed;
+        bottom: 0cm;
+        height: 2cm;
+        margin-left: 0px;
+        margin-right: 0px;
+        width: 100%;
+        background-color: #696969;
+        color: white;
+        font-family: Helvetica;
+        font-size: 8pt;
+        /line-height: 35pt;/
+    }
+    div img{
+        left: 0px;
+        right: 0px;
+        margin-left: 0px;
+    }
+    
 </style>
-
-
 <body>
     <div>
-        <div class="row">
-            <div align="left"><img src="{{public_path('images/Edomex.png')}}" height="60" alt=""></div>
-            <div align="right"><img src="{{public_path('images/logoUTVT.png')}}" height="90" alt=""></div>
+        <div align="right">
+            <div>
+                <img src="{{public_path('images/Gob.jpg')}}" height="40" align="left">
+                <img src="{{public_path('images/logoUTVT.png')}}" height="30" alt="">
+                <img src="{{public_path('images/Edomex.png')}}" height="40" alt="">
+            </div>
         </div>
     </div>
-    <h1>REPORTE DE ACUSE DE RECIBIDO</h1><br>
-    <h2>DETALLE DE LA ACTIVIDAD</h2>
+    <br><br>
+    <center><p style="font-family: Helvetica; font-size:10pt"><b>“2021. Año de la Consumación de la Independencia y la Grandeza de México".</b></p></center>
+    <div class="titulo"><p style="font-family: Helvetica;"><b>REPORTE DE ACUSE DE RECIBIDO</b></p></div>
+    <div class="sub"><p><b>DETALLE DE LA ACTIVIDAD</b></p></div>
 
     <table class="table table-bordered border-primary">
         <tr>
-            <td scope="row" width='50%'>
-                <div class="row">
-                    <div class="col">
+            <td width='50%'>
+                <div>
+                    <div class="col" style="font-family: Helvetica;">
                         <p>Folio: <b>{{$data[0]->comunicado}}</b></p>
                         <p>Asunto: <b>{{$data[0]->asunto}}</b></p>
                         <p>Detalle: <b>{{$data[0]->descripcion}}</b></p>
                     </div>
                 </div>
             </td>
-            <td scope="row" width='50%'>
-                <div class="row">
-                    <div class="col">
+            <td width='50%'>
+                <div>
+                    <div>
                         <p>Fecha creaci&oacute;n: <b>{{$data[0]->fecha_creacion}}</b></p>
                         <p>Fecha seguimiento: <b>{{$data[0]->fecha_inicio}}</b></p>
                         <p>Fecha termino: <b>{{$data[0]->fecha_fin}}</b></p>
@@ -94,16 +116,16 @@
                 {
                     $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
-                    $contenido .= "<p>Nombre: ".$insert[$i]['nombre']."</p>";
+                    $contenido .= "<p>Nombre: <b>".$insert[$i]['nombre']."</b></p>";
 
-                    $contenido .= "<p>Fecha: ".$insert[$i]['fecha_acuse']."</p>";
+                    $contenido .= "<p>Fecha: <b>".$insert[$i]['fecha_acuse']."</b></p>";
 
                     //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
-                    $contenido .= "<p>Área: ".$insert[$i]['area']."</p>";
+                    $contenido .= "<p>Área: <b>".$insert[$i]['area']."</b></p>";
 
-                    $contenido .= "<p>Firma: ".$insert[$i]['firma']."</p>";
-                    $contenido .= "<p>".$insert[$i]['firma2']."<p>";
+                    $contenido .= "<p>Firma: <b>".$insert[$i]['firma']."</b></p>";
+                    $contenido .= "<p><b>".$insert[$i]['firma2']."</b><p>";
 
                     $contenido .= "</div> </div> </td>";
 
@@ -138,16 +160,16 @@
             {
                 $contenido .= "<td scope='row' width='30%'> <div class='row'> <div class='col'>";
 
-                $contenido .= "<p>Nombre: ".$out[$i]['nombre']."</p>";
+                $contenido .= "<p>Nombre: <b>".$out[$i]['nombre']."</b></p>";
 
-                $contenido .= "<p>Fecha: ".$out[$i]['fecha_acuse']."</p>";
+                $contenido .= "<p>Fecha: <b>".$out[$i]['fecha_acuse']."</b></p>";
 
                 //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
-                $contenido .= "<p>Área: ".$out[$i]['area']."</p>";
+                $contenido .= "<p>Área: <b>".$out[$i]['area']."</b></p>";
 
-                $contenido .= "<p>Firma: ".$out[$i]['firma']."</p>";
-                $contenido .= "<p>".$insert[$i]['firma2']."<p>";
+                $contenido .= "<p>Firma: <b>".$out[$i]['firma']."</b></p>";
+                $contenido .= "<p><b>".$insert[$i]['firma2']."</b><p>";
 
                 $contenido .= "</div> </div> </td>";
 
@@ -160,7 +182,13 @@
 
     @endphp
                  
-    </table>
+    </table>    
     
+    
+
+    <footer>
+        <div><img src="{{public_path('images/Abajo.JPG')}}" width="100%" ></div>
+    </footer>
 </body>
 </html>
+
