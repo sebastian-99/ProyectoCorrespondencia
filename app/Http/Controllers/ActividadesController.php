@@ -668,7 +668,7 @@ class ActividadesController extends Controller
             array_push($array2, $t->idar,);
         }
         
-        if(count($array2) > 1){
+        if(count($array2) > 0){
 
         $no_seleccionar = DB::SELECT("SELECT *
         FROM areas AS ar
@@ -700,7 +700,7 @@ class ActividadesController extends Controller
             array_push($array4, $us->idar);
         }
 
-        if(count($array3) > 1 && count($array4) > 1){
+        if(count($array3) > 0 && count($array4) > 0){
 
             $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario,
             ar.nombre AS nombre_area
