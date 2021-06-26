@@ -252,6 +252,9 @@ $('document').ready(()=>{
                         <th>Periodo</th>
                         <th>Inportancia</th>
                         <th>Area Responsable</th>
+                        <th>Tipo Actividad</th>
+                        <th>Avance</th>
+                        <th>Numero de Segumientos</th>
                         <th>Acciones</th>
                     </tr>
                 `
@@ -272,6 +275,9 @@ $('document').ready(()=>{
                             <td>${dato.periodo}</td>
                             <td>${dato.importancia}</td>
                             <td>${dato.area_responsable}</td>
+                            <td>${dato.tipo_actividad}</td>
+                            <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
+                            <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
                             <td>
                                 <a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>
                             </td>
