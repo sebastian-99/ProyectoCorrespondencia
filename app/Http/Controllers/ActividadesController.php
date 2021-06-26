@@ -390,7 +390,7 @@ class ActividadesController extends Controller
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
                              'estado' =>  D($c->status_ac,$c->fecha_fin,$c->created_at,$c->estado),
-                             'porcentaje' => $c->porcentaje.'%',
+                             'porcentaje' => "$c->porcentaje.'%'",
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
                              $turno = $turno+1;
