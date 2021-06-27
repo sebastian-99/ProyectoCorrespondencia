@@ -220,10 +220,10 @@
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="arvhivos" name="archivos">
                                 @if($consul[0]->archivo1 != null)
-                                    <label for="">{{$consul[0]->archivo1}}</label>
+                                    <label for="">{{$consul[0]->archivo_redux}}</label>
                                     <input type="hidden" name="archivosoculto" value="{{$consul[0]->archivo1}}">
                                 @endif
-
+                                
                             </div>
                         </div>
                         <div class="col-xs-1 col-sm-1 col-md-1">
@@ -244,7 +244,7 @@
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="archivos" name="archivos2">
                                 @if($consul[0]->archivo2 != null)
-                                    <label for="">{{$consul[0]->archivo2}}</label>
+                                    <label for="">{{$consul[0]->archivo_redux2}}</label>
                                     <input type="hidden" name="archivosoculto2" value="{{$consul[0]->archivo2}}">
 
                                 @endif
@@ -262,8 +262,8 @@
                                 <strong>Archivos soporte:</strong>
                                 <input type="file" class="form-control" id="archivos" name="archivos3">
                                 @if($consul[0]->archivo3 != null)
-                                    <label for="">{{$consul[0]->archivo3}}</label>
-                                    <input type="hidden" name="archivosoculto3" >
+                                    <label for="">{{$consul[0]->archivo_redux3}}</label>
+                                    <input type="hidden" name="archivosoculto3" value="{{$consul[0]->archivo3}}">
                                 @endif
                             </div>
                         </div>
