@@ -403,7 +403,7 @@
                 $('#estado_p').prop('disabled', false);
             }
             
-            if(verif_p <= vp){
+            if(Number(verif_p) <= Number(vp)){
                 alert('El porcentaje no puede ser menor que el ultimo');
                 $('#porc').html(vp);
                 $('#porcentaje').val(vp);
@@ -427,7 +427,7 @@
     $('body').on('click', '#addfile',function(){
         
            
-        var newInputFile = "<tr><td style='width:450px'><label for='archivo"+f+"' class='form-label'>Seleccione un archivo </label><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td><td style='width:600px'><label for='archivo"+f+"' class='form-label'>Detalle de evidencia </label><input type='text' id='detalle_a"+f+"' placeholder='Escribe el detalle del archivo' name='detalle_a[]' class='form-control form-control-sm'></td><td><BR><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger borrar'><i class='fa fa-trash'></i></a></td></tr>" ;
+        var newInputFile = "<tr><td style='width:450px'><label for='archivo"+f+"' class='form-label'>Seleccione un archivo </label><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm' required></td><td style='width:600px'><label for='archivo"+f+"' class='form-label'>Detalle de evidencia </label><input type='text' id='detalle_a"+f+"' placeholder='Escribe el detalle del archivo' name='detalle_a[]' class='form-control form-control-sm'  required></td><td><BR><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger borrar'><i class='fa fa-trash'></i></a></td></tr>" ;
         $('#nuevoInputfile').append(newInputFile);
             
         f=f+1;   
