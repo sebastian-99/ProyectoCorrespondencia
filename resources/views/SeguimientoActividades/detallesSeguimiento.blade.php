@@ -15,14 +15,14 @@
     <div class="col-sm-11">
     @foreach ($consult as $c)
     @if ($loop->first)
-    <h3>Reporte de actividades de: ``{{$c->nombre}}´´ Area: ``{{$c->nombre_ar}}´´ </h3>
+    <h3>Reporte de actividades de: ``{{$c->nombre}}´´ Área: ``{{$c->nombre_ar}}´´ </h3>
     @endif
     @endforeach
     </div>
     <div class="col-sm-10">
     <a href="{{ route('Detalles', ['id'=>$id_actividad]) }}"><button class="btn btn-warning">Regresar a responsables</button></a>
         </div>
-   
+
     </div>
     </div>
 
@@ -53,7 +53,7 @@
 
 
 
-  
+
        <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
        <div class="modal-dialog modal-lg">
            <div class="modal-content">
@@ -63,17 +63,17 @@
                  <form id="DetallesArchivos" name="DetallesArchivos" class="form-horzontal">
                  <div class="card-body">
                   <div class="table-responsive">
-     
+
                       @foreach ($consult as $c)
                      @if ($loop->first)
                       <h4>
                         <div >Actividad: {{$c->asunto}} </div>
-                         <div> Usuario: {{$c->nombre}} </div> 
-                         <div> Area: {{$c->nombre_ar}} </div> 
+                         <div> Usuario: {{$c->nombre}} </div>
+                         <div> Area: {{$c->nombre_ar}} </div>
                     @endif
                       </h4>
-   
-    
+
+
                       @endforeach
                <table class="table table-striped table-bordered" id="tablaModal">
                   <thead class="text-center">
@@ -85,15 +85,15 @@
                   </thead>
                   <tbody>
                     <tr class="text-center">
-               
-            
+
+
 
                     </tr>
                 </tbody>
              </table>
            </div>
      </div>
-                    
+
         </form>
       </div>
       </div>
@@ -121,7 +121,7 @@ for (i=0;i<=data.length-1;i++){
         $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta_a+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
         $('#detalle'+i).val(data[i].detalle_a);
-      
+
         $('#ruta'+i).attr('href',archivo);
 }
       })

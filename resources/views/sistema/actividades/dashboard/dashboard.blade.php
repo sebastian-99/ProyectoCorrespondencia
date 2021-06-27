@@ -14,13 +14,13 @@
     .<div class="container-fluid">
         <div class="card bg-light">
             <div class="card-header bg-success text-center">
-                <h2>Medidor de Actividades realizadas por Area  Administrativa</h2>
+                <h2>Medidor de Actividades realizadas por Área  Administrativa</h2>
             </div>
             <div class="card-body">
                 <div class="form-row" id="dashboard_panel">
                     <div class="form-group col-md-4">
                         <select class="custom-select" name="areas" id="select_tipo_area">
-                            <option value="">--Area--</option>
+                            <option value="">--Área--</option>
                             @foreach ($areas as $area)
                                 <option value="{{ $area->idtar }}"> {{ $area->nombre }} </option>
                             @endforeach
