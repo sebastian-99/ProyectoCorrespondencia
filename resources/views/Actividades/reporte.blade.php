@@ -1,13 +1,13 @@
 @extends('layout.layout')
 @section('content')
 @section('header')
-    
-    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>    
-    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>   
+
+    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
     <script>
       if (es) ZingGrid.registerLanguage(es, 'custom');
-    </script> 
-    
+    </script>
+
 @endsection
 <div class="card">
     <div class="card-header">
@@ -19,7 +19,7 @@
          <a href="{{route('create_actividades')}}"><button class="btn btn-primary">Nuevo</button></a>
         </div>
       </div>
-      
+
     </div>
     <div class="card-body">
     @if (Session::has('message'))
@@ -36,17 +36,17 @@
                 <p class="alert alert-warning">
                     {{Session::get('message3')}}
                 </p>
-                @endif  
+                @endif
               <zing-grid
-              
-                lang="custom" 
-                caption='Reporte de oficios' 
-                sort 
-                search 
-                pager 
-                page-size='10' 
-                page-size-options='1,2,3,4,5,10' 
-                layout='row' 
+
+                lang="custom"
+                caption='Reporte de oficios'
+                sort
+                search
+                pager
+                page-size='10'
+                page-size-options='1,2,3,4,5,10'
+                layout='row'
                 viewport-stop
                 theme='android'
                 id='zing-grid'
@@ -70,5 +70,5 @@
     </div>
   </div>
 
- 
+
 @endsection
