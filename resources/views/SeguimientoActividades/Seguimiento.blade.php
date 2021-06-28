@@ -11,12 +11,10 @@
 
 <script>
     addEventListener('load', inicio, false);
-
     function inicio() {
         document.getElementById('porcentaje').addEventListener('change', porcentajeAvance, false);
         document.getElementById('porcentaje').addEventListener('mousemove', porcentajeAvance, false);
     }
-
     function porcentajeAvance() {
         document.getElementById('porc').innerHTML = document.getElementById('porcentaje').value;
     }
@@ -405,17 +403,15 @@
                 $('#estado_p').prop('disabled', false);
             }
             
-            if(verif_p <= vp){
+            if(Number(verif_p) <= Number(vp)){
                 alert('El porcentaje no puede ser menor que el ultimo');
                 $('#porc').html(vp);
                 $('#porcentaje').val(vp);
                 //console.log(verif_p);
                 //console.log(vp);
             }
-
             
         }
-
         function verificar_s() {
             var verif_s = document.getElementById("estado_c").value;
             var verif_sp = document.getElementById("estado_p").value;
@@ -431,12 +427,10 @@
     $('body').on('click', '#addfile',function(){
         
            
-        var newInputFile = "<tr><td style='width:450px'><label for='archivo"+f+"' class='form-label'>Seleccione un archivo </label><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td><td style='width:600px'><label for='archivo"+f+"' class='form-label'>Detalle de evidencia </label><input type='text' id='detalle_a"+f+"' placeholder='Escribe el detalle del archivo' name='detalle_a[]' class='form-control form-control-sm'></td><td><BR><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger borrar'><i class='fa fa-trash'></i></a></td></tr>" ;
-
+        var newInputFile = "<tr><td style='width:450px'><label for='archivo"+f+"' class='form-label'>Seleccione un archivo </label><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm' required></td><td style='width:600px'><label for='archivo"+f+"' class='form-label'>Detalle de evidencia </label><input type='text' id='detalle_a"+f+"' placeholder='Escribe el detalle del archivo' name='detalle_a[]' class='form-control form-control-sm'  required></td><td><BR><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger borrar'><i class='fa fa-trash'></i></a></td></tr>" ;
         $('#nuevoInputfile').append(newInputFile);
             
         f=f+1;   
-
     });
      
     $(document).on('click', '.borrar', function (event) {
@@ -444,14 +438,12 @@
     $(this).closest('tr').remove();
         });
     
-
 // ------------------------------------------------------------------------------------------------
 $("#form").submit(function(event){
         
         $("#dar_seg").prop("disabled", true);
        
     });
-
  //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
@@ -498,7 +490,6 @@ $("#form").submit(function(event){
       })
       
     });
-
     $("#ajaxModel").on('hidden.bs.modal', function () {
         
               $('#tablaModal>tbody>tr').remove();
