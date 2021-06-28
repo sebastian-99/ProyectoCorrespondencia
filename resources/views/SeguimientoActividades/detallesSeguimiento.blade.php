@@ -122,7 +122,8 @@ for (i=0;i<=data.length-1;i++){
         $('#nombre'+i).val(data[i].nombre);
         $('#detalle'+i).val(data[i].detalle_a);
       
-        $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).attr('download',data[i].nombre);
+
 }
       })
 
