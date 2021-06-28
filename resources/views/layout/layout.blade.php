@@ -203,7 +203,7 @@
               <li class="nav-item">
                 <a href="{{ url('/dashboard/'.auth()->user()->idu)}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Mis Estadísticas</p>
+                  <p>Estadísticas por Actividad</p>
                 </a>
               </li>
             </ul>

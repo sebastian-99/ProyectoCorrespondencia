@@ -21,7 +21,11 @@
         </label>
 
         <input  type="hidden" 
+<<<<<<< HEAD
                 name="token" git 
+=======
+                name="token" 
+>>>>>>> 0058f17a55ed96101e054850a92069c000e7f550
                 value="{{ $token }}"
         >
 

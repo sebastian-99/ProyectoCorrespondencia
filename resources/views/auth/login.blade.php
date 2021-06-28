@@ -19,7 +19,7 @@
     <div class="form-text text-danger">{{ $message }}</div>
 	@enderror
 	</div>
-	
+
 
 	<div class="form-group d-md-flex">
 	<div  align="center">

@@ -11,12 +11,10 @@
 
 <script>
     addEventListener('load', inicio, false);
-
     function inicio() {
         document.getElementById('porcentaje').addEventListener('change', porcentajeAvance, false);
         document.getElementById('porcentaje').addEventListener('mousemove', porcentajeAvance, false);
     }
-
     function porcentajeAvance() {
         document.getElementById('porc').innerHTML = document.getElementById('porcentaje').value;
     }
@@ -47,12 +45,12 @@
         <h4 class="">Comunicado: {{$actividades->comunicado}}</h4>
     </div>
             <div class="col-sm-12">
-                <div class="bd-intro ps-lg-4">
+               
                     <div class="d-md-flex align-items-center justify-content-between">
-                        <h1 class="bd-title" id="content">{{$actividades->asunto}}</h1>
+                        <h2 class="bd-title" id="content">{{$actividades->asunto}}</h2>
                     </div>
                     <p class="bd-lead">{{$actividades->descripcion}}</p>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -140,14 +138,24 @@
                     <div class="d-md-flex align-items-center justify-content-between">
                     <center>
                     <h4>Avance de la actividad</h4>
-                </center><br>
+                    </center><br><br><br><br>
                     </div>
-                    <p class="bd-lead"></p>
+                    <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
-                        <center><h5>Individual:</h5><input class="form-control" disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}} %"></center>
+                        <h5>Individual: </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}}">%
+                    </p></div><br><br><br>
+                    <div class='btn-group me-2' role='group' aria-label='Second group'>
+                    <p class="bd-lead">
+                       <h5>Total:</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text"  value="{{$general}}">%
+                    </p></div>
+                    
+                    
+                    <br><br>
+                    <p class="bd-lead">
+                        <center><h5>Estado de la actividad:</h5></center>
                     </p>
                     <p class="bd-lead">
-                        <center><h5>Total: {{$general}}%</h5></center>
+                        <center><h6>{{$est_act}}</h6></center>
                     </p>
                     <!--<div class="d-md-flex align-items-center justify-content-between">
                         <h3 class="bd-title">Status atención</h3>
@@ -163,100 +171,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-5">
-        <div class="card">
-            <div class="card-body">
-                <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <!--<div class="col-sm-4">
-                        <div class="mb-3">
-                            <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
-                            <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
-                        </div>
-                    </div>-->
-                    <center>
-                    <h4>Dar un nuevo seguimiento</h4>
-                </center><br>
-                    <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
-
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="" class="form-label">Seguimiento realizado por</label>
-                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}   /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label> ( {{$now->locale('es')->isoFormat('D MMMM h:mm')}} )
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="detalle" class="form-label">Detalle de la actividad</label>                         
-                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="porcentaje" class="form-label">Porcentaje </label>
-                            <input class="form-control-range" type="range" id="porcentaje" min="0" max="100" name="porcentaje" value="{{$max_ai->avance_i}}" onchange="verificar_p()">
-                            <span id="porc">{{$max_ai->avance_i}}</span>%
-
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="mb-3">
-                            <label for="estado" class="form-label">Estado Actividad</label><br>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" checked>
-                                <label class="form-check-label" for="inlineRadio1">Pendiente</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="estado" id="estado_c" value="Completo" onchange="verificar_s()">
-                                <label class="form-check-label" for="inlineRadio2">Completo</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                    <div class="col-sm-12">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                       
-                            <label for="archivo" class="form-label">Agregar Archivo</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>
-                           
-                         
-                         
-                        </div>
-                    </div>
-
-
-              
-                        <div class="form-group">
-                       
-                            
-                         <table><tr>
-                            <td><div id="nuevoInputfile">
-                                {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
-                            </div></td>
-                            </tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-
-                        <button type="submit" class="btn btn-sm btn-success" onclick="this.hidden=true;">Guardar seguimiento</button>
-
-                    </div>
-                    </table>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-7">
+<div class="col-sm-12">
         <div class="card">
             <div class="card-body">
                 <center>
@@ -265,9 +180,9 @@
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
-                            <th scope="col">Archivo</th>
-                            <th scope="col" style='width:250px'>Nombre del archivo</th>
-                            <th scope="col" style='width:250px'>Detalle (link)</th>
+                            <th scope="col" style='width:33.3%'>Archivo</th>
+                            <th scope="col" style='width:33.3%'>Nombre del archivo</th>
+                            <th scope="col" style='width:33.3%'>Detalle (link)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -319,6 +234,91 @@
         </div>
        
     </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data" id="form">
+                    @csrf
+                    <!--<div class="col-sm-4">
+                        <div class="mb-3">
+                            <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
+                            <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
+                        </div>
+                    </div>-->
+                    <center>
+                    <h4>Dar un nuevo seguimiento</h4>
+                </center><br>
+                    <input type="hidden" class="form-control form-control-sm" id="idreac" name="idreac_responsables_actividades" value="{{$resp->idreac}}">
+
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Seguimiento realizado por</label>
+                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}   /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label> ( {{$now->locale('es')->isoFormat('D MMMM h:mm')}} )
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="detalle" class="form-label">Detalle de la actividad</label>                         
+                            <textarea class="form-control" rows="5" name="detalle" id="detalle" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="porcentaje" class="form-label">Porcentaje </label>
+                            <input class="form-control-range" type="range" step="5" id="porcentaje" min="0" max="100" name="porcentaje" value="{{$max_ai->avance_i}}" onchange="verificar_p()">
+                            <span id="porc">{{$max_ai->avance_i}}</span>%
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado Actividad</label><p>(Al marcar completo tu avance cambia a 100%)</p><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" checked>
+                                <label class="form-check-label" for="inlineRadio1">Pendiente</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="estado" id="estado_c" value="Completo" onchange="verificar_s()">
+                                <label class="form-check-label" for="inlineRadio2">Completo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-sm-12">
+                        <div class="form-group">                     
+                            <label for="archivo" class="form-label">Agregar Archivos</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>           
+                        </div>
+                    </div>             
+                   
+                        <table class="table table-responsive">           
+                        <tr>
+                            <div id="nuevoInputfile">
+                                {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
+                            </div>
+                        </tr>
+                        </table>   
+                           
+                        
+                    
+
+                    <div class="col-sm-2">
+
+                        <button type="submit" class="btn btn-sm btn-success" id="dar_seg">Guardar seguimiento</button>
+
+                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -392,13 +392,9 @@
     
     //comprobar si el porcentaje de avance es igual 100% marcar estado completado
     function verificar_p() {
-            var verif_p = document.getElementById("porcentaje").value;
             var vp = document.getElementById("porc_ind").value;
-            if(verif_p < vp){
-                alert('El porcentaje no puede ser menos que el ultimo anterior');
-                $('#porc').html(vp);
-                $('#porcentaje').val(vp);
-            }
+            var verif_p = document.getElementById("porcentaje").value;
+            
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
@@ -406,8 +402,16 @@
                 $('#estado_p').prop("checked", true);
                 $('#estado_p').prop('disabled', false);
             }
+            
+            if(Number(verif_p) <= Number(vp)){
+                alert('El porcentaje no puede ser menor que el ultimo');
+                $('#porc').html(vp);
+                $('#porcentaje').val(vp);
+                //console.log(verif_p);
+                //console.log(vp);
+            }
+            
         }
-
         function verificar_s() {
             var verif_s = document.getElementById("estado_c").value;
             var verif_sp = document.getElementById("estado_p").value;
@@ -419,53 +423,27 @@
         }
     //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
     var f = 1;
-    var g = 0;
+    
     $('body').on('click', '#addfile',function(){
-      //  var valruta = document.getElementById('archivo'+g).value;
-        //var valdet_a = document.getElementById('detalle_a'+g).value;
-       // dname = valdet_a;
         
-       
-      
-            $('#evidencefiles').prop('hidden', false);
-        
-            var evidencia_file = "<input id='nuevo_f"+f+"' name='nuevo_f"+f+"' class='archivo form-control form-control-sm' disabled style='width:250px'></td><textarea id='nuevo_d"+f+"' name='detalle_a[]' class='detalle_a form-control form-control-sm' disabled style='width:250px'></textarea><td>" ;
-            //remplazar la ruta C:/faker/ y obtner el nombre original del archivo            
-           // var filename = valruta.replace(/^.*\\/, "");
-         //   fname = valruta;
-            $('#tablefiles>tbody').append("<tr>"+evidencia_file+"</tr>");
-          //  $('#nuevo_f'+f).val(filename);
-          //  $('#nuevo_d'+f).val(valdet_a);
-            $('#archivo'+g).prop('hidden', false);
-            $('#detalle_a'+g).prop('hidden', false);
            
-            var newInputFile = "<tr><td><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm'></td><td><input type='text' id='detalle_a"+f+"' name='detalle_a[]' class='form-control form-control-sm'></td><td><input type='button' class='borrar' value='Eliminar' /></td></tr>" ;
-
-            $('#nuevoInputfile').append(newInputFile);
-     
+        var newInputFile = "<tr><td style='width:450px'><label for='archivo"+f+"' class='form-label'>Seleccione un archivo </label><input type='file' id='archivo"+f+"' name='ruta[]' class='form-control form-control-sm' required></td><td style='width:600px'><label for='archivo"+f+"' class='form-label'>Detalle de evidencia </label><input type='text' id='detalle_a"+f+"' placeholder='Escribe el detalle del archivo' name='detalle_a[]' class='form-control form-control-sm'  required></td><td><BR><a href='javascript:void(0)' class='btn btn-sm rounded-circle btn-danger borrar'><i class='fa fa-trash'></i></a></td></tr>" ;
+        $('#nuevoInputfile').append(newInputFile);
             
-            f=f+1;
-            g=g+1;                       
-        
+        f=f+1;   
     });
-    //var h=0;
-    //var i =1;
-    //$('body').on('click', '#dropfile',function(){
-    //   alert('Estas seguro de que quieres eliminar este archivo?');
-    //   $('#nuevo_f'+i).remove();
-    // $('#nuevo_d'+i).remove();
-    // $('#dropfile'+i).remove();
-    // $('#archivo'+h).remove();
-    //    $('#detalle_a'+h).remove();
-    //    h=h+1;
-    //    i=i+1;
-    //});     
+     
     $(document).on('click', '.borrar', function (event) {
     event.preventDefault();
     $(this).closest('tr').remove();
         });
     
-
+// ------------------------------------------------------------------------------------------------
+$("#form").submit(function(event){
+        
+        $("#dar_seg").prop("disabled", true);
+       
+    });
  //--------------------------------------------------------------------------------------------------------------
     $('body').on('click', '.DetallesArchivos',function(){
       var id = $(this).data('id');
@@ -512,7 +490,6 @@
       })
       
     });
-
     $("#ajaxModel").on('hidden.bs.modal', function () {
         
               $('#tablaModal>tbody>tr').remove();

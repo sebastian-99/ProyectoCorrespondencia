@@ -20,15 +20,16 @@ class ActividadesController extends Controller
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-        ac.status
+        ac.status, ta.nombre AS tipo_actividad
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades 
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-
+        
         $array = array();
 
         function recorrer($value){
@@ -72,7 +73,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 1, '.', ' ').'%';
+                return number_format($data['3'], 0, '.', ' ').'%';
 
             }else{
 
@@ -102,6 +103,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
+                                    'nombre_actividad' => $c->tipo_actividad,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
@@ -127,7 +129,7 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
         $us_id = \Auth()->User()->idu;
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, max(seg.porcentaje) AS porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios
+        res.acuse, res.idreac, seg.estado, Max(seg.porcentaje) as porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios, Max(seg.created_at) as created_at
         FROM responsables_actividades AS res
         JOIN actividades AS ac ON ac.idac = res.idac_actividades
         JOIN users AS us ON us.idu = res.idu_users
@@ -135,7 +137,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
         GROUP BY idu_users");
-
+   
         $boton = DB::table('responsables_actividades as res')
                     ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
                     ->where([
@@ -147,26 +149,25 @@ class ActividadesController extends Controller
 
         $array = array();
 
-        function recorrer($value)
-        {
-            if (gettype($value) == "string") {
-                $val = explode('*', $value);
-                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
-            } else {
-                $arr = null;
-            }
-            return $arr;
-        }
+       function por($porcentaje,$acuse){
+           if($acuse == 0){
+               return "0%";
+           }elseif($acuse == 2){
+               return "0%";
+           }else{
+               return $porcentaje."%";
+           }
+       }
 
         function btn($idac,$data,$rechazo,$idreac){
             if($data == 0){
                 return ("No existen detalles");
 
             }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'>Ver detalle</button></a>   ";
+                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
             }else if($data == 2){
                 if (Auth()->User()->idtu_tipos_usuarios == 3) {
-                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -181,7 +182,7 @@ class ActividadesController extends Controller
                  </div>
                </div>";
                 }else {
-                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'>Ver</a>
+                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -193,7 +194,7 @@ class ActividadesController extends Controller
                                         <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
                                              <input type='hidden' name='_token' value=". csrf_token() .">
                                              <input type='hidden' value=".$idac." name='idreac'>        
-                                             <button type='submit' class='btn btn-sm btn-success'>Reactivar</button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' >Eliminar</a>
+                                             <button type='submit' class='btn btn-sm btn-success'><i class='fas fa-check-circle'></i></button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
                                         </form>
                                 </div>
                           </div>
@@ -203,65 +204,40 @@ class ActividadesController extends Controller
                 }
             }
         }
+       
+   
 
-     //  function C($data){
+        function D($porcentaje, $fecha_fin, $created_at, $acuse)
+        {
+         
+           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+            
+          //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
+          if($acuse == 2){
+                    
+            return "Acuse rechazado";
 
-       //     if(gettype($data) == "array"){
+         }elseif($created_at <= $fecha_fin && $porcentaje < 100){
 
-         //       return number_format($data[2], 2, '.', ' ').'%';
-           // }else{
-             //   return 0.00;
-            //}
-
-        //}
-
-          // $data = recorrer($c->porcentaje);
-          function D($status, $end_date, $data, $acuse)
-          {
-              if (gettype($data) == "array") {
-                  $data = number_format($data['2'], 0, '.', ' ');
-              } else {
-                  $data = 0;
-              }
-
-              $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
-              
-              //return ($data > $end_date ? "es mayor" : "No es mayor");
-              if($date <= $end_date && $status == 1 && $data < 100 && $acuse == 0){
-  
                 return "En proceso – En Tiempo";
 
-            }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 0){
-  
-                return "En proceso – Fuera de tiempo";
+            }elseif($created_at <= $fecha_fin   && $porcentaje == 100){
 
-            }elseif($date <= $end_date && $status == 1 && $data < 100 && $acuse == 1){
-  
-                  return "En proceso – En Tiempo";
-  
-              }elseif($date <= $end_date && $status == 1 && $data == 100 && $acuse == 1){
-  
-                  return "Concluido – En tiempo";
-                  
-              }elseif($date >= $end_date && $status == 2 && $data < 100 && $acuse == 1){
-  
-                  return "En proceso - Fuera de Tiempo";
-  
-              }elseif($date >= $end_date && $status == 2 && $data == 100 && $acuse == 1){
-  
-                  return "Concluido – Fuera de Tiempo";
-  
-              }elseif($acuse == 2 && $acuse == 2){
-                      
-                      return "Acuse rechazado";
-  
-              }elseif($status == 3){
-      
-                      return "Cancelado";
-                  
-              }
-              
-          }
+                return "Concluido – En tiempo";
+                
+      }elseif($created_at >= $fecha_fin  && $porcentaje < 100){
+
+               return "En proceso - Fuera de Tiempo";
+
+           }elseif($created_at >= $fecha_fin  && $porcentaje == 100){
+
+               return "Concluido – Fuera de Tiempo";
+
+           }else{
+               return "Sin aceptar estado";
+            }
+            
+        }
 
         function Acuse($data){
 
@@ -279,12 +255,12 @@ class ActividadesController extends Controller
         foreach($query as $c){
 
              $data1 = Acuse($c->acuse);
-             $data = recorrer($c->porcentaje);
+            $porcentaje = por($c->porcentaje,$c->acuse);
 
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
-                                    'porcentaje' =>  $c->porcentaje.'%',
-                                    'estado' =>  D($c->status_ac,$c->fecha_fin,$data, $c->acuse),
+                                    'porcentaje' =>  $porcentaje,
+                                    'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->created_at,$c->acuse),
                                     'acuse' => $data1,
                                     'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo,$c->idreac,$us_id),
                                     ));
@@ -337,7 +313,7 @@ class ActividadesController extends Controller
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
         $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
-        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar
+        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse, re.created_at
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -345,12 +321,18 @@ class ActividadesController extends Controller
         INNER JOIN actividades AS act ON re.idac_actividades = act.idac
         INNER JOIN archivos_seguimientos AS arch ON arch.idseac_seguimientos_actividades = seg.idseac
             WHERE idreac_responsables_actividades = $idac
-            GROUP BY idseac desc");
+            GROUP BY idseac ASC");
 
         $array = array();
 
-        function recorrer($value){
-          $arr = (gettype($value) == "string") ? explode('-', $value) : null;
+        function recorrer($value)
+        {
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+            } else {
+                $arr = null;
+            }
             return $arr;
         }
         function btn($idac,$ruta){
@@ -358,26 +340,62 @@ class ActividadesController extends Controller
                 return "Sin archivos";
             }else{
             return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'>Archivos</a>";
+                <a href='javascript:void(0)' data-toggle='tooltip' data-id=".encrypt($idac)."  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
                 }
             }
-        $turno = 0;
-        foreach($consult as $c){
 
-          $turno = $turno+1;
-           }
-        foreach($consult as $c){
+        
+            function D($status_ac, $fecha_fin, $updated_at, $estado)
+            {
+             
+               $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+                
+              //  return ($updated_at > $fecha_fin ? "es mayor" : "No es mayor");
+    
+               if($updated_at <= $fecha_fin && $estado == "Pendiente"){
+    
+                    return "En proceso – En Tiempo";
+    
+                }elseif($updated_at <= $fecha_fin   && $estado == "Completo"){
+    
+                    return "Concluido – En tiempo";
+                    
+          }elseif($updated_at >= $fecha_fin  && $estado == "Pendiente"){
+    
+                   return "En proceso - Fuera de Tiempo";
+    
+               }elseif($updated_at >= $fecha_fin  && $estado == "Completo"){
+    
+                   return "Concluido – Fuera de Tiempo";
+    
+               }elseif($estado == 2){
+                        
+                   return "Acuse rechazado";
+    
+                }elseif($status == 3){
+        
+                    return "Cancelado";
+                    
+               }else{
+                   return "Sin aceptar estado";
+                }
+                
+            }
 
-         // $data = recorrer($c->porcentaje);
+        $turno = 1;
+    
+        foreach($consult as $c){
+        
+         
 
           array_push($array, array('idseac' => $turno,
                              'fecha' => $c->fecha,
                              'detalle' =>  $c->detalle,
-                             'estado' => $c->estado,
-                             'porcentaje' => $c->porcentaje.'%',
+                             'estado' =>  D($c->status_ac,$c->fecha_fin,$c->created_at,$c->estado),
+                             'porcentaje' => "$c->porcentaje.'%'",
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
-                             $turno = $turno-1;
+                             $turno = $turno+1;
         }
         $json = json_encode($array);
 
@@ -451,7 +469,7 @@ class ActividadesController extends Controller
         $id = $request->tipo_u;
         $id_seleccionado;
 
-        for($b=0; $b < count($id); $b++){
+        /* for($b=0; $b < count($id); $b++){
 
             $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
@@ -461,13 +479,19 @@ class ActividadesController extends Controller
 
             $id_seleccionado[$b] = $consul;
 
-        }
+        } */
 
-        $id_sacado = Arr::flatten($consul);
+        //$id_sacado = Arr::flatten($consul);
+
+        $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
+            INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
+            INNER JOIN areas AS a ON a.idar = u.idar_areas
+            WHERE u.idtu_tipos_usuarios NOT IN(1)
+            AND a.idar = $id");
 
 
 
-        return response()->json($id_sacado);
+        return response()->json($consul);
     }
 
     public function insert_actividad(Request $r){
@@ -602,8 +626,11 @@ class ActividadesController extends Controller
             'actividades.status',
             'actividades.importancia',
             'actividades.archivo1',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo1,'_',-1) AS archivo_redux"),
             'actividades.archivo2',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo2,'_',-1) AS archivo_redux2"),
             'actividades.archivo3',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo3,'_',-1) AS archivo_redux3"),
             'actividades.link1',
             'actividades.link2',
             'actividades.link3',
@@ -618,6 +645,7 @@ class ActividadesController extends Controller
                                 WHERE re.acuse = 1
                                 AND re.idac_actividades = $id
                                 ORDER BY ar.nombre ASC");
+       
         $array = array();
 
         foreach($personas as $personas){
@@ -639,16 +667,22 @@ class ActividadesController extends Controller
         WHERE ac.idac = $id
         GROUP BY a.nombre");
 
-
+       
         $array2 = array();
 
         foreach($tipous as $t){
             array_push($array2, $t->idar,);
         }
+        
+        if(count($array2) > 0){
 
         $no_seleccionar = DB::SELECT("SELECT *
         FROM areas AS ar
         WHERE ar.idar NOT IN (" . implode(',', $array2) . ")");
+        }else{
+            $no_seleccionar =DB::SELECT("SELECT *
+            FROM areas AS ar");
+        }
 
 
 
@@ -657,13 +691,13 @@ class ActividadesController extends Controller
         //return $no_seleccionar;
 
         $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario,
-        a.idar
+        a.idar, a.nombre AS nombre_area
         FROM actividades AS ac
         INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
         INNER JOIN users AS u ON u.idu = re.idu_users
         INNER JOIN areas AS a ON a.idar = u.idar_areas
         WHERE ac.idac = $id");
-
+       
         $array3 = array();
         $array4 = array();
 
@@ -672,12 +706,19 @@ class ActividadesController extends Controller
             array_push($array4, $us->idar);
         }
 
-        $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario
-        FROM users AS us
-        INNER JOIN areas AS ar ON ar.idar = us.idar_areas
-        WHERE us.idu NOT IN(" . implode(',', $array3) . ")
-        AND ar.idar IN (" . implode(',', $array4) . ")");
+        if(count($array3) > 0 && count($array4) > 0){
 
+            $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario,
+            ar.nombre AS nombre_area
+            FROM users AS us
+            INNER JOIN areas AS ar ON ar.idar = us.idar_areas
+            WHERE us.idu NOT IN(" . implode(',', $array3) . ")
+            AND ar.idar IN (" . implode(',', $array4) . ")
+            AND us.idtu_tipos_usuarios NOT IN(1)");
+        }else{
+            $no_seleccionar_user = null;
+        }
+        
         $tipo_actividad = DB::table('tipos_actividades')
         ->whereNotIn('idtac',[$consul[0]->idtac_tipos_actividades])
         ->orderBy('nombre','Asc')
@@ -817,9 +858,20 @@ class ActividadesController extends Controller
 
         $tipousuario = $r->tipousuario;
         $tipousuarioarea = $r->tipousuarioarea;
-
+      
         $estado = $r->estado;
         $importancia = $r->importancia;
+
+        
+        //return $tipousuarioarea;
+        //return array("36", "38", "red");
+        
+
+        
+
+        //return $array;
+
+        //return count(array_diff($array,$tipousuarioarea));
 
 
         DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
@@ -831,17 +883,39 @@ class ActividadesController extends Controller
         WHERE idac = $id");
 
 
+        $array = array();
+        $no_dentro = DB::SELECT("SELECT idu_users 
+        FROM responsables_actividades 
+        WHERE idac_actividades= $id");
+
+        foreach($no_dentro as $no){
+            array_push($array, $no->idu_users);
+        }
+
+        foreach($array as $a){
+
+             
+            (in_array($a, $tipousuarioarea) ? "" : DB::DELETE("DELETE FROM responsables_actividades WHERE idu_users = $a AND idac_actividades = $id"));
+            
+        }
+    
 
         for($i=0; $i < count($tipousuarioarea); $i++){
 
-            $prueba = DB::SELECT("SELECT idu_users FROM responsables_actividades WHERE idac_actividades= $id AND idu_users = $tipousuarioarea[$i]");
+            $prueba = DB::SELECT("SELECT idu_users 
+            FROM responsables_actividades 
+            WHERE idac_actividades= $id 
+            AND idu_users = $tipousuarioarea[$i]");
 
             if(count($prueba) == 0){
                 DB::INSERT("INSERT INTO responsables_actividades(idu_users, idac_actividades) VALUES ($tipousuarioarea[$i] , $id)");
             }
 
-
+           
+        
+          
         }
+
 
 
 	if (Auth()->User()->idtu_tipos_usuarios == 3) {
@@ -874,10 +948,11 @@ class ActividadesController extends Controller
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status
+        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.idu_users = $id_u
@@ -935,7 +1010,7 @@ class ActividadesController extends Controller
 
             if(gettype($data) == "array"){
 
-                return number_format($data['3'], 1, '.', ' ').'%';
+                return number_format($data['3'], 0, '.', ' ').'%';
 
             }else{
 
@@ -967,6 +1042,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
+                                    'tipo_actividad' => $c->tipo_actividad,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
