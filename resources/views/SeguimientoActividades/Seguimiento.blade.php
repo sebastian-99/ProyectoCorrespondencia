@@ -137,16 +137,16 @@
                 <div class="bd-intro ps-lg-4">
                     <div class="d-md-flex align-items-center justify-content-between">
                     <center>
-                    <h4>Avance de la actividad</h4>
+                    <h4>Avance de actividad</h4>
                     </center><br><br><br><br>
                     </div>
                     <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
-                        <h5>Individual: </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}}">%
+                        <h6>Avance individual: </h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 40px;' disabled type="text" id="porc_ind" value="{{$max_ai->avance_i}}">%
                     </p></div><br><br><br>
                     <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
-                       <h5>Total:</h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 60px;' disabled type="text"  value="{{$general}}">%
+                       <h6>Avance total:</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 40px;' disabled type="text"  value="{{$general}}">%
                     </p></div>
                     
                     
@@ -193,22 +193,26 @@
                         @endif
                         @if ($actividades->archivo1 != "Sin archivo")
                         <tr>
-                            <td><a download href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo1}}</td>
+                            <td><a download={{$archivo1}} href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$archivo1}}</td>
                             <td>
                             @if ($actividades->link1 != "Sin Link")
                                 <a href="{{$actividades->link1}}" target="_blank">{{$actividades->link1}}</a>
+                            @else
+                            Este archivo no contiene un link de referencia
                             @endif    
                             </td>
                         </tr>
                         @endif
                         @if ($actividades->archivo2 != "Sin archivo")
                         <tr>
-                            <td><a download="" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo2}}</td>
+                            <td><a download="{{$archivo2}}" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$archivo2}}</td>
                             <td>
                             @if ($actividades->link2 != "Sin Link")
                                 <a href="{{$actividades->link2}}" target="_blank">{{$actividades->link2}}</a>
+                                @else
+                            Este archivo no contiene un link de referencia
                             @endif    
                             </td>
                         </tr>
@@ -216,11 +220,13 @@
 
                         @if ($actividades->archivo3 != "Sin archivo")
                         <tr>
-                            <td><a download="{{$actividades->archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
-                            <td>{{$actividades->archivo1}}</td>
+                            <td><a download="{{$archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>{{$archivo3}}</td>
                             <td>
                             @if ($actividades->link3 != "Sin Link")
                                 <a href="{{$actividades->link3}}" target="_blank">{{$actividades->link3}}</a>
+                                @else
+                            Este archivo no contiene un link de referencia
                             @endif    
                             </td>
                         </tr>
@@ -479,6 +485,7 @@ $("#form").submit(function(event){
         $('#detalle'+i).val(data[i].detalle_a);
         $('#ruta'+i).val(ruta);
         $('#ruta'+i).attr('href',archivo);
+        $('#ruta'+i).attr('download',data[i].nombre);
         $('#ruta'+i).text(texto);
         }
        
