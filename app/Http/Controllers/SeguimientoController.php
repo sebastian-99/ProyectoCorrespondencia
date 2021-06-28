@@ -24,10 +24,11 @@ class SeguimientoController extends Controller
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
-        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         WHERE ra.idu_users = $id_user
         GROUP BY ac.idac
@@ -60,7 +61,7 @@ class SeguimientoController extends Controller
         function C($data)
         {
             if (gettype($data) == "array") {
-                return number_format($data['2'], 1, '.', ' ').'%';
+                return number_format($data['2'], 0, '.', ' ').'%';
             } else {
                 return 0;
             }
@@ -141,6 +142,7 @@ class SeguimientoController extends Controller
                 'turno' => $c->turno,
                 'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                 'asunto' => $c->asunto,
+                'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
                 'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
@@ -204,7 +206,6 @@ class SeguimientoController extends Controller
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -235,7 +236,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         WHERE ac.idac = $idac");
         $general = explode('*', $actividades[0]->porcentaje)[2];
-        $general = number_format($general, 2, '.', ' ');
+        $general = number_format($general, 0);
         $general1 = explode('*', $actividades[0]->porcentaje)[1];
 
         $end_date = $actividades[0]->fecha_fin;

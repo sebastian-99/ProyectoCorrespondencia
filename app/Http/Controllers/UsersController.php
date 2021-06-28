@@ -85,6 +85,8 @@ class UsersController extends Controller
                         'areas.nombre as idar_areas',
                         'tipos_areas.nombre as nombretipo',
                             )
+                        ->orderby('nombretipo', 'ASC')
+                        ->orderby('idar_areas', 'ASC')
                         ->get();
         $tipos_usuarios = TiposUsuarios::all();
         return view( 'users.create', compact('tipos_usuarios', 'areas'));
@@ -172,6 +174,8 @@ class UsersController extends Controller
                                 'tipos_areas.nombre as nombretipo',
 
                             )
+                            ->orderby('nombretipo', 'ASC')
+                            ->orderby('idar_areas', 'ASC')
                             ->get();
 
             $tipos_usuarios = TiposUsuarios::all();

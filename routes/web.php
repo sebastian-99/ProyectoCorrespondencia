@@ -25,6 +25,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panel/get-actividades-por-mes/{idu}', [PanelController::class,'getActividadesPorMes']);
     Route::get('/panel/get-actividades-cerradas/{idu}', [PanelController::class,'getActividadesCerradas']);
     Route::get('/panel/get-actividades-en-seguimiento/{idu}', [PanelController::class,'getActividadesEnSeguimiento']);
+    Route::get('/panel/get-actividades-completadas', [PanelController::class,'getActividadesCompletadas']);
+    Route::get('/panel/get-actividades-en-proceso', [PanelController::class,'getActividadesEnProceso']);
+    Route::get('/panel/get-actividades-sin-entregar', [PanelController::class,'getActividadesSinEntregar']);
+    Route::get('/panel/get-actividades-con-acuse-de-recibido', [PanelController::class,'getActividadesConAcuseDeRecibido']);
+    Route::get('/panel/get-actividades-sin-acuse-de-recibido', [PanelController::class,'getActividadesSinAcuseDeRecibido']);
 
 
 //////////////////////////////////////////////  U S U A R I O S  ///////////////////////////////////////////////////////////////

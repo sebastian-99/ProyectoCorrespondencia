@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Sistema\Actividades;
 use App\Http\Controllers\Controller;
 use App\Models\Actividades as actividades;
 use App\Models\Areas as areas;
+use App\Models\SeguimientosActividades;
 use App\Models\TiposAreas as tiposAreas;
 use App\Models\User;
 use Carbon\Carbon;
@@ -124,6 +125,7 @@ class ActividadesController extends Controller
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->join('areas','areas.idar','actividades.idar_areas')
+            ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('actividades.idar_areas', $areas->idar)
             ->select(
                 'users.idu',
@@ -137,7 +139,10 @@ class ActividadesController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'tipos_actividades.nombre AS tipo_actividad',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -145,7 +150,12 @@ class ActividadesController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
-                return $collection;
+                    $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
+                    $collection->numero_de_seguimiento = $seguimiento->count();
+                    $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
+
+                    $collection->seguimiento = $seguimiento->first();
+                    return $collection;
 
             });
     }
@@ -157,6 +167,7 @@ class ActividadesController extends Controller
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->join('areas','areas.idar','actividades.idar_areas')
+            ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
@@ -173,7 +184,10 @@ class ActividadesController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'tipos_actividades.nombre AS tipo_actividad',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -181,6 +195,11 @@ class ActividadesController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
+                $collection->numero_de_seguimiento = $seguimiento->count();
+                $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
+
+                $collection->seguimiento = $seguimiento->first();
                 return $collection;
 
             });
@@ -192,6 +211,7 @@ class ActividadesController extends Controller
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->join('areas','areas.idar','actividades.idar_areas')
+            ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
@@ -208,7 +228,10 @@ class ActividadesController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'tipos_actividades.nombre AS tipo_actividad',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -216,6 +239,11 @@ class ActividadesController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
+                $collection->numero_de_seguimiento = $seguimiento->count();
+                $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
+
+                $collection->seguimiento = $seguimiento->first();
                 return $collection;
 
             });
@@ -227,6 +255,7 @@ class ActividadesController extends Controller
         return actividades::join('responsables_actividades','idac_actividades', 'actividades.idac')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->join('areas','areas.idar','actividades.idar_areas')
+            ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('actividades.idar_areas', $areas->idar)
             ->where('actividades.fecha_fin','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
@@ -244,7 +273,10 @@ class ActividadesController extends Controller
                 'responsables_actividades.idreac',
                 'actividades.idac',
                 'actividades.idu_users AS creador_id',
-                'areas.nombre AS area_responsable'
+                'areas.nombre AS area_responsable',
+                'tipos_actividades.nombre AS tipo_actividad',
+                'responsables_actividades.idreac',
+                'responsables_actividades.firma'
             )
             ->get()
             ->each(function($collection){
@@ -252,6 +284,11 @@ class ActividadesController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
+                $collection->numero_de_seguimiento = $seguimiento->count();
+                $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
+
+                $collection->seguimiento = $seguimiento->first();
                 return $collection;
 
             });

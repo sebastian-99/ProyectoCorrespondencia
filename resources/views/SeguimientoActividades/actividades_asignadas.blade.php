@@ -41,6 +41,7 @@
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
+        <zg-column index='tipo_actividad' header='Tipo de actividad' width="200" type='text'></zg-column>
         <zg-column index='descripcion' header='Descripción' width="200" type='text'></zg-column>
         <zg-column index='fecha_creacion' header='Fecha de creación' width="200" type='text'></zg-column>
         <zg-column index='creador' header='Creador' width="200" type='text'></zg-column>
