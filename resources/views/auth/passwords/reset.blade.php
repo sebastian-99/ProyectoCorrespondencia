@@ -14,39 +14,6 @@
 
     <div class="form-group">
 
-        <label for='email'>
-
-            Correo Electrónico
-
-        </label>
-
-        <input  type="hidden" 
-                name="token" 
-                value="{{ $token }}"
-        >
-
-        <input  type="text" 
-                class="form-control rounded-left"  
-                class="@error('email') is-invalid @enderror" 
-                placeholder="Correo electrónico" 
-                name="email" 
-                value="{{$email}}" 
-        >
-
-        @error('email')
-
-            <div class="form-text text-danger">
-
-                {{ $message }}
-
-            </div>
-
-        @enderror
-
-	</div>
-
-    <div class="form-group">
-
         <label for='password'>
 
             Nueva Contraseña:
@@ -102,10 +69,41 @@
         </button>
 
     </div>
+     <div class="form-group" style="visibility:hidden">
 
-    <br>
-    <br>
-    <br>
+        <label for='email'> 
+
+            Correo Electrónico
+
+        </label>
+
+        <input  type="hidden" 
+                name="token"  
+                value="{{ $token }}"
+                
+        >
+
+        <input  type="text" 
+                class="form-control rounded-left"  
+                class="@error('email') is-invalid @enderror" 
+                placeholder="Correo electrónico" 
+                name="email" 
+                value="{{$email}}" 
+                
+        >
+
+        @error('email')
+
+            <div class="form-text text-danger">
+
+                {{ $message }}
+
+            </div>
+
+        @enderror
+
+	</div>
+
     
 </form>
 
