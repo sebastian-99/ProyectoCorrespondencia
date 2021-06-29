@@ -101,12 +101,6 @@
 
             </div>
         </div>
-        <div class="form-row w-100">
-            <div class="col-md-6"  id="grafico_actividades">
-            </div>
-            <div class="col-md-6"  id="grafico_acuse">
-            </div>
-        </div>
         <div class="table-responsive"  id="tabla">
         </div>
     </div>
@@ -122,11 +116,6 @@
 
     <script>
         const user_id = '{{ auth()->user()->idu }}'
-        const actividades_completadas = '{{ $actividades_completadas }}'
-        const actividades_en_proceso = '{{ $actividades_en_proceso }}'
-        const actividades_sin_entregar = '{{ $actividades_sin_entregar }}'
-        const actividades_con_acuse_de_recibido = '{{ $actividades_con_acuse_de_recibido }}'
-        const actividades_sin_acuse_de_recibido = '{{ $actividades_sin_acuse_de_recibido }}'
     </script>
     <script  type="module" src="/js/panel/panel.js"></script>
 @endsection
