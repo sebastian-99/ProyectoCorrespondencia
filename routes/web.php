@@ -12,6 +12,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
 
 use App\Http\Controllers\EncryptController;
+use App\Http\Controllers\Graficas\GraficasPorTipoAreaController;
 use App\Http\Controllers\Sistema\TipoAreas\TipoAreasController;
 
 
@@ -80,19 +81,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('hello', [EncryptController::class,'index']);
 
-    Route::get('/dashboard/{user}',[TipoAreasController::class,'dashboard']);
-    Route::get('/seguimiento/{idac}', [TipoAreasController::class,'seguimiento']);
-    Route::get('/dashboard/{user}/get-actividades-ṕor-mes/{tiposActividades}/{year}/{mes}',[TipoAreasController::class,'getActividadesṔorMes']);
-    Route::get('/dashboard/{user}/get-actividades-ṕor-rango-de-fechas/{tiposActividades}/{inicio}/{fin}',[TipoAreasController::class,'getActividadesṔorRangoDeFechas']);
-    Route::get('/dashboard/{user}/get-actividades-totales/{tiposActividades}',[TipoAreasController::class,'getActividadesTotales']);
-    Route::get('/dashboard/{user}/seguimiento/{idac}', [TipoAreasController::class,'seguimiento']);
+    Route::get('/dashboard/{user}',[GraficasPorTipoAreaController::class,'dashboard']);
 
-    Route::get('/dashboard/{user}/get-actividades-completadas-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesCompletadasPorMes']);
-    Route::get('/dashboard/{user}/get-actividades-en-proceso-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesEnProcesoPorMes']);
-    Route::get('/dashboard/{user}/get-actividades-sin-entregar-por-mes/{tiposActividades}/{mes}/{year}',[TipoAreasController::class,'getActividadesSinEntregarPorMes']);
+    Route::post('/dashboard/{user}',[GraficasPorTipoAreaController::class,'getEstadisticasDeActividades']);
 
-    Route::get('/dashboard/{user}/get-actividades-completadas/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesCompletadas']);
-    Route::get('/dashboard/{user}/get-actividades-en-proceso/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesEnProceso']);
-    Route::get('/dashboard/{user}/get-actividades-sin-entregar/{tiposActividades}/{inicio}/{fin}/{year}',[TipoAreasController::class,'getActividadesSinEntregar']);
+    Route::post('/dashboard/{user}',[GraficasPorTipoAreaController::class,'getEstadisticasDeActividades']);
+
+    Route::post('/dashboard/{user}/get-actividades-completadas', [GraficasPorTipoAreaController::class,'actividadesCompletadas']);
+    Route::post('/dashboard/{user}/get-actividades-en-proceso', [GraficasPorTipoAreaController::class,'actividadesEnProceso']);
+    Route::post('/dashboard/{user}/get-actividades-sin-entregar', [GraficasPorTipoAreaController::class,'actividadesSinEntregar']);
+    Route::post('/dashboard/{user}/get-actividades-con-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesConAcuseDeRecibido']);
+    Route::post('/dashboard/{user}/get-actividades-sin-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesSinAcuseDeRecibido']);
 
 });

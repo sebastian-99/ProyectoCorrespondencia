@@ -1,63 +1,6 @@
 import Area from '/js/actividades/Area.js'
 
 $(document).ready(()=>{
-
-
-
-    const graficoActividaes = c3.generate({
-        bindto: '#grafico_actividades',
-        data: {
-            columns: [
-                ['sin enttregar', actividades_sin_entregar],
-                ['en proceso', actividades_en_proceso],
-                ['completadas', actividades_completadas],
-            ],
-            type : 'pie',
-            onclick: function (data) {
-                let route = ''
-                switch(data.index){
-                    case 0:
-                        route= `get-actividades-sin-entregar`
-                    break;
-                    case 1:
-                        route= `get-actividades-en-proceso`
-                        break;
-                    case 2:
-                        route= `get-actividades-completadas`
-                        break;
-                }
-                route = `panel/${route}`
-                imprimirTablaConAjax(route)
-             },
-        }
-    });
-
-    const graficoAcuse = c3.generate({
-        bindto: '#grafico_acuse',
-        data: {
-            columns: [
-                ['con acuse', actividades_con_acuse_de_recibido],
-                ['sin acuse', actividades_sin_acuse_de_recibido],
-            ],
-            type : 'pie',
-            onclick: function (data) {
-                let route = ''
-                switch(data.index){
-                    case 0:
-                        route= `get-actividades-con-acuse-de-recibido`
-                    break;
-                    case 1:
-                        route= `get-actividades-sin-acuse-de-recibido`
-                        break;
-                }
-                route = `panel/${route}`
-                imprimirTablaConAjax(route)
-             },
-        }
-    });
-
-
-
     const scriptDataTables = `
     $('#table tfoot th').each( function () {
         var title = $(this).text();

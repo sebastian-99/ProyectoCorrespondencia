@@ -194,12 +194,14 @@
               <i class="fas fa-angle-left right"></i>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('admin/actividades/dashboard')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Gr&aacute;ficas por departameto</p>
-                </a>
-              </li>
+              @if (auth()->user()->idtu_tipos_usuarios == 1 || auth()->user()->idtu_tipos_usuarios == 3)
+                <li class="nav-item">
+                    <a href="{{ url('admin/dashboard')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Gr&aacute;ficas por departameto</p>
+                    </a>
+                </li>
+              @endif
               <li class="nav-item">
                 <a href="{{ url('/dashboard/'.auth()->user()->idu)}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
