@@ -26,7 +26,7 @@
                         <label>Area</label>
                         <select class="custom-select" name="areas" id="select_areas" >
                             @foreach ($areas as $area)
-                                <option value="{{ $area->idtac }}"> {{  $area->nombre }} </option>
+                                <option value="{{ $area->idar }}"> {{  $area->nombre }} </option>
                             @endforeach
                         </select>
                     </div>
