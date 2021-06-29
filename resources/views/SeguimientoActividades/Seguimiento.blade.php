@@ -109,8 +109,8 @@
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
-                        <th scope="col" style='width:214px'>Área Responsable</th>
-                        <th scope="col" style='width:214px'>Acuse de Recibido</th>
+                        <th scope="col" style='width:214px'>Área responsable</th>
+                        <th scope="col" style='width:214px'>Acuse de recibido</th>
                         <th scope="col" style='width:214px'>Tipo de actividad </th>
                             
 
@@ -284,7 +284,7 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="mb-3">
-                            <label for="estado" class="form-label">Estado Actividad</label><p>(Al marcar completo tu avance cambia a 100%)</p><br>
+                            <label for="estado" class="form-label">Estado actividad</label><p>(Al marcar completo tu avance cambia a 100%)</p><br>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="estado" id="estado_p" value="Pendiente" checked>
                                 <label class="form-check-label" for="inlineRadio1">Pendiente</label>
@@ -299,7 +299,7 @@
                     
                     <div class="col-sm-12">
                         <div class="form-group">                     
-                            <label for="archivo" class="form-label">Agregar Archivos</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>           
+                            <label for="archivo" class="form-label">Agregar archivos</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>           
                         </div>
                     </div>             
                    
@@ -346,7 +346,7 @@
                         <zg-column index='idseac' header='No. Seguimiento' width="" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
-                        <zg-column index='estado' header='Status' width="200" type='text'></zg-column>
+                        <zg-column index='estado' header='Estatus' width="200" type='text'></zg-column>
                         <zg-column index='porcentaje' header='% Avance' width="150" type='text'></zg-column>
                         <zg-column index='evidencia' filter="disabled" header='Importancia' width="150" type='text'></zg-column>
                     </zg-colgroup>
@@ -362,7 +362,7 @@
 <div class="modal fade" id="ajaxModel" value="1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color:#198754; color: #ffffff">
                 <h4 class="modal-title" id="modelHeading"></h4><p id="fecha_info"></p>
             </div>
             <div class="modal-body">

@@ -113,15 +113,15 @@ $('document').ready(()=>{
                     <tr>
                         <th>Turno</th>
                         <th>Autor</th>
-                        <th>Responsale</th>
+                        <th>Responsable</th>
                         <th>Asunto</th>
-                        <th>Descripcion</th>
-                        <th>Periodo</th>
-                        <th>Inportancia</th>
-                        <th>Area Responsable</th>
+                        <th>Descripción</th>
+                        <th>Período</th>
+                        <th>Importancia</th>
+                        <th>Área Responsable</th>
                         <th>Tipo Actividad</th>
                         <th>Avance</th>
-                        <th>Numero de Segumientos</th>
+                        <th>Número de Segumientos</th>
                         <th>Acciones</th>
                     </tr>
                 `

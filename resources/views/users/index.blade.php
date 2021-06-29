@@ -42,13 +42,13 @@
         	filter
             data="{{ $json }}">
         	<zg-colgroup>
-            	  <zg-column index='idtu_tipos_usuarios' header='Tipo-Uusario'  type='text'></zg-column>
+            	  <zg-column index='idtu_tipos_usuarios' header='Tipo-Usuario'  type='text'></zg-column>
                 <zg-column index='imagen' header='Imagen'></zg-column>
                 <zg-column index='titulo' header='Título'  type='text'></zg-column>
                 <zg-column index='nombre' header='Nombre'  type='text'></zg-column>
                 <zg-column index='app' header='Apellido-Paterno'  type='text'></zg-column>
                 <zg-column index='apm' header='Apellido-Materno'  type='text'></zg-column>
-                <zg-column index='email' header='email'  type='text'></zg-column>
+                <zg-column index='email' header='Email'  type='text'></zg-column>
                 <zg-column index='idar_areas' header='Área'  type='text'></zg-column>
             	<zg-column index='activo' header='Activo'  type='text'></zg-column>
                 <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' type='text'></zg-column>

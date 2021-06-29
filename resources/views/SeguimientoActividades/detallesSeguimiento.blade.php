@@ -43,7 +43,7 @@
           <h4>
             <div>Actividad: {{$c->asunto}} </div>
             <div> Usuario: {{$c->nombre}} </div>
-            <div> Area: {{$c->nombre_ar}} </div>
+            <div> Área: {{$c->nombre_ar}} </div>
             @endif
           </h4>
           @endforeach

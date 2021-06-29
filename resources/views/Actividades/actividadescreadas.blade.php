@@ -13,7 +13,7 @@
     <div class="card-header">
       	<div class="row">
         	<div class="col-sm-11">
-        	  <h3>Reporte de actividades creadas por mi persona</h3>
+        	  <h3>Reporte de actividades creadas por mí persona</h3>
         	</div>
     	</div>
 	</div>
