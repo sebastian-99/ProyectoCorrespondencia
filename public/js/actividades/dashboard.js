@@ -48,7 +48,7 @@ $('document').ready(()=>{
         console.log(tipos_actividades);
         $.ajax({
             type: 'POST',
-            url: `/dashboard/${user_id}`,
+            url: `/admin/dashboard`,
             data : {
                 _token,
                 areas,
@@ -57,7 +57,7 @@ $('document').ready(()=>{
                 fin
             },
             success: data =>{
-                console.log('peticion exitosa');
+                console.log('peticion exitosaa');
                 console.log(data);
                 let actividadesSinEntregar = 0
                 let actividadesEnProceso = 0
