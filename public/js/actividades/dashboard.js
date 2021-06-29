@@ -147,7 +147,7 @@ $('document').ready(()=>{
                                 <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
                                 <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
                                 <td>
-                                    <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
+                                    ${dato.seguimiento ? `<a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
                                 </td>
                             </tr>
                         `

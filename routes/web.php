@@ -94,4 +94,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/get-actividades-sin-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesSinAcuseDeRecibido']);
     Route::post('/dashboard/{user}/get-actividades-por-area', [GraficasPorTipoAreaController::class,'getActividadesPorTipoArea']);
 
+    Route::get('/seguimiento/{idac}', [GraficasPorTipoAreaController::class,'seguimiento']);
+
 });

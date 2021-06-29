@@ -14,3 +14,4 @@ Route::post('/dashboard/get-actividades-con-acuse-de-recibido', [AdminGraficasCo
 Route::post('/dashboard/get-actividades-sin-acuse-de-recibido', [AdminGraficasController::class,'actividadesSinAcuseDeRecibido']);
 
 Route::post('/dashboard/get-actividades-por-area', [AdminGraficasController::class,'getActividadesPorTipoArea']);
+Route::get('/seguimiento/{idac}', [AdminGraficasController::class,'seguimiento']);

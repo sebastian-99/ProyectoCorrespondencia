@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 
 class GraficasPorTipoAreaController extends Controller
 {
+    public function seguimiento($idac){
+        return redirect()->route('Seguimiento',[ 'idac' => encrypt($idac) ]);
+    }
     public function dashboard(User $user)
     {
         $tiposActividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')

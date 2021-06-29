@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\DB;
 
 class AdminGraficasController extends Controller
 {
+    public function seguimiento($idac){
+        return redirect()->route('detallesSeguimiento',[ 'idac' => encrypt($idac) ]);
+    }
     public function dashboard()
     {
         return view('sistema.graficas.admin-dashboard',[
