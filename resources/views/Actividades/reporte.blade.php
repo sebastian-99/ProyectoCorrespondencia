@@ -55,6 +55,7 @@
                 <zg-colgroup>
                     <zg-column index='turno' header='Turno'  width="100" type='number'></zg-column>
                     <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
+                    <zg-column index='nombre_actividad' header='Tipo actividad' width="200" type='text'></zg-column>
                     <zg-column index='descripcion' header='Descripción'  width='200'></zg-column>
                     <zg-column index='fecha_creacion' header='Fecha creación' width="200" type='text'></zg-column>
                     <zg-column index='creador' header='Creador' width="200" type='text'></zg-column>

@@ -121,7 +121,8 @@ for (i=0;i<=data.length-1;i++){
         $('#tablaModal>tbody').append("<tr>"+nombre+detalle+ruta_a+"</tr>");
         $('#nombre'+i).val(data[i].nombre);
         $('#detalle'+i).val(data[i].detalle_a);
-
+      
+        $('#ruta'+i).attr('download',data[i].nombre);
         $('#ruta'+i).attr('href',archivo);
 }
       })

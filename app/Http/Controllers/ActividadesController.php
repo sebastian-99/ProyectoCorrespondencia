@@ -20,15 +20,16 @@ class ActividadesController extends Controller
 
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-        ac.status
+        ac.status, ta.nombre AS tipo_actividad
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades 
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-
+        
         $array = array();
 
         function recorrer($value){
@@ -102,6 +103,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
+                                    'nombre_actividad' => $c->tipo_actividad,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
@@ -286,11 +288,10 @@ class ActividadesController extends Controller
 
     public function pdf($idac){
 
-
         $idac = decrypt($idac);
 
-        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area,
-        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion , ac.fecha_inicio, ac.fecha_fin, SUBSTRING(res.firma, 1, 20) AS firma, SUBSTRING(res.firma, 21, 46) AS firma2
+        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre, DATE_FORMAT(res.fecha_acuse,'%d-%m-%Y') AS fecha_acuse, CONCAT(ta.nombre,' / ',ar.nombre) AS area,
+        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion, DATE_FORMAT(ac.fecha_inicio,'%d-%m-%Y') AS fecha_inicio, DATE_FORMAT(ac.fecha_fin,'%d-%m-%Y') AS fecha_fin, SUBSTRING(res.firma, 1, 20) AS firma, SUBSTRING(res.firma, 21, 46) AS firma2
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -624,13 +625,17 @@ class ActividadesController extends Controller
             'actividades.status',
             'actividades.importancia',
             'actividades.archivo1',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo1,'_',-1) AS archivo_redux"),
             'actividades.archivo2',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo2,'_',-1) AS archivo_redux2"),
             'actividades.archivo3',
+            DB::raw("SUBSTRING_INDEX(actividades.archivo3,'_',-1) AS archivo_redux3"),
             'actividades.link1',
             'actividades.link2',
             'actividades.link3',
         )
         ->get();
+
         $personas = DB::SELECT("SELECT CONCAT(us.titulo, ' ' , us.nombre, ' ', us.app, ' ', us.apm) AS nombre, ar.nombre AS nombre_area
                                 FROM responsables_actividades AS re
                                 INNER JOIN actividades AS ac ON ac.idac = re.idac_actividades
@@ -942,10 +947,11 @@ class ActividadesController extends Controller
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status
+        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.idu_users = $id_u
@@ -1035,6 +1041,7 @@ class ActividadesController extends Controller
                                     'turno' => $c->turno,
                                     'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                                     'asunto' => $c->asunto,
+                                    'tipo_actividad' => $c->tipo_actividad,
                                     'descripcion' => $c->descripcion,
                                     'creador' => $c->creador,
                                     'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),

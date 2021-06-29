@@ -37,187 +37,71 @@ const scriptDataTables = `
 $('document').ready(()=>{
 
     const area = new Area()
-    area.rangoSemanal()
 
-    const selectTipoArea = $('#select_tipo_area')
-    const selectArea = $('#select_area')
-    const radiosDeRangoDeFechas = $('#radios_rango_de_fechas')
-    const selectRango = $('#rango_inicial')
-    const btnFiltrarBusquedas = $('#filtrar_busquedas')
-    const inputYear = $('#year')
-
-    selectArea.change(()=>{
-        if (!selectArea.val()){
-            //radiosDeRangoDeFechas.attr('hidden',true)
-            return
-        }
-        radiosDeRangoDeFechas.removeAttr('hidden')
-    })
-
-    area.generarHtmlDelGrafico('Prorcentaje total de actividades','gauge_chart')
-    //area.generarGreficoGauge()
-
-    area.generarHtmlDelGrafico('Estado de las Actividades','pie_chart')
-    //area.generarGreficoPie()
-
-    $('input:radio[name=rango]').click(()=>{
-        const rango = $('input:radio[name=rango]:checked').val()
-        switch(rango){
-            case 'mensual':
-                selectRango.empty()
-                selectRango.append('<option value="">-Selecciona Mes inicial-</option>')
-                moment.months().forEach((mes,indice)=>{
-                    const template = `
-                        <option value="${indice}">${mes}</option>
-                    `
-                    selectRango.append(template)
+    const btnBuscar = $('#btn_buscar')
+    btnBuscar.click(()=>{
+        const inicio = $('#fecha_inicial').val()
+        const fin = $('#fecha_final').val()
+        const tipos_actividades = $('#select_tipo_actividades').val()
+        console.log(tipos_actividades);
+        $.ajax({
+            type: 'POST',
+            url: `/dashboard/${user_id}`,
+            data : {
+                _token,
+                tipos_actividades,
+                inicio,
+                fin
+            },
+            success: data =>{
+                console.log('peticion exitosa');
+                console.log(data);
+                let actividadesSinEntregar = 0
+                let actividadesEnProceso = 0
+                let actividadesCompletadas = 0
+                let actividadesConAcuseDeRecibido = 0
+                let actividadesSinAcuseDeRecibido = 0
+                let totalActividades=[]
+                data.forEach(dato=>{
+                    actividadesCompletadas += dato.actividadesCompletadas
+                    actividadesConAcuseDeRecibido += dato.actividadesConAcuseDeRecibido
+                    actividadesEnProceso += dato.actividadesEnProceso
+                    actividadesSinAcuseDeRecibido += dato.actividadesSinAcuseDeRecibido
+                    totalActividades.push([ dato.nombre, dato.actividadesTotales ])
                 })
-                btnFiltrarBusquedas.removeAttr('disabled')
-                //area.rangoMensual(selectRango.val(),selectRangoFinal.val())
-                break
-            case 'semanal':
-                const year = `01/01/${inputYear.val()}`
-                selectRango.empty()
-                selectRango.append('<option value="">-Selecciona Semana Inicial-</option>')
-                for (let index = 1; index <= moment().weeksInYear(); index++) {
-                    const template = `
-                        <option value="${index}">
-                            DEL
-                            ${moment(year).set({week: index, day: 0}).format('DD-MMM-YYYY') }
-                            AL
-                            ${moment(year).set({week: index, day: 6}).format('DD-MMM-YYYY') }
-                            </option>
-                    `
-                    selectRango.append(template)
-                }
-                btnFiltrarBusquedas.removeAttr('disabled')
-                //area.rangoSemanal()
-                break
-            case 'general':
-                //area.rangoGeneral()
-                break
-            default :
+                generarGraficos(
+                    actividadesSinEntregar,
+                    actividadesEnProceso,
+                    actividadesCompletadas,
+                    actividadesConAcuseDeRecibido,
+                    actividadesSinAcuseDeRecibido,
+                    totalActividades
+                )
 
-                break
-        }
+
+            },
+            error : error =>{
+                console.log(error);
+            }
+        })
     })
 
-
-    btnFiltrarBusquedas.click(()=>{
-
-        //const areaAdministrativa = selectArea.val()
-        const tipoActividad = selectArea.val()
-        const rangoInicial = Number(selectRango.val())
-        const year = inputYear.val()
-
-        const rango = $('input:radio[name=rango]:checked').val()
-        switch (rango){
-            case 'mensual':
-                    const mes = Number(moment().month(rangoInicial).format('MM'))
-                    $.ajax({
-                        type: 'GET',
-                        url:  `/dashboard/${user_id}/get-actividades-ṕor-mes/${tipoActividad}/${year}/${mes}`,
-                        success: data =>{
-                            const gaugeChart ={
-                                columns: [[data.area.nombre, data.promedio]],
-                                type: 'gauge',
-                                onclick: (data, i) => {
-                                    const route = `/dashboard/${user_id}/get-actividades-totales/${$('#select_area').val()}`
-                                    console.log(route);
-                                    imprimirTablaConAjax(route)
-                                },
-                            }
-                            area.generarGreficoGauge(gaugeChart)
-
-                            const parametrosGrafico = {
-                                columns: [
-                                    ['sin entregar', data.actividades.incompletas],
-                                    ['en proceso', data.actividades.enProceso],
-                                    ['completadas', data.actividades.completadas],
-                                ],
-                                type : 'pie',
-                                onclick: data=>{
-                                    clickGraficoPie(data)
-                                }
-                            }
-                            area.generarGreficoPie(parametrosGrafico);
-                        },
-                        error: error =>{
-                            console.log(error);
-                        },
-                    })
-                break
-            case 'semanal':
-                    const diaInicialDeLaSemana = moment(year).set({week: rangoInicial, day: 0}).format('DD-MM-YYYY')
-                    const diaFinallDeLaSemana = moment(year).set({week: rangoInicial, day: 6}).format('DD-MM-YYYY')
-                    $.ajax({
-                        type: 'GET',
-                        url:  `/dashboard/${user_id}/get-actividades-ṕor-rango-de-fechas/${tipoActividad}/${diaInicialDeLaSemana}/${diaFinallDeLaSemana}`,
-                        success: data =>{
-                            area.generarGreficoGauge([[data.area.nombre, data.promedio]])
-                            area.setGraficoPie([
-                                ['sin entregar', data.actividades.incompletas],
-                                ['en proceso', data.actividades.enProceso],
-                                ['completadas', data.actividades.completadas],
-                            ]);
-                        },
-                        error: error =>{
-                            console.log(error);
-                        },
-                    })
-                break
-            case 'general':
-                break
-            default:
-                break
-        }
-
-    })
-
-    function clickGraficoPie(data){
-        console.log('click');
-        $('#tabla').empty()
-        let route = ''
-        let bandera = true
-        const year = Number($('#year').val())
-        const area = Number($('#select_area').val())
-        const select = $('#rango_inicial').val()
-        switch ($('input:radio[name=rango]:checked').val())
-        {
-            case 'mensual':
-                route = `-por-mes`
-                bandera = false
-                break;
-        }
-        switch(data.index){
-            case 0:
-                route= `get-actividades-sin-entregar${route}/${area}`
-            break;
-            case 1:
-                route= `get-actividades-en-proceso${route}/${area}`
-                break;
-            case 2:
-                route= `get-actividades-completadas${route}/${area}`
-                break;
-        }
-
-        if(bandera){
-            const inicio = moment(year).set({week: select, day: 0}).format('DD-M-YYYY')
-            const fin = moment(year).set({week: select, day: 6}).format('DD-M-YYYY')
-            route=`${route}/${inicio}/${fin}`
-        }else{
-            route= `${route}/${Number(moment().month(select).format('MM'))}`
-        }
-        route = `/dashboard/${user_id}/${route}/${year}`
-
-        imprimirTablaConAjax(route)
-    }
     function imprimirTablaConAjax(route){
         console.log(route)
+        const inicio = $('#fecha_inicial').val()
+        const fin = $('#fecha_final').val()
+        const tipos_actividades = $('#select_tipo_actividades').val()
         $.ajax({
-            type: 'GET',
+            type: 'POST',
+            data:{
+                _token,
+                tipos_actividades,
+                inicio,
+                fin
+            },
             url: route,
             success: data=>{
+                console.log(data);
                 const thead = `
                     <tr>
                         <th>Turno</th>
@@ -235,31 +119,33 @@ $('document').ready(()=>{
                     </tr>
                 `
                 let tbody = ''
-                data.forEach(dato => {
-                    tbody += `
-                        <tr>
-                            <td>${dato.turno}</td>
-                            <td>
-                                ${dato.creador.titulo}
-                                ${dato.creador.nombre}
-                                ${dato.creador.app}
-                                ${dato.creador.apm}
-                            </td>
-                            <td>${dato.responsable}</td>
-                            <td>${dato.asunto}</td>
-                            <td>${dato.descripcion}</td>
-                            <td>${dato.periodo}</td>
-                            <td>${dato.importancia}</td>
-                            <td>${dato.area_responsable}</td>
-                            <td>${dato.tipo_actividad}</td>
-                            <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
-                            <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
-                            <td>
-                                <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
-                            </td>
-                        </tr>
-                    `
-                });
+                data.forEach(element=>{
+                    element.actividades.forEach(dato => {
+                        tbody += `
+                            <tr>
+                                <td>${dato.turno}</td>
+                                <td>
+                                    ${dato.creador.titulo}
+                                    ${dato.creador.nombre}
+                                    ${dato.creador.app}
+                                    ${dato.creador.apm}
+                                </td>
+                                <td>${dato.responsable}</td>
+                                <td>${dato.asunto}</td>
+                                <td>${dato.descripcion}</td>
+                                <td>${dato.periodo}</td>
+                                <td>${dato.importancia}</td>
+                                <td>${dato.area_responsable}</td>
+                                <td>${dato.tipo_actividad}</td>
+                                <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
+                                <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
+                                <td>
+                                    <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
+                                </td>
+                            </tr>
+                        `
+                    });
+                })
                 area.imprimirDatosEnTabla(thead,tbody, $('#tabla'),scriptDataTables)
             },
             error: error=>{
@@ -268,33 +154,83 @@ $('document').ready(()=>{
         })
     }
 
-    function resetearAreas(){
-        selectArea.empty()
-        //selectArea.attr('hidden',true)
-        selectArea.empty()
-        //radiosDeRangoDeFechas.attr('hidden',true)
-        //selectRango.attr('hidden',true)
-        selectRango.empty()
-        //btnFiltrarBusquedas.attr('hidden',true)
-    }
-    function resetearCarreras(){
-        //selectArea.attr('hidden',true)
-        selectArea.empty()
-        radiosDeRangoDeFechas.attr('hidden',true)
-        //selectRango.attr('hidden',true)
-        selectRango.empty()
-        //btnFiltrarBusquedas.attr('hidden',true)
-    }
-    function resetearRadiosDeRangos(){
-        //radiosDeRangoDeFechas.attr('hidden',true)
-        //selectRango.attr('hidden',true)
-        selectRango.empty()
-        //btnFiltrarBusquedas.attr('hidden',true)
+
+    function generarGraficos(
+            actividades_sin_entregar,
+            actividades_en_proceso,
+            actividades_completadas,
+            actividades_con_acuse_de_recibido,
+            actividades_sin_acuse_de_recibido,
+            total_actividades
+        ){
+        const graficoActividaes = c3.generate({
+            bindto: '#grafico_actividades',
+            data: {
+                columns: [
+                    ['sin enttregar', actividades_sin_entregar],
+                    ['en proceso', actividades_en_proceso],
+                    ['completadas', actividades_completadas],
+                ],
+                type : 'pie',
+                onclick: function (data) {
+                    let route = ''
+                    switch(data.index){
+                        case 0:
+                            route= `get-actividades-sin-entregar`
+                        break;
+                        case 1:
+                            route= `get-actividades-en-proceso`
+                            break;
+                        case 2:
+                            route= `get-actividades-completadas`
+                            break;
+                    }
+                    route = `/dashboard/${user_id}/${route}`
+                    imprimirTablaConAjax(route)
+                 },
+            }
+        });
+
+        const graficoAcuse = c3.generate({
+            bindto: '#grafico_acuse',
+            data: {
+                columns: [
+                    ['con acuse', actividades_con_acuse_de_recibido],
+                    ['sin acuse', actividades_sin_acuse_de_recibido],
+                ],
+                type : 'pie',
+                onclick: function (data) {
+                    let route = ''
+                    switch(data.index){
+                        case 0:
+                            route= `get-actividades-con-acuse-de-recibido`
+                        break;
+                        case 1:
+                            route= `get-actividades-sin-acuse-de-recibido`
+                            break;
+                    }
+                    route = `/dashboard/${user_id}/${route}`
+                    imprimirTablaConAjax(route)
+                 },
+            }
+        });
+        const graficoTipoAreas = c3.generate({
+            bindto: '#grafico_tipo_areas',
+            data: {
+                columns: total_actividades,
+                type : 'pie',
+                onclick: function (data) {
+                    console.log(data);
+                    /*let route = ''
+
+                    route = `/dashboard/${user_id}/${route}`
+                    imprimirTablaConAjax(route)*/
+                 },
+            }
+        });
     }
 
-    function resetearSelectRangoInicial(){
-        //btnFiltrarBusquedas.attr('hidden',true)
-    }
+
 
 })
 
