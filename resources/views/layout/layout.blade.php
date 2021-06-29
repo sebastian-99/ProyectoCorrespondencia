@@ -194,7 +194,7 @@
               <i class="fas fa-angle-left right"></i>
             </a>
             <ul class="nav nav-treeview">
-              @if (auth()->user()->idtu_tipos_usuarios == 1 || auth()->user()->idtu_tipos_usuarios == 2)
+              @if (auth()->user()->idtu_tipos_usuarios == 1 || auth()->user()->idtu_tipos_usuarios == 3)
                 <li class="nav-item">
                     <a href="{{ url('admin/dashboard')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
