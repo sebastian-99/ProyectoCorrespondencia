@@ -86,7 +86,7 @@ $('document').ready(()=>{
         })
     })
 
-    function imprimirTablaConAjax(route){
+    function imprimirTablaConAjax(route, tipo_area = ''){
         console.log(route)
         const inicio = $('#fecha_inicial').val()
         const fin = $('#fecha_final').val()
@@ -97,7 +97,8 @@ $('document').ready(()=>{
                 _token,
                 tipos_actividades,
                 inicio,
-                fin
+                fin,
+                tipo_area
             },
             url: route,
             success: data=>{
@@ -220,11 +221,8 @@ $('document').ready(()=>{
                 columns: total_actividades,
                 type : 'pie',
                 onclick: function (data) {
-                    console.log(data);
-                    /*let route = ''
-
-                    route = `/dashboard/${user_id}/${route}`
-                    imprimirTablaConAjax(route)*/
+                    const route = `/dashboard/${user_id}/get-actividades-por-area`
+                    imprimirTablaConAjax(route,data.id)
                  },
             }
         });

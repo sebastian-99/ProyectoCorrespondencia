@@ -13,3 +13,4 @@ Route::post('/dashboard/get-actividades-sin-entregar', [AdminGraficasController:
 Route::post('/dashboard/get-actividades-con-acuse-de-recibido', [AdminGraficasController::class,'actividadesConAcuseDeRecibido']);
 Route::post('/dashboard/get-actividades-sin-acuse-de-recibido', [AdminGraficasController::class,'actividadesSinAcuseDeRecibido']);
 
+Route::post('/dashboard/get-actividades-por-area', [AdminGraficasController::class,'getActividadesPorTipoArea']);

@@ -92,5 +92,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/get-actividades-sin-entregar', [GraficasPorTipoAreaController::class,'actividadesSinEntregar']);
     Route::post('/dashboard/{user}/get-actividades-con-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesConAcuseDeRecibido']);
     Route::post('/dashboard/{user}/get-actividades-sin-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesSinAcuseDeRecibido']);
+    Route::post('/dashboard/{user}/get-actividades-por-area', [GraficasPorTipoAreaController::class,'getActividadesPorTipoArea']);
 
 });

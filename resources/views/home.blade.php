@@ -81,7 +81,7 @@
                                 <div class="col-lg-8 col-sm-12">
                                     <div id="actividades_cerradas">
                                         <h5>ACTIVIDADES CERRADAS</h5>
-                                        <b>{{ $actividades_cerradas['concluidas']}} de {{ $actividades_cerradas['total'] }}</b><br>
+                                        <h2>{{ $actividades_cerradas['concluidas']}} de {{ $actividades_cerradas['total'] }}</h2><br>
                                     </div>
                                     <div id="actividades_en_seguimiento_concluidas">
                                         <h5> ACTIVIDADES EN SEGUIMIENTO CONCLUIDAS</h5><br>
