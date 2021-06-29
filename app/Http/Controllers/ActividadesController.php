@@ -288,11 +288,10 @@ class ActividadesController extends Controller
 
     public function pdf($idac){
 
-
         $idac = decrypt($idac);
 
-        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre ,res.fecha_acuse, CONCAT(ar.nombre,'/', ta.nombre) AS area,
-        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion , ac.fecha_inicio, ac.fecha_fin, SUBSTRING(res.firma, 1, 20) AS firma, SUBSTRING(res.firma, 21, 46) AS firma2
+        $data = DB::SELECT("SELECT CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre, DATE_FORMAT(res.fecha_acuse,'%d-%m-%Y') AS fecha_acuse, CONCAT(ta.nombre,' / ',ar.nombre) AS area,
+        ac.asunto , ac.descripcion , ac.comunicado, ac.fecha_creacion, DATE_FORMAT(ac.fecha_inicio,'%d-%m-%Y') AS fecha_inicio, DATE_FORMAT(ac.fecha_fin,'%d-%m-%Y') AS fecha_fin, SUBSTRING(res.firma, 1, 20) AS firma, SUBSTRING(res.firma, 21, 46) AS firma2
         FROM responsables_actividades AS res
         JOIN users AS us ON us.idu = res.idu_users
         JOIN areas AS ar ON ar.idar = us.idar_areas

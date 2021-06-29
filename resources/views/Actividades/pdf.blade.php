@@ -118,7 +118,7 @@
 
                     $contenido .= "<p>Nombre: <b>".$insert[$i]['nombre']."</b></p>";
 
-                    $contenido .= "<p>Fecha: <b>".$insert[$i]['fecha_acuse']."</b></p>";
+                    $contenido .= "<p>Fecha de acuse: <b>".$insert[$i]['fecha_acuse']."</b></p>";
 
                     //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
@@ -162,7 +162,7 @@
 
                 $contenido .= "<p>Nombre: <b>".$out[$i]['nombre']."</b></p>";
 
-                $contenido .= "<p>Fecha: <b>".$out[$i]['fecha_acuse']."</b></p>";
+                $contenido .= "<p>Fecha de acuse: <b>".$out[$i]['fecha_acuse']."</b></p>";
 
                 //$contenido .= "<p>Razón: FIRMA DE RECIBIDO</p>";
 
