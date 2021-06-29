@@ -10,20 +10,47 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/fc-3.3.3/fh-3.1.9/kt-2.6.2/r-2.2.8/rg-1.1.3/rr-1.2.8/sc-2.0.4/sb-1.1.0/sp-1.3.0/sl-1.3.3/datatables.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #e9830e;
+        color: white;
 
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove {
+        color: #000000;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+        margin-right: 2px;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+        background-color: #416CC3;
+        color: white;
+        border: 1px solid black;
+        border-radius: 0.2rem;
+        padding: 0;
+        padding-right: 5px;
+        cursor: pointer;
+        float: left;
+        margin-top: 0.3em;
+        margin-right: 5px;
+    }
+    </style>
 @endsection
 
 @section('content')
     @csrf
-    .<div class="container-fluid">
+    <div class="container-fluid">
         <div class="card bg-light">
             <div class="card-header bg-success text-center">
-                <h2>Medidor de mis Actividades por tipo Area </h2>
+                <h2>Medidor de mis actividades por tipo área </h2>
             </div>
             <div class="card-body">
                 <div class="form-row mt-3" id="dashboard_panel">
                     <div class="form-group col-md-4">
-                        <label>Tipo de area</label>
+                        <label>Tipo de área</label>
                         <select class="custom-select" name="tipo_actividades[]" id="select_tipo_actividades" multiple style="color:back">
                             @foreach ($tipo_actividades as $tipo_actividad)
                                 <option value="{{ $tipo_actividad->idtac }}"> {{  $tipo_actividad->nombre }} </option>
@@ -42,7 +69,7 @@
                 </div>
                 <div class="form-row mt-3">
                     <div class="col-md-4">
-                        <label>Status de las Actividades</label>
+                        <label>Estatus de las actividades</label>
                         <div id="grafico_actividades"></div>
                     </div>
                     <div class="col-md-4">
@@ -50,7 +77,7 @@
                         <div id="grafico_acuse"></div>
                     </div>
                     <div class="col-md-4">
-                        <label>Porcentaje de tipo areas</label>
+                        <label>Porcentaje de tipo áreas</label>
                         <div id="grafico_tipo_areas"></div>
                     </div>
                 </div>

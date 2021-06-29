@@ -3,7 +3,7 @@
 <form method="POST" action="{{ route('login') }}">
 	@csrf
 
-	INICIAR SESIÒN
+	INICIAR SESIÓN
 	<br>
 	<br>
 	<div class="form-group">

@@ -104,7 +104,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Actividad Creada por:</strong>
+                                    <strong>Actividad creada por:</strong>
                                     <input type="text" class="form-control" id="actividadcreador" value ="{{$user[0]->titulo . ' ' . $user[0]->nombre . ' ' . $user[0]->app . ' ' . $user[0]->apm}}" readonly>
                                     <input type="hidden" name="idusuario" value="{{$user[0]->idu}}">
                                 </div>
@@ -116,7 +116,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Tipo de usuario-Detalle:</strong>
+                                    <strong>Tipo de usuario-detalle:</strong>
                                     <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
                                     <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}" >
                                 </div>
@@ -239,7 +239,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Selccione participantes:</strong>
+                                    <strong>Seleccione participantes:</strong>
                                     <br>
                                     <label>Tipo de usuario:</label>
                                     <select class="form-control" name="tipousuario[]" id="tipousuario" multiple="multiple"  required>
@@ -251,7 +251,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Selccione usuarios de las area:</strong>
+                                    <strong>Seleccione usuarios de las área:</strong>
                                     <br>
                                     <label>&nbsp;</label>
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
