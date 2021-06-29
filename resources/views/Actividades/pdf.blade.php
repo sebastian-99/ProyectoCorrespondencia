@@ -49,8 +49,8 @@
     <div>
         <div align="right">
             <div>
-                <img src="{{public_path('images/Gob.jpg')}}" height="40" align="left">
-                <img src="{{public_path('images/logoUTVT.png')}}" height="30" alt="">
+                <img src="{{public_path('images/Gob.png')}}" height="45" align="left">
+                <img src="{{public_path('images/logoUTVT.png')}}" height="40" alt="">
                 <img src="{{public_path('images/Edomex.png')}}" height="40" alt="">
             </div>
         </div>
