@@ -73,15 +73,16 @@ $(document).ready(()=>{
                     </tr>
                 `
                 let tbody = ''
+                console.log(data);
                 data.forEach(dato => {
                     tbody += `
                         <tr>
                             <td>${dato.turno}</td>
                             <td>
-                                ${dato.creador.titulo}
-                                ${dato.creador.nombre}
-                                ${dato.creador.app}
-                                ${dato.creador.apm}
+                                ${dato.creador ? dato.creador.titulo : ''}
+                                ${dato.creador ? dato.creador.nombre : ''}
+                                ${dato.creador ? dato.creador.app : ''}
+                                ${dato.creador ? dato.creador.apm : ''}
                             </td>
                             <td>${dato.responsable}</td>
                             <td>${dato.asunto}</td>
@@ -97,7 +98,7 @@ $(document).ready(()=>{
                             </td>
                         </tr>
                     `
-                });
+                })
                 area.imprimirDatosEnTabla(thead,tbody, $('#tabla'),scriptDataTables)
             },
             error: error=>{

@@ -26,7 +26,7 @@
                                         <h5>ACTIVIDADES DE HOY</h5>
                                     </div>
                                     <div class="mt-3">
-                                        <h5>{{ $actividades_hoy }}</h5>
+                                        <h2>{{ $actividades_hoy }}</h2>
                                     </div>
                                     <h2></h2>
                                 </div>
@@ -84,7 +84,7 @@
                                         <b>{{ $actividades_cerradas['concluidas']}} de {{ $actividades_cerradas['total'] }}</b><br>
                                     </div>
                                     <div id="actividades_en_seguimiento_concluidas">
-                                        <b> ACTIVIDADES EN SEGUIMIENTO CONCLUIDAS</b><br>
+                                        <h5> ACTIVIDADES EN SEGUIMIENTO CONCLUIDAS</h5><br>
                                         <div class="text-center">
                                             <h2>
                                                 {{ $actividades_en_seguimiento['completadas']}} de {{ $actividades_en_seguimiento['total'] }}
