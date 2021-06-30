@@ -20,6 +20,7 @@ class AreasController extends Controller
                                 'areas.nombre',
                                 'areas.activo',
                                 'tipos_areas.nombre as idtar')
+                                ->orderby('nombre', 'ASC')
                         ->get();
 
         $tipos_areas = TiposAreas::all();

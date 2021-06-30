@@ -13,6 +13,7 @@ class TiposActividadesController extends Controller
     public function index()
     {
         $tipos_actividades = TiposActividades::query()
+                                            ->orderby('nombre', 'ASC')
                                              ->get();
         $array = array();
 
