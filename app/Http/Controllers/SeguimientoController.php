@@ -140,12 +140,12 @@ class SeguimientoController extends Controller
             array_push($array, array(
 
                 'turno' => $c->turno,
-                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
+                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('DD [de] MMMM [del] YYYY'),
                 'asunto' => $c->asunto,
                 'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('DD MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('DD MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'area' => $c->area,
                 'recibo' => AB($data),
@@ -406,7 +406,7 @@ class SeguimientoController extends Controller
             array_push($array_sa, array(
 
                 'idseac' => $turno,
-                'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('D MMMM h:mm a'),
+                'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('DD MMMM h:mm a'),
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
