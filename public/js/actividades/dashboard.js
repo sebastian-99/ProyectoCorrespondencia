@@ -48,7 +48,7 @@ $('document').ready(()=>{
         console.log(tipos_actividades);
         $.ajax({
             type: 'POST',
-            url: `/dashboard/${user_id}`,
+            url: `/admin/dashboard`,
             data : {
                 _token,
                 areas,
@@ -57,7 +57,7 @@ $('document').ready(()=>{
                 fin
             },
             success: data =>{
-                console.log('peticion exitosa');
+                console.log('peticion exitosaa');
                 console.log(data);
                 let actividadesSinEntregar = 0
                 let actividadesEnProceso = 0
@@ -89,7 +89,7 @@ $('document').ready(()=>{
         })
     })
 
-    function imprimirTablaConAjax(route){
+    function imprimirTablaConAjax(route, tipo_area = ''){
         console.log(route)
         const inicio = $('#fecha_inicial').val()
         const fin = $('#fecha_final').val()
@@ -103,7 +103,8 @@ $('document').ready(()=>{
                 areas,
                 tipos_actividades,
                 inicio,
-                fin
+                fin,
+                tipo_area
             },
             url: route,
             success: data=>{
@@ -112,15 +113,15 @@ $('document').ready(()=>{
                     <tr>
                         <th>Turno</th>
                         <th>Autor</th>
-                        <th>Responsale</th>
+                        <th>Responsable</th>
                         <th>Asunto</th>
-                        <th>Descripcion</th>
-                        <th>Periodo</th>
-                        <th>Inportancia</th>
-                        <th>Area Responsable</th>
+                        <th>Descripción</th>
+                        <th>Período</th>
+                        <th>Importancia</th>
+                        <th>Área Responsable</th>
                         <th>Tipo Actividad</th>
                         <th>Avance</th>
-                        <th>Numero de Segumientos</th>
+                        <th>Número de Segumientos</th>
                         <th>Acciones</th>
                     </tr>
                 `
@@ -146,7 +147,7 @@ $('document').ready(()=>{
                                 <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
                                 <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
                                 <td>
-                                    <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirijete a mis actividades dando click aquí'}
+                                    ${dato.seguimiento ? `<a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
                                 </td>
                             </tr>
                         `
@@ -226,11 +227,8 @@ $('document').ready(()=>{
                 columns: total_actividades,
                 type : 'pie',
                 onclick: function (data) {
-                    console.log(data);
-                    /*let route = ''
-
-                    route = `/admin/dashboard/${route}`
-                    imprimirTablaConAjax(route)*/
+                    const route = `/admin/dashboard/get-actividades-por-area`
+                    imprimirTablaConAjax(route,data.id)
                  },
             }
         });

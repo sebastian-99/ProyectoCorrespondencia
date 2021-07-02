@@ -74,30 +74,37 @@ class SeguimientoController extends Controller
             } else {
                 $data = 0;
             }
-            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
 
             //return ($data > $end_date ? "es mayor" : "No es mayor");
 
             if ($date <= $end_date && $data < 100 && $acuse == 1) {
 
                 return "En proceso – En Tiempo";
+
             } elseif ($date <= $end_date  && $data == 100 && $acuse == 1) {
 
                 return "Concluido – En tiempo";
+
             } elseif ($date >= $end_date  && $data < 100 && $acuse == 1) {
 
                 return "En proceso - Fuera de Tiempo";
+
             } elseif ($date >= $end_date  && $data == 100 && $acuse == 1) {
 
                 return "Concluido – Fuera de Tiempo";
+
             } elseif ($acuse == 2) {
 
                 return "Acuse rechazado";
+
             } elseif ($status == 3) {
 
                 return "Cancelado";
+
             } else {
                 return "Sin aceptar acuse";
+
             }
         }
 
@@ -147,7 +154,6 @@ class SeguimientoController extends Controller
                 'operaciones' => ver($c->idac),
             ));
         }
-
         $json = json_encode($array);
 
         return view('SeguimientoActividades.actividades_asignadas')

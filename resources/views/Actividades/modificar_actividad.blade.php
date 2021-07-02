@@ -126,7 +126,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Tipo de usuario - Detalle:</strong>
+                                    <strong>Tipo de usuario - detalle:</strong>
                                     <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$consul[0]->tipo_usuario . ' - ' . $consul[0]->nombre_area}}" readonly>
 
                                 </div>
@@ -289,7 +289,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Selccione participantes:</strong>
+                                    <strong>Seleccione participantes:</strong>
                                     <br>
                                     <label>Tipo de usuario:</label>
                                     <select class="form-control" name="tipousuario[]" id="tipousuario" multiple="multiple" required>
@@ -306,7 +306,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <strong>Selccione usuarios de las &aacute;rea:</strong>
+                                    <strong>Seleccione usuarios de las &aacute;rea:</strong>
                                     <br>
                                     <label>&nbsp;</label>
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
@@ -347,7 +347,7 @@
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia" value="Baja" {{($consul[0]->importancia == "Baja")? 'checked' : ''}}>
-                                        <label class="form-check-label" for="importancia">baja</label>
+                                        <label class="form-check-label" for="importancia">Baja</label>
                                       </div>
                                       <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="importancia" id="importancia1" value="Media" {{($consul[0]->importancia == "Media")? 'checked' : ''}}>
@@ -371,7 +371,7 @@
 
                                             <zing-grid
                                             lang="custom"
-                                            caption='Personas que ya estan dando seguimiento'
+                                            caption='Personas que ya están dando seguimiento'
                                             sort
                                             search
                                             pager
