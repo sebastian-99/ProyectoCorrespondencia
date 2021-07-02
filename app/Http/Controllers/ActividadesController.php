@@ -386,7 +386,7 @@ class ActividadesController extends Controller
          
 
           array_push($array, array('idseac' => $turno,
-                             'fecha' => $c->fecha,
+                             'fecha' => Carbon::parse($c->fecha)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                              'detalle' =>  $c->detalle,
                              'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->fecha,$c->estado),
                              'porcentaje' => $c->porcentaje.'%',
