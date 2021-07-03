@@ -42,11 +42,15 @@ class GraficasPorTipoAreaController extends Controller
                 $tipoActividad->actividadesConAcuseDeRecibido = $this->getActividadesConAcuseDeRecibido($user,$tipoActividad,$inicio,$fin)->count();
                 $tipoActividad->actividadesSinAcuseDeRecibido = $this->getActividadesSinAcuseDeRecibido($user,$tipoActividad,$inicio,$fin)->count();
 
+                $tipoActividad->actividadesCompletadasEnTiempo = $this->getActividadesCompletadasEnTiempo($user,$tipoActividad,$inicio,$fin)->count();
+                $tipoActividad->actividadesCompletadasFueraDeTiempo = $this->getActividadesCompletadasFueraDeTiempo($user,$tipoActividad,$inicio,$fin)->count();
+
+                $tipoActividad->actividadesEnProcesoEnTiempo = $this->getActividadesEnProcesoEnTiempo($user,$tipoActividad,$inicio,$fin)->count();
+                $tipoActividad->actividadesEnProcesoFueraDeTiempo = $this->getActividadesEnProcesoFueraDeTiempo($user,$tipoActividad,$inicio,$fin)->count();
+
                 $tipoActividad->actividadesTotales = $tipoActividad->actividadesCompletadas +
                                                     $tipoActividad->actividadesEnProceso +
-                                                    $tipoActividad->actividadesSinEntregar +
-                                                    $tipoActividad->actividadesConAcuseDeRecibido +
-                                                    $tipoActividad->actividadesSinAcuseDeRecibido;
+                                                    $tipoActividad->actividadesSinEntregar;
 
 
                 return $tipoActividad;
@@ -116,6 +120,54 @@ class GraficasPorTipoAreaController extends Controller
         return $tiposActividades;
     }
 
+    public function actividadesCompletadasEnTiempo(User $user, Request $request){
+        $inicio = $request->inicio;
+        $fin = $request->fin;
+        return TiposActividades::whereIn('idtac', $request->tipos_actividades)
+            ->get()
+            ->each(function($tipoActividad) use($user,$inicio,$fin){
+                $tipoActividad->actividades = $this->getActividadesCompletadasEnTiempo($user,$tipoActividad,$inicio,$fin);
+                return $tipoActividad;
+            });
+    }
+
+    public function actividadesCompletadasFueraDeTiempo(User $user, Request $request){
+        $inicio = $request->inicio;
+        $fin = $request->fin;
+        $tiposActividades = TiposActividades::whereIn('idtac', $request->tipos_actividades)
+            ->get()
+            ->each(function($tipoActividad) use($user,$request){
+                $tipoActividad->actividades = $this->getActividadesCompletadasFueraDeTiempo($user,$tipoActividad,$request->inicio,$request->fin);
+                return $tipoActividad;
+            });
+        $actividades = [];
+        return $actividades;
+    }
+
+    public function actividadesEnProcesoEnTiempo(User $user,  Request $request){
+        $inicio = $request->inicio;
+        $fin = $request->fin;
+        $tiposActividades = TiposActividades::whereIn('idtac', $request->tipos_actividades)
+            ->get()
+            ->each(function($tipoActividad) use($user,$inicio,$fin){
+                $tipoActividad->actividades = $this->getActividadesEnProcesoEnTiempo($user,$tipoActividad,$inicio,$fin);
+                return $tipoActividad;
+            });
+        return $tiposActividades;
+    }
+
+    public function actividadesEnProcesoFueraDeTiempo(User $user, Request $request){
+        $inicio = $request->inicio;
+        $fin = $request->fin;
+        $tiposActividades = TiposActividades::whereIn('idtac', $request->tipos_actividades)
+            ->get()
+            ->each(function($tipoActividad) use($user,$inicio,$fin){
+                $tipoActividad->actividades = $this->getActividadesEnProcesoFueraDeTiempo($user,$tipoActividad,$inicio,$fin);
+                return $tipoActividad;
+            });
+        return $tiposActividades;
+    }
+
 
     public function getActividades(User $user, Request $request)
     {
@@ -134,22 +186,35 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesCompletadas(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
+        $actividades = ResponsablesActividades::join('seguimientos_actividades',
+                'seguimientos_actividades.idreac_responsables_actividades',
+                'responsables_actividades.idreac'
+            )
+            ->where('responsables_actividades.idu_users', $user->idu)
+            ->where('seguimientos_actividades.porcentaje', 100)
+            ->groupBy('responsables_actividades.idreac')
+            ->select('responsables_actividades.idreac')
+            ->get();
+        if($actividades->count() < 1 ) return [];
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        ->where('responsables_actividades.fecha','!=', null)
+        //->where('responsables_actividades.fecha','!=', null)
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->whereIn('responsables_actividades.idreac', $actividades)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
             DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -166,9 +231,9 @@ class GraficasPorTipoAreaController extends Controller
 
             $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
             $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
-
-            $collection->seguimiento = $seguimiento->first();
+            $collection->porcentaje_seguimiento = $seguimiento->last()->porcentaje;//$seguimiento->avg('porcentaje');
+            $collection->ultimo_seguimiento = $seguimiento->last();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         });
@@ -177,23 +242,39 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesEnProceso(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
+
+        $actividades = ResponsablesActividades::join('seguimientos_actividades',
+                'seguimientos_actividades.idreac_responsables_actividades',
+                'responsables_actividades.idreac'
+            )
+            ->where('responsables_actividades.idu_users', $user->idu)
+            ->where('seguimientos_actividades.porcentaje','>', 0)
+            ->where('seguimientos_actividades.porcentaje','<', 100)
+            ->groupBy('responsables_actividades.idreac')
+            ->select('responsables_actividades.idreac')
+            ->get();
+        if($actividades->count() < 1 ) return [];
+
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        ->where('responsables_actividades.fecha', null)
+        //->where('responsables_actividades.fecha', null)
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->whereIn('responsables_actividades.idreac', $actividades)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
             DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -212,7 +293,7 @@ class GraficasPorTipoAreaController extends Controller
             $collection->numero_de_seguimiento = $seguimiento->count();
             $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
-            $collection->seguimiento = $seguimiento->first();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         });
@@ -221,20 +302,41 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesSinEntregar(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
+        $actividades = ResponsablesActividades::where('idu_users', $user->idu)
+            ->select('idreac')
+            ->groupBy('responsables_actividades.idreac')
+            ->get()
+            ->each(function($responsableActividad){
+                $responsableActividad->seguimiento =SeguimientosActividades::where('idreac_responsables_actividades',$responsableActividad->idreac)
+                    ->groupBy('idreac_responsables_actividades')
+                    ->get();
+                return $responsableActividad;
+
+            });
+            foreach($actividades AS $key => $actividad){
+                if($actividad->seguimiento->count()>0){
+                    $actividades->forget($key);
+                }
+                unset($actividad['seguimiento']);
+            }
+
+        //return $actividades;
+        if($actividades->count() < 1 ) {return [];}
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        ->where('responsables_actividades.fecha', null)
-        ->where('responsables_actividades.fecha','<', Carbon::now()->format('Y-m-d'))
+        //->where('responsables_actividades.fecha', null)
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->whereIn('responsables_actividades.idreac', $actividades)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
@@ -279,6 +381,7 @@ class GraficasPorTipoAreaController extends Controller
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
@@ -323,6 +426,7 @@ class GraficasPorTipoAreaController extends Controller
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
@@ -369,6 +473,7 @@ class GraficasPorTipoAreaController extends Controller
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
             'actividades.turno',
+            'actividades.comunicado',
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
@@ -397,5 +502,66 @@ class GraficasPorTipoAreaController extends Controller
         })]];
     }
 
+    private function getActividadesCompletadasEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+        $actividadesCompletadas = $this->getActividadesCompletadas($user,$tiposActividades,$inicio,$fin);
+        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
+            $seguimiento = new Carbon($actividadCompletada->ultimo_seguimiento->created_at);
+            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
+            $seguimiento = $seguimiento->format('Y-m-d');
+            $fechaFin = $fechaFin->format('Y-m-d');
+
+            if($seguimiento > $fechaFin){
+                $actividadesCompletadas->forget($key);
+            }
+        }
+        return $actividadesCompletadas;
+    }
+
+    public function getActividadesCompletadasFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+
+        $actividadesCompletadas = $this->getActividadesCompletadas($user,$tiposActividades,$inicio,$fin);
+
+        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
+            $seguimiento = new Carbon($actividadCompletada->ultimo_seguimiento->created_at);
+            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
+            $seguimiento = $seguimiento->format('Y-m-d');
+            $fechaFin = $fechaFin->format('Y-m-d');
+
+            if(!($seguimiento > $fechaFin)){
+                $actividadesCompletadas->forget($key);
+            }
+        }
+        return $actividadesCompletadas;
+    }
+
+    public function getActividadesEnProcesoEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+        $actividadesCompletadas = $this->getActividadesEnProceso($user,$tiposActividades,$inicio,$fin);
+        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
+            $seguimiento = new Carbon($actividadCompletada->seguimiento->created_at);
+            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
+            $seguimiento = $seguimiento->format('Y-m-d');
+            $fechaFin = $fechaFin->format('Y-m-d');
+
+            if($seguimiento > $fechaFin){
+                $actividadesCompletadas->forget($key);
+            }
+        }
+        return $actividadesCompletadas;
+    }
+
+    public function getActividadesEnProcesoFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+        $actividadesCompletadas = $this->getActividadesEnProceso($user,$tiposActividades,$inicio,$fin);
+        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
+            $seguimiento = new Carbon($actividadCompletada->seguimiento->created_at);
+            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
+            $seguimiento = $seguimiento->format('Y-m-d');
+            $fechaFin = $fechaFin->format('Y-m-d');
+
+            if(!($seguimiento > $fechaFin)){
+                $actividadesCompletadas->forget($key);
+            }
+        }
+        return $actividadesCompletadas;
+    }
 
 }

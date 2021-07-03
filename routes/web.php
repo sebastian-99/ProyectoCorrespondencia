@@ -94,6 +94,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/get-actividades-sin-acuse-de-recibido', [GraficasPorTipoAreaController::class,'actividadesSinAcuseDeRecibido']);
     Route::post('/dashboard/{user}/get-actividades-por-area', [GraficasPorTipoAreaController::class,'getActividadesPorTipoArea']);
 
+    Route::post('/dashboard/{user}/actividades-completadas-en-tiempo', [GraficasPorTipoAreaController::class,'actividadesCompletadasEnTiempo'])->name('actividades.en-tiempo');
+    Route::post('/dashboard/{user}/actividades-completadas-fuera-de-tiempo', [GraficasPorTipoAreaController::class,'actividadesCompletadasFueraDeTiempo']);
+    Route::post('/dashboard/{user}/actividades-en-proceso-en-tiempo', [GraficasPorTipoAreaController::class,'actividadesEnProcesoEnTiempo']);
+    Route::post('/dashboard/{user}/actividades-en-proceso-fuera-de-tiempo', [GraficasPorTipoAreaController::class,'actividadesEnProcesoFueraDeTiempo']);
+
     Route::get('/seguimiento/{idac}', [GraficasPorTipoAreaController::class,'seguimiento']);
 
 });

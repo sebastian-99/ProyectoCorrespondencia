@@ -68,17 +68,21 @@
                     <button class="btn btn-success" id="btn_buscar"> Buscar </button>
                 </div>
                 <div class="form-row mt-3">
-                    <div class="col-md-4">
-                        <label>Estatus de las actividades</label>
+                    <div class="col-md-3">
+                        <label>Seguimientos</label>
                         <div id="grafico_actividades"></div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Acuse de recibido</label>
                         <div id="grafico_acuse"></div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Porcentaje de tipo áreas</label>
                         <div id="grafico_tipo_areas"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Status</label>
+                        <div id="grafico_de_status"></div>
                     </div>
                 </div>
             </div>
