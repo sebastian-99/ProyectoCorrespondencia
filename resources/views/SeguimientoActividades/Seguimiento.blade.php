@@ -264,7 +264,7 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="mb-3">
-                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label> ( {{$now->locale('es')->isoFormat('D MMMM h:mm')}} )
+                            <label for="fecha_seg" class="form-label">Fecha de Seguimiento</label> ( {{$now->locale('es')->isoFormat('DD MMMM h:mm')}} )
                         </div>
                     </div>
                     <div class="col-sm-12">

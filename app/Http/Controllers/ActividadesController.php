@@ -129,7 +129,7 @@ class ActividadesController extends Controller
         $idac = decrypt($idac);
         $us_id = \Auth()->User()->idu;
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us, 
-        res.acuse, res.idreac, seg.estado, Max(seg.porcentaje) as porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios, Max(seg.created_at) as created_at
+        res.acuse, res.idreac, seg.estado, Max(seg.porcentaje) as porcentaje, razon_rechazo, ac.fecha_fin, ac.status AS status_ac, us.idtu_tipos_usuarios, Max(DATE(seg.created_at)) as created_at_seg
         FROM responsables_actividades AS res
         JOIN actividades AS ac ON ac.idac = res.idac_actividades
         JOIN users AS us ON us.idu = res.idu_users
@@ -210,14 +210,16 @@ class ActividadesController extends Controller
         function D($porcentaje, $fecha_fin, $created_at, $acuse)
         {
          
-           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
             
           //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
-          if($acuse == 2){
+         if($date > $fecha_fin && $created_at == NULL){
+            return "En proceso - Fuera de Tiempo";
+         } elseif($acuse == 2){
                     
             return "Acuse rechazado";
 
-         }elseif($created_at <= $fecha_fin && $porcentaje < 100){
+         }elseif($date <= $fecha_fin && $porcentaje < 100){
 
                 return "En proceso – En Tiempo";
 
@@ -225,12 +227,12 @@ class ActividadesController extends Controller
 
                 return "Concluido – En tiempo";
                 
-      }elseif($created_at >= $fecha_fin  && $porcentaje < 100){
+      }elseif($date > $fecha_fin  && $porcentaje < 100){
 
                return "En proceso - Fuera de Tiempo";
 
-           }elseif($created_at >= $fecha_fin  && $porcentaje == 100){
-
+           }elseif($created_at > $fecha_fin  && $porcentaje == 100){
+            
                return "Concluido – Fuera de Tiempo";
 
            }else{
@@ -260,7 +262,7 @@ class ActividadesController extends Controller
             array_push($array, array('nombre_us' => $c->nombre_us,
                                     'nombre_ar' => $c->nombre_ar,
                                     'porcentaje' =>  $porcentaje,
-                                    'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->created_at,$c->acuse),
+                                    'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->created_at_seg,$c->acuse),
                                     'acuse' => $data1,
                                     'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo,$c->idreac,$us_id),
                                     ));
@@ -311,7 +313,7 @@ class ActividadesController extends Controller
 
         $idActvidad = ResponsablesActividades::where('idreac',$idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
-        $consult = DB::SELECT("SELECT seg.idseac, seg.fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
+        $consult = DB::SELECT("SELECT seg.idseac, DATE(seg.fecha) as fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
         arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse, re.created_at
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
@@ -344,42 +346,38 @@ class ActividadesController extends Controller
             }
 
         
-            function D($status_ac, $fecha_fin, $updated_at, $estado)
-            {
-             
-               $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
-                
-              //  return ($updated_at > $fecha_fin ? "es mayor" : "No es mayor");
-    
-               if($updated_at <= $fecha_fin && $estado == "Pendiente"){
-    
-                    return "En proceso – En Tiempo";
-    
-                }elseif($updated_at <= $fecha_fin   && $estado == "Completo"){
-    
-                    return "Concluido – En tiempo";
+          
+        function D($porcentaje, $fecha_fin, $created_at, $acuse)
+        {
+         
+           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
+            
+          //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
+        if($acuse == 2){
                     
-          }elseif($updated_at >= $fecha_fin  && $estado == "Pendiente"){
-    
-                   return "En proceso - Fuera de Tiempo";
-    
-               }elseif($updated_at >= $fecha_fin  && $estado == "Completo"){
-    
-                   return "Concluido – Fuera de Tiempo";
-    
-               }elseif($estado == 2){
-                        
-                   return "Acuse rechazado";
-    
-                }elseif($status == 3){
-        
-                    return "Cancelado";
-                    
-               }else{
-                   return "Sin aceptar estado";
-                }
+            return "Acuse rechazado";
+
+         }elseif($created_at <= $fecha_fin && $porcentaje < 100){
                 
+                return "En proceso – En Tiempo";
+
+            }elseif($created_at <= $fecha_fin   && $porcentaje == 100){
+
+                return "Concluido – En tiempo";
+                
+      }elseif($created_at > $fecha_fin  && $porcentaje < 100){
+          
+               return "En proceso - Fuera de Tiempo";
+
+           }elseif($created_at > $fecha_fin  && $porcentaje == 100){
+           
+               return "Concluido – Fuera de Tiempo";
+
+           }else{
+               return "Sin aceptar estado";
             }
+            
+        }
 
         $turno = 1;
     
@@ -388,9 +386,9 @@ class ActividadesController extends Controller
          
 
           array_push($array, array('idseac' => $turno,
-                             'fecha' => $c->fecha,
+                             'fecha' => Carbon::parse($c->fecha)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
                              'detalle' =>  $c->detalle,
-                             'estado' =>  D($c->status_ac,$c->fecha_fin,$c->created_at,$c->estado),
+                             'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->fecha,$c->estado),
                              'porcentaje' => $c->porcentaje.'%',
                              'operaciones' => btn($c->idseac,$c->ruta),
                              ));
