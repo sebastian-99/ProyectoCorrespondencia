@@ -66,6 +66,7 @@ $('document').ready(()=>{
                 let actividadesSinAcuseDeRecibido = 0
                 let totalActividades=[]
                 data.forEach(dato=>{
+                    actividadesSinEntregar += dato.actividadesSinEntregar
                     actividadesCompletadas += dato.actividadesCompletadas
                     actividadesConAcuseDeRecibido += dato.actividadesConAcuseDeRecibido
                     actividadesEnProceso += dato.actividadesEnProceso
