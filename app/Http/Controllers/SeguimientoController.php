@@ -301,7 +301,7 @@ class SeguimientoController extends Controller
         ");
 
         //ver el estado de la actividad
-        $date = Carbon::now()->locale('es')->isoFormat("Y-MM-D");
+        $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
 
         //return ($data > $end_date ? "es mayor" : "No es mayor");
         if ($date <= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 0) {
