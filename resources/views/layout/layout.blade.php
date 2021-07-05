@@ -203,12 +203,18 @@
                 </li>
               @endif
               @if(auth()->user()->idtu_tipos_usuarios != 1 )
-              <li class="nav-item">
-                <a href="{{ url('/dashboard/'.auth()->user()->idu)}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Estadísticas por Actividad</p>
-                </a>
-              </li>
+                <li class="nav-item">
+                    <a href="{{ url('/dashboard/'.auth()->user()->idu)}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Actividades Asignadas</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/dashboard/'.auth()->user()->idu)}}/actividades-creadas" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Actividades Creadas</p>
+                    </a>
+                </li>
               @endif
             </ul>
           </li>
