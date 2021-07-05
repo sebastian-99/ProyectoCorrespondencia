@@ -45,7 +45,7 @@
     <div class="container-fluid">
         <div class="card bg-light">
             <div class="card-header bg-success text-center">
-                <h2>Medidor de mis actividades por tipo área </h2>
+                <h2>Medidor de mis actividades Asignadas </h2>
             </div>
             <div class="card-body">
                 <div class="form-row mt-3" id="dashboard_panel">
