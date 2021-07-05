@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Graficas;
 
 use App\Http\Controllers\Controller;
+use App\Models\Actividades;
 use App\Models\ResponsablesActividades;
 use App\Models\SeguimientosActividades;
 use App\Models\TiposActividades;
@@ -11,21 +11,19 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class GraficasPorTipoAreaController extends Controller
+class GraficasDeActividadesCreadasController extends Controller
 {
     public function seguimiento($idac){
         return redirect()->route('Seguimiento',[ 'idac' => encrypt($idac) ]);
     }
     public function dashboard(User $user)
     {
-        $tiposActividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')
-            ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-            ->where('responsables_actividades.idu_users',$user->idu)
-            ->select('tipos_actividades.idtac', 'tipos_actividades.nombre')
-            ->groupBy('tipos_actividades.nombre')
+        $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+            ->where('actividades.idu_users',$user->idu)
+            ->groupBy('tipos_actividades.idtac')
             ->get();
-        return view('sistema.graficas.dashboard-por-tipo-area',[
-            'tipo_actividades' => $tiposActividades
+        return view('sistema.graficas.actividades-creadas',[
+            'tipo_actividades' => $misActividades
         ]);
     }
 
@@ -187,14 +185,14 @@ class GraficasPorTipoAreaController extends Controller
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'responsables_actividades.idreac'
             )
-            ->where('responsables_actividades.idu_users', $user->idu)
+            ->join('actividades','actividades.idac','responsables_actividades.idac_actividades')
+            ->where('actividades.idu_users', $user->idu)
             ->where('seguimientos_actividades.porcentaje', 100)
             ->groupBy('responsables_actividades.idreac')
             ->select('responsables_actividades.idreac')
             ->get();
         if($actividades->count() < 1 ) return [];
-        return User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -202,6 +200,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -244,7 +243,8 @@ class GraficasPorTipoAreaController extends Controller
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'responsables_actividades.idreac'
             )
-            ->where('responsables_actividades.idu_users', $user->idu)
+            ->join('actividades','actividades.idac','responsables_actividades.idac_actividades')
+            ->where('actividades.idu_users', $user->idu)
             ->where('seguimientos_actividades.porcentaje','>', 0)
             ->where('seguimientos_actividades.porcentaje','<', 100)
             ->groupBy('responsables_actividades.idreac')
@@ -252,8 +252,7 @@ class GraficasPorTipoAreaController extends Controller
             ->get();
         if($actividades->count() < 1 ) return [];
 
-        return User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -262,6 +261,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -299,7 +299,8 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesSinEntregar(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        $actividades = ResponsablesActividades::where('idu_users', $user->idu)
+        $actividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')
+            ->where('actividades.idu_users', $user->idu)
             ->select('idreac')
             ->groupBy('responsables_actividades.idreac')
             ->get()
@@ -319,8 +320,7 @@ class GraficasPorTipoAreaController extends Controller
 
         //return $actividades;
         if($actividades->count() < 1 ) {return [];}
-        return User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -329,6 +329,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -365,8 +366,7 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesConAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        return User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -374,6 +374,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -410,8 +411,7 @@ class GraficasPorTipoAreaController extends Controller
     public function getActividadesSinAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        return User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -419,6 +419,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -457,8 +458,7 @@ class GraficasPorTipoAreaController extends Controller
         $fin = $request->fin;
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        return [['actividades' => User::where('idu', $user->idu)
-        ->join('responsables_actividades', 'idu_users', 'users.idu')
+        return [['actividades' => User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
@@ -466,6 +466,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('tipos_actividades.nombre', $request->tipo_area)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
+        ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),

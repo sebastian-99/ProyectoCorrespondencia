@@ -65,7 +65,10 @@
                         <label>Fecha final</label>
                         <input type="date" class="form-control" name="fin" id="fecha_final">
                     </div>
-                    <button class="btn btn-success" id="btn_buscar"> Buscar </button>
+                    <button class="btn btn-success" id="btn_buscar">
+                        Buscar
+                        <span class="spinner-border spinner-border-sm" id="spinner_estadisticas" hidden></span>
+                    </button>
                 </div>
                 <div class="form-row mt-3">
                     <div class="col-md-3">

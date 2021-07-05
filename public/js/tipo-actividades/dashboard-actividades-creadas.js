@@ -47,7 +47,7 @@ $('document').ready(()=>{
         console.log(tipos_actividades);
         $.ajax({
             type: 'POST',
-            url: `/dashboard/${user_id}`,
+            url: `/dashboard/${user_id}/actividades-creadas`,
             data : {
                 _token,
                 tipos_actividades,
@@ -122,9 +122,9 @@ $('document').ready(()=>{
                 const thead = `
                     <tr>
                         <th>Comunicado - Asunto</th>
+                        <th>Responsable</th>
                         <th>Creador</th>
                         <th>Avance</th>
-                        <th>Responsable</th>
                         <th>Descripción</th>
                         <th>Período</th>
                         <th>Importancia</th>
@@ -141,14 +141,14 @@ $('document').ready(()=>{
                         tbody += `
                             <tr>
                                 <td>${actividades[key].comunicado}-${actividades[key].asunto}</td>
+                                <td>${actividades[key].responsable}</td>
+                                <td>${actividades[key].seguimiento ? `${actividades[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
                                 <td>
                                     ${actividades[key].creador.titulo}
                                     ${actividades[key].creador.nombre}
                                     ${actividades[key].creador.app}
                                     ${actividades[key].creador.apm}
                                 </td>
-                                <td>${actividades[key].seguimiento ? `${actividades[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
-                                <td>${actividades[key].responsable}</td>
                                 <td>${actividades[key].descripcion}</td>
                                 <td>${actividades[key].periodo}</td>
                                 <td>${actividades[key].importancia}</td>
@@ -156,7 +156,7 @@ $('document').ready(()=>{
                                 <td>${actividades[key].tipo_actividad}</td>
                                 <td>${actividades[key].seguimiento ? actividades[key].numero_de_seguimiento : 'No existen seguimientos'}</td>
                                 <td>
-                                    <a href="${actividades[key].firma ? `/seguimiento/${actividades[key].idac}` : `/actividades_asignadas` }" class="btn btn-link">${actividades[key].firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirígete a mis actividades dando click aquí'}
+                                    ${actividades[key].seguimiento ? `<a href="/admin/seguimiento/${actividades[key].idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
                                 </td>
                             </tr>
                         `
@@ -205,7 +205,7 @@ $('document').ready(()=>{
                             route= `get-actividades-completadas`
                             break;
                     }
-                    route = `/dashboard/${user_id}/${route}`
+                    route = `/dashboard/${user_id}/actividades-creadas/${route}`
                     imprimirTablaConAjax(route)
                  },
             }
@@ -229,7 +229,7 @@ $('document').ready(()=>{
                             route= `get-actividades-sin-acuse-de-recibido`
                             break;
                     }
-                    route = `/dashboard/${user_id}/${route}`
+                    route = `/dashboard/${user_id}/actividades-creadas/${route}`
                     imprimirTablaConAjax(route)
                  },
             }
@@ -240,7 +240,7 @@ $('document').ready(()=>{
                 columns: total_actividades,
                 type : 'pie',
                 onclick: function (data) {
-                    const route = `/dashboard/${user_id}/get-actividades-por-area`
+                    const route = `/dashboard/${user_id}/actividades-creadas/get-actividades-por-area`
                     imprimirTablaConAjax(route,data.id)
                  },
             }
@@ -272,7 +272,7 @@ $('document').ready(()=>{
                             route= `actividades-en-proceso-fuera-de-tiempo`
                         break;
                     }
-                    route = `/dashboard/${user_id}/${route}`
+                    route = `/dashboard/${user_id}/actividades-creadas/${route}`
                     imprimirTablaConAjax(route)
                  },
             }

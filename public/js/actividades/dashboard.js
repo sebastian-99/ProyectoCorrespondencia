@@ -37,9 +37,10 @@ const scriptDataTables = `
 $('document').ready(()=>{
 
     const area = new Area()
-
+    const spinnerEstadisticas = $('#spinner_estadisticas')
     const btnBuscar = $('#btn_buscar')
     btnBuscar.click(()=>{
+        spinnerEstadisticas.removeAttr('hidden')
         const inicio = $('#fecha_inicial').val()
         const fin = $('#fecha_final').val()
         const areas =$('#select_areas').val()
@@ -64,6 +65,10 @@ $('document').ready(()=>{
                 let actividadesCompletadas = 0
                 let actividadesConAcuseDeRecibido = 0
                 let actividadesSinAcuseDeRecibido = 0
+                let actividadesCompletadasEnTiempo = 0
+                let actividadesCompletadasFueraDeTiempo = 0
+                let actividadesEnProcesoEnTiempo = 0
+                let actividadesEnProcesoFueraDeTiempo = 0
                 let totalActividades=[]
                 data.forEach(dato=>{
                     actividadesSinEntregar += dato.actividadesSinEntregar
@@ -71,6 +76,12 @@ $('document').ready(()=>{
                     actividadesConAcuseDeRecibido += dato.actividadesConAcuseDeRecibido
                     actividadesEnProceso += dato.actividadesEnProceso
                     actividadesSinAcuseDeRecibido += dato.actividadesSinAcuseDeRecibido
+
+                    actividadesCompletadasEnTiempo += dato.actividadesCompletadasEnTiempo
+                    actividadesCompletadasFueraDeTiempo += dato.actividadesCompletadasFueraDeTiempo
+                    actividadesEnProcesoEnTiempo += dato.actividadesEnProcesoEnTiempo
+                    actividadesEnProcesoFueraDeTiempo += dato.actividadesEnProcesoFueraDeTiempo
+
                     totalActividades.push([ dato.nombre, dato.actividadesTotales ])
                 })
                 generarGraficos(
@@ -79,9 +90,13 @@ $('document').ready(()=>{
                     actividadesCompletadas,
                     actividadesConAcuseDeRecibido,
                     actividadesSinAcuseDeRecibido,
-                    totalActividades
+                    totalActividades,
+                    actividadesCompletadasEnTiempo,
+                    actividadesCompletadasFueraDeTiempo,
+                    actividadesEnProcesoEnTiempo,
+                    actividadesEnProcesoFueraDeTiempo
                 )
-
+                spinnerEstadisticas.attr('hidden',true)
 
             },
             error : error =>{
@@ -94,65 +109,63 @@ $('document').ready(()=>{
         console.log(route)
         const inicio = $('#fecha_inicial').val()
         const fin = $('#fecha_final').val()
-        const areas =$('#select_areas').val()
         const tipos_actividades = $('#select_tipo_actividades').val()
-
+        const areas =$('#select_areas').val()
         $.ajax({
             type: 'POST',
             data:{
                 _token,
-                areas,
                 tipos_actividades,
                 inicio,
                 fin,
-                tipo_area
+                tipo_area,
+                areas,
             },
             url: route,
             success: data=>{
                 console.log(data);
                 const thead = `
                     <tr>
-                        <th>Turno</th>
-                        <th>Autor</th>
+                        <th>Comunicado - Asunto</th>
                         <th>Responsable</th>
-                        <th>Asunto</th>
+                        <th>Avance</th>
+                        <th>Creador</th>
                         <th>Descripción</th>
                         <th>Período</th>
                         <th>Importancia</th>
                         <th>Área Responsable</th>
                         <th>Tipo Actividad</th>
-                        <th>Avance</th>
                         <th>Número de Segumientos</th>
                         <th>Acciones</th>
                     </tr>
                 `
                 let tbody = ''
-                data.forEach(element=>{
-                    element.actividades.forEach(dato => {
+                data.map((element,key)=>{
+                    const {actividades} = element
+                    for (const key in actividades) {
                         tbody += `
                             <tr>
-                                <td>${dato.turno}</td>
+                                <td>${actividades[key].comunicado}-${actividades[key].asunto}</td>
+                                <td>${actividades[key].responsable}</td>
+                                <td>${actividades[key].seguimiento ? `${actividades[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
                                 <td>
-                                    ${dato.creador.titulo}
-                                    ${dato.creador.nombre}
-                                    ${dato.creador.app}
-                                    ${dato.creador.apm}
+                                    ${actividades[key].creador.titulo}
+                                    ${actividades[key].creador.nombre}
+                                    ${actividades[key].creador.app}
+                                    ${actividades[key].creador.apm}
                                 </td>
-                                <td>${dato.responsable}</td>
-                                <td>${dato.asunto}</td>
-                                <td>${dato.descripcion}</td>
-                                <td>${dato.periodo}</td>
-                                <td>${dato.importancia}</td>
-                                <td>${dato.area_responsable}</td>
-                                <td>${dato.tipo_actividad}</td>
-                                <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
-                                <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
+                                <td>${actividades[key].descripcion}</td>
+                                <td>${actividades[key].periodo}</td>
+                                <td>${actividades[key].importancia}</td>
+                                <td>${actividades[key].area_responsable}</td>
+                                <td>${actividades[key].tipo_actividad}</td>
+                                <td>${actividades[key].seguimiento ? actividades[key].numero_de_seguimiento : 'No existen seguimientos'}</td>
                                 <td>
-                                    ${dato.seguimiento ? `<a href="/admin/seguimiento/${dato.idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
+                                    ${actividades[key].seguimiento ? `<a href="/admin/seguimiento/${actividades[key].idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
                                 </td>
                             </tr>
                         `
-                    });
+                    }
                 })
                 area.imprimirDatosEnTabla(thead,tbody, $('#tabla'),scriptDataTables)
             },
@@ -169,13 +182,17 @@ $('document').ready(()=>{
             actividades_completadas,
             actividades_con_acuse_de_recibido,
             actividades_sin_acuse_de_recibido,
-            total_actividades
+            total_actividades,
+            actividades_completadas_en_tiempo,
+            actividades_completadas_fuera_de_tiempo,
+            actividades_en_proceso_en_tiempo,
+            actividades_en_proceso_fuera_de_tiempo
         ){
         const graficoActividaes = c3.generate({
             bindto: '#grafico_actividades',
             data: {
                 columns: [
-                    ['sin enttregar', actividades_sin_entregar],
+                    ['sin seguimientos', actividades_sin_entregar],
                     ['en proceso', actividades_en_proceso],
                     ['completadas', actividades_completadas],
                 ],
@@ -230,6 +247,37 @@ $('document').ready(()=>{
                 onclick: function (data) {
                     const route = `/admin/dashboard/get-actividades-por-area`
                     imprimirTablaConAjax(route,data.id)
+                 },
+            }
+        });
+        const graficoDeStatus = c3.generate({
+            bindto: '#grafico_de_status',
+            data: {
+                columns: [
+                    ['completadas en tiempo', actividades_completadas_en_tiempo],
+                    ['completadas fuera de tiempo', actividades_completadas_fuera_de_tiempo],
+                    ['en proceso en tiempo', actividades_en_proceso_en_tiempo],
+                    ['en proceso fuera de tiempo', actividades_en_proceso_fuera_de_tiempo],
+                ],
+                type : 'pie',
+                onclick: function (data) {
+                    let route = ''
+                    switch(data.index){
+                        case 0:
+                            route= `actividades-completadas-en-tiempo`
+                        break;
+                        case 1:
+                            route= `actividades-completadas-fuera-de-tiempo`
+                            break;
+                        case 2:
+                            route= `actividades-en-proceso-en-tiempo`
+                            break;
+                        case 3:
+                            route= `actividades-en-proceso-fuera-de-tiempo`
+                        break;
+                    }
+                    route = `/admin/dashboard/${route}`
+                    imprimirTablaConAjax(route)
                  },
             }
         });

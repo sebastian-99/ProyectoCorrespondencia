@@ -60,7 +60,6 @@ $(document).ready(()=>{
                     <tr>
                         <th>Turno</th>
                         <th>Creador</th>
-                        <th>Responsable</th>
                         <th>Asunto</th>
                         <th>Descripción</th>
                         <th>Período</th>
@@ -74,31 +73,30 @@ $(document).ready(()=>{
                 `
                 let tbody = ''
                 console.log(data);
-                data.forEach(dato => {
+                for (const key in data) {
                     tbody += `
                         <tr>
-                            <td>${dato.turno}</td>
+                            <td>${data[key].turno}</td>
                             <td>
-                                ${dato.creador ? dato.creador.titulo : ''}
-                                ${dato.creador ? dato.creador.nombre : ''}
-                                ${dato.creador ? dato.creador.app : ''}
-                                ${dato.creador ? dato.creador.apm : ''}
+                                ${data[key].creador ? data[key].creador.titulo : ''}
+                                ${data[key].creador ? data[key].creador.nombre : ''}
+                                ${data[key].creador ? data[key].creador.app : ''}
+                                ${data[key].creador ? data[key].creador.apm : ''}
                             </td>
-                            <td>${dato.responsable}</td>
-                            <td>${dato.asunto}</td>
-                            <td>${dato.descripcion}</td>
-                            <td>${dato.periodo}</td>
-                            <td>${dato.importancia}</td>
-                            <td>${dato.area_responsable}</td>
-                            <td>${dato.tipo_actividad}</td>
-                            <td>${dato.seguimiento ? `${dato.porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
-                            <td>${dato.seguimiento ? dato.numero_de_seguimiento : 'No existen seguimientos'}</td>
+                            <td>${data[key].asunto}</td>
+                            <td>${data[key].descripcion}</td>
+                            <td>${data[key].periodo}</td>
+                            <td>${data[key].importancia}</td>
+                            <td>${data[key].area_responsable}</td>
+                            <td>${data[key].tipo_actividad}</td>
+                            <td>${data[key].seguimiento ? `${data[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
+                            <td>${data[key].seguimiento ? data[key].numero_de_seguimiento : 'No existen seguimientos'}</td>
                             <td>
-                                <a href="${dato.firma ? `/seguimiento/${dato.idac}` : `/actividades_asignadas` }" class="btn btn-link">${dato.firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirígete a mis actividades dando click aquí'}
+                                <a href="${data[key].firma ? `/seguimiento/${data[key].idac}` : `/actividades_asignadas` }" class="btn btn-link">${data[key].firma ? `Ver Detalle</a>`: 'No tienes acuse de recibido dirígete a mis actividades dando click aquí'}
                             </td>
                         </tr>
                     `
-                })
+                }
                 area.imprimirDatosEnTabla(thead,tbody, $('#tabla'),scriptDataTables)
             },
             error: error=>{

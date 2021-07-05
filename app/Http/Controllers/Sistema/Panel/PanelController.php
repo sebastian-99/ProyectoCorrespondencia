@@ -212,11 +212,19 @@ class PanelController extends Controller
     public function getActividadesCerradas($idu){
         $usuario = User::find($idu);
         $total= $usuario->responsables()->count();
-        $actividadesConcluidas = $usuario->responsables()->where('fecha','!=', null)->get();
+        $actividades = ResponsablesActividades::join('seguimientos_actividades',
+                'seguimientos_actividades.idreac_responsables_actividades',
+                'responsables_actividades.idreac'
+            )
+            ->where('responsables_actividades.idu_users', $idu)
+            ->where('seguimientos_actividades.porcentaje', 100)
+            ->groupBy('responsables_actividades.idreac')
+            ->select('responsables_actividades.idreac')
+            ->get();
         if(!request()->ajax()){
             return [
                 'total' => $total,
-                'concluidas' => $actividadesConcluidas->count()
+                'concluidas' => $actividades->count()
 
             ];
         }
@@ -225,7 +233,8 @@ class PanelController extends Controller
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
             ->join('areas','areas.idar','actividades.idar_areas')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-            ->where('responsables_actividades.fecha','!=', null)
+            //->where('responsables_actividades.fecha','!=', null)
+            ->whereIn('responsables_actividades.idreac', $actividades)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -306,13 +315,13 @@ class PanelController extends Controller
             });
 
         if(request()->ajax()){
-            return $actividades;
+            return $actividades->where('porcentaje_seguimiento','100');
         }
 
         return [
             'actividades' => $actividades,
             'total' => $actividades->count(),
-            'completadas' => $actividades->where('porcentaje','100')->count()
+            'completadas' => $actividades->where('porcentaje_seguimiento','100')->count()
         ];
 
     }

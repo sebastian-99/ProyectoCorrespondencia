@@ -12,6 +12,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
 
 use App\Http\Controllers\EncryptController;
+use App\Http\Controllers\Graficas\GraficasDeActividadesCreadasController;
 use App\Http\Controllers\Graficas\GraficasPorTipoAreaController;
 use App\Http\Controllers\Sistema\TipoAreas\TipoAreasController;
 
@@ -85,8 +86,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/dashboard/{user}',[GraficasPorTipoAreaController::class,'getEstadisticasDeActividades']);
 
-    Route::post('/dashboard/{user}',[GraficasPorTipoAreaController::class,'getEstadisticasDeActividades']);
-
     Route::post('/dashboard/{user}/get-actividades-completadas', [GraficasPorTipoAreaController::class,'actividadesCompletadas']);
     Route::post('/dashboard/{user}/get-actividades-en-proceso', [GraficasPorTipoAreaController::class,'actividadesEnProceso']);
     Route::post('/dashboard/{user}/get-actividades-sin-entregar', [GraficasPorTipoAreaController::class,'actividadesSinEntregar']);
@@ -100,5 +99,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/actividades-en-proceso-fuera-de-tiempo', [GraficasPorTipoAreaController::class,'actividadesEnProcesoFueraDeTiempo']);
 
     Route::get('/seguimiento/{idac}', [GraficasPorTipoAreaController::class,'seguimiento']);
+
+    //lol
+    Route::get('/dashboard/{user}/actividades-creadas',[GraficasDeActividadesCreadasController::class,'dashboard']);
+
+    Route::post('/dashboard/{user}/actividades-creadas',[GraficasDeActividadesCreadasController::class,'getEstadisticasDeActividades']);
+
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-completadas', [GraficasDeActividadesCreadasController::class,'actividadesCompletadas']);
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-en-proceso', [GraficasDeActividadesCreadasController::class,'actividadesEnProceso']);
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-sin-entregar', [GraficasDeActividadesCreadasController::class,'actividadesSinEntregar']);
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-con-acuse-de-recibido', [GraficasDeActividadesCreadasController::class,'actividadesConAcuseDeRecibido']);
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-sin-acuse-de-recibido', [GraficasDeActividadesCreadasController::class,'actividadesSinAcuseDeRecibido']);
+    Route::post('/dashboard/{user}/actividades-creadas/get-actividades-por-area', [GraficasDeActividadesCreadasController::class,'getActividadesPorTipoArea']);
+
+    Route::post('/dashboard/{user}/actividades-creadas/actividades-completadas-en-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesCompletadasEnTiempo'])->name('actividades.en-tiempo');
+    Route::post('/dashboard/{user}/actividades-creadas/actividades-completadas-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesCompletadasFueraDeTiempo']);
+    Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-en-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoEnTiempo']);
+    Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoFueraDeTiempo']);
 
 });

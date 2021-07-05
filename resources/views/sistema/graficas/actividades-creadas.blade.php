@@ -45,19 +45,11 @@
     <div class="container-fluid">
         <div class="card bg-light">
             <div class="card-header bg-success text-center">
-                <h2>Medidor de mis actividades por tipo área </h2>
+                <h2>Medidor de mis actividades Creadas </h2>
             </div>
             <div class="card-body">
                 <div class="form-row mt-3" id="dashboard_panel">
-                    <div class="form-group col-md-3">
-                        <label>Área</label>
-                        <select class="custom-select" name="areas" id="select_areas" >
-                            @foreach ($areas as $area)
-                                <option value="{{ $area->idar }}"> {{  $area->nombre }} </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label>Tipo de área</label>
                         <select class="custom-select" name="tipo_actividades[]" id="select_tipo_actividades" multiple style="color:back">
                             @foreach ($tipo_actividades as $tipo_actividad)
@@ -65,11 +57,11 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label>Fecha inicial</label>
                         <input type="date" class="form-control" name="inicio" id="fecha_inicial">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label>Fecha final</label>
                         <input type="date" class="form-control" name="fin" id="fecha_final">
                     </div>
@@ -113,5 +105,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.0.0/d3.min.js" integrity="sha512-55FY9DHtfMBE2epZhXrWn78so/ZT5/GCLim66+L83U5LghiYwVBAEris4/13Iab9S8C9ShJp3LQL/2raiaO+0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" integrity="sha512-+IpCthlNahOuERYUSnKFjzjdKXIbJ/7Dd6xvUp+7bEw0Jp2dg6tluyxLs+zq9BMzZgrLv8886T4cBSqnKiVgUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module"  src="{{ asset('js/actividades/dashboard.js') }}"></script>
+    <script type="module"  src="{{ asset('js/tipo-actividades/dashboard-actividades-creadas.js') }}"></script>
 @endsection
