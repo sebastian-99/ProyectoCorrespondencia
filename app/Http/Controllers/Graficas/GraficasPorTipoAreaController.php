@@ -192,7 +192,7 @@ class GraficasPorTipoAreaController extends Controller
             ->groupBy('responsables_actividades.idreac')
             ->select('responsables_actividades.idreac')
             ->get();
-        if($actividades->count() < 1 ) return [];
+        if($actividades->count() < 1 ) return $actividades;
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
@@ -250,7 +250,7 @@ class GraficasPorTipoAreaController extends Controller
             ->groupBy('responsables_actividades.idreac')
             ->select('responsables_actividades.idreac')
             ->get();
-        if($actividades->count() < 1 ) return [];
+        if($actividades->count() < 1 ) return $actividades;
 
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
@@ -318,7 +318,7 @@ class GraficasPorTipoAreaController extends Controller
             }
 
         //return $actividades;
-        if($actividades->count() < 1 ) {return [];}
+        if($actividades->count() < 1 ) {return $actividades;}
         return User::where('idu', $user->idu)
         ->join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
