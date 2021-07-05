@@ -193,14 +193,14 @@
       var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
-      $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+      $('#descripcion_a').append("<strong>Descripción </strong>" + descripcion);
       $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
       $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
       $('#turno_a').append("<strong>Turno </strong>" + turno);
       $('#creador_a').append("<strong>Creador </strong>" + creador);
-      $('#area_a').append("<strong>Area responsable </strong>" + area);
-      $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
-      $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
+      $('#area_a').append("<strong>Área responsable </strong>" + area);
+      $('#f_creacion_a').append("<strong>Fecha de creación </strong>" + creacion);
+      $('#periodo_atencion_a').append("<strong>Periodo de atención </strong>" + periodo);
 
       $('#asunto').val(data[0].asunto);
       $('#descripcion').val(data[0].descripcion);

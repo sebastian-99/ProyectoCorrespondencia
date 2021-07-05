@@ -348,7 +348,7 @@
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
                         <zg-column index='estado' header='Estatus' width="200" type='text'></zg-column>
                         <zg-column index='porcentaje' header='% Avance' width="150" type='text'></zg-column>
-                        <zg-column index='evidencia' filter="disabled" header='Importancia' width="150" type='text'></zg-column>
+                        <zg-column index='evidencia' filter="disabled" header='Operaciónes' width="150" type='text'></zg-column>
                     </zg-colgroup>
                 </zing-grid>
 
