@@ -239,18 +239,19 @@ class GraficasDeActividadesCreadasController extends Controller
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
 
-        $actividades = ResponsablesActividades::join('seguimientos_actividades',
-                'seguimientos_actividades.idreac_responsables_actividades',
-                'responsables_actividades.idreac'
-            )
-            ->join('actividades','actividades.idac','responsables_actividades.idac_actividades')
-            ->where('actividades.idu_users', $user->idu)
-            ->where('seguimientos_actividades.porcentaje','>', 0)
-            ->where('seguimientos_actividades.porcentaje','<', 100)
-            ->groupBy('responsables_actividades.idreac')
-            ->select('responsables_actividades.idreac')
-            ->get();
-        if($actividades->count() < 1 ) return $actividades;
+        $query = "SELECT t1.idreac
+                FROM
+                (SELECT idreac_responsables_actividades AS idreac ,ultimoporcentaje( idreac_responsables_actividades) AS ultimoporcentaje
+                FROM seguimientos_actividades
+                GROUP BY idreac_responsables_actividades) AS t1
+                WHERE t1.ultimoporcentaje <100";
+        $actividades = DB::select($query);
+
+        if(count($actividades)<1) return  collect([]);
+        $Actividades = [];
+        foreach($actividades AS $actividad){
+            array_push($Actividades,$actividad->idreac);
+        }
 
         return User::join('responsables_actividades', 'idu_users', 'users.idu')
         ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
@@ -260,7 +261,7 @@ class GraficasDeActividadesCreadasController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->whereIn('responsables_actividades.idreac', $actividades)
+        ->whereIn('responsables_actividades.idreac', $Actividades)
         ->where('actividades.idu_users',$user->idu)
         ->select(
             'users.idu',
