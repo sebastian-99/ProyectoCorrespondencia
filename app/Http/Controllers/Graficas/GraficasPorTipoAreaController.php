@@ -356,7 +356,7 @@ class GraficasPorTipoAreaController extends Controller
             $collection->numero_de_seguimiento = $seguimiento->count();
             $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
-            $collection->seguimiento = $seguimiento->first();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         });
@@ -401,7 +401,7 @@ class GraficasPorTipoAreaController extends Controller
             $collection->numero_de_seguimiento = $seguimiento->count();
             $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
-            $collection->seguimiento = $seguimiento->first();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         });
@@ -446,7 +446,7 @@ class GraficasPorTipoAreaController extends Controller
             $collection->numero_de_seguimiento = $seguimiento->count();
             $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
-            $collection->seguimiento = $seguimiento->first();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         });
@@ -493,7 +493,7 @@ class GraficasPorTipoAreaController extends Controller
             $collection->numero_de_seguimiento = $seguimiento->count();
             $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
-            $collection->seguimiento = $seguimiento->first();
+            $collection->seguimiento = $seguimiento->last();
             return $collection;
 
         })]];

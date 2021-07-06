@@ -147,7 +147,7 @@ $('document').ready(()=>{
                                     ${actividades[key].creador.app}
                                     ${actividades[key].creador.apm}
                                 </td>
-                                <td>${actividades[key].seguimiento ? `${actividades[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
+                                <td>${actividades[key].seguimiento ? `${actividades[key].seguimiento.porcentaje} %` : 'No existen seguimientos'}</td>
                                 <td>${actividades[key].responsable}</td>
                                 <td>${actividades[key].descripcion}</td>
                                 <td>${actividades[key].periodo}</td>
