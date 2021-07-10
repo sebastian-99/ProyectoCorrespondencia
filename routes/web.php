@@ -81,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin/users', UsersController::class, ['names' => 'users']);
 
     Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
+    Route::get('ajax_filtro_fecha', [ActividadesController::class, 'ajax_filtro_fecha'])->name('ajax_filtro_fecha');
 
     Route::get('hello', [EncryptController::class,'index']);
 

@@ -1224,4 +1224,197 @@ class ActividadesController extends Controller
 
         return view('Actividades.actividadescreadas', compact('json'));
     }
+
+    public function ajax_filtro_fecha(Request $request){
+
+        $id_u = \Auth()->User()->idu;
+        $fecha_orden = $request->fecha_orden;
+        $fecha = $request->fecha;
+
+    
+        if ($fecha_orden == 0 ){
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+
+        if ($fecha_orden == 1 && $fecha != NULL){
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.fecha_inicio = DATE('$fecha')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+    
+        if ($fecha_orden == 1 && $fecha == NULL){
+
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+            porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+            WHERE ac.idu_users = $id_u
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+        }
+    
+        if ($fecha_orden == 2 && $fecha == NULL){
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+            porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+            WHERE ac.idu_users = $id_u
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+        }
+                     
+        if ($fecha_orden == 2 && $fecha !=  NULL){
+                        
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$id_u) AS porcentaje,
+            ac.status, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades 
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+            WHERE ac.idu_users = $id_u
+            AND ac.fecha_fin = DATE('$fecha') 
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+        }
+
+        $array = array();
+
+        function recorrer($value){
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1], '3' =>$val[2]);
+            }else{
+                $arr = null;
+            }
+            return $arr;
+        }
+
+        function btn($idac, $activo){
+
+
+            if($activo == 1){
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></i></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></i></a><div>";
+            }else{
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></a></div>";
+            }
+        }
+
+        function AB($data){
+
+            if(gettype($data) == "array"){
+
+                return $data['1'][0]." de ".$data['1'][1];
+            }else{
+                return 0;
+            }
+        }
+
+        function C($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data['2'], 0, '.', ' ').'%';
+            }else{
+                return 0;
+            }
+
+        }
+
+        function D($data){
+
+            if(gettype($data) == "array"){
+
+                return number_format($data['3'], 0, '.', ' ').'%';
+
+            }else{
+
+                return 0;
+
+            }
+
+        }
+
+        function E($status){
+
+            if($status == 1){
+                return "En proceso";
+            }elseif($status == 2){
+                return "Concluido";
+            }else{
+                return "Cancelado";
+            }
+
+        }
+
+
+
+        foreach($ac_cre as $c){
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array('idac' => $c->idac,
+                                    'turno' => $c->turno,
+                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
+                                    'asunto' => $c->asunto,
+                                    'tipo_actividad' => $c->tipo_actividad,
+                                    'descripcion' => $c->descripcion,
+                                    'creador' => $c->creador,
+                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                                    'importancia' => $c->importancia,
+                                    'nombre' => $c->nombre,
+                                    'activo' => $c->activo,
+                                    'acuse' => $c->acuse,
+                                    'idu_users' => $c->idu_users,
+                                    'AB' => AB($data),
+                                    'C' =>  D($data),
+                                    'E' =>  E($c->status),
+                                    'operaciones' => btn($c->idac, $c->activo),
+                                    ));
+        }
+
+
+        $json = json_encode($array);
+
+        return response()->json($json);
+    }
+
+
 }
