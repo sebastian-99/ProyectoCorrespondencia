@@ -16,6 +16,30 @@
         	  <h3>Reporte de actividades creadas por mí persona</h3>
         	</div>
     	</div>
+      	<div class="row">
+        	<div class="col-sm-6">
+        	  <label for="">Fecha orden:</label>
+        	  
+        	</div>
+        	<div class="col-sm-6">
+        	  <label for="">Fecha:</label>
+        	</div>
+    	</div>
+		<form>
+      	<div class="row">
+        	<div class="col-sm-6">
+        	  <select class="form-control" name="fecha_orden" id="fecha_orden">
+				  <option value="1">Fecha inicio</option>
+				  <option value="2">Fecha fin</option>
+				  <option value="3">Todo</option>
+			  </select>
+			  <button type="button" class="btn btn-primary mt-1" id="button">Enviar</button>
+        	</div>
+        	<div class="col-sm-6">
+        	  <input class="form-control" name="fecha" id="fecha" type="date">
+        	</div>
+    	</div>
+		</form>
 	</div>
 	<div class="card-body">
     	<zing-grid
@@ -51,7 +75,84 @@
 	</div>
 </div>
 
+<script>
 
+	$("#fecha_orden").on("change", function(){
+
+		if($(this).val() == "3"){
+
+			$("#fecha").attr("readonly", true);
+			$("#fecha").val("");
+
+		}else{
+
+			$("#fecha").removeAttr("readonly");
+		}
+		
+
+
+	});
+	console.log($("#fecha_orden").val());
+	$("#button").on("click", function(){
+
+	
+	if($("#fecha_orden").val() == 1 || $("#fecha_orden").val() == 2 && $("#fecha").val() != ""){
+
+		let fecha_orden = $("#fecha_orden").val();
+		let fecha = $("#fecha").val();
+		
+		$.ajax({
+			type: "get",
+			url: "{{route('ajax_filtro_fecha')}}",
+			data: {
+				fecha_orden:fecha_orden,
+				fecha:fecha
+			},
+			success: function (data) {
+
+				
+				$("#zing-grid").removeAttr("data");
+				$("#zing-grid").attr("data", data);
+				//$("#zing-grid").data("data", data);
+
+
+			},
+			error(error){
+				console.log(error);
+			}
+		});
+	}else if($("#fecha_orden").val() == 3 && $("#fecha").val() == ""){
+		let fecha_orden = $("#fecha_orden").val();
+		let fecha = $("#fecha").val();
+		
+		$.ajax({
+			type: "get",
+			url: "{{route('ajax_filtro_fecha')}}",
+			data: {
+				fecha_orden:fecha_orden,
+				fecha:fecha
+			},
+			success: function (data) {
+
+				
+				$("#zing-grid").removeAttr("data");
+				$("#zing-grid").attr("data", data);
+				//$("#zing-grid").data("data", data);
+
+
+			},
+			error(error){
+				console.log(error);
+			}
+		});
+	}else if($("#fecha").val() == ""){
+		alert("Te falta un campo");
+	}
+		
+		
+
+	});
+</script>
 
 
 @endsection
