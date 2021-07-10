@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
     //Actividades
 
     Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
+    Route::get('fecha_ajax', [ActividadesController::class,'fecha_ajax'])->name('fecha_ajax');
     Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
     Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
     Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
