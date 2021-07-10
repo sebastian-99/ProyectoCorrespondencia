@@ -21,7 +21,7 @@ class SeguimientoController extends Controller
     {
         //Filtrar solo mis actividades que tengo asignadas
         $id_user = Auth()->user()->idu;
-
+        
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -158,6 +158,207 @@ class SeguimientoController extends Controller
 
         return view('SeguimientoActividades.actividades_asignadas')
             ->with('json', $json);
+    }
+    public function fecha_actividades_asignadas(Request $request)
+    {
+        $id_user = Auth()->user()->idu;
+       $fecha_orden =  $request->fecha_orden;
+       $fecha =  $request->fecha;
+
+
+       if ($fecha_orden == 0 ){
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        
+        WHERE ra.idu_users = $id_user
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+       }
+       if ($fecha_orden == 1 && $fecha != NULL){
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+       
+        WHERE ra.idu_users = $id_user AND ac.fecha_inicio = DATE('$fecha') 
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+
+        if ($fecha_orden == 1 && $fecha == NULL){
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+            porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            WHERE ra.idu_users = $id_user
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+        }
+
+        if ($fecha_orden == 2 && $fecha == NULL){
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+            porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            WHERE ra.idu_users = $id_user
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+        }
+                 if ($fecha_orden == 2 && $fecha !=  NULL){
+                    $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+            porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+            FROM actividades AS ac
+            INNER JOIN users AS us ON us.idu = ac.idu_users
+            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+            WHERE ra.idu_users = $id_user AND ac.fecha_fin = DATE('$fecha') 
+            GROUP BY ac.idac
+            ORDER BY ac.fecha_creacion DESC");
+                 }
+                 $array = array();
+
+
+                 function recorrer($value)
+                 {
+                     if (gettype($value) == "string") {
+                         $val = explode('*', $value);
+                         $arr = array('1' => explode('-', $val[0]), '2' => $val[1]);
+                     } else {
+                         $arr = null;
+                     }
+                     return $arr;
+                 }
+         
+                 function AB($data)
+                 {
+                     if (gettype($data) == "array") {
+         
+                         return $data['1'][0] . " de " . $data['1'][1];
+                     } else {
+                         return 0;
+                     }
+                 }
+         
+                 function C($data)
+                 {
+                     if (gettype($data) == "array") {
+                         return number_format($data['2'], 0, '.', ' ') . '%';
+                     } else {
+                         return 0;
+                     }
+                 }
+         
+                 function D($status, $end_date, $data, $acuse)
+                 {
+                     if (gettype($data) == "array") {
+                         $data = number_format($data['2'], 0, '.', ' ');
+                     } else {
+                         $data = 0;
+                     }
+                     $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
+         
+                     //return ($data > $end_date ? "es mayor" : "No es mayor");
+         
+                     if ($date <= $end_date && $data < 100 && $acuse == 1) {
+         
+                         return "En proceso – En Tiempo";
+         
+                     } elseif ($date <= $end_date  && $data == 100 && $acuse == 1) {
+         
+                         return "Concluido – En tiempo";
+         
+                     } elseif ($date >= $end_date  && $data < 100 && $acuse == 1) {
+         
+                         return "En proceso - Fuera de Tiempo";
+         
+                     } elseif ($date >= $end_date  && $data == 100 && $acuse == 1) {
+         
+                         return "Concluido – Fuera de Tiempo";
+         
+                     } elseif ($acuse == 2) {
+         
+                         return "Acuse rechazado";
+         
+                     } elseif ($status == 3) {
+         
+                         return "Cancelado";
+         
+                     } else {
+                         return "Sin aceptar acuse";
+         
+                     }
+                 }
+         
+                 function ver($idac)
+                 {
+                     //consulta para ver si el acuse se recibio
+                     $id_user = Auth()->user()->idu;
+         
+                     $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
+                     FROM actividades AS ac
+                     LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                     WHERE ra.idu_users = $id_user
+                     AND ra.idac_actividades = $idac
+                     ");
+                     if ($ver_acuse[0]->acuse == 2) {
+                         return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
+                     }
+         
+                     if ($ver_acuse[0]->acuse == 1) {
+                         return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+                     } else {
+                         $idreac = $ver_acuse[0]->idreac;
+                         return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+                             <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
+                     }
+                 }
+         
+                 foreach ($consult as $c) {
+         
+                     $data = recorrer($c->porcentaje);
+         
+                     array_push($array, array(
+         
+                         'turno' => $c->turno,
+                         'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('DD [de] MMMM [del] YYYY'),
+                         'asunto' => $c->asunto,
+                         'tipo_actividad' => $c->tipo_actividad,
+                         'descripcion' => $c->descripcion,
+                         'creador' => $c->creador,
+                         'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('DD MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('DD MMMM [del] YYYY'),
+                         'importancia' => $c->importancia,
+                         'area' => $c->area,
+                         'recibo' => AB($data),
+                         'porcentaje' => C($data),
+                         'estado' =>  D($c->status, $c->fecha_fin, $data, $c->acuse),
+                         'operaciones' => ver($c->idac),
+                     ));
+                 }
+                 $json = json_encode($array);
+         
+        return response()->json($json);
+    
     }
 
     public function aceptarActividad(Request $request)

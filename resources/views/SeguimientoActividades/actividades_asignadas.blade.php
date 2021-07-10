@@ -17,6 +17,27 @@
         <h3>Actividades asignadas al {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h3>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="">Fecha orden:</label>
+      </div>
+      <div class="col-sm-6">
+        <label for="">Fecha:</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <select class="form-control" name="fecha_orden" id="fecha_orden">
+          <option value="0">Todas los registros</option>
+          <option value="1">Fecha inicio</option>
+          <option value="2">Fecha fin</option>
+        </select>
+        <button type="button" class="btn btn-primary mt-1" id="button">Enviar</button> <button type="button" class="btn btn-primary mt-1" id="limpiar">Limpiar</button>
+      </div>
+      <div class="col-sm-6">
+        <input class="form-control" name="fecha" id="fecha" type="date" readonly>
+      </div>
+    </div>
   </div>
   @if (Session::has('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -281,6 +302,39 @@
     val = 0;
   }); //cierre acciones al cierre modal
 
-</script>
 
+  $('#button').on("click", function() {
+
+    let fecha_orden = $('#fecha_orden').val()
+    let fecha = $('#fecha').val()
+    $.ajax({
+      type: "GET",
+      url: "{{route('fecha_actividades_asignadas')}}",
+      data: {
+        fecha_orden: fecha_orden,
+        fecha: fecha
+      },
+      success: function(data) {
+        console.log(data);
+        $('#zing-grid').removeAttr('data');
+        $('#zing-grid').attr("data", data);
+      }
+    })
+
+  })
+  $('#limpiar').on("click", function() {
+    $("#fecha").val("");
+    $("#fecha_orden").val(0);
+    $('#fecha').attr("readOnly", true);
+    $('#fecha').val("");
+  })
+  $('#fecha_orden').on("change", function() {
+    if ($(this).val() == 0) {
+      $('#fecha').attr("readOnly", true);
+      $('#fecha').val("");
+    } else {
+      $('#fecha').removeAttr("readOnly");
+    }
+  })
+</script>
 @endsection
