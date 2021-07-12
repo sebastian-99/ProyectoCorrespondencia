@@ -14,7 +14,14 @@
   <div class="card-header">
     <div class="row">
       <div class="col-sm-11">
-        <h3>Actividades asignadas al {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h3>
+        <h3>Actividades asignadas  
+          @if(Auth()->user()->idtu_tipos_usuarios == 2)
+            al: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} 
+          @endif
+          @if(Auth()->user()->idtu_tipos_usuarios == 4)
+            del: {{$dir}} 
+          @endif
+        </h3>
       </div>
     </div>
     <div class="row">
@@ -82,7 +89,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Actividad para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} </h5>
+        <h5 class="modal-title" id="exampleModalLabel">Actividad 
+          @if(Auth()->user()->idtu_tipos_usuarios == 2)
+            para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} 
+          @endif
+          @if(Auth()->user()->idtu_tipos_usuarios == 4)
+            del: {{$dir}} 
+          @endif
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 

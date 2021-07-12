@@ -139,12 +139,14 @@
               <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth()->user()->idtu_tipos_usuarios != 4)
               <li class="nav-item">
                 <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Asignar actividad</p>
                 </a>
               </li>
+              @endif
               @if(Auth()->user()->idtu_tipos_usuarios == 3)
               <li class="nav-item">
                 <a href="{{ url('reporte_actividades')}}" class="nav-link">
@@ -154,10 +156,24 @@
               </li>
               @endif
               <li class="nav-item">
+                @if(Auth()->user()->idtu_tipos_usuarios == 2)
                 <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades creadas</p>
                 </a>
+                @endif
+                @php
+                  $ar = Auth()->user()->idar_areas;
+
+                  $director = DB::SELECT("SELECT idu FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
+                  $dir = $director[0]->idu;
+                @endphp
+                @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                <a href="{{ url('actividades_creadas', ['id'=>encrypt($dir)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades creadas</p>
+                </a>
+                @endif
               </li>
               <li class="nav-item">
                 <a href="{{ url('actividades_asignadas') }}" class="nav-link">

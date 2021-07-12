@@ -8,6 +8,7 @@ use App\Models\Actividades;
 use App\Models\ResponsablesActividades;
 use App\Models\Users;
 use App\Models\SeguimientosActividades;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Arr;
 use PDF;
@@ -1104,6 +1105,11 @@ class ActividadesController extends Controller
     public function actividades_creadas($id)
     {
         $id_u = decrypt($id);
+        //return $id_u;
+        $ar = Auth()->user()->idar_areas;
+        $tipo = Auth::user()->idtu_tipos_usuarios;
+        $director = DB::SELECT("SELECT CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS director FROM users AS us WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
+        $dir = $director[0]->director;
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
@@ -1117,7 +1123,7 @@ class ActividadesController extends Controller
         WHERE ac.idu_users = $id_u
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-
+       
         $array = array();
 
         function recorrer($value)
@@ -1131,18 +1137,29 @@ class ActividadesController extends Controller
             return $arr;
         }
 
-        function btn($idac, $activo)
-        {
+        if ($tipo == 2) {
+            function btn($idac, $activo){
 
+                if ($activo == 1) {
+                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+                    <a class='btn btn-danger mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
+                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
+                } else {
+                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+                    <a class='btn btn-primary mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></a>
+                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
+                }
+            }
+        } else {
+            function btn($idac, $activo){
 
-            if ($activo == 1) {
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-                <a class='btn btn-danger mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
-                <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
-            } else {
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-                <a class='btn btn-primary mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></a>
-                <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
+                if ($activo == 1) {
+                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+                } else {
+                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+                    <a class='btn btn-primary mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></a>
+                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
+                }
             }
         }
 
@@ -1222,7 +1239,7 @@ class ActividadesController extends Controller
 
         $json = json_encode($array);
 
-        return view('Actividades.actividadescreadas', compact('json'));
+        return view('Actividades.actividadescreadas', compact('json','dir'));
     }
 
     public function ajax_filtro_fecha(Request $request){
