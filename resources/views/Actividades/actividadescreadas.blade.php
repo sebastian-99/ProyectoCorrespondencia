@@ -4,6 +4,10 @@
 
     <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
     <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
+
+	<!-- Libreria para usar xlsx en js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+
     <script>
       if (es) ZingGrid.registerLanguage(es, 'custom');
     </script>
@@ -16,6 +20,11 @@
         	  <h3>Reporte de actividades creadas por mí persona</h3>
         	</div>
     	</div>
+		<div class="text-center">
+			<button id="btn_exportar_excel" type="button" class="btn btn-success">
+				Exportar a EXCEL
+			</button>
+		</div>
 	</div>
 	<div class="card-body">
     	<zing-grid
@@ -42,16 +51,39 @@
                     <zg-column index='periodo' header='Periodo' width="220" type='text'></zg-column>
                     <zg-column index='importancia' header='Importancia' width="130" type='text'></zg-column>
                     <zg-column index='nombre' header='Área responsable' width="170" type='text'></zg-column>
-                    <zg-column index='C' header='Avance' width="120" type='text'></zg-column>
-                    <zg-column index='AB' header='Atendido por' width="135" type='text'></zg-column>
-                    <zg-column index='E' header='Estatus' width="120" type='text'></zg-column>
+                    <zg-column index='avance' header='Avance' width="120" type='text'></zg-column>
+                    <zg-column index='atendido_por' header='Atendido por' width="135" type='text'></zg-column>
+                    <zg-column index='estatus' header='Estatus' width="120" type='text'></zg-column>
                     <zg-column align="center" filter ="disabled" index='operaciones' header='Operaciones' type='text'></zg-column>
         	</zg-colgroup>
     	</zing-grid>
 	</div>
 </div>
+@endsection
 
+@section('scripts')
+	<script>
+		$(window).on('load', function(){
+	        const $NAME_EXCEL = 'Actividades Creadas';
+	        const $BTN_EXPORTAR_EXCEL = $('#btn_exportar_excel');
+	        const $ZING_GRID = document.querySelector('zing-grid');
 
+	        $BTN_EXPORTAR_EXCEL.on('click', function(){
+	        	let $gridData = $ZING_GRID.getData({
+					headers:true,
+	        		cols:'visible',
+					rows:'visible'
+	        	});
 
+				$.map($gridData, function(data){
+					delete data.operaciones;
+				});
 
+                let $sheet = XLSX.utils.json_to_sheet($gridData);
+                let $book = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet($book, $sheet, 'Hoja 1');
+                XLSX.writeFile($book, $NAME_EXCEL + '.xlsx');
+            });
+		});
+	</script>
 @endsection
