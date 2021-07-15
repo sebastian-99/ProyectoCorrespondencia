@@ -142,7 +142,7 @@ $('document').ready(()=>{
                             <tr>
                                 <td>${actividades[key].comunicado}-${actividades[key].asunto}</td>
                                 <td>${actividades[key].responsable}</td>
-                                <td>${actividades[key].seguimiento ? `${actividades[key].porcentaje_seguimiento} %` : 'No existen seguimientos'}</td>
+                                <td>${actividades[key].seguimiento ? `${actividades[key].seguimiento.porcentaje} %` : 'No existen seguimientos'}</td>
                                 <td>
                                     ${actividades[key].creador.titulo}
                                     ${actividades[key].creador.nombre}
