@@ -247,7 +247,7 @@
         </div>
        
     </div>
-    @if(Auth()->user()->idtu_tipos_usuarios == 2)                      
+    @if(Auth()->user()->idtu_tipos_usuarios == 2 && $ultimo_seg[0]->archivo_fin == NULL)                      
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -305,6 +305,9 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="estado" id="estado_c" value="Completo" onchange="verificar_s()">
                                 <label class="form-check-label" for="inlineRadio2">Completo</label>
+                            </div>
+                            <div id="file_fin">
+                                {{--- Aquí se agrega el archivo definalizacion del seguimiento---}}
                             </div>
                         </div>
                     </div>
@@ -417,9 +420,13 @@
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
+                var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
             } else {
                 $('#estado_p').prop("checked", true);
                 $('#estado_p').prop('disabled', false);
+                $('#file_fin').empty();
+
             }
             
             if(Number(verif_p) <= Number(vp)){
@@ -438,6 +445,8 @@
                 $('#porcentaje').val(100);
                 $('#porc').html(100);
                 $('#estado_p').prop('disabled', true);
+                var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
             }
         }
     //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
@@ -515,6 +524,8 @@ $("#form").submit(function(event){
               $('#tablaModal>tbody>tr').remove();
             
     });
+
+//----------------------------------
     
 </script>
 
