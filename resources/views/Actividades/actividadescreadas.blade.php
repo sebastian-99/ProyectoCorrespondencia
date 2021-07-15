@@ -154,7 +154,7 @@
 @section('scripts')
       <script>
 		$(window).on('load', function(){
-	        const $NAME_EXCEL = 'Reporte de Actividades Creadas';
+	        const $NAME_EXCEL = 'Actividades Creadas';
 	        const $BTN_EXPORTAR_EXCEL = $('#btn_exportar_excel');
 	        const $ZING_GRID = document.querySelector('zing-grid');
 

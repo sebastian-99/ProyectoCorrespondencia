@@ -1229,9 +1229,9 @@ class ActividadesController extends Controller
                 'activo' => $c->activo,
                 'acuse' => $c->acuse,
                 'idu_users' => $c->idu_users,
-                'AB' => AB($data),
-                'C' =>  D($data),
-                'E' =>  E($c->status),
+                'avance' => AB($data),
+                'atendido_por' =>  D($data),
+                'estatus' =>  E($c->status),
                 'operaciones' => btn($c->idac, $c->activo),
             ));
         }
