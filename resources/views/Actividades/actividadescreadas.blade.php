@@ -7,6 +7,7 @@
 
         <!-- Libreria para usar xlsx en js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+        <script src="{{ asset('src/js/xlsx.js') }}"></script>
 
         <script>
         if (es) ZingGrid.registerLanguage(es, 'custom');
@@ -152,31 +153,145 @@
 
 <!-- E x c e l -->
 @section('scripts')
-      <script>
-		$(window).on('load', function(){
-	        const $NAME_EXCEL = 'Actividades Creadas';
-	        const $BTN_EXPORTAR_EXCEL = $('#btn_exportar_excel');
-	        const $ZING_GRID = document.querySelector('zing-grid');
+    <script>
+        $( document ).ready( () => {
+            
+            const excel = () => {
 
-	        $BTN_EXPORTAR_EXCEL.on('click', function(){
-	        	let $gridData = $ZING_GRID.getData({
-					headers:true,
-	        		cols:'visible',
-					rows:'visible'
+                let date = new Date(), sheet, data, columns, rows, zing_grid = document.querySelector( 'zing-grid' );
+
+                const headers = [ "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3" ];
+
+                data = zing_grid.getData({
+                    headers:true,
+                    cols:'visible',
+                    rows:'visible',
                 });
 
-				$.map($gridData, function(data){
-                    delete data.operaciones;
-                });
+                sheet = XLSX.utils.aoa_to_sheet([
+                    ["Reporte de actividades creadas"],
+                ]);
 
-                let $sheet = XLSX.utils.json_to_sheet($gridData);
-                let $book = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet($book, $sheet, 'Hoja 1');
-                XLSX.writeFile($book, $NAME_EXCEL + '.xlsx');
-            });
-		});
-	</script>
+                XLSX.utils.sheet_add_aoa( sheet, [
+                    [`Fecha de reporte: ${ date.toLocaleDateString() } ${ date.getHours() }:${ date.getMinutes() }`],
+                ], { origin: -1 } );
+
+                XLSX.utils.sheet_add_aoa( sheet, [
+                   ["Turno", "Asunto", "Tipo de Actividades", 
+                    "Descripción", "Fecha de Creación", "Creador", 
+                    "Periodo", "Importancia", "Área", "Avance Individual",
+                    "Estado"], 
+                ], { origin: -1 } );
+
+                for ( value of data )
+                {
+                    XLSX.utils.sheet_add_aoa( sheet, [
+                        [ value.turno, value.asunto, value.tipo_actividad, value.descripcion, value.fecha_creacion,
+                          value.creador, value.periodo, value.importancia, value.area, value.porcentaje, value.estado ],
+                    ], { origin: -1 } );   
+                }
+
+                // Size columns
+                columns = [
+                    {wch:20}, // turno
+                    {wch:40}, // asunto
+                    {wch:25}, // tipo de actividad
+                    {wch:40}, // descripción
+                    {wch:20}, // fecha de creación
+                    {wch:30}, // creadi por (creador)
+                    {wch:30}, // periodo
+                    {wch:20}, // importancia
+                    {wch:30}, // área
+                    {wch:20}, // porcentaje
+                    {wch:30}, // estado
+                ];
+
+                sheet['!cols'] = columns;
+                
+                rows = [
+                    { hpt:30, level:1 },
+                    { hpt:20, level:2 },
+                    { hpt:15, level:3 },
+                ];
+
+                sheet["!rows"] = rows;
+                
+                let mergeA1K1 = { s: {r:0, c:0}, e: {r:0, c:10} }; // Merge A1:K1
+
+                let mergeA2K2 = { s: {r:1, c:0}, e: {r:1, c:10} }; // Merge A2:K2
+
+                if( ! sheet['!merges'] ) sheet['!merges'] = [];
+                        
+                sheet['!merges'].push( mergeA1K1 );
+
+                sheet['!merges'].push( mergeA2K2 );
+
+                // set the style of target cell
+                sheet["A1"].s = {
+                    font: {
+                        name: 'Arial',
+                        sz: 18,
+                        bold: true,
+                        color: { rgb: "00000000" }
+                    },
+                    alignment: {
+                        horizontal: 'center',
+                    },
+                };
+
+                sheet["A2"].s = {
+                    font: {
+                        name: 'Arial',
+                        sz: 14,
+                        bold: false,
+                        color: { rgb: "00000000" }
+                    },
+                    alignment: {
+                        horizontal: 'center',
+                    },
+                };
+
+                for( value of headers )
+                {
+
+                  sheet[ value ].s = {
+                    fill :{
+                        patternType : 'solid',
+                        fgColor: { rgb: "43B105" },
+                        bgColor: { rgb: "43B105" },
+                    },
+                    font: {
+                        name: 'Arial',
+                        sz: 12,
+                        bold: false,
+                        color: { rgb: "FFFFFFFF" },
+                    },
+                    alignment: {
+                        horizontal: 'center',
+                    },
+                  };
+
+                }
+      
+                let book = XLSX.utils.book_new();
+
+                XLSX.utils.book_append_sheet( book, sheet, 'Worksheet 1' );
+
+                XLSX.writeFile( book, 'Reporte_de_Actividades_Creadas.xlsx' );
+
+            }
+
+            $( '#btn_exportar_excel' ).on( 'click', () => {
+
+                excel();
+
+            } );
+            
+
+        });
+    </script>
 @endsection
+
 
 
 
