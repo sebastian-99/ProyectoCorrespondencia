@@ -11,8 +11,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function App\Http\Controllers\por;
+
 class GraficasDeActividadesCreadasController extends Controller
 {
+    public function detalleActividad($idac){
+        return redirect()->route('Detalles',[ 'id' => encrypt($idac) ]);
+    }
     public function seguimiento($idac){
         return redirect()->route('Seguimiento',[ 'idac' => encrypt($idac) ]);
     }
@@ -34,17 +39,17 @@ class GraficasDeActividadesCreadasController extends Controller
         $tiposActividades = TiposActividades::whereIn('idtac', $request->tipos_actividades)
             ->get()
             ->each(function($tipoActividad) use($user,$inicio,$fin){
-                $tipoActividad->actividadesCompletadas = $this->getActividadesCompletadas($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesEnProceso = $this->getActividadesEnProceso($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesSinEntregar = $this->getActividadesSinEntregar($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesConAcuseDeRecibido = $this->getActividadesConAcuseDeRecibido($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesSinAcuseDeRecibido = $this->getActividadesSinAcuseDeRecibido($user,$tipoActividad,$inicio,$fin)->count();
+                $tipoActividad->actividadesCompletadas = $this->getActividadesCompletadas($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesEnProceso = $this->getActividadesEnProceso($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesSinEntregar = $this->getActividadesSinEntregar($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesConAcuseDeRecibido = $this->getActividadesConAcuseDeRecibido($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesSinAcuseDeRecibido = $this->getActividadesSinAcuseDeRecibido($user,$tipoActividad,$inicio,$fin,true);
 
-                $tipoActividad->actividadesCompletadasEnTiempo = $this->getActividadesCompletadasEnTiempo($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesCompletadasFueraDeTiempo = $this->getActividadesCompletadasFueraDeTiempo($user,$tipoActividad,$inicio,$fin)->count();
+                $tipoActividad->actividadesCompletadasEnTiempo = $this->getActividadesCompletadasEnTiempo($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesCompletadasFueraDeTiempo = $this->getActividadesCompletadasFueraDeTiempo($user,$tipoActividad,$inicio,$fin,true);
 
-                $tipoActividad->actividadesEnProcesoEnTiempo = $this->getActividadesEnProcesoEnTiempo($user,$tipoActividad,$inicio,$fin)->count();
-                $tipoActividad->actividadesEnProcesoFueraDeTiempo = $this->getActividadesEnProcesoFueraDeTiempo($user,$tipoActividad,$inicio,$fin)->count();
+                $tipoActividad->actividadesEnProcesoEnTiempo = $this->getActividadesEnProcesoEnTiempo($user,$tipoActividad,$inicio,$fin,true);
+                $tipoActividad->actividadesEnProcesoFueraDeTiempo = $this->getActividadesEnProcesoFueraDeTiempo($user,$tipoActividad,$inicio,$fin,true);
 
                 $tipoActividad->actividadesTotales = $tipoActividad->actividadesCompletadas +
                                                     $tipoActividad->actividadesEnProceso +
@@ -164,403 +169,267 @@ class GraficasDeActividadesCreadasController extends Controller
     }
 
 
-    public function getActividades(User $user, Request $request)
+    private function getActividades(User $user, TiposActividades $tiposActividades, $inicio, $fin)
     {
-        return  TiposActividades::whereIn('idtac', $request->tipos_actividades)
+        $inicio = new Carbon($inicio);
+        $fin = new Carbon($fin);
+        return Actividades::where('idu_users', $user->idu)
+            ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
+            ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
+            ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
+            ->select('idac','fecha_fin')
             ->get()
-            ->each(function($tipoActividad) use($user,$request){
-                $tipoActividad->actividades_completadas = $this->getActividadesCompletadas($user,$tipoActividad,$request->inicio,$request->fin);
-                $tipoActividad->actividades_en_proceso = $this->getActividadesEnProceso($user,$tipoActividad,$request->inicio,$request->fin);
-                $tipoActividad->actividades_sin_entregar = $this->getActividadesSinEntregar($user,$tipoActividad,$request->inicio,$request->fin);
-                $tipoActividad->actividades_con_acuse_de_recibido = $this->getActividadesConAcuseDeRecibido($user,$tipoActividad,$request->inicio,$request->fin);
-                $tipoActividad->actividades_sin_acuse_de_recibido = $this->getActividadesSinAcuseDeRecibido($user,$tipoActividad,$request->inicio,$request->fin);
-                return $tipoActividad;
+            ->each(function($actividad){
+                $responsables = ResponsablesActividades::where('idac_actividades',$actividad->idac)
+                    ->select('idreac')
+                    ->get()
+                    ->each(function($responsable){
+                        $idreac_responsables_actividades = $responsable->idreac;
+                        $query = "SELECT fecha,ultimoporcentaje(idreac_responsables_actividades) AS ultimo_porcentaje
+                            FROM seguimientos_actividades
+                            WHERE idreac_responsables_actividades = $idreac_responsables_actividades";
+                        $seguimiento = DB::select($query);
+
+                        $responsable->porcentaje_seguimiento = count($seguimiento) > 0 ? $seguimiento[0]->ultimo_porcentaje : null;
+                        $responsable->fecha_seguimiento = count($seguimiento) > 0 ? $seguimiento[0]->fecha : null;
+
+                        return $responsable;
+                    });
+                $actividad->porcentaje = $responsables->avg('porcentaje_seguimiento');
+                $actividad->responsables = $responsables;
+                return $actividad;
             });
+
     }
 
-    public function getActividadesCompletadas(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $inicio = new Carbon($inicio);
-        $fin = new Carbon($fin);
-        $actividades = ResponsablesActividades::join('seguimientos_actividades',
-                'seguimientos_actividades.idreac_responsables_actividades',
-                'responsables_actividades.idreac'
-            )
-            ->join('actividades','actividades.idac','responsables_actividades.idac_actividades')
-            ->where('actividades.idu_users', $user->idu)
-            ->where('seguimientos_actividades.porcentaje', 100)
-            ->groupBy('responsables_actividades.idreac')
-            ->select('responsables_actividades.idreac')
-            ->get();
-        if($actividades->count() < 1 ) return $actividades;
-        return User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        //->where('responsables_actividades.fecha','!=', null)
-        ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->whereIn('responsables_actividades.idreac', $actividades)
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.fecha_fin',
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
+    private function getActividadesFinales($actividades){
+        return Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+                ->join('areas','areas.idar','actividades.idar_areas')
+                ->whereIn('actividades.idac', $actividades)
+                ->select(
+                    'idac',
+                    'areas.nombre',
+                    'areas.nombre AS area_responsable',
+                    'tipos_actividades.nombre AS tipo_actividad',
+                    'actividades.comunicado',
+                    'actividades.asunto',
+                    'actividades.descripcion',
+                    'actividades.created_at AS fecha_creacion',
+                    DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                    'actividades.fecha_fin',
+                    'actividades.importancia'
+                )
+                ->get()
+                ->each(function($actividad){
+                    $responsables = ResponsablesActividades::where('idac_actividades',$actividad->idac)
+                        ->select('idreac','firma')
+                        ->get()
+                        ->each(function($responsable){
+                            $idreac_responsables_actividades = $responsable->idreac;
+                            $query = "SELECT fecha,ultimoporcentaje(idreac_responsables_actividades) AS ultimo_porcentaje
+                                FROM seguimientos_actividades
+                                WHERE idreac_responsables_actividades = $idreac_responsables_actividades";
+                            $seguimiento = DB::select($query);
 
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
+                            $responsable->porcentaje_seguimiento = count($seguimiento) > 0 ? $seguimiento[0]->ultimo_porcentaje : null;
+                            $responsable->fecha_seguimiento = count($seguimiento) > 0 ? $seguimiento[0]->fecha : null;
 
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->last()->porcentaje;//$seguimiento->avg('porcentaje');
-            $collection->ultimo_seguimiento = $seguimiento->last();
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
-
-        });
+                            return $responsable;
+                        });
+                    $actividad->porcentaje = $responsables->avg('porcentaje_seguimiento');
+                    $actividadConAcuse = $responsables->where('firma','!=', null)->count();
+                    $actividad->atendido_por = "$actividadConAcuse de ".$responsables->count();
+                    return $actividad;
+                });
     }
 
-    public function getActividadesEnProceso(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $inicio = new Carbon($inicio);
-        $fin = new Carbon($fin);
-
-        $query = "SELECT t1.idreac
-                FROM
-                (SELECT idreac_responsables_actividades AS idreac ,ultimoporcentaje( idreac_responsables_actividades) AS ultimoporcentaje
-                FROM seguimientos_actividades
-                GROUP BY idreac_responsables_actividades) AS t1
-                WHERE t1.ultimoporcentaje <100";
-        $actividades = DB::select($query);
-
-        if(count($actividades)<1) return  collect([]);
-        $Actividades = [];
+    private function getActividadesCompletadas(User $user, TiposActividades $tiposActividades, $inicio, $fin , $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
         foreach($actividades AS $actividad){
-            array_push($Actividades,$actividad->idreac);
+            if($actividad->porcentaje == 100)array_push($actividades_ids, $actividad->idac);
         }
 
-        return User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        //->where('responsables_actividades.fecha', null)
-        ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
-        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->whereIn('responsables_actividades.idreac', $Actividades)
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.fecha_fin',
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
+        if($cantidad)return count($actividades_ids);
 
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
 
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
-
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
-
-        });
     }
 
-    public function getActividadesSinEntregar(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+    public function getActividadesEnProceso(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            if($actividad->porcentaje < 100 && $actividad->porcentaje > 0 )array_push($actividades_ids, $actividad->idac);
+        }
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
+    }
+
+    public function getActividadesSinEntregar(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            if($actividad->porcentaje <= 0 )array_push($actividades_ids, $actividad->idac);
+        }
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+
+        return $this->getActividadesFinales($actividades_ids);
+    }
+
+    public function getActividadesConAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        $actividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')
-            ->where('actividades.idu_users', $user->idu)
-            ->select('idreac')
-            ->groupBy('responsables_actividades.idreac')
+        $actividades = Actividades::where('idu_users', $user->idu)
+            ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
+            ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
+            ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
+            ->select('idac')
             ->get()
-            ->each(function($responsableActividad){
-                $responsableActividad->seguimiento =SeguimientosActividades::where('idreac_responsables_actividades',$responsableActividad->idreac)
-                    ->groupBy('idreac_responsables_actividades')
-                    ->get();
-                return $responsableActividad;
+            ->each(function($actividad){
+                $responsablesActividades = ResponsablesActividades::where('idac_actividades', $actividad->idac)->get();
 
+                $actividadConAcuse = $responsablesActividades->where('firma', '!=', null)->count();
+                $actividad->acuse = $actividadConAcuse == $responsablesActividades->count() ? true : false;
+                return $actividad;
             });
-            foreach($actividades AS $key => $actividad){
-                if($actividad->seguimiento->count()>0){
-                    $actividades->forget($key);
-                }
-                unset($actividad['seguimiento']);
-            }
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            if($actividad->acuse)array_push($actividades_ids, $actividad->idac);
+        }
 
-        //return $actividades;
-        if($actividades->count() < 1 ) {return $actividades;}
-        return User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        //->where('responsables_actividades.fecha', null)
-        ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
-        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->whereIn('responsables_actividades.idreac', $actividades)
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
+        if($cantidad)return count($actividades_ids);
 
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
+        if (count($actividades_ids) <= 0) return collect();
 
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
-
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
-
-        });
+        return $this->getActividadesFinales($actividades_ids);
     }
 
-    public function getActividadesConAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin){
+    public function getActividadesSinAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
         $inicio = new Carbon($inicio);
         $fin = new Carbon($fin);
-        return User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        ->where('responsables_actividades.firma','!=', null)
-        ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
-        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
+        $actividades = Actividades::where('idu_users', $user->idu)
+            ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
+            ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
+            ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
+            ->select('idac')
+            ->get()
+            ->each(function($actividad){
+                $responsablesActividades = ResponsablesActividades::where('idac_actividades', $actividad->idac)->get();
 
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
+                $actividadConAcuse = $responsablesActividades->where('firma', '!=', null)->count();
+                $actividad->acuse = $actividadConAcuse < $responsablesActividades->count() ? true : false;
+                return $actividad;
+            });
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            if($actividad->acuse)array_push($actividades_ids, $actividad->idac);
+        }
 
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
+        if($cantidad)return count($actividades_ids);
 
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
+        if (count($actividades_ids) <= 0) return collect();
 
-        });
-    }
-
-    public function getActividadesSinAcuseDeRecibido(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $inicio = new Carbon($inicio);
-        $fin = new Carbon($fin);
-        return User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        ->where('responsables_actividades.firma', null)
-        ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
-        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
-
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
-
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
-
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
-
-        });
+        return $this->getActividadesFinales($actividades_ids);
     }
 
     public function getActividadesPorTipoArea(User $user, Request $request){
-        $inicio = $request->inicio;
-        $fin = $request->fin;
-        $inicio = new Carbon($inicio);
-        $fin = new Carbon($fin);
-        return [['actividades' => User::join('responsables_actividades', 'idu_users', 'users.idu')
-        ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
-        ->join('areas','areas.idar','actividades.idar_areas')
-        ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-        //->where('responsables_actividades.fecha', null)
-        ->where('tipos_actividades.nombre', $request->tipo_area)
-        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
-        ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.idu_users',$user->idu)
-        ->select(
-            'users.idu',
-            DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
-            'actividades.turno',
-            'actividades.comunicado',
-            'actividades.asunto',
-            'actividades.descripcion',
-            'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
-            'actividades.importancia',
-            'responsables_actividades.idreac',
-            'actividades.idac',
-            'actividades.idu_users AS creador_id',
-            'areas.nombre AS area_responsable',
-            'tipos_actividades.nombre AS tipo_actividad',
-            'responsables_actividades.firma'
-        )
-        ->get()
-        ->each(function($collection){
-
-            $collection->creador = User::where('idu',$collection->creador_id)
-                ->select('idu','titulo', 'nombre', 'app','apm')->first();
-
-            $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
-            $collection->numero_de_seguimiento = $seguimiento->count();
-            $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
-
-            $collection->seguimiento = $seguimiento->last();
-            return $collection;
-
-        })]];
+        return collect([]);
     }
 
-    private function getActividadesCompletadasEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $actividadesCompletadas = $this->getActividadesCompletadas($user,$tiposActividades,$inicio,$fin);
-        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
-            $seguimiento = new Carbon($actividadCompletada->ultimo_seguimiento->created_at);
-            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
-            $seguimiento = $seguimiento->format('Y-m-d');
-            $fechaFin = $fechaFin->format('Y-m-d');
-
-            if($seguimiento > $fechaFin){
-                $actividadesCompletadas->forget($key);
+    private function getActividadesCompletadasEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            $fechaFin = new Carbon($actividad->fecha_fin);
+            if($actividad->porcentaje == 100){
+                foreach ($actividad->responsables AS $responsable){
+                    $fecha = new Carbon($responsable->fecha_seguimiento);
+                    $fecha->format('Y-m-d');
+                    if(!($fecha > $fechaFin)){
+                        if($actividad->porcentaje == 100)array_push($actividades_ids, $actividad->idac);
+                    }
+                }
             }
         }
-        return $actividadesCompletadas;
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
     }
 
-    public function getActividadesCompletadasFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-
-        $actividadesCompletadas = $this->getActividadesCompletadas($user,$tiposActividades,$inicio,$fin);
-
-        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
-            $seguimiento = new Carbon($actividadCompletada->ultimo_seguimiento->created_at);
-            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
-            $seguimiento = $seguimiento->format('Y-m-d');
-            $fechaFin = $fechaFin->format('Y-m-d');
-
-            if(!($seguimiento > $fechaFin)){
-                $actividadesCompletadas->forget($key);
+    public function getActividadesCompletadasFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            $fechaFin = new Carbon($actividad->fecha_fin);
+            if($actividad->porcentaje == 100){
+                foreach ($actividad->responsables AS $responsable){
+                    $fecha = new Carbon($responsable->fecha_seguimiento);
+                    $fecha->format('Y-m-d');
+                    if($fecha > $fechaFin){
+                        if($actividad->porcentaje == 100)array_push($actividades_ids, $actividad->idac);
+                    }
+                }
             }
         }
-        return $actividadesCompletadas;
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
     }
 
-    public function getActividadesEnProcesoEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $actividadesCompletadas = $this->getActividadesEnProceso($user,$tiposActividades,$inicio,$fin);
-        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
-            $seguimiento = new Carbon($actividadCompletada->seguimiento->created_at);
-            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
-            $seguimiento = $seguimiento->format('Y-m-d');
-            $fechaFin = $fechaFin->format('Y-m-d');
-
-            if($seguimiento > $fechaFin){
-                $actividadesCompletadas->forget($key);
+    public function getActividadesEnProcesoEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            $fechaFin = new Carbon($actividad->fecha_fin);
+            if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                foreach ($actividad->responsables AS $responsable){
+                    $fecha = new Carbon($responsable->fecha_seguimiento);
+                    $fecha->format('Y-m-d');
+                    if(!($fecha > $fechaFin)){
+                        if($actividad->porcentaje < 100 && $actividad->porcentaje > 0)array_push($actividades_ids, $actividad->idac);
+                    }
+                }
             }
         }
-        return $actividadesCompletadas;
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
     }
 
-    public function getActividadesEnProcesoFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin){
-        $actividadesCompletadas = $this->getActividadesEnProceso($user,$tiposActividades,$inicio,$fin);
-        foreach($actividadesCompletadas AS $key =>$actividadCompletada){
-            $seguimiento = new Carbon($actividadCompletada->seguimiento->created_at);
-            $fechaFin = new Carbon($actividadCompletada->fecha_fin);
-            $seguimiento = $seguimiento->format('Y-m-d');
-            $fechaFin = $fechaFin->format('Y-m-d');
-
-            if(!($seguimiento > $fechaFin)){
-                $actividadesCompletadas->forget($key);
+    public function getActividadesEnProcesoFueraDeTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
+        $actividades = $this->getActividades($user,$tiposActividades,$inicio,$fin);
+        $actividades_ids = [];
+        foreach($actividades AS $actividad){
+            $fechaFin = new Carbon($actividad->fecha_fin);
+            if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                foreach ($actividad->responsables AS $responsable){
+                    $fecha = new Carbon($responsable->fecha_seguimiento);
+                    $fecha->format('Y-m-d');
+                    if($fecha > $fechaFin){
+                        if($actividad->porcentaje < 100 && $actividad->porcentaje > 0)array_push($actividades_ids, $actividad->idac);
+                    }
+                }
             }
         }
-        return $actividadesCompletadas;
+
+        if($cantidad)return count($actividades_ids);
+
+        if (count($actividades_ids) <= 0) return collect();
+        return $this->getActividadesFinales($actividades_ids);
     }
 
 }
