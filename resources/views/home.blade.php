@@ -23,7 +23,14 @@
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
                                     <div class="mt-3">
-                                        <h5>ACTIVIDADES DE HOY</h5>
+                                        <h5>
+                                            @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                                                ACTIVIDADES DE HOY 
+                                            @endif
+                                            @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                                ACTIVIDADES DE HOY PARA {{$nombre}}
+                                            @endif    
+                                        </h5>
                                     </div>
                                     <div class="mt-3">
                                         <h2>{{ $actividades_hoy }}</h2>
@@ -43,7 +50,14 @@
                                     <i class="fa fa-list-ul mt-5 pt-5" aria-hidden="true" style="font-size: 80px"></i>
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
-                                    <h5>ACTIVIDADES PENDIENTES DE REVISIÓN</h5>
+                                    <h5>
+                                        @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                                            ACTIVIDADES PENDIENTES DE REVISIÓN
+                                        @endif
+                                        @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                            ACTIVIDADES PENDIENTES DE REVISIÓN PARA {{$nombre}}
+                                        @endif
+                                    </h5>
                                     <div class="text-center mt-5">
                                         <h2>{{ $actividades_pendientes }}</h2>
                                     </div>
@@ -64,7 +78,14 @@
                                     <i class="fa fa-calendar mt-5 pt-5 mb-2" aria-hidden="true" style="font-size: 80px"></i>
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
-                                    <h5 style="text-transform: uppercase;">ACTIVIDADES DEL MES DE {{ Carbon\Carbon::now()->locale('es')->isoFormat('MMMM') }} </h5>
+                                    <h5 style="text-transform: uppercase;">
+                                        @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                                            ACTIVIDADES DEL MES DE {{ Carbon\Carbon::now()->locale('es')->isoFormat('MMMM') }}
+                                        @endif
+                                        @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                            ACTIVIDADES DEL MES DE {{ Carbon\Carbon::now()->locale('es')->isoFormat('MMMM') }} PARA {{$nombre}}
+                                        @endif
+                                    </h5>
                                     <div class="text-center">
                                         <h2>{{ $actividades_por_mes }}</h2>
                                     </div>
@@ -84,7 +105,14 @@
                                         <h2>{{ $actividades_cerradas['concluidas']}} de {{ $actividades_cerradas['total'] }}</h2><br>
                                     </div>
                                     <div id="actividades_en_seguimiento_concluidas">
-                                        <h5> ACTIVIDADES EN SEGUIMIENTO CONCLUIDAS</h5><br>
+                                        <h5> 
+                                            @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                                                ACTIVIDADES CERRADAS
+                                            @endif
+                                            @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                                ACTIVIDADES CERRADAS DEL {{$nombre}}
+                                            @endif
+                                        </h5><br>
                                         <div class="text-center">
                                             <h2>
                                                 {{ $actividades_en_seguimiento['completadas']}} de {{ $actividades_en_seguimiento['total'] }}
@@ -115,7 +143,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" integrity="sha512-+IpCthlNahOuERYUSnKFjzjdKXIbJ/7Dd6xvUp+7bEw0Jp2dg6tluyxLs+zq9BMzZgrLv8886T4cBSqnKiVgUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        const user_id = '{{ auth()->user()->idu }}'
+        const user_id = '{{ $user }}';
     </script>
     <script  type="module" src="/js/panel/panel.js"></script>
 @endsection

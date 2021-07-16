@@ -663,6 +663,7 @@ class ActividadesController extends Controller
             INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
             INNER JOIN areas AS a ON a.idar = u.idar_areas
             WHERE u.idtu_tipos_usuarios NOT IN(1)
+            AND u.idtu_tipos_usuarios NOT IN(4)
             AND a.idar = $id");
 
 
@@ -1108,8 +1109,6 @@ class ActividadesController extends Controller
         //return $id_u;
         $ar = Auth()->user()->idar_areas;
         $tipo = Auth::user()->idtu_tipos_usuarios;
-        $director = DB::SELECT("SELECT CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS director FROM users AS us WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
-        $dir = $director[0]->director;
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
@@ -1137,7 +1136,7 @@ class ActividadesController extends Controller
             return $arr;
         }
 
-        if ($tipo == 2) {
+        if ($tipo != 4) {
             function btn($idac, $activo){
 
                 if ($activo == 1) {
@@ -1150,6 +1149,7 @@ class ActividadesController extends Controller
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
                 }
             }
+
         } else {
             function btn($idac, $activo){
 
@@ -1239,7 +1239,15 @@ class ActividadesController extends Controller
 
         $json = json_encode($array);
 
-        return view('Actividades.actividadescreadas', compact('json','dir'));
+        if (Auth()->user()->idtu_tipos_usuarios == 4) {
+            $director = DB::SELECT("SELECT CONCAT(titulo, ' ',nombre, ' ',app, ' ',apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
+            $dir = $director[0]->nombre;
+
+            return view('Actividades.actividadescreadas', compact('json','dir'));
+        } else {
+            return view('Actividades.actividadescreadas', compact('json'));
+        }
+
     }
 
     public function ajax_filtro_fecha(Request $request){

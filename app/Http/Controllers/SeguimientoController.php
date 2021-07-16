@@ -23,12 +23,12 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
         $ar = Auth()->user()->idar_areas;
 
-        $director = DB::SELECT("SELECT CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS director FROM users AS us WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
-        $dir = $director[0]->director;
-
         if (Auth()->user()->idtu_tipos_usuarios == 4) {
-            $asignado = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
+            
+            $asignado = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ',app, ' ',apm) AS director  FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
             $id = $asignado[0]->idu;
+            $dir = $asignado[0]->director;
+
             $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS AREA,ra.idu_users, 
             porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -180,9 +180,14 @@ class SeguimientoController extends Controller
         }
         $json = json_encode($array);
 
-        return view('SeguimientoActividades.actividades_asignadas')
-            ->with('dir', $dir)
-            ->with('json', $json);
+        if (Auth()->user()->idtu_tipos_usuarios == 4) {
+            return view('SeguimientoActividades.actividades_asignadas')
+                ->with('dir', $dir)
+                ->with('json', $json);
+        } else {
+            return view('SeguimientoActividades.actividades_asignadas')
+                ->with('json', $json);
+        }
     }
     public function fecha_actividades_asignadas(Request $request)
     {
@@ -665,12 +670,18 @@ class SeguimientoController extends Controller
             ORDER BY sa.idseac DESC LIMIT 1");
 
 
-            function detalles($idseac, $idarseg, $ultimo)
-            {
-
+            function detalles($idseac, $idarseg, $ultimo, $archivo_fin){
                 if ($idseac == $ultimo) {
-                    return "<div class='btn-group me-2' role='group' aria-label='Second group'>
-                    <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
+                    if ($archivo_fin != NULL) {
+                        return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+                        &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>
+                        &nbsp;";
+                    } else {
+                        return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+                        <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                    }
                 } else {
                     return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
                 }

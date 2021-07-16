@@ -25,7 +25,8 @@ class GraficasPorTipoAreaController extends Controller
             ->groupBy('tipos_actividades.nombre')
             ->get();
         return view('sistema.graficas.dashboard-por-tipo-area',[
-            'tipo_actividades' => $tiposActividades
+            'tipo_actividades' => $tiposActividades,
+            'user'=>$user->idu,
         ]);
     }
 

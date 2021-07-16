@@ -45,7 +45,20 @@
     <div class="container-fluid">
         <div class="card bg-light">
             <div class="card-header bg-success text-center">
-                <h2>Medidor de mis actividades Creadas </h2>
+                <h2>
+                    @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                        Medidor de mis actividades creadas 
+                    @endif
+                    @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                        @php
+                        $ar = Auth()->user()->idar_areas;
+
+                        $director = DB::SELECT("SELECT CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
+                        $nom = $director[0]->nombre;
+                        @endphp
+                        Medidor de actividades creadas por: {{$nom}}
+                    @endif
+                </h2>
             </div>
             <div class="card-body">
                 <div class="form-row mt-3" id="dashboard_panel">
@@ -84,7 +97,7 @@
                         <div id="grafico_tipo_areas"></div>
                     </div>
                     <div class="col-md-3">
-                        <label>Status</label>
+                        <label>Estatus</label>
                         <div id="grafico_de_status"></div>
                     </div>
                 </div>
@@ -98,9 +111,9 @@
 @endsection
 @section('scripts')
     <script>
-        $('#select_tipo_actividades').select2()
-        const user_id = '{{ auth()->user()->idu }}'
-        const _token = $('input[name="_token"]').val()
+        $('#select_tipo_actividades').select2();
+        const user_id = '{{ $user }}';
+        const _token = $('input[name="_token"]').val();
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.0.0/d3.min.js" integrity="sha512-55FY9DHtfMBE2epZhXrWn78so/ZT5/GCLim66+L83U5LghiYwVBAEris4/13Iab9S8C9ShJp3LQL/2raiaO+0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use function App\Http\Controllers\por;
 
@@ -23,13 +24,14 @@ class GraficasDeActividadesCreadasController extends Controller
     }
     public function dashboard(User $user)
     {
-        $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-            ->where('actividades.idu_users',$user->idu)
-            ->groupBy('tipos_actividades.idtac')
-            ->get();
-        return view('sistema.graficas.actividades-creadas',[
-            'tipo_actividades' => $misActividades
-        ]);
+            $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+                ->where('actividades.idu_users',$user->idu)
+                ->groupBy('tipos_actividades.idtac')
+                ->get();
+            return view('sistema.graficas.actividades-creadas',[
+                'tipo_actividades' => $misActividades,
+                'user' => $user->idu,
+            ]);
     }
 
     public function getEstadisticasDeActividades(User $user, Request $request)

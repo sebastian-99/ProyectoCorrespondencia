@@ -17,19 +17,44 @@ class PanelController extends Controller
     public function panel()
     {
         $user = auth()->user()->idu;
-        $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
-        return view('home',[
-            'actividades_hoy' => $this->getActividadesHoy($user)->count(),
-            'actividades_pendientes' => $this->getActividadesPendientes($user)->count(),
-            'actividades_por_mes' => $this->getActividadesPorMes($user)->count(),
-            'actividades_cerradas' => $this->getActividadesCerradas($user),
-            'actividades_en_seguimiento' => [ 'completadas'=> $actividadesEnSeguimiento['completadas'], 'total' => $actividadesEnSeguimiento['total'] ],
-            'actividades_completadas' => $this->getActividadesCompletadas()->count(),
-            'actividades_en_proceso' => $this->getActividadesEnProceso()->count(),
-            'actividades_sin_entregar' => $this->getActividadesSinEntregar()->count(),
-            'actividades_con_acuse_de_recibido' => $this->getActividadesConAcuseDeRecibido()->count(),
-            'actividades_sin_acuse_de_recibido' => $this->getActividadesSinAcuseDeRecibido()->count(),
-        ]);
+        $area = Auth()->user()->idar_areas;
+        
+        if (auth()->user()->idtu_tipos_usuarios == 4) {
+
+            $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $area");
+            $nombre = $user[0]->nombre;
+            $user = $user[0]->idu;
+            $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
+            return view('home',[
+                'actividades_hoy' => $this->getActividadesHoy($user)->count(),
+                'actividades_pendientes' => $this->getActividadesPendientes($user)->count(),
+                'actividades_por_mes' => $this->getActividadesPorMes($user)->count(),
+                'actividades_cerradas' => $this->getActividadesCerradas($user),
+                'actividades_en_seguimiento' => [ 'completadas'=> $actividadesEnSeguimiento['completadas'], 'total' => $actividadesEnSeguimiento['total'] ],
+                'actividades_completadas' => $this->getActividadesCompletadas()->count(),
+                'actividades_en_proceso' => $this->getActividadesEnProceso()->count(),
+                'actividades_sin_entregar' => $this->getActividadesSinEntregar()->count(),
+                'actividades_con_acuse_de_recibido' => $this->getActividadesConAcuseDeRecibido()->count(),
+                'actividades_sin_acuse_de_recibido' => $this->getActividadesSinAcuseDeRecibido()->count(),
+                'user' => $user,
+                'nombre' => $nombre
+            ]);
+        } else {
+            $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
+            return view('home',[
+                'actividades_hoy' => $this->getActividadesHoy($user)->count(),
+                'actividades_pendientes' => $this->getActividadesPendientes($user)->count(),
+                'actividades_por_mes' => $this->getActividadesPorMes($user)->count(),
+                'actividades_cerradas' => $this->getActividadesCerradas($user),
+                'actividades_en_seguimiento' => [ 'completadas'=> $actividadesEnSeguimiento['completadas'], 'total' => $actividadesEnSeguimiento['total'] ],
+                'actividades_completadas' => $this->getActividadesCompletadas()->count(),
+                'actividades_en_proceso' => $this->getActividadesEnProceso()->count(),
+                'actividades_sin_entregar' => $this->getActividadesSinEntregar()->count(),
+                'actividades_con_acuse_de_recibido' => $this->getActividadesConAcuseDeRecibido()->count(),
+                'actividades_sin_acuse_de_recibido' => $this->getActividadesSinAcuseDeRecibido()->count(),
+                'user' => $user,
+            ]);
+        }
     }
 
     public function getActividadesHoy($idu){
