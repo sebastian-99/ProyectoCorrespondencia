@@ -343,7 +343,18 @@ class GraficasDeActividadesCreadasController extends Controller
     }
 
     public function getActividadesPorTipoArea(User $user, Request $request){
-        return collect([]);
+        $inicio = $request->inicio;
+        $fin = $request->fin;
+        $inicio = new Carbon($inicio);
+        $fin = new Carbon($fin);
+        $actividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+            ->where('tipos_actividades.nombre', $request->tipo_area)
+            ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d)'))
+            ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d)'))
+            ->where('actividades.idu_users', $user->idu)
+            ->select('actividades.idac')
+            ->get();
+        return [['actividades' =>$this->getActividadesFinales($actividades)]];
     }
 
     private function getActividadesCompletadasEnTiempo(User $user, TiposActividades $tiposActividades, $inicio, $fin, $cantidad = false){
