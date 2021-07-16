@@ -24,4 +24,5 @@ class ResponsablesActividades extends Model
         'acuse',
         'fecha'
     ];
+
 }

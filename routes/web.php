@@ -116,5 +116,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/actividades-creadas/actividades-completadas-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesCompletadasFueraDeTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-en-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoEnTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoFueraDeTiempo']);
+    Route::get('/detalle-actividad/{idac}', [GraficasDeActividadesCreadasController::class,'detalleActividad']);
 
 });
