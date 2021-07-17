@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col-sm-11">
         <h3>Actividades asignadas
-          @if(Auth()->user()->idtu_tipos_usuarios == 2)
+          @if(Auth()->user()->idtu_tipos_usuarios != 4)
             al: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}}
           @endif
           @if(Auth()->user()->idtu_tipos_usuarios == 4)
@@ -100,7 +100,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Actividad
-          @if(Auth()->user()->idtu_tipos_usuarios == 2)
+          @if(Auth()->user()->idtu_tipos_usuarios != 4)
             para: {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}}
           @endif
           @if(Auth()->user()->idtu_tipos_usuarios == 4)

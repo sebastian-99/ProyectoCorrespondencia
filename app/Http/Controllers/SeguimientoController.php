@@ -140,9 +140,7 @@ class SeguimientoController extends Controller
             WHERE ra.idu_users = $id
             AND ra.idac_actividades = $idac");
 
-            /*if ( count ($ver_acuse) != 0) {
-                return "<>";
-            }*/
+            
             if ($ver_acuse[0]->acuse == 2) {
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
@@ -151,9 +149,14 @@ class SeguimientoController extends Controller
                 return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
             } else {
                 $idreac = $ver_acuse[0]->idreac;
-                return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
-                    <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
-                    <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
+                if (Auth()->user()->idtu_tipos_usuarios != 4) {
+                    return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
+                        <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
+                } else {
+                    return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
+                        <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";   
+                }
             }
         }
 
@@ -546,7 +549,7 @@ class SeguimientoController extends Controller
         $now = Carbon::now();
 
         //Obtener el responsable que le esta dando seguimiento ala actividad
-        if ($tipo == 2) {
+        if ($tipo != 4) {
             $resp = DB::table('responsables_actividades')
                 ->join('actividades', 'actividades.idac', '=', 'responsables_actividades.idac_actividades')
                 ->select(
@@ -663,29 +666,12 @@ class SeguimientoController extends Controller
 
             $array_sa = array();
 
-            $ultimo_seg = DB::SELECT("SELECT sa.idseac FROM seguimientos_actividades AS sa
+            $ultimo_seg = DB::SELECT("SELECT sa.idseac, sa.archivo_fin  FROM seguimientos_actividades AS sa
             INNER JOIN responsables_actividades AS ra ON ra.idreac = sa.idreac_responsables_actividades
             WHERE ra.idac_actividades = $idac 
             AND ra.idu_users = $id
             ORDER BY sa.idseac DESC LIMIT 1");
 
-
-            function detalles($idseac, $idarseg, $ultimo, $archivo_fin){
-                if ($idseac == $ultimo) {
-                    if ($archivo_fin != NULL) {
-                        return "<div class='btn-group me-2' role='group' aria-label='Second group'>
-                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-                        &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>
-                        &nbsp;";
-                    } else {
-                        return "<div class='btn-group me-2' role='group' aria-label='Second group'>
-                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-                        <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
-                    }
-                } else {
-                    return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
-                }
-            }
         } else {
             $seguimientos = DB::table('seguimientos_actividades')
                 ->join('responsables_actividades', 'responsables_actividades.idreac', '=', 'seguimientos_actividades.idreac_responsables_actividades')
@@ -701,7 +687,6 @@ class SeguimientoController extends Controller
                     'seguimientos_actividades.idreac_responsables_actividades',
                     'arse.idarseg',
                     'arse.detalle_a',
-
                 )
                 ->where('responsables_actividades.idac_actividades', '=', $idac)
                 ->where('responsables_actividades.idu_users', '=', Auth()->user()->idu)
@@ -716,28 +701,31 @@ class SeguimientoController extends Controller
             AND ra.idu_users = $id_user
             ORDER BY sa.idseac DESC LIMIT 1");
 
-            //dd($ultimo_seg);
-
-
-            function detalles($idseac, $idarseg, $ultimo, $archivo_fin)
-            {
-
+        }
+        
+        function detalles($idseac, $idarseg, $ultimo, $archivo_fin){
                 if ($idseac == $ultimo) {
                     if ($archivo_fin != NULL) {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                         &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>
-                        &nbsp;<a class='btn btn-danger mt-3 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                        &nbsp;";
                     } else {
-                        return "<div class='btn-group me-2' role='group' aria-label='Second group'>
-                        <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-                        <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                        if (Auth()->user()->idtu_tipos_usuarios !=4) {
+                        
+                            return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                            <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
+                            <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                        } else {
+                            return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                            <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
+                        }
                     }
                 } else {
                     return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
                 }
-            }
         }
+    
         //dd($seguimientos);
         foreach ($seguimientos as $seg_ac) {
             $turno = 1;
@@ -745,16 +733,16 @@ class SeguimientoController extends Controller
 
         foreach ($seguimientos as $seg_ac) {
 
+                array_push($array_sa, array(
 
-            array_push($array_sa, array(
+                    'idseac' => $turno,
+                    'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('DD MMMM h:mm a'),
+                    'detalle' => $seg_ac->detalle,
+                    'estado' => $seg_ac->estado,
+                    'porcentaje' => $seg_ac->porcentaje,
+                    'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac, $ultimo_seg[0]->archivo_fin),
+                )); 
 
-                'idseac' => $turno,
-                'fecha' => Carbon::parse($seg_ac->fecha)->locale('es')->isoFormat('DD MMMM h:mm a'),
-                'detalle' => $seg_ac->detalle,
-                'estado' => $seg_ac->estado,
-                'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac, $ultimo_seg[0]->archivo_fin),
-            ));
             $turno = $turno + 1;
         }
         $json_sa = json_encode($array_sa);
