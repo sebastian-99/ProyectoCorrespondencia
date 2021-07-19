@@ -179,15 +179,15 @@
                 XLSX.utils.sheet_add_aoa( sheet, [
                    ["Turno", "Asunto", "Tipo de Actividades",
                     "Descripción", "Fecha de Creación", "Creador",
-                    "Periodo", "Importancia", "Área", "Avance Individual",
-                    "Estado"],
+                    "Perìodo", "Importancia", "Àrea responsable", "Avance", "Atendido por", 
+                    "Estatus"],
                 ], { origin: -1 } );
 
                 for ( value of data )
                 {
                     XLSX.utils.sheet_add_aoa( sheet, [
                         [ value.turno, value.asunto, value.tipo_actividad, value.descripcion, value.fecha_creacion,
-                          value.creador, value.periodo, value.importancia, value.nombre, value.avance, value.atendido_por, value.estatus ],
+                          value.creador, value.periodo, value.importancia, value.nombre, value.avance, value.atendido_por, value.estatus],
                     ], { origin: -1 } );
                 }
 
@@ -276,7 +276,7 @@
 
                 let book = XLSX.utils.book_new();
 
-                XLSX.utils.book_append_sheet( book, sheet, 'Worksheet 1' );
+                XLSX.utils.book_append_sheet( book, sheet, 'Pàgina 1' );
 
                 XLSX.writeFile( book, 'Reporte_de_Actividades_Creadas.xlsx' );
 
