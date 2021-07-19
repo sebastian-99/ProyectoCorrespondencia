@@ -99,7 +99,14 @@
                     <tbody>
                         <tr>
                             <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
-                            <td>{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</td>
+                            <td>
+                                @if(Auth()->user()->idtu_tipos_usuarios == 2)
+                                    {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} 
+                                @endif
+                                @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                    {{$dir}} 
+                                @endif
+                            </td>
                             <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
                             <td>{{$actividades->importancia}}</td>
 
@@ -240,6 +247,7 @@
         </div>
        
     </div>
+    @if(Auth()->user()->idtu_tipos_usuarios == 2 && $ultimo_seg[0]->archivo_fin == NULL)                      
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -259,7 +267,12 @@
                     <div class="col-sm-12">
                         <div class="mb-3">
                             <label for="" class="form-label">Seguimiento realizado por</label>
-                            <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}   /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
+                             @if(Auth()->user()->idtu_tipos_usuarios == 2)
+                                <input type="text" class="form-control form-control-sm" id="" value="{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}   /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
+                            @endif
+                            @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                <input type="text" class="form-control form-control-sm" id="" value="{{$dir}}  /    {{$user->tipo_usuario . ' - ' . $user->nombre_areas}}" disabled>
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -293,6 +306,9 @@
                                 <input class="form-check-input" type="radio" name="estado" id="estado_c" value="Completo" onchange="verificar_s()">
                                 <label class="form-check-label" for="inlineRadio2">Completo</label>
                             </div>
+                            <div id="file_fin">
+                                {{--- Aquí se agrega el archivo definalizacion del seguimiento---}}
+                            </div>
                         </div>
                     </div>
 
@@ -324,7 +340,7 @@
             </div>
         </div>
     </div>
-
+    @endif
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -348,7 +364,7 @@
                         <zg-column index='fecha' header='Fecha de avance' width="200" type='text'></zg-column>
                         <zg-column index='estado' header='Estatus' width="200" type='text'></zg-column>
                         <zg-column index='porcentaje' header='% Avance' width="150" type='text'></zg-column>
-                        <zg-column index='evidencia' filter="disabled" header='Operaciónes' width="150" type='text'></zg-column>
+                        <zg-column index='evidencia' filter="disabled" header='Evidencia' width="150" type='text'></zg-column>
                     </zg-colgroup>
                 </zing-grid>
 
@@ -404,9 +420,13 @@
             if (verif_p == 100) {
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
+                var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
             } else {
                 $('#estado_p').prop("checked", true);
                 $('#estado_p').prop('disabled', false);
+                $('#file_fin').empty();
+
             }
             
             if(Number(verif_p) <= Number(vp)){
@@ -425,6 +445,8 @@
                 $('#porcentaje').val(100);
                 $('#porc').html(100);
                 $('#estado_p').prop('disabled', true);
+                var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
             }
         }
     //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
@@ -502,6 +524,8 @@ $("#form").submit(function(event){
               $('#tablaModal>tbody>tr').remove();
             
     });
+
+//----------------------------------
     
 </script>
 

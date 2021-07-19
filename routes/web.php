@@ -46,17 +46,18 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('areas', AreasController::class, ['names' => 'areas']);
     //Seguimiento de actividades
     Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
+    Route::get('fecha_actividades_asignadas', [SeguimientoController::class,'fecha_actividades_asignadas'])->name('fecha_actividades_asignadas');
     Route::get('DetallesAsignacion/{idac}', [SeguimientoController::class, 'DetallesAsignacion'])->name('DetallesAsignacion');
     Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
     Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
     Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
     Route::get('DetallesArchivos/{idarc}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
-
     Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
     Route::post('rechazarActividad', [SeguimientoController::class,'rechazarActividad'])->name('rechazarActividad');
     //Actividades
 
     Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
+    Route::get('fecha_ajax', [ActividadesController::class,'fecha_ajax'])->name('fecha_ajax');
     Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
     Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
     Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
@@ -79,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin/users', UsersController::class, ['names' => 'users']);
 
     Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
+    Route::get('ajax_filtro_fecha', [ActividadesController::class, 'ajax_filtro_fecha'])->name('ajax_filtro_fecha');
 
     Route::get('hello', [EncryptController::class,'index']);
 
@@ -116,5 +118,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/actividades-creadas/actividades-completadas-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesCompletadasFueraDeTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-en-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoEnTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoFueraDeTiempo']);
+    Route::get('/detalle-actividad/{idac}', [GraficasDeActividadesCreadasController::class,'detalleActividad']);
 
 });

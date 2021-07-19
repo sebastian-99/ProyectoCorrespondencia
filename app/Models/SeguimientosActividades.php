@@ -22,6 +22,7 @@ class SeguimientosActividades extends Model
         'fecha',
         'detalle',
         'porcentaje',
-        'estado'
+        'estado',
+        'archivo_fin'
     ];
 }
