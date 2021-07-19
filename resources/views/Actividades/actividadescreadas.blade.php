@@ -155,12 +155,12 @@
 @section('scripts')
     <script>
         $( document ).ready( () => {
-            
+
             const excel = () => {
 
                 let date = new Date(), sheet, data, columns, rows, zing_grid = document.querySelector( 'zing-grid' );
 
-                const headers = [ "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3" ];
+                const headers = [ "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3"  ];
 
                 data = zing_grid.getData({
                     headers:true,
@@ -177,18 +177,18 @@
                 ], { origin: -1 } );
 
                 XLSX.utils.sheet_add_aoa( sheet, [
-                   ["Turno", "Asunto", "Tipo de Actividades", 
-                    "Descripción", "Fecha de Creación", "Creador", 
-                    "Periodo", "Importancia", "Área", "Avance Individual",
-                    "Estado"], 
+                   ["Turno", "Asunto", "Tipo de Actividades",
+                    "Descripción", "Fecha de Creación", "Creador",
+                    "Perìodo", "Importancia", "Àrea responsable", "Avance", "Atendido por", 
+                    "Estatus"],
                 ], { origin: -1 } );
 
                 for ( value of data )
                 {
                     XLSX.utils.sheet_add_aoa( sheet, [
                         [ value.turno, value.asunto, value.tipo_actividad, value.descripcion, value.fecha_creacion,
-                          value.creador, value.periodo, value.importancia, value.area, value.porcentaje, value.estado ],
-                    ], { origin: -1 } );   
+                          value.creador, value.periodo, value.importancia, value.nombre, value.avance, value.atendido_por, value.estatus],
+                    ], { origin: -1 } );
                 }
 
                 // Size columns
@@ -202,12 +202,13 @@
                     {wch:30}, // periodo
                     {wch:20}, // importancia
                     {wch:30}, // área
-                    {wch:20}, // porcentaje
-                    {wch:30}, // estado
+                    {wch:20}, // avance
+                    {wch:25}, // atendido por
+                    {wch:30}, // estatus
                 ];
 
                 sheet['!cols'] = columns;
-                
+
                 rows = [
                     { hpt:30, level:1 },
                     { hpt:20, level:2 },
@@ -215,13 +216,13 @@
                 ];
 
                 sheet["!rows"] = rows;
-                
+
                 let mergeA1K1 = { s: {r:0, c:0}, e: {r:0, c:10} }; // Merge A1:K1
 
                 let mergeA2K2 = { s: {r:1, c:0}, e: {r:1, c:10} }; // Merge A2:K2
 
                 if( ! sheet['!merges'] ) sheet['!merges'] = [];
-                        
+
                 sheet['!merges'].push( mergeA1K1 );
 
                 sheet['!merges'].push( mergeA2K2 );
@@ -272,10 +273,10 @@
                   };
 
                 }
-      
+
                 let book = XLSX.utils.book_new();
 
-                XLSX.utils.book_append_sheet( book, sheet, 'Worksheet 1' );
+                XLSX.utils.book_append_sheet( book, sheet, 'Pàgina 1' );
 
                 XLSX.writeFile( book, 'Reporte_de_Actividades_Creadas.xlsx' );
 
@@ -286,7 +287,7 @@
                 excel();
 
             } );
-            
+
 
         });
     </script>
