@@ -160,7 +160,7 @@
 
                 let date = new Date(), sheet, data, columns, rows, zing_grid = document.querySelector( 'zing-grid' );
 
-                const headers = [ "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3" ];
+                const headers = [ "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3"  ];
 
                 data = zing_grid.getData({
                     headers:true,
