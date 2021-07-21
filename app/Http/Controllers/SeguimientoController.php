@@ -163,7 +163,8 @@ class SeguimientoController extends Controller
     {
         $id_user = Auth()->user()->idu;
        $fecha_orden =  $request->fecha_orden;
-       $fecha =  $request->fecha;
+       $fechaIni =  $request->fechaIni;
+       $fechaFin =  $request->fechaFin;
 
 
        if ($fecha_orden == 0 ){
@@ -180,7 +181,7 @@ class SeguimientoController extends Controller
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
        }
-       if ($fecha_orden == 1 && $fecha != NULL){
+       if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin != NULL){
         $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -190,12 +191,53 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
        
-        WHERE ra.idu_users = $id_user AND ac.fecha_inicio = DATE('$fecha') 
+        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
-
-        if ($fecha_orden == 1 && $fecha == NULL){
+       if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin == NULL){
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+       
+        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` >= DATE('$fechaIni')
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+       if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin != NULL){
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+       
+        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` <= DATE('$fechaFin')
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+       if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL){
+        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+        porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+       
+        WHERE ra.idu_users = $id_user
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin != NULL){
             $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
             porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -204,37 +246,55 @@ class SeguimientoController extends Controller
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user
+           
+            WHERE ra.idu_users = $id_user AND ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
-        }
+            }
+            if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin == NULL){
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+                porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+               
+                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` >= DATE('$fechaIni')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+                }
+               if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin != NULL){
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+                porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+               
+                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` <= DATE('$fechaFin')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+                }
+               if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin == NULL){
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
+                porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+               
+                WHERE ra.idu_users = $id_user
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+                }
 
-        if ($fecha_orden == 2 && $fecha == NULL){
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
-            porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
-        }
-                 if ($fecha_orden == 2 && $fecha !=  NULL){
-                    $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, 
-            porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user AND ac.fecha_fin = DATE('$fecha') 
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
-                 }
+       
                  $array = array();
 
 
