@@ -752,6 +752,7 @@ class SeguimientoController extends Controller
             $turno = $turno + 1;
         }
         $json_sa = json_encode($array_sa);
+        //dd($ultimo_seg[0]);
 
         return view('SeguimientoActividades.Seguimiento')
             ->with('actividades', $actividades[0])

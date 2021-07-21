@@ -247,7 +247,7 @@
         </div>
        
     </div>
-    @if(Auth()->user()->idtu_tipos_usuarios == 2 && $ultimo_seg[0]->archivo_fin == NULL)                      
+    @if(Auth()->user()->idtu_tipos_usuarios == 2 && $max_ai->avance_i != "100")                      
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
