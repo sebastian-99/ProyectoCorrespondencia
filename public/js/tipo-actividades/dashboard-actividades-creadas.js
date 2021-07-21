@@ -107,6 +107,7 @@ $('document').ready(()=>{
         const inicio = $('#fecha_inicial').val()
         const fin = $('#fecha_final').val()
         const tipos_actividades = $('#select_tipo_actividades').val()
+        const areas =$('#select_areas').val()
         $.ajax({
             type: 'POST',
             data:{
@@ -114,7 +115,8 @@ $('document').ready(()=>{
                 tipos_actividades,
                 inicio,
                 fin,
-                tipo_area
+                tipo_area,
+                areas,
             },
             url: route,
             success: data=>{
@@ -122,15 +124,13 @@ $('document').ready(()=>{
                 const thead = `
                     <tr>
                         <th>Comunicado - Asunto</th>
-                        <th>Responsable</th>
-                        <th>Creador</th>
                         <th>Avance</th>
                         <th>Descripción</th>
                         <th>Período</th>
                         <th>Importancia</th>
                         <th>Área Responsable</th>
                         <th>Tipo Actividad</th>
-                        <th>Número de Segumientos</th>
+                        <th>Atendido Por</th>
                         <th>Acciones</th>
                     </tr>
                 `
@@ -141,22 +141,15 @@ $('document').ready(()=>{
                         tbody += `
                             <tr>
                                 <td>${actividades[key].comunicado}-${actividades[key].asunto}</td>
-                                <td>${actividades[key].responsable}</td>
-                                <td>${actividades[key].seguimiento ? `${actividades[key].seguimiento.porcentaje} %` : 'No existen seguimientos'}</td>
-                                <td>
-                                    ${actividades[key].creador.titulo}
-                                    ${actividades[key].creador.nombre}
-                                    ${actividades[key].creador.app}
-                                    ${actividades[key].creador.apm}
-                                </td>
+                                <td>${actividades[key].porcentaje ? `${actividades[key].porcentaje.porcentaje} %` : 'No existen seguimientos'}</td>
                                 <td>${actividades[key].descripcion}</td>
                                 <td>${actividades[key].periodo}</td>
                                 <td>${actividades[key].importancia}</td>
                                 <td>${actividades[key].area_responsable}</td>
                                 <td>${actividades[key].tipo_actividad}</td>
-                                <td>${actividades[key].seguimiento ? actividades[key].numero_de_seguimiento : 'No existen seguimientos'}</td>
+                                <td>${actividades[key].atendido_por ? actividades[key].atendido_por : '0'}</td>
                                 <td>
-                                    ${actividades[key].seguimiento ? `<a href="/admin/seguimiento/${actividades[key].idreac}" class="btn btn-link">Ver Detalle</a>` : 'No existen seguimientos'}
+                                    <a href="/detalle-actividad/${actividades[key].idac}" class="btn btn-link">Ver Detalle</a>
                                 </td>
                             </tr>
                         `

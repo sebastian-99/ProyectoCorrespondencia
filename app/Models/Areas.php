@@ -33,4 +33,9 @@ class Areas extends Model
         return number_format( ($this->actividades()->count()/$areas)*100 ,2);
     }
 
+    public function scopeCosa($query){
+        return $query->first();
+    }
+
+
 }

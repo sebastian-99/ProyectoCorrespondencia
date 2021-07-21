@@ -52,7 +52,6 @@ Route::middleware(['auth'])->group(function () {
     Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
     Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
     Route::get('DetallesArchivos/{idarc}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
-
     Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
     Route::post('rechazarActividad', [SeguimientoController::class,'rechazarActividad'])->name('rechazarActividad');
     //Actividades
@@ -119,5 +118,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/actividades-creadas/actividades-completadas-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesCompletadasFueraDeTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-en-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoEnTiempo']);
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoFueraDeTiempo']);
+    Route::get('/detalle-actividad/{idac}', [GraficasDeActividadesCreadasController::class,'detalleActividad']);
 
 });
