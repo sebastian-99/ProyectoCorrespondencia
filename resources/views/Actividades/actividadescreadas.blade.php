@@ -151,7 +151,11 @@
     </script>
 @endsection
 
+
+
 <!-- E x c e l -->
+
+
 @section('scripts')
     <script>
         $( document ).ready( () => {
@@ -179,7 +183,7 @@
                 XLSX.utils.sheet_add_aoa( sheet, [
                    ["Turno", "Asunto", "Tipo de Actividades",
                     "Descripción", "Fecha de Creación", "Creador",
-                    "Perìodo", "Importancia", "Àrea responsable", "Avance", "Atendido por", 
+                    "Perìodo", "Importancia", "Àrea responsable", "Avance", "Atendido por",
                     "Estatus"],
                 ], { origin: -1 } );
 
@@ -208,12 +212,6 @@
                 ];
 
                 sheet['!cols'] = columns;
-
-                rows = [
-                    { hpt:30, level:1 },
-                    { hpt:20, level:2 },
-                    { hpt:15, level:3 },
-                ];
 
                 sheet["!rows"] = rows;
 
@@ -276,7 +274,7 @@
 
                 let book = XLSX.utils.book_new();
 
-                XLSX.utils.book_append_sheet( book, sheet, 'Pàgina 1' );
+                XLSX.utils.book_append_sheet( book, sheet, 'Hoja 1' );
 
                 XLSX.writeFile( book, 'Reporte_de_Actividades_Creadas.xlsx' );
 
