@@ -100,7 +100,7 @@
                         <tr>
                             <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
                             <td>
-                                @if(Auth()->user()->idtu_tipos_usuarios == 2)
+                                @if(Auth()->user()->idtu_tipos_usuarios != 4)
                                     {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} 
                                 @endif
                                 @if(Auth()->user()->idtu_tipos_usuarios == 4)
@@ -247,11 +247,7 @@
         </div>
        
     </div>
-<<<<<<< HEAD
-    @if(Auth()->user()->idtu_tipos_usuarios == 2)                      
-=======
     @if(Auth()->user()->idtu_tipos_usuarios == 2 && $max_ai->avance_i != "100")                      
->>>>>>> b1326fb846e466be47d43f0ecbc58850efa021f3
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
