@@ -141,7 +141,7 @@ $('document').ready(()=>{
                         tbody += `
                             <tr>
                                 <td>${actividades[key].comunicado}-${actividades[key].asunto}</td>
-                                <td>${actividades[key].porcentaje ? `${actividades[key].porcentaje.porcentaje} %` : 'No existen seguimientos'}</td>
+                                <td>${actividades[key].porcentaje ? `${actividades[key].porcentaje} %` : 'No existen seguimientos'}</td>
                                 <td>${actividades[key].descripcion}</td>
                                 <td>${actividades[key].periodo}</td>
                                 <td>${actividades[key].importancia}</td>
@@ -209,7 +209,7 @@ $('document').ready(()=>{
             data: {
                 columns: [
                     ['con acuse', actividades_con_acuse_de_recibido],
-                    ['sin acuse', actividades_sin_acuse_de_recibido],
+                    ['acuse parcial', actividades_sin_acuse_de_recibido],
                 ],
                 type : 'pie',
                 onclick: function (data) {
