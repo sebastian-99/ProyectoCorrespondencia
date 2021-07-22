@@ -131,176 +131,220 @@ class ActividadesController extends Controller
     public function fecha_ajax(Request $request)
     {
         $us_id = \Auth()->User()->idu;
-       $fecha_orden =  $request->fecha_orden;
-       $fecha =  $request->fecha;
+        $fecha_orden =  $request->fecha_orden;
 
-       if ($fecha_orden == 0 ){
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-        ac.status, ta.nombre AS tipo_actividad
-        FROM actividades AS ac
-        INNER JOIN users AS us ON us.idu = ac.idu_users
-        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        GROUP BY ac.idac
-        ORDER BY ac.fecha_creacion DESC");
-        }
-       if ($fecha_orden == 1 && $fecha != NULL){
-        $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-        ac.status, ta.nombre AS tipo_actividad
-        FROM actividades AS ac
-        INNER JOIN users AS us ON us.idu = ac.idu_users
-        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        WHERE ac.fecha_inicio = DATE('$fecha')
-        GROUP BY ac.idac
-        ORDER BY ac.fecha_creacion DESC");
-        }
+        $fechaIni =  $request->fechaIni;
+        $fechaFin =  $request->fechaFin;
 
-        if ($fecha_orden == 1 && $fecha == NULL){
+        if ($fecha_orden == 0) {
             $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-            ac.status, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin != NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin == NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_inicio` >=  DATE('$fechaIni') 
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin != NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_inicio` <=  DATE('$fechaFin') 
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin != NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin == NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_fin` >=  DATE('$fechaIni') 
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin != NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.`fecha_fin` <=  DATE('$fechaFin') 
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 || $fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
+            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
+        ac.status, ta.nombre AS tipo_actividad
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+      
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
         }
 
-        if ($fecha_orden == 2 && $fecha == NULL){
-                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-                ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-                ac.status, ta.nombre AS tipo_actividad
-                FROM actividades AS ac
-                INNER JOIN users AS us ON us.idu = ac.idu_users
-                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                GROUP BY ac.idac
-                ORDER BY ac.fecha_creacion DESC");
+
+        $array = array();
+
+        function recorrer($value)
+        {
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1], '3' => $val[2]);
+            } else {
+                $arr = null;
+            }
+            return $arr;
         }
-                 if ($fecha_orden == 2 && $fecha !=  NULL){
-                    $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-                    ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-                    ac.status, ta.nombre AS tipo_actividad
-                    FROM actividades AS ac
-                    INNER JOIN users AS us ON us.idu = ac.idu_users
-                    INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-                    INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-                    LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-                    LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                    WHERE ac.fecha_fin = DATE('$fecha')
-                    GROUP BY ac.idac
-                    ORDER BY ac.fecha_creacion DESC");
-                 }
-         $array = array();
 
-         function recorrer($value)
-         {
-             if (gettype($value) == "string") {
-                 $val = explode('*', $value);
-                 $arr = array('1' => explode('-', $val[0]), '2' => $val[1], '3' => $val[2]);
-             } else {
-                 $arr = null;
-             }
-             return $arr;
-         }
+        function btn($idac, $activo)
+        {
 
-         function btn($idac, $activo)
-         {
+            return "<a class='btn btn-success btn-sm'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+        }
 
-             return "<a class='btn btn-success btn-sm'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
-         }
+        function AB($data)
+        {
 
-         function AB($data)
-         {
+            if (gettype($data) == "array") {
 
-             if (gettype($data) == "array") {
+                return $data['1'][0] . " de " . $data['1'][1];
+            } else {
+                return 0;
+            }
+        }
 
-                 return $data['1'][0] . " de " . $data['1'][1];
-             } else {
-                 return 0;
-             }
-         }
+        function C($data)
+        {
 
-         function C($data)
-         {
+            if (gettype($data) == "array") {
 
-             if (gettype($data) == "array") {
+                return number_format($data['2'], 0, '.', ' ') . '%';
+            } else {
+                return 0;
+            }
+        }
 
-                 return number_format($data['2'], 0, '.', ' ') . '%';
-             } else {
-                 return 0;
-             }
-         }
+        function D($data)
+        {
 
-         function D($data)
-         {
+            if (gettype($data) == "array") {
 
-             if (gettype($data) == "array") {
+                return number_format($data['3'], 0, '.', ' ') . '%';
+            } else {
 
-                 return number_format($data['3'], 0, '.', ' ') . '%';
-             } else {
+                return 0;
+            }
+        }
 
-                 return 0;
-             }
-         }
+        function E($status)
+        {
 
-         function E($status)
-         {
+            if ($status == 1) {
+                return "En proceso";
+            } elseif ($status == 2) {
+                return "Concluido";
+            } else {
+                return "Cancelado";
+            }
+        }
 
-             if ($status == 1) {
-                 return "En proceso";
-             } elseif ($status == 2) {
-                 return "Concluido";
-             } else {
-                 return "Cancelado";
-             }
-         }
+        foreach ($consult as $c) {
 
-         foreach ($consult as $c) {
+            $data = recorrer($c->porcentaje);
 
-             $data = recorrer($c->porcentaje);
+            array_push($array, array(
+                'idac' => $c->idac,
+                'turno' => $c->turno,
+                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
+                'asunto' => $c->asunto,
+                'nombre_actividad' => $c->tipo_actividad,
+                'descripcion' => $c->descripcion,
+                'creador' => $c->creador,
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'importancia' => $c->importancia,
+                'nombre' => $c->nombre,
+                'activo' => $c->activo,
+                'acuse' => $c->acuse,
+                'idu_users' => $c->idu_users,
+                'avance' => AB($data),
+                'atendido_por' =>  D($data),
+                'estatus' => E($c->status),
+                'operaciones' => btn($c->idac, $c->activo),
+            ));
+        }
 
-             array_push($array, array(
-                 'idac' => $c->idac,
-                 'turno' => $c->turno,
-                 'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
-                 'asunto' => $c->asunto,
-                 'nombre_actividad' => $c->tipo_actividad,
-                 'descripcion' => $c->descripcion,
-                 'creador' => $c->creador,
-                 'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
-                 'importancia' => $c->importancia,
-                 'nombre' => $c->nombre,
-                 'activo' => $c->activo,
-                 'acuse' => $c->acuse,
-                 'idu_users' => $c->idu_users,
-                 'avance' => AB($data),
-                 'atendido_por' =>  D($data),
-                 'estatus' => E($c->status),
-                 'operaciones' => btn($c->idac, $c->activo),
-             ));
-         }
-
-         $json = json_encode($array);
+        $json = json_encode($array);
         return response()->json($json);
-
-
     }
 
-    public function Detalles($idac){
+    public function Detalles($idac)
+    {
         $idac = decrypt($idac);
         $us_id = \Auth()->User()->idu;
         $query = DB::SELECT("SELECT res.idu_users, ar.nombre AS nombre_ar, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre_us,
@@ -314,37 +358,38 @@ class ActividadesController extends Controller
         GROUP BY idu_users");
 
         $boton = DB::table('responsables_actividades as res')
-                    ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
-                    ->where([
-                        ['res.idac_actividades', '=' , $idac],
-                        ['res.acuse', '=' , 1],
-                        ])
-                    ->first();
+            ->select(DB::raw('IF(COUNT(res.acuse) = 0, 0 , 1) AS boton'))
+            ->where([
+                ['res.idac_actividades', '=', $idac],
+                ['res.acuse', '=', 1],
+            ])
+            ->first();
 
 
         $array = array();
 
-       function por($porcentaje,$acuse){
-           if($acuse == 0){
-               return "0%";
-           }elseif($acuse == 2){
-               return "Acuse rechazado";
-           }elseif($porcentaje == NULL){
-               return "0%";
-           }else{
-               return $porcentaje."%";
-           }
-       }
+        function por($porcentaje, $acuse)
+        {
+            if ($acuse == 0) {
+                return "0%";
+            } elseif ($acuse == 2) {
+                return "Acuse rechazado";
+            } elseif ($porcentaje == NULL) {
+                return "0%";
+            } else {
+                return $porcentaje . "%";
+            }
+        }
 
-        function btn($idac,$data,$rechazo,$idreac){
-            if($data == 0){
+        function btn($idac, $data, $rechazo, $idreac)
+        {
+            if ($data == 0) {
                 return ("No existen detalles");
-
-            }else if($data == 1){
-                return "<a href=".route('detallesSeguimiento', encrypt($idac))."><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
-            }else if($data == 2){
+            } else if ($data == 1) {
+                return "<a href=" . route('detallesSeguimiento', encrypt($idac)) . "><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
+            } else if ($data == 2) {
                 if (Auth()->User()->idtu_tipos_usuarios == 3) {
-                return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
+                    return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
                       <div class='modal-content'>
@@ -358,7 +403,7 @@ class ActividadesController extends Controller
                      </div>
                  </div>
                </div>";
-                }else {
+                } else {
                     return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
                 <div class='modal fade' id='create$idac'>
                   <div class='modal-dialog'>
@@ -368,10 +413,10 @@ class ActividadesController extends Controller
                           </div>
                           <div class='modal-body'>
                                  $rechazo
-                                        <form action=".route('updateRechazo')." method='POST' enctype='multipart/form-data'>
-                                             <input type='hidden' name='_token' value=". csrf_token() .">
-                                             <input type='hidden' value=".$idac." name='idreac'>
-                                             <button type='submit' class='btn btn-sm btn-success'><i class='fas fa-check-circle'></i></button> <a class='btn btn-danger btn-sm' href=".route('EliminarResponsables', encrypt($idreac)). " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
+                                        <form action=" . route('updateRechazo') . " method='POST' enctype='multipart/form-data'>
+                                             <input type='hidden' name='_token' value=" . csrf_token() . ">
+                                             <input type='hidden' value=" . $idac . " name='idreac'>
+                                             <button type='submit' class='btn btn-sm btn-success'><i class='fas fa-check-circle'></i></button> <a class='btn btn-danger btn-sm' href=" . route('EliminarResponsables', encrypt($idreac)) . " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
                                         </form>
                                 </div>
                           </div>
@@ -387,73 +432,67 @@ class ActividadesController extends Controller
         function D($porcentaje, $fecha_fin, $created_at, $acuse)
         {
 
-           $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
+            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
 
-          //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
-         if($date > $fecha_fin && $created_at == NULL){
-            return "En proceso - Fuera de Tiempo";
-         } elseif($acuse == 2){
+            //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
+            if ($date > $fecha_fin && $created_at == NULL) {
+                return "En proceso - Fuera de Tiempo";
+            } elseif ($acuse == 2) {
 
-            return "Acuse rechazado";
-
-         }elseif($date <= $fecha_fin && $porcentaje < 100){
+                return "Acuse rechazado";
+            } elseif ($date <= $fecha_fin && $porcentaje < 100) {
 
                 return "En proceso – En Tiempo";
-
-            }elseif($created_at <= $fecha_fin   && $porcentaje == 100){
+            } elseif ($created_at <= $fecha_fin   && $porcentaje == 100) {
 
                 return "Concluido – En tiempo";
+            } elseif ($date > $fecha_fin  && $porcentaje < 100) {
 
-      }elseif($date > $fecha_fin  && $porcentaje < 100){
+                return "En proceso - Fuera de Tiempo";
+            } elseif ($created_at > $fecha_fin  && $porcentaje == 100) {
 
-               return "En proceso - Fuera de Tiempo";
-
-           }elseif($created_at > $fecha_fin  && $porcentaje == 100){
-
-               return "Concluido – Fuera de Tiempo";
-
-           }else{
-               return "Sin aceptar estado";
+                return "Concluido – Fuera de Tiempo";
+            } else {
+                return "Sin aceptar estado";
             }
-
         }
 
-        function Acuse($data){
+        function Acuse($data)
+        {
 
 
-            if ($data == 1){
-                 $acuse = "Recibido";
-             }else if($data == 2){
-                 $acuse = "Rechazado";
-             }else{
-                 $acuse = "No recibido";
-             }
-             return $acuse;
-          }
+            if ($data == 1) {
+                $acuse = "Recibido";
+            } else if ($data == 2) {
+                $acuse = "Rechazado";
+            } else {
+                $acuse = "No recibido";
+            }
+            return $acuse;
+        }
 
-        foreach($query as $c){
+        foreach ($query as $c) {
 
-             $data1 = Acuse($c->acuse);
-            $porcentaje = por($c->porcentaje,$c->acuse);
+            $data1 = Acuse($c->acuse);
+            $porcentaje = por($c->porcentaje, $c->acuse);
 
-            array_push($array, array('nombre_us' => $c->nombre_us,
-                                    'nombre_ar' => $c->nombre_ar,
-                                    'porcentaje' =>  $porcentaje,
-                                    'estado' =>  D($c->porcentaje,$c->fecha_fin,$c->created_at_seg,$c->acuse),
-                                    'acuse' => $data1,
-                                    'operaciones' => btn($c->idreac,$c->acuse,$c->razon_rechazo,$c->idreac,$us_id),
-                                    ));
+            array_push($array, array(
+                'nombre_us' => $c->nombre_us,
+                'nombre_ar' => $c->nombre_ar,
+                'porcentaje' =>  $porcentaje,
+                'estado' =>  D($c->porcentaje, $c->fecha_fin, $c->created_at_seg, $c->acuse),
+                'acuse' => $data1,
+                'operaciones' => btn($c->idreac, $c->acuse, $c->razon_rechazo, $c->idreac, $us_id),
+            ));
         }
 
         $json = json_encode($array);
 
         return view('Actividades.reporte_detalles')
 
-        ->with('json', $json)
-        ->with('idac', $idac)
-        ->with('boton', $boton);
-
-
+            ->with('json', $json)
+            ->with('idac', $idac)
+            ->with('boton', $boton);
     }
 
     public function updateRechazo(Request $c)
@@ -1137,7 +1176,8 @@ class ActividadesController extends Controller
         }
 
         if ($tipo != 4) {
-            function btn($idac, $activo){
+            function btn($idac, $activo)
+            {
 
                 if ($activo == 1) {
                     return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
@@ -1149,9 +1189,9 @@ class ActividadesController extends Controller
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
                 }
             }
-
         } else {
-            function btn($idac, $activo){
+            function btn($idac, $activo)
+            {
 
                 if ($activo == 1) {
                     return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
@@ -1243,21 +1283,127 @@ class ActividadesController extends Controller
             $director = DB::SELECT("SELECT CONCAT(titulo, ' ',nombre, ' ',app, ' ',apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
             $dir = $director[0]->nombre;
 
-            return view('Actividades.actividadescreadas', compact('json','dir'));
+            return view('Actividades.actividadescreadas', compact('json', 'dir'));
         } else {
             return view('Actividades.actividadescreadas', compact('json'));
         }
-
     }
 
-    public function ajax_filtro_fecha(Request $request){
+    public function ajax_filtro_fecha(Request $request)
+    {
 
         $id_u = \Auth()->User()->idu;
         $fecha_orden = $request->fecha_orden;
-        $fecha = $request->fecha;
+        $fechaIni =  $request->fechaIni;
+        $fechaFin =  $request->fechaFin;
 
 
-        if ($fecha_orden == 0 ){
+        if ($fecha_orden == 0) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u 
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+
+        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin != NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin == NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_inicio` >=  DATE('$fechaIni')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin != NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_inicio` <=  DATE('$fechaFin')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin != NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin == NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_fin` >=  DATE('$fechaIni')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin != NULL) {
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+                FROM actividades AS ac
+                INNER JOIN users AS us ON us.idu = ac.idu_users
+                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+                WHERE ac.idu_users = $id_u
+                AND ac.`fecha_fin` <=  DATE('$fechaFin')
+                GROUP BY ac.idac
+                ORDER BY ac.fecha_creacion DESC");
+        }
+        if ($fecha_orden == 2 || $fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
             $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
                 porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
@@ -1272,167 +1418,108 @@ class ActividadesController extends Controller
                 ORDER BY ac.fecha_creacion DESC");
         }
 
-        if ($fecha_orden == 1 && $fecha != NULL){
-            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
-                FROM actividades AS ac
-                INNER JOIN users AS us ON us.idu = ac.idu_users
-                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
-                AND ac.fecha_inicio = DATE('$fecha')
-                GROUP BY ac.idac
-                ORDER BY ac.fecha_creacion DESC");
-        }
 
-        if ($fecha_orden == 1 && $fecha == NULL){
 
-            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-            porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-            WHERE ac.idu_users = $id_u
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
-        }
-
-        if ($fecha_orden == 2 && $fecha == NULL){
-            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-            porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-            WHERE ac.idu_users = $id_u
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
-        }
-
-        if ($fecha_orden == 2 && $fecha !=  NULL){
-
-            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$id_u) AS porcentaje,
-            ac.status, ta.nombre AS tipo_actividad
-            FROM actividades AS ac
-            INNER JOIN users AS us ON us.idu = ac.idu_users
-            INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-            INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-            LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-            WHERE ac.idu_users = $id_u
-            AND ac.fecha_fin = DATE('$fecha')
-            GROUP BY ac.idac
-            ORDER BY ac.fecha_creacion DESC");
-        }
 
         $array = array();
 
-        function recorrer($value){
+        function recorrer($value)
+        {
             if (gettype($value) == "string") {
                 $val = explode('*', $value);
-                $arr = array('1'=> explode('-', $val[0]),'2'=>$val[1], '3' =>$val[2]);
-            }else{
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1], '3' => $val[2]);
+            } else {
                 $arr = null;
             }
             return $arr;
         }
 
-        function btn($idac, $activo){
+        function btn($idac, $activo)
+        {
 
 
-            if($activo == 1){
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
-                <a class='btn btn-danger mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></i></a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></i></a><div>";
-            }else{
-                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=".route('Detalles', ['id' => encrypt($idac)]) ."><i class='nav-icon fas fa-eye'></i></a>
-                <a class='btn btn-primary mt-1 btn-sm' href=".route('actividades_asignadas',['id' => encrypt($idac), 'activo' => encrypt($activo)])."><i class='nav-icon fas fa-ban'></a>
-                <a class='btn btn-warning mt-1 btn-sm' href=".route('edit_modificacion', ['id' => encrypt($idac)])."><i class='fas fa-pencil-alt'></a></div>";
+            if ($activo == 1) {
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-danger mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
+            } else {
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
+                <a class='btn btn-primary mt-1 btn-sm' href=" . route('actividades_asignadas', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></a>
+                <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></a></div>";
             }
         }
 
-        function AB($data){
+        function AB($data)
+        {
 
-            if(gettype($data) == "array"){
+            if (gettype($data) == "array") {
 
-                return $data['1'][0]." de ".$data['1'][1];
-            }else{
+                return $data['1'][0] . " de " . $data['1'][1];
+            } else {
                 return 0;
             }
         }
 
-        function C($data){
+        function C($data)
+        {
 
-            if(gettype($data) == "array"){
+            if (gettype($data) == "array") {
 
-                return number_format($data['2'], 0, '.', ' ').'%';
-            }else{
+                return number_format($data['2'], 0, '.', ' ') . '%';
+            } else {
                 return 0;
             }
-
         }
 
-        function D($data){
+        function D($data)
+        {
 
-            if(gettype($data) == "array"){
+            if (gettype($data) == "array") {
 
-                return number_format($data['3'], 0, '.', ' ').'%';
-
-            }else{
+                return number_format($data['3'], 0, '.', ' ') . '%';
+            } else {
 
                 return 0;
-
             }
-
         }
 
-        function E($status){
+        function E($status)
+        {
 
-            if($status == 1){
+            if ($status == 1) {
                 return "En proceso";
-            }elseif($status == 2){
+            } elseif ($status == 2) {
                 return "Concluido";
-            }else{
+            } else {
                 return "Cancelado";
             }
-
         }
 
 
 
-        foreach($ac_cre as $c){
+        foreach ($ac_cre as $c) {
 
             $data = recorrer($c->porcentaje);
 
-            array_push($array, array('idac' => $c->idac,
-                                    'turno' => $c->turno,
-                                    'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
-                                    'asunto' => $c->asunto,
-                                    'tipo_actividad' => $c->tipo_actividad,
-                                    'descripcion' => $c->descripcion,
-                                    'creador' => $c->creador,
-                                    'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
-                                    'importancia' => $c->importancia,
-                                    'nombre' => $c->nombre,
-                                    'activo' => $c->activo,
-                                    'acuse' => $c->acuse,
-                                    'idu_users' => $c->idu_users,
-                                    'avance' => AB($data),
-                                    'atendido_por' =>  D($data),
-                                    'estatus' =>  E($c->status),
-                                    'operaciones' => btn($c->idac, $c->activo),
-                                    ));
+            array_push($array, array(
+                'idac' => $c->idac,
+                'turno' => $c->turno,
+                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
+                'asunto' => $c->asunto,
+                'tipo_actividad' => $c->tipo_actividad,
+                'descripcion' => $c->descripcion,
+                'creador' => $c->creador,
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'importancia' => $c->importancia,
+                'nombre' => $c->nombre,
+                'activo' => $c->activo,
+                'acuse' => $c->acuse,
+                'idu_users' => $c->idu_users,
+                'avance' => AB($data),
+                'atendido_por' =>  D($data),
+                'estatus' =>  E($c->status),
+                'operaciones' => btn($c->idac, $c->activo),
+            ));
         }
 
 
@@ -1440,6 +1527,4 @@ class ActividadesController extends Controller
 
         return response()->json($json);
     }
-
-
 }

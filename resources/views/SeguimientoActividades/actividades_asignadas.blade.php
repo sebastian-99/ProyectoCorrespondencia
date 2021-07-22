@@ -364,10 +364,13 @@
 </script>
 @endsection
 
+
+<!-- E X C E L-->
+
 @section('scripts')
     <script>
         $( document ).ready( () => {
-            
+
             const excel = () => {
 
                 let date = new Date(), sheet, data, columns, rows, zing_grid = document.querySelector( 'zing-grid' );
@@ -389,10 +392,10 @@
                 ], { origin: -1 } );
 
                 XLSX.utils.sheet_add_aoa( sheet, [
-                   ["Turno", "Asunto", "Tipo de Actividades", 
-                    "Descripción", "Fecha de Creación", "Creador", 
+                   ["Turno", "Asunto", "Tipo de Actividades",
+                    "Descripción", "Fecha de Creación", "Creador",
                     "Periodo", "Importancia", "Área", "Avance Individual",
-                    "Estado"], 
+                    "Estado"],
                 ], { origin: -1 } );
 
                 for ( value of data )
@@ -400,7 +403,7 @@
                     XLSX.utils.sheet_add_aoa( sheet, [
                         [ value.turno, value.asunto, value.tipo_actividad, value.descripcion, value.fecha_creacion,
                           value.creador, value.periodo, value.importancia, value.area, value.porcentaje, value.estado ],
-                    ], { origin: -1 } );   
+                    ], { origin: -1 } );
                 }
 
                 // Size columns
@@ -419,21 +422,15 @@
                 ];
 
                 sheet['!cols'] = columns;
-                
-                rows = [
-                    { hpt:30, level:1 },
-                    { hpt:20, level:2 },
-                    { hpt:15, level:3 },
-                ];
 
                 sheet["!rows"] = rows;
-                
+
                 let mergeA1K1 = { s: {r:0, c:0}, e: {r:0, c:10} }; // Merge A1:K1
 
                 let mergeA2K2 = { s: {r:1, c:0}, e: {r:1, c:10} }; // Merge A2:K2
 
                 if( ! sheet['!merges'] ) sheet['!merges'] = [];
-                        
+
                 sheet['!merges'].push( mergeA1K1 );
 
                 sheet['!merges'].push( mergeA2K2 );
@@ -484,10 +481,10 @@
                   };
 
                 }
-      
+
                 let book = XLSX.utils.book_new();
 
-                XLSX.utils.book_append_sheet( book, sheet, 'Worksheet 1' );
+                XLSX.utils.book_append_sheet( book, sheet, 'Hoja 1' );
 
                 XLSX.writeFile( book, 'Reporte_de_Actividades_Asignadas.xlsx' );
 
@@ -498,7 +495,7 @@
                 excel();
 
             } );
-            
+
 
         });
     </script>
