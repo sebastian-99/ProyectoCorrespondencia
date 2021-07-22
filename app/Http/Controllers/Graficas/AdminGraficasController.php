@@ -216,7 +216,7 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
             'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
@@ -228,6 +228,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();
@@ -277,7 +281,7 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
             'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
@@ -289,6 +293,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();
@@ -343,7 +351,8 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -354,6 +363,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();
@@ -388,7 +401,8 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -399,6 +413,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();
@@ -433,7 +451,8 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -444,6 +463,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();
@@ -480,7 +503,8 @@ class AdminGraficasController extends Controller
             'actividades.asunto',
             'actividades.descripcion',
             'actividades.created_at AS fecha_creacion',
-            DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+            'actividades.fecha_inicio',
+            'actividades.fecha_fin',
             'actividades.importancia',
             'responsables_actividades.idreac',
             'actividades.idac',
@@ -491,6 +515,10 @@ class AdminGraficasController extends Controller
         )
         ->get()
         ->each(function($collection){
+
+            $periodoInico = Carbon::parse($collection->fecha_inicio)->format('d-m-Y');
+            $periodoFin = Carbon::parse($collection->fecha_fin)->format('d-m-Y');
+            $collection->periodo = " $periodoInico al $periodoFin";
 
             $collection->creador = User::where('idu',$collection->creador_id)
                 ->select('idu','titulo', 'nombre', 'app','apm')->first();

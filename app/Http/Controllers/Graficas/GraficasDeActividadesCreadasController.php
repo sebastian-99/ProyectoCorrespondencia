@@ -24,14 +24,14 @@ class GraficasDeActividadesCreadasController extends Controller
     }
     public function dashboard(User $user)
     {
-            $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-                ->where('actividades.idu_users',$user->idu)
-                ->groupBy('tipos_actividades.idtac')
-                ->get();
-            return view('sistema.graficas.actividades-creadas',[
-                'tipo_actividades' => $misActividades,
-                'user' => $user->idu,
-            ]);
+        $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+            ->where('actividades.idu_users',$user->idu)
+            ->groupBy('tipos_actividades.idtac')
+            ->get();
+        return view('sistema.graficas.actividades-creadas',[
+            'tipo_actividades' => $misActividades,
+            'user' => $user->idu,
+        ]);
     }
 
     public function getEstadisticasDeActividades(User $user, Request $request)
@@ -217,12 +217,17 @@ class GraficasDeActividadesCreadasController extends Controller
                     'actividades.asunto',
                     'actividades.descripcion',
                     'actividades.created_at AS fecha_creacion',
-                    DB::raw("CONCAT(actividades.fecha_inicio, ' al ', actividades.fecha_fin) AS periodo"),
+                    'actividades.fecha_inicio',
                     'actividades.fecha_fin',
                     'actividades.importancia'
                 )
                 ->get()
                 ->each(function($actividad){
+
+                    $periodoInico = Carbon::parse($actividad->fecha_inicio)->format('d-m-Y');
+                    $periodoFin = Carbon::parse($actividad->fecha_fin)->format('d-m-Y');
+                    $actividad->periodo = " $periodoInico al $periodoFin";
+
                     $responsables = ResponsablesActividades::where('idac_actividades',$actividad->idac)
                         ->select('idreac','firma')
                         ->get()
@@ -407,12 +412,33 @@ class GraficasDeActividadesCreadasController extends Controller
         foreach($actividades AS $actividad){
             $fechaFin = new Carbon($actividad->fecha_fin);
             if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                $enProcesoEnTiempo = false;
+
                 foreach ($actividad->responsables AS $responsable){
+
                     $fecha = new Carbon($responsable->fecha_seguimiento);
                     $fecha->format('Y-m-d');
-                    if(!($fecha > $fechaFin)){
-                        if($actividad->porcentaje < 100 && $actividad->porcentaje > 0)array_push($actividades_ids, $actividad->idac);
+
+                    if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                        $hoy = Carbon::now()->format('Y-m-d');
+                        if( ($hoy > $fecha  && $hoy > $fechaFin) && $responsable->porcentaje_seguimiento < 100 ){
+                                $enProcesoEnTiempo = false;
+                                break;
+                            }
+                        else{
+                            if($fecha > $fechaFin){
+                                $enProcesoEnTiempo = false;
+                                break;
+                            }
+                            else{
+                            $enProcesoEnTiempo = true;
+                            }
+                        }
+
                     }
+                }
+                if($enProcesoEnTiempo){
+                    array_push($actividades_ids, $actividad->idac);
                 }
             }
         }
@@ -429,12 +455,33 @@ class GraficasDeActividadesCreadasController extends Controller
         foreach($actividades AS $actividad){
             $fechaFin = new Carbon($actividad->fecha_fin);
             if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                $enProcesoEnTiempo = false;
+
                 foreach ($actividad->responsables AS $responsable){
+
                     $fecha = new Carbon($responsable->fecha_seguimiento);
                     $fecha->format('Y-m-d');
-                    if($fecha > $fechaFin){
-                        if($actividad->porcentaje < 100 && $actividad->porcentaje > 0)array_push($actividades_ids, $actividad->idac);
+
+                    if($actividad->porcentaje < 100 && $actividad->porcentaje > 0){
+                        $hoy = Carbon::now()->format('Y-m-d');
+                        if( ($hoy > $fecha  && $hoy > $fechaFin) && $responsable->porcentaje_seguimiento < 100 ){
+                                $enProcesoEnTiempo = false;
+                                break;
+                            }
+                        else{
+                            if($fecha > $fechaFin){
+                                $enProcesoEnTiempo = false;
+                                break;
+                            }
+                            else{
+                            $enProcesoEnTiempo = true;
+                            }
+                        }
+
                     }
+                }
+                if(!$enProcesoEnTiempo){
+                    array_push($actividades_ids, $actividad->idac);
                 }
             }
         }
