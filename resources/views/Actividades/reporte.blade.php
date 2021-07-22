@@ -1,19 +1,19 @@
 @extends('layout.layout')
 @section('content')
-    @section('header')
+@section('header')
 
-    <script src='{{asset('src/js/zinggrid.min.js')}}'></script>
-    <script src='{{asset('src/js/zinggrid-es.js')}}'></script>
+<script src='{{asset('src/js/zinggrid.min.js')}}'></script>
+<script src='{{asset('src/js/zinggrid-es.js')}}'></script>
 
-    <!-- Libreria para usar xlsx en js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
-    <script src="{{ asset('src/js/xlsx.js') }}"></script>
+<!-- Libreria para usar xlsx en js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+<script src="{{ asset('src/js/xlsx.js') }}"></script>
 
-    <script>
-    if (es) ZingGrid.registerLanguage(es, 'custom');
-    </script>
+<script>
+  if (es) ZingGrid.registerLanguage(es, 'custom');
+</script>
 
-    @endsection
+@endsection
 <div class="card">
   <div class="card-header">
     <div class="row">
@@ -25,31 +25,39 @@
       </div>
     </div>
 
-        <div class="text-center">
-            <button id="btn_exportar_excel" type="button" class="btn btn-success">
-                Exportar a EXCEL
-            </button>
-        </div>
+    <div class="text-center">
+      <button id="btn_exportar_excel" type="button" class="btn btn-success">
+        Exportar a EXCEL
+      </button>
+    </div>
 
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-4">
         <label for="">Fecha orden:</label>
       </div>
-      <div class="col-sm-6">
-        <label for="">Fecha:</label>
+      <div class="col-sm-4">
+        <label for="">Fecha Inicio:</label>
+      </div>
+
+      <div class="col-sm-4">
+        <label for="">Fecha Fin:</label>
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-4">
         <select class="form-control" name="fecha_orden" id="fecha_orden">
-          <option value="0">Todas los registros</option>
+          <option value="0">Todos los registros</option>
           <option value="1">Fecha inicio</option>
           <option value="2">Fecha fin</option>
         </select>
         <button type="button" class="btn btn-primary mt-1" id="button">Enviar</button> <button type="button" class="btn btn-primary mt-1" id="limpiar">Limpiar</button>
       </div>
-      <div class="col-sm-6">
-        <input class="form-control" name="fecha" id="fecha" type="date" readonly>
+      <div class="col-sm-4">
+        <input class="form-control" name="fechaIni" id="fechaIni" type="date" readonly>
+
+      </div>
+      <div class="col-sm-4">
+        <input class="form-control" name="fechaFin" id="fechaFin" type="date" readonly>
       </div>
     </div>
   </div>
@@ -92,13 +100,15 @@
   $('#button').on("click", function() {
 
     let fecha_orden = $('#fecha_orden').val()
-    let fecha = $('#fecha').val()
+    let fechaIni = $('#fechaIni').val()
+    let fechaFin = $('#fechaFin').val()
     $.ajax({
       type: "GET",
       url: "{{route('fecha_ajax')}}",
       data: {
         fecha_orden: fecha_orden,
-        fecha: fecha
+        fechaIni: fechaIni,
+        fechaFin: fechaFin
       },
       success: function(data) {
         console.log(data);
@@ -109,17 +119,23 @@
 
   })
   $('#limpiar').on("click", function() {
-    $("#fecha").val("");
+    $("#fechaIni").val("");
+    $("#fechaFin").val("");
     $("#fecha_orden").val(0);
-    $('#fecha').attr("readOnly", true);
-    $('#fecha').val("");
+    $('#fechaIni').attr("readOnly", true);
+    $('#fechaFin').attr("readOnly", true);
+    $('#fechaIni').val("");
+    $('#fechaFin').val("");
   })
   $('#fecha_orden').on("change", function() {
     if ($(this).val() == 0) {
-      $('#fecha').attr("readOnly", true);
-      $('#fecha').val("");
+      $('#fechaIni').attr("readOnly", true);
+      $('#fechaFin').attr("readOnly", true);
+      $('#fechaIni').val("");
+      $('#fechaFin').val("");
     } else {
-      $('#fecha').removeAttr("readOnly");
+      $('#fechaIni').removeAttr("readOnly");
+      $('#fechaFin').removeAttr("readOnly");
     }
   })
 </script>
@@ -278,8 +294,6 @@
 
             } );
 
-
-        });
-    </script>
+  });
+</script>
 @endsection
-
