@@ -233,20 +233,7 @@ class ActividadesController extends Controller
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
-        if ($fecha_orden == 2 || $fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion, porcentaje(ac.idac,$us_id) AS porcentaje,
-        ac.status, ta.nombre AS tipo_actividad
-        FROM actividades AS ac
-        INNER JOIN users AS us ON us.idu = ac.idu_users
-        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-      
-        GROUP BY ac.idac
-        ORDER BY ac.fecha_creacion DESC");
-        }
+     
 
 
         $array = array();
@@ -1296,7 +1283,7 @@ class ActividadesController extends Controller
         $fecha_orden = $request->fecha_orden;
         $fechaIni =  $request->fechaIni;
         $fechaFin =  $request->fechaFin;
-
+      
 
         if ($fecha_orden == 0) {
             $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
@@ -1403,20 +1390,7 @@ class ActividadesController extends Controller
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
-        if ($fecha_orden == 2 || $fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
-            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-                ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-                porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
-                FROM actividades AS ac
-                INNER JOIN users AS us ON us.idu = ac.idu_users
-                INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-                INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
-                LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-                LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
-                GROUP BY ac.idac
-                ORDER BY ac.fecha_creacion DESC");
-        }
+    
 
 
 
