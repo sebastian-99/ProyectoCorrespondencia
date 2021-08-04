@@ -29,7 +29,7 @@
      <div class="card-body">
     	<zing-grid
         	lang="custom"
-        	caption='Reporte de tipos de actividades'
+        	caption='Reporte de usuarios'
         	sort
         	search
         	pager
