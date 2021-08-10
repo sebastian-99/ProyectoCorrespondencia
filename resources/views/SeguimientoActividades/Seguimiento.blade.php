@@ -100,7 +100,7 @@
                         <tr>
                             <td>{{$atendido->atencion}} de {{$total_at->total}}</td>
                             <td>
-                                @if(Auth()->user()->idtu_tipos_usuarios == 2)
+                                @if(Auth()->user()->idtu_tipos_usuarios != 4)
                                     {{Auth()->user()->titulo}} {{Auth()->user()->nombre}} {{Auth()->user()->app}} {{Auth()->user()->apm}} 
                                 @endif
                                 @if(Auth()->user()->idtu_tipos_usuarios == 4)
