@@ -380,6 +380,9 @@
 </script>
 @endsection
 
+
+<!-- E x c e l -->
+
 @section('scripts')
 <script>
   $(document).ready(() => {
@@ -428,80 +431,33 @@
       }
 
       // Size columns
-      columns = [{
-          wch: 20
-        }, // turno
-        {
-          wch: 40
-        }, // asunto
-        {
-          wch: 25
-        }, // tipo de actividad
-        {
-          wch: 40
-        }, // descripción
-        {
-          wch: 20
-        }, // fecha de creación
-        {
-          wch: 30
-        }, // creadi por (creador)
-        {
-          wch: 30
-        }, // periodo
-        {
-          wch: 20
-        }, // importancia
-        {
-          wch: 30
-        }, // área
-        {
-          wch: 20
-        }, // porcentaje
-        {
-          wch: 30
-        }, // estado
-      ];
+      columns = [
+            {wch: 20}, // turno
+            {wch: 40}, // asunto
+            {wch: 25}, // tipo de actividad
+            {wch: 40}, // descripción
+            {wch: 20}, // fecha de creación
+            {wch: 30}, // creadi por (creador)
+            {wch: 30}, // periodo
+            {wch: 20}, // importancia
+            {wch: 30}, // área
+            {wch: 20}, // porcentaje
+            {wch: 30}, // estado
+        ];
 
       sheet['!cols'] = columns;
-
-      rows = [{
-          hpt: 30,
-          level: 1
-        },
-        {
-          hpt: 20,
-          level: 2
-        },
-        {
-          hpt: 15,
-          level: 3
-        },
-      ];
 
       sheet["!rows"] = rows;
 
       let mergeA1K1 = {
-        s: {
-          r: 0,
-          c: 0
-        },
-        e: {
-          r: 0,
-          c: 10
-        }
-      }; // Merge A1:K1
+            s: {r: 0,c: 0},
+            e: {r: 0,c: 10}
+        }; // Merge A1:K1
 
       let mergeA2K2 = {
-        s: {
-          r: 1,
-          c: 0
-        },
-        e: {
-          r: 1,
-          c: 10
-        }
-      }; // Merge A2:K2
+            s: {r: 1,c: 0},
+            e: {r: 1,c: 10}
+        }; // Merge A2:K2
 
       if (!sheet['!merges']) sheet['!merges'] = [];
 
