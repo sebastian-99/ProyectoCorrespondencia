@@ -253,6 +253,7 @@
             <div class="card-body">
                 <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data" id="form">
                     @csrf
+                    <input type="hidden" name="idac" value="{{$idac}}">
                     <!--<div class="col-sm-4">
                         <div class="mb-3">
                             <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
@@ -357,7 +358,7 @@
                     {{Session::get('message2')}}
                 </p>
                 @endif
-                <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json_sa}}">
+                <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter  selector data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No. Seguimiento' width="" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>

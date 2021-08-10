@@ -40,6 +40,7 @@
         	theme='android'
         	id='zing-grid'
         	filter
+            selector
             data="{{ $json }}">
         	<zg-colgroup>
             	<zg-column index='nombre' header='Nombre'  type='text'></zg-column>
