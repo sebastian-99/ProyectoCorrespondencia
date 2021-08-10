@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="card-body">
-        <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+        <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
             <zg-colgroup>
                 <zg-column index='turno' header='Turno' width="100" type='number'></zg-column>
                 <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>

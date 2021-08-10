@@ -172,7 +172,7 @@ class SeguimientoController extends Controller
                 'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('DD MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('DD MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'area' => $c->AREA,
                 'recibo' => AB($data),
@@ -583,7 +583,7 @@ class SeguimientoController extends Controller
                 'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('DD MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('DD MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'area' => $c->area,
                 'recibo' => AB($data),
@@ -912,7 +912,7 @@ class SeguimientoController extends Controller
             ORDER BY sa.idseac DESC LIMIT 1");
         }
 
-        function detalles($idseac, $idarseg, $ultimo, $archivo_fin)
+        function detalles($idseac, $idarseg, $ultimo, $archivo_fin, $idac)
         {
 
             if ($idseac == $ultimo) {
@@ -921,7 +921,7 @@ class SeguimientoController extends Controller
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                             &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>
-                            &nbsp;<a class='btn btn-danger mt-3 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                            &nbsp;<a class='btn btn-danger mt-3 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac), 'idac' => encrypt($idac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
                     } else {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
@@ -931,7 +931,7 @@ class SeguimientoController extends Controller
                     if (Auth()->user()->idtu_tipos_usuarios == 2) {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
-                        <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
+                        <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac), 'idac' => encrypt($idac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
                     } else {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
@@ -957,7 +957,7 @@ class SeguimientoController extends Controller
                 'detalle' => $seg_ac->detalle,
                 'estado' => $seg_ac->estado,
                 'porcentaje' => $seg_ac->porcentaje,
-                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac, $ultimo_seg[0]->archivo_fin),
+                'evidencia' => detalles($seg_ac->idseac, $seg_ac->idarseg, $ultimo_seg[0]->idseac, $ultimo_seg[0]->archivo_fin, $idac),
             ));
 
             $turno = $turno + 1;
@@ -980,6 +980,7 @@ class SeguimientoController extends Controller
             ->with('archivo3', $archivo3)
             ->with('est_act', $est_act)
             ->with('ultimo_seg', $ultimo_seg)
+            ->with('idac', $idac)
             ->with('dir', $dir);
     }
 
@@ -988,6 +989,7 @@ class SeguimientoController extends Controller
         return DB::transaction(function () use ($request) {
 
             $idseac = $request->idseac;
+            $idac = $request->idac;
             $idreac_responsables_actividades = $request->idreac_responsables_actividades;
             $idseac_seguimientos_actividades = $request->idseac_seguimientos_actividades;
             $now = Carbon::now();
@@ -1053,7 +1055,22 @@ class SeguimientoController extends Controller
 
 
             $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
+        
+            /*Valicación porcentaje general para modificar status en tabla actividades*/
+            $consul = DB::SELECT("SELECT 
+            porcentaje(ac.idac, 0) AS porcentaje
+            FROM actividades AS ac
+            WHERE ac.idac = $idac");
 
+            $porcentaje = number_format(explode("*", $consul[0]->porcentaje)[2], 0, '.', ' ');
+
+            if($porcentaje == 100){
+                
+                DB::UPDATE("UPDATE actividades SET status = 2 
+                WHERE idac = $idac");
+            }
+            /*END Valicación porcentaje general by Azure_Valkyrie*/
+            
             Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
             return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
         });
@@ -1068,12 +1085,15 @@ class SeguimientoController extends Controller
         return response()->json($query);
     }
 
-    public function EliminarSeguimiento($idarseg, $idseac)
+    public function EliminarSeguimiento($idarseg, $idseac, $idac)
 
     {
+        
         //$ultimo = archivosSeguimientos::find('idarse')->orderBy('idarse')->desc();
         $idarseg = decrypt($idarseg);
         $idseac = decrypt($idseac);
+        $idac = decrypt($idac);
+    
 
         $elim = DB::DELETE("DELETE FROM archivos_seguimientos
         where idseac_seguimientos_actividades =$idseac
@@ -1082,6 +1102,19 @@ class SeguimientoController extends Controller
         $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades
         where idseac =$idseac
         ");
+
+        $consul = DB::SELECT("SELECT 
+        porcentaje(ac.idac, 0) AS porcentaje
+        FROM actividades AS ac
+        WHERE ac.idac = $idac");
+
+        $porcentaje = number_format(explode("*", $consul[0]->porcentaje)[2], 0, '.', ' ');
+
+        if($porcentaje < 100){
+            
+            DB::UPDATE("UPDATE actividades SET status = 1 
+            WHERE idac = $idac");
+        }
 
         Session::flash('message2', 'Se ha eliminado el seguimiento de actividad');
 
