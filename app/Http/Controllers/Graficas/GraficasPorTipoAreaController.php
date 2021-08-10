@@ -201,6 +201,7 @@ class GraficasPorTipoAreaController extends Controller
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
         //->where('responsables_actividades.fecha','!=', null)
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
+        ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
         ->select(
