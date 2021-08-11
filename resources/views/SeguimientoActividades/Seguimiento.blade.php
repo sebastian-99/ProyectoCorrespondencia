@@ -421,7 +421,7 @@
                 $('#estado_c').prop("checked", true);
                 $('#estado_p').prop('disabled', true);
                 var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
-                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu oficio de término de actividad</label>"+f_f);
             } else {
                 $('#estado_p').prop("checked", true);
                 $('#estado_p').prop('disabled', false);
@@ -446,7 +446,7 @@
                 $('#porc').html(100);
                 $('#estado_p').prop('disabled', true);
                 var f_f = "<input type='file' id='' name='archivo_fin' class='form-control form-control-sm' required>";
-                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu archivo de finalización</label>"+f_f);
+                $('#file_fin').append("<br><label class='form-label'>Antes de marcar la actividad como completada sube tu oficio de término de actividad</label>"+f_f);
             }
         }
     //Agregar mas archivos en nueva seccion ------------------------------------------------------------------
