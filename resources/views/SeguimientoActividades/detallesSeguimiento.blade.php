@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <zing-grid lang="custom" caption='Actividades' sort search pager page-size='10' page-size-options='10,20,50' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+  <zing-grid lang="custom" caption='Actividades' sort search pager page-size='10' page-size-options='10,20,50' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
     <zg-colgroup>
       <zg-column index='idseac' header='No. Seguimeinto' width="" type='text'></zg-column>
       <zg-column index='fecha' header='Fecha de avance' width="" type='text'></zg-column>

@@ -29,6 +29,7 @@ class ActividadesController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
 
@@ -109,7 +110,7 @@ class ActividadesController extends Controller
                 'nombre_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'nombre' => $c->nombre,
                 'activo' => $c->activo,
@@ -154,6 +155,7 @@ class ActividadesController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -168,6 +170,7 @@ class ActividadesController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+        AND ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -182,6 +185,7 @@ class ActividadesController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_inicio` >=  DATE('$fechaIni') 
+        AND ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -195,7 +199,8 @@ class ActividadesController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        WHERE ac.`fecha_inicio` <=  DATE('$fechaFin') 
+        WHERE ac.`fecha_inicio` <=  DATE('$fechaFin')
+        AND ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -210,6 +215,7 @@ class ActividadesController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
+        AND ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -223,7 +229,8 @@ class ActividadesController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        WHERE ac.`fecha_fin` >=  DATE('$fechaIni') 
+        WHERE ac.`fecha_fin` >=  DATE('$fechaIni')
+        AND ac.activo = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -237,7 +244,8 @@ class ActividadesController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        WHERE ac.`fecha_fin` <=  DATE('$fechaFin') 
+        WHERE ac.`fecha_fin` <=  DATE('$fechaFin')
+        AND ac.activo = 1 
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -321,7 +329,7 @@ class ActividadesController extends Controller
                 'nombre_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'nombre' => $c->nombre,
                 'activo' => $c->activo,
@@ -801,7 +809,6 @@ class ActividadesController extends Controller
 
     public function actividades_modificacion($id)
     {
-
         $id = decrypt($id);
         $consul = DB::table('actividades')->where('idac', $id)
             ->join('users', 'users.idu', '=', 'actividades.idu_users')
@@ -1126,9 +1133,9 @@ class ActividadesController extends Controller
 
         if ($activo == 1) {
 
-            DB::UPDATE("UPDATE actividades SET activo = '0' WHERE idac = $id");
+            DB::UPDATE("UPDATE actividades SET activo = '0' , status = 3 WHERE idac = $id");
         } else {
-            DB::UPDATE("UPDATE actividades SET activo = '1' WHERE idac = $id");
+            DB::UPDATE("UPDATE actividades SET activo = '1', status = 1 WHERE idac = $id");
         }
 
         return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);
@@ -1176,9 +1183,8 @@ class ActividadesController extends Controller
                     <a class='btn btn-danger mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
                 } else {
-                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-                    <a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
-                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a></div>";
+                    return "<a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='fas fa-check'></i></a>";
+                    
                 }
             }
         } else {
@@ -1253,7 +1259,7 @@ class ActividadesController extends Controller
                 'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'nombre' => $c->nombre,
                 'activo' => $c->activo,
@@ -1428,9 +1434,7 @@ class ActividadesController extends Controller
                     <a class='btn btn-danger mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
                 } else {
-                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
-                    <a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
-                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a></div>";
+                    return "<a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='fas fa-check'></i></a>";
                 }
             }else{
                 if ($activo == 1) {
@@ -1500,7 +1504,7 @@ class ActividadesController extends Controller
                 'tipo_actividad' => $c->tipo_actividad,
                 'descripcion' => $c->descripcion,
                 'creador' => $c->creador,
-                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D MMMM') . ' al ' . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat('D MMMM [del] YYYY'),
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
                 'importancia' => $c->importancia,
                 'nombre' => $c->nombre,
                 'activo' => $c->activo,
