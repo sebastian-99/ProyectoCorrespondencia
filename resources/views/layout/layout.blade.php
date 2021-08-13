@@ -82,8 +82,9 @@
       <div class="mt-3 pb-3 mb-3">
         <div class="text-center">
             <div >
-              <img src="{{asset('storage/imagenes_perfil') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px">
-              <a href="{{url('/panel')}}" class="d-block">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a>
+              <img src="{{asset('storage/imagenes_perfil') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px"><br>
+              <a href="{{url('/panel')}}">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a><br><br>
+              <a href="{{ route('editar-perfil') }}" class="text-info">Editar mi perfil</a>
               <hr class="bg-secondary">
             </div>
           </div>
