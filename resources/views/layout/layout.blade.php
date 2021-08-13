@@ -84,7 +84,7 @@
             <div >
               <img src="{{asset('storage/imagenes_perfil') .'/' . Auth()->user()->imagen }}" class="img-circle img-fluid" alt="User Image" width="150px"><br>
               <a href="{{url('/panel')}}">{{Auth()->user()->titulo . ' ' . Auth()->user()->nombre . ' '  .Auth()->user()->app . ' ' . Auth()->user()->apm}}</a><br><br>
-              <a href="{{ route('editar-perfil') }}" class="text-info">Editar mi perfil</a>
+              <a href="{{ route('editar-perfil') }}"><button type="button" class="btn btn-outline-success">Mi Perfil</button></a>
               <hr class="bg-secondary">
             </div>
           </div>
