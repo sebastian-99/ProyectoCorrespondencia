@@ -1143,7 +1143,7 @@ class ActividadesController extends Controller
         hora_inicio = '$horadeinicio', fecha_fin = '$fechatermino', hora_fin = '$horatermino', idtac_tipos_actividades = '$tipoactividad',
         status = '$estado',
         importancia = '$importancia',  archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3',
-        link1 = '$link', link2 = '$link2', link3 = '$link3'
+        link1 = '$link', link2 = '$link2', link3 = '$link3', aprobacion = 1
         WHERE idac = $id");
 
 
