@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\SeguimientoController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AreasController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\CuentasController;
+use App\Http\Controllers\EncryptController;
+
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ActividadesController;
-use App\Http\Controllers\Sistema\Panel\PanelController;
+use App\Http\Controllers\SeguimientoController;
 
-use App\Http\Controllers\AreasController;
-use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TiposActividadesController;
-
-use App\Http\Controllers\EncryptController;
-use App\Http\Controllers\Graficas\GraficasDeActividadesCreadasController;
-use App\Http\Controllers\Graficas\GraficasPorTipoAreaController;
+use App\Http\Controllers\Sistema\Panel\PanelController;
 use App\Http\Controllers\Sistema\TipoAreas\TipoAreasController;
+use App\Http\Controllers\Graficas\GraficasPorTipoAreaController;
+use App\Http\Controllers\Graficas\GraficasDeActividadesCreadasController;
 
 
 Route::redirect('/', 'panel');
@@ -37,8 +38,8 @@ Route::middleware(['auth'])->group(function () {
 //////////////////////////////////////////////  U S U A R I O S  ///////////////////////////////////////////////////////////////
     Route::resource('users', UsersController::class, ['names' => 'users']);
 
-
-
+    Route::get('editar-perfil', [CuentasController::class, 'editar_perfil'])->name('editar-perfil');
+    Route::post('editar-perfil', [CuentasController::class, 'editar_perfil_post'])->name('editar-perfil.post');
 
 
     Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
@@ -50,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('DetallesAsignacion/{idac}', [SeguimientoController::class, 'DetallesAsignacion'])->name('DetallesAsignacion');
     Route::get('Seguimiento/{idac}', [SeguimientoController::class, 'Seguimiento'])->name('Seguimiento');
     Route::POST('AgregarSeguimiento', [SeguimientoController::class,'AgregarSeguimiento'])->name('AgregarSeguimiento');
-    Route::get('EliminarSeguimiento/{idarse}/{idseac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
+    Route::get('EliminarSeguimiento/{idarse}/{idseac}/{idac}', [SeguimientoController::class, 'EliminarSeguimiento'])->name('EliminarSeguimiento');
     Route::get('DetallesArchivos/{idarc}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
     Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
     Route::post('rechazarActividad', [SeguimientoController::class,'rechazarActividad'])->name('rechazarActividad');

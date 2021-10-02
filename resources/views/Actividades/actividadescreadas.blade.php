@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="card-body">
-        <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+        <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
             <zg-colgroup>
                 <zg-column index='turno' header='Turno' width="100" type='number'></zg-column>
                 <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
@@ -193,7 +193,7 @@
                     {wch: 20}, // turno
                     {wch: 40}, // asunto
                     {wch: 25}, // tipo de actividad
-                    { wch: 40}, // descripción
+                    {wch: 40}, // descripción
                     {wch: 20}, // fecha de creación
                     {wch: 30}, // creadi por (creador)
                     {wch: 30}, // periodo
@@ -209,26 +209,14 @@
                 sheet["!rows"] = rows;
 
                 let mergeA1K1 = {
-                    s: {
-                        r: 0,
-                        c: 0
-                    },
-                    e: {
-                        r: 0,
-                        c: 10
-                    }
-                }; // Merge A1:K1
+                        s: {r: 0,c: 0},
+                        e: {r: 0,c: 10}
+                    }; // Merge A1:K1
 
                 let mergeA2K2 = {
-                    s: {
-                        r: 1,
-                        c: 0
-                    },
-                    e: {
-                        r: 1,
-                        c: 10
-                    }
-                }; // Merge A2:K2
+                        s: {r: 1,c: 0},
+                        e: {r: 1,c: 10}
+                    }; // Merge A2:K2
 
                 if (!sheet['!merges']) sheet['!merges'] = [];
 

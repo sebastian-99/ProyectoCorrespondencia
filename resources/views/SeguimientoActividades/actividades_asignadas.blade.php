@@ -84,7 +84,7 @@
   </div>
   @endif
   <div class="card-body">
-    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
@@ -259,9 +259,9 @@
       $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
       $('#turno_a').append("<strong>Turno </strong>" + turno);
       $('#creador_a').append("<strong>Creador </strong>" + creador);
-      $('#area_a').append("<strong>Area responsable </strong>" + area);
-      $('#f_creacion_a').append("<strong>Fecha de creacion </strong>" + creacion);
-      $('#periodo_atencion_a').append("<strong>Periodo de atencion </strong>" + periodo);
+      $('#area_a').append("<strong>Área responsable </strong>" + area);
+      $('#f_creacion_a').append("<strong>Fecha de creación </strong>" + creacion);
+      $('#periodo_atencion_a').append("<strong>Periodo de atención </strong>" + periodo);
 
       $('#asunto').val(data[0].asunto);
       $('#descripcion').val(data[0].descripcion);
@@ -390,6 +390,9 @@
 </script>
 @endsection
 
+
+<!-- E x c e l -->
+
 @section('scripts')
 <script>
   $(document).ready(() => {
@@ -438,80 +441,33 @@
       }
 
       // Size columns
-      columns = [{
-          wch: 20
-        }, // turno
-        {
-          wch: 40
-        }, // asunto
-        {
-          wch: 25
-        }, // tipo de actividad
-        {
-          wch: 40
-        }, // descripción
-        {
-          wch: 20
-        }, // fecha de creación
-        {
-          wch: 30
-        }, // creadi por (creador)
-        {
-          wch: 30
-        }, // periodo
-        {
-          wch: 20
-        }, // importancia
-        {
-          wch: 30
-        }, // área
-        {
-          wch: 20
-        }, // porcentaje
-        {
-          wch: 30
-        }, // estado
-      ];
+      columns = [
+            {wch: 20}, // turno
+            {wch: 40}, // asunto
+            {wch: 25}, // tipo de actividad
+            {wch: 40}, // descripción
+            {wch: 20}, // fecha de creación
+            {wch: 30}, // creadi por (creador)
+            {wch: 30}, // periodo
+            {wch: 20}, // importancia
+            {wch: 30}, // área
+            {wch: 20}, // porcentaje
+            {wch: 30}, // estado
+        ];
 
       sheet['!cols'] = columns;
-
-      rows = [{
-          hpt: 30,
-          level: 1
-        },
-        {
-          hpt: 20,
-          level: 2
-        },
-        {
-          hpt: 15,
-          level: 3
-        },
-      ];
 
       sheet["!rows"] = rows;
 
       let mergeA1K1 = {
-        s: {
-          r: 0,
-          c: 0
-        },
-        e: {
-          r: 0,
-          c: 10
-        }
-      }; // Merge A1:K1
+            s: {r: 0,c: 0},
+            e: {r: 0,c: 10}
+        }; // Merge A1:K1
 
       let mergeA2K2 = {
-        s: {
-          r: 1,
-          c: 0
-        },
-        e: {
-          r: 1,
-          c: 10
-        }
-      }; // Merge A2:K2
+            s: {r: 1,c: 0},
+            e: {r: 1,c: 10}
+        }; // Merge A2:K2
 
       if (!sheet['!merges']) sheet['!merges'] = [];
 

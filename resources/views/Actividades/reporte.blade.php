@@ -77,7 +77,7 @@
       {{Session::get('message3')}}
     </p>
     @endif
-    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter data="{{$json}}">
+    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='number'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
@@ -205,19 +205,19 @@
 
                 // Size columns
                 columns = [
-                    {wch:20}, // turno
-                    {wch:40}, // asunto
-                    {wch:25}, // tipo de actividad
-                    {wch:40}, // descripción
-                    {wch:20}, // fecha de creación
-                    {wch:30}, // creadi por (creador)
-                    {wch:30}, // periodo
-                    {wch:20}, // importancia
-                    {wch:30}, // área
-                    {wch:20}, // porcentaje
-                    {wch:20}, // Atendido
-                    {wch:30}, // estado
-                ];
+                        {wch:20}, // turno
+                        {wch:40}, // asunto
+                        {wch:25}, // tipo de actividad
+                        {wch:40}, // descripción
+                        {wch:20}, // fecha de creación
+                        {wch:30}, // creadi por (creador)
+                        {wch:30}, // periodo
+                        {wch:20}, // importancia
+                        {wch:30}, // área
+                        {wch:20}, // porcentaje
+                        {wch:20}, // Atendido
+                        {wch:30}, // estado
+                    ];
 
                 sheet['!cols'] = columns;
 

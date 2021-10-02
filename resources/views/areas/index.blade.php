@@ -29,7 +29,7 @@
     <div class="card-body">
     	<zing-grid
         	lang="custom"
-        	caption='Reporte de tipos de áreas'
+        	caption='Reporte de áreas'
         	sort
         	search
         	pager
@@ -40,6 +40,7 @@
         	theme='android'
         	id='zing-grid'
         	filter
+            selector
             data="{{ $json }}">
         	<zg-colgroup>
             	<zg-column index='nombre' header='Nombre'  type='text'></zg-column>

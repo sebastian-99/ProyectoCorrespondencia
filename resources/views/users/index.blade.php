@@ -29,7 +29,7 @@
      <div class="card-body">
     	<zing-grid
         	lang="custom"
-        	caption='Reporte de tipos de actividades'
+        	caption='Reporte de usuarios'
         	sort
         	search
         	pager
@@ -40,6 +40,7 @@
         	theme='android'
         	id='zing-grid'
         	filter
+            selector
             data="{{ $json }}">
         	<zg-colgroup>
             	  <zg-column index='idtu_tipos_usuarios' header='Tipo-Usuario'  type='text'></zg-column>
