@@ -64,6 +64,7 @@ class PanelController extends Controller
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
             ->join('areas','areas.idar','actividades.idar_areas')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
+            ->where('actividades.autorizacion', 1)
             ->where('actividades.fecha_fin', "$hoy")
             ->select(
                 'users.idu',
@@ -111,6 +112,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma', null)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -162,6 +164,7 @@ class PanelController extends Controller
             ->where('actividades.fecha_inicio','<=', "$mesFinal")
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma',"!=", null)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -260,8 +263,10 @@ class PanelController extends Controller
                 'seguimientos_actividades.idreac_responsables_actividades',
                 'responsables_actividades.idreac'
             )
+            ->join('actividades','actividades.idac', 'responsables_actividades.idac_actividades')
             ->where('responsables_actividades.idu_users', $idu)
             ->where('seguimientos_actividades.porcentaje', 100)
+            ->where('actividades.autorizacion', 1)
             ->groupBy('responsables_actividades.idreac')
             ->select('responsables_actividades.idreac')
             ->get();
@@ -332,6 +337,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->where('responsables_actividades.idu_users', $idu)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -388,6 +394,7 @@ class PanelController extends Controller
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
         ->where('responsables_actividades.fecha','!=', null)
+        ->where('actividades.autorizacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -432,6 +439,7 @@ class PanelController extends Controller
             ->join('areas','areas.idar','actividades.idar_areas')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -477,6 +485,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('actividades.fecha_fin', '<', Carbon::now()->format('Y-m-d') )
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -522,6 +531,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma','!=', null)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -568,6 +578,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma', null)
+            ->where('actividades.autorizacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
