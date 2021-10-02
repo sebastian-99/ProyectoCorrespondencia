@@ -640,12 +640,13 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
-        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
+        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
         ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN responsables_actividades AS res_act ON res_act.idac_actividades = ac.idac
         WHERE ac.idac = $idac");
 
         return response()->json($actividad);
@@ -669,13 +670,14 @@ class SeguimientoController extends Controller
 
             //Obtener detalles de la actividad
             $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
-            CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
+            CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
             ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, ta.nombre as tipo_act,
             ac.status, porcentaje(ac.idac,$id) AS porcentaje
             FROM actividades AS ac
             INNER JOIN users AS us ON us.idu = ac.idu_users
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN responsables_actividades AS res_act ON res_act.idac_actividades = ac.idac
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             WHERE ac.idac = $idac");
         } else {
