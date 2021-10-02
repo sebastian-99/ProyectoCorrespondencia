@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
     Route::get('fecha_ajax', [ActividadesController::class,'fecha_ajax'])->name('fecha_ajax');
     Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
+    Route::get('aprobacion/{id}/{aprobacion}', [ActividadesController::class,'aprobacion'])->name('aprobacion');
     Route::get('actividades', [ActividadesController::class,'actividades'])->name('create_actividades');
     Route::get('tipousuarios', [ActividadesController::class,'tipousuarios'])->name('ajax_tipousuarios');
     Route::get('quitar_ajax', [ActividadesController::class,'quitar_ajax'])->name('quitar_ajax');
@@ -81,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin/users', UsersController::class, ['names' => 'users']);
 
     Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
+    Route::get('actividades_pendientes/{id}', [ActividadesController::class, 'actividades_pendientes'])->name('actividades_pendientes');
     Route::get('ajax_filtro_fecha', [ActividadesController::class, 'ajax_filtro_fecha'])->name('ajax_filtro_fecha');
 
     Route::get('hello', [EncryptController::class,'index']);

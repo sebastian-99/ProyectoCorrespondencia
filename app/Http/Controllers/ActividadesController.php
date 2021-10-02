@@ -253,7 +253,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_fin` <=  DATE('$fechaFin')
         AND ac.activo = 1 
-        
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -366,6 +366,7 @@ class ActividadesController extends Controller
         JOIN areas AS ar ON ar.idar = us.idar_areas
         LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
         WHERE idac_actividades = $idac
+        AND ac.aprobacion = 1
         GROUP BY idu_users");
 
         $boton = DB::table('responsables_actividades as res')
@@ -1199,6 +1200,20 @@ class ActividadesController extends Controller
         return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);
     }
 
+    public function aprobacion($id, $aprobacion)
+    {
+
+        $id = decrypt($id);
+        $aprobacion = decrypt($aprobacion);
+
+        if ($aprobacion == 0) {
+
+            DB::UPDATE("UPDATE actividades SET aprobacion = '1'  WHERE idac = $id");
+        }
+
+        return redirect()->route('actividades_pendientes', ['id' => encrypt(Auth()->User()->idu)]);
+    }
+
     public function actividades_creadas($id)
     {
         $id_u = decrypt($id);
@@ -1208,14 +1223,14 @@ class ActividadesController extends Controller
 
         $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
-        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad
+        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad, ac.aprobacion
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-        WHERE ac.idu_users = $id_u
+        WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
 
@@ -1340,6 +1355,136 @@ class ActividadesController extends Controller
             return view('Actividades.actividadescreadas', compact('json', 'dir'));
         } else {
             return view('Actividades.actividadescreadas', compact('json'));
+        }
+    }
+
+    public function actividades_pendientes($id)
+    {
+        $id_u = decrypt($id);
+        //return $id_u;
+        $ar = Auth()->user()->idar_areas;
+        $tipo = Auth::user()->idtu_tipos_usuarios;
+
+        $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+        ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
+        porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad, ac.aprobacion
+        FROM actividades AS ac
+        INNER JOIN users AS us ON us.idu = ac.idu_users
+        INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+        INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
+        LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
+        LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
+        WHERE ac.idu_users = $id_u AND ac.aprobacion = 0
+        GROUP BY ac.idac
+        ORDER BY ac.fecha_creacion DESC");
+
+        $array = array();
+
+        function recorrer($value)
+        {
+            if (gettype($value) == "string") {
+                $val = explode('*', $value);
+                $arr = array('1' => explode('-', $val[0]), '2' => $val[1], '3' => $val[2]);
+            } else {
+                $arr = null;
+            }
+            return $arr;
+        }
+
+        if ($tipo != 4) {
+            function btn($idac, $aprobacion,$activo)
+            {
+
+                if ($aprobacion == 0) {
+                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-primary mt-1 btn-sm' href=" . route('aprobacion', ['id' => encrypt($idac), 'aprobacion' => encrypt($aprobacion)]) . "><i class='fas fa-check'></i></a>
+                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
+                } 
+            }
+        } 
+
+        function AB($data)
+        {
+
+            if (gettype($data) == "array") {
+
+                return $data['1'][0] . " de " . $data['1'][1];
+            } else {
+                return 0;
+            }
+        }
+
+        function C($data)
+        {
+
+            if (gettype($data) == "array") {
+
+                return number_format($data['2'], 0, '.', ' ') . '%';
+            } else {
+                return 0;
+            }
+        }
+
+        function D($data)
+        {
+
+            if (gettype($data) == "array") {
+
+                return number_format($data['3'], 0, '.', ' ') . '%';
+            } else {
+
+                return 0;
+            }
+        }
+
+        function E($status)
+        {
+
+            if ($status == 1) {
+                return "En proceso";
+            } elseif ($status == 2) {
+                return "Concluido";
+            } else {
+                return "Cancelado";
+            }
+        }
+
+
+
+        foreach ($ac_cre as $c) {
+
+            $data = recorrer($c->porcentaje);
+
+            array_push($array, array(
+                'idac' => $c->idac,
+                'turno' => $c->turno,
+                'fecha_creacion' => Carbon::parse($c->fecha_creacion)->locale('es')->isoFormat('D [de] MMMM [del] YYYY'),
+                'asunto' => $c->asunto,
+                'tipo_actividad' => $c->tipo_actividad,
+                'descripcion' => $c->descripcion,
+                'creador' => $c->creador,
+                'periodo' => Carbon::parse($c->fecha_inicio)->locale('es')->isoFormat('D [de] MMMM [del] YYYY [al]') . Carbon::parse($c->fecha_fin)->locale('es')->isoFormat(' D [de] MMMM [del] YYYY'),
+                'importancia' => $c->importancia,
+                'nombre' => $c->nombre,
+                'activo' => $c->activo,
+                'acuse' => $c->acuse,
+                'idu_users' => $c->idu_users,
+                'avance' => AB($data),
+                'atendido_por' =>  D($data),
+                'estatus' =>  E($c->status),
+                'operaciones' => btn($c->idac, $c->aprobacion,$c->activo),
+            ));
+        }
+
+
+        $json = json_encode($array);
+
+        if (Auth()->user()->idtu_tipos_usuarios == 4) {
+            $director = DB::SELECT("SELECT CONCAT(titulo, ' ',nombre, ' ',app, ' ',apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
+            $dir = $director[0]->nombre;
+
+            return view('Actividades.actividades_pendientes', compact('json', 'dir'));
+        } else {
+            return view('Actividades.actividades_pendientes', compact('json'));
         }
     }
 
