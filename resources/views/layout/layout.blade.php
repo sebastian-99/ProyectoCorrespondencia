@@ -140,7 +140,7 @@
               <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth()->user()->idtu_tipos_usuarios != 4)
+              @if(Auth()->user()->idtu_tipos_usuarios != 1)
               <li class="nav-item">
                 <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

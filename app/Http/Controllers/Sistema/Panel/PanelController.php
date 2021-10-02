@@ -18,10 +18,10 @@ class PanelController extends Controller
     {
         $user = auth()->user()->idu;
         $area = Auth()->user()->idar_areas;
-
+        
         if (auth()->user()->idtu_tipos_usuarios == 4) {
 
-            $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $area");
+            $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 4 AND idar_areas = $area");
             $nombre = $user[0]->nombre;
             $user = $user[0]->idu;
             $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
@@ -64,7 +64,7 @@ class PanelController extends Controller
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
             ->join('areas','areas.idar','actividades.idar_areas')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->where('actividades.fecha_fin', "$hoy")
             ->select(
                 'users.idu',
@@ -112,7 +112,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma', null)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -164,7 +164,7 @@ class PanelController extends Controller
             ->where('actividades.fecha_inicio','<=', "$mesFinal")
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma',"!=", null)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -266,7 +266,7 @@ class PanelController extends Controller
             ->join('actividades','actividades.idac', 'responsables_actividades.idac_actividades')
             ->where('responsables_actividades.idu_users', $idu)
             ->where('seguimientos_actividades.porcentaje', 100)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->groupBy('responsables_actividades.idreac')
             ->select('responsables_actividades.idreac')
             ->get();
@@ -337,7 +337,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->join('users', 'users.idu','responsables_actividades.idu_users')
             ->where('responsables_actividades.idu_users', $idu)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -394,7 +394,7 @@ class PanelController extends Controller
         ->join('areas','areas.idar','actividades.idar_areas')
         ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
         ->where('responsables_actividades.fecha','!=', null)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -439,7 +439,7 @@ class PanelController extends Controller
             ->join('areas','areas.idar','actividades.idar_areas')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -485,7 +485,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('actividades.fecha_fin', '<', Carbon::now()->format('Y-m-d') )
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -531,7 +531,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma','!=', null)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -578,7 +578,7 @@ class PanelController extends Controller
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.fecha', null)
             ->where('responsables_actividades.firma', null)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select(
                 'users.idu',
                 DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),

@@ -30,6 +30,7 @@ class ActividadesController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
 
@@ -156,6 +157,7 @@ class ActividadesController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -171,6 +173,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
         AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -186,6 +189,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_inicio` >=  DATE('$fechaIni') 
         AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -201,6 +205,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_inicio` <=  DATE('$fechaFin')
         AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -216,6 +221,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
         AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -231,6 +237,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_fin` >=  DATE('$fechaIni')
         AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -246,6 +253,7 @@ class ActividadesController extends Controller
         LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
         WHERE ac.`fecha_fin` <=  DATE('$fechaFin')
         AND ac.activo = 1 
+        
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -652,14 +660,33 @@ class ActividadesController extends Controller
     public function actividades()
     {
 
-        $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
-        $consul = DB::table('actividades')->count() + 1;
-        $tipous = DB::table('areas')->get()->all();
-        $tipo_actividad = DB::table('tipos_actividades')
-            ->orderBy('nombre', 'Asc')
-            ->get();
 
-        $user = DB::table('users')
+        if (Auth()->user()->idtu_tipos_usuarios == 4) {
+
+            $dir = DB::SELECT("SELECT idu FROM users 
+            WHERE idar_areas = ". Auth()->user()->idar_areas. 
+            " AND idtu_tipos_usuarios = 2");
+            
+            $user = DB::table('users')
+            ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+            ->join('areas', 'areas.idar', '=', 'users.idar_areas')
+            ->select(
+                'users.idu',
+                'users.titulo',
+                'users.nombre',
+                'users.app',
+                'users.apm',
+                'tipos_usuarios.nombre as tipo_usuario',
+                'areas.nombre as nombre_areas',
+                'areas.idar',
+            )
+            ->where('users.idu', '=', $dir[0]->idu)
+            ->get();
+            
+
+        }else{
+
+            $user = DB::table('users')
             ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
             ->join('areas', 'areas.idar', '=', 'users.idar_areas')
             ->select(
@@ -674,6 +701,16 @@ class ActividadesController extends Controller
             )
             ->where('users.idu', '=', Auth()->user()->idu)
             ->get();
+        }
+
+        $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
+        $consul = DB::table('actividades')->count() + 1;
+        $tipous = DB::table('areas')->get()->all();
+        $tipo_actividad = DB::table('tipos_actividades')
+            ->orderBy('nombre', 'Asc')
+            ->get();
+
+       
 
         return view('Actividades.actividades')
             ->with('hoy', $hoy)
@@ -785,13 +822,25 @@ class ActividadesController extends Controller
         $estado = $r->estado;
         $importancia = $r->importancia;
 
+        if(Auth()->user()->idtu_tipos_usuarios == 4){
 
-        DB::Insert("INSERT INTO actividades (asunto, descripcion, fecha_creacion, turno, comunicado, fecha_inicio,
-                    hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
-                    importancia, archivo1, archivo2, archivo3, link1, link2, link3)
-                    VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
-                    '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
-                    '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
+            DB::Insert("INSERT INTO actividades (asunto, descripcion, fecha_creacion, turno, comunicado, fecha_inicio,
+                        hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
+                        importancia, archivo1, archivo2, archivo3, link1, link2, link3)
+                        VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
+                        '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
+                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
+        }else{
+
+            DB::Insert("INSERT INTO actividades (asunto, descripcion, fecha_creacion, turno, comunicado, fecha_inicio,
+                        hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
+                        importancia, archivo1, archivo2, archivo3, link1, link2, link3, aprobacion)
+                        VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
+                        '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
+                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3', 1)");
+
+
+        }
 
 
         $consul = DB::table('actividades')->max('idac');
@@ -804,9 +853,15 @@ class ActividadesController extends Controller
 
 
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
+
             return redirect()->route('reporte_actividades');
-        } else {
+        }else if(Auth()->User()->idtu_tipos_usuarios == 2){
+
             return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);
+
+        }else{
+
+            return redirect('panel');
         }
     }
 
