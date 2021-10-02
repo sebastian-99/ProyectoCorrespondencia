@@ -400,11 +400,13 @@ class ActividadesController extends Controller
                           </div>
                           <div class='modal-body'>
                                  $rechazo
-                                        <form action=" . route('updateRechazo') . " method='POST' enctype='multipart/form-data'>
-                                             <input type='hidden' name='_token' value=" . csrf_token() . ">
-                                             <input type='hidden' value=" . $idac . " name='idreac'>
-                                             <button type='submit' class='btn btn-sm btn-success'><i class='fas fa-check-circle'></i></button> <a class='btn btn-danger btn-sm' href=" . route('EliminarResponsables', encrypt($idreac)) . " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
-                                        </form>
+                                 <form action=" . route('updateRechazo') . " method='POST' enctype='multipart/form-data'>
+                                 <input type='hidden' name='_token' value=" . csrf_token() . ">
+                                 <input type='hidden' value=" . $idac . " name='idreac'>
+                                     <label>Describe la razón del porque si le corresponde la actividad</label>
+                                     <Textarea class='form-control' name='razon_activacion' id='razon_a' value='{{old('razon_activacion')}}' rows='5' required></Textarea>
+                                 <button type='submit' class='btn btn-sm btn-success'><i class='fas fa-check-circle'></i></button> <a class='btn btn-danger btn-sm' href=" . route('EliminarResponsables', encrypt($idreac)) . " id='boton_disabled' ><i class='nav-icon fas fa-ban'></i></a>
+                             </form>
                                 </div>
                           </div>
                      </div>
@@ -487,7 +489,8 @@ class ActividadesController extends Controller
         $idreac = $c->idreac;
         $acuse = 0;
         $razon_rechazo = NULL;
-        DB::UPDATE("UPDATE responsables_actividades SET  acuse ='$acuse', razon_rechazo = '$razon_rechazo'
+        $razon_activacion = $c->razon_activacion;
+        DB::UPDATE("UPDATE responsables_actividades SET  acuse ='$acuse', razon_rechazo = '$razon_rechazo', razon_activacion = '$razon_activacion'
         WHERE idreac = $idreac");
         return back()->with('message', 'El usuario se ha reactivado en la actividad');
     }

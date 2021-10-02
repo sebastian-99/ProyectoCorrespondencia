@@ -136,6 +136,10 @@
           <div class="col-sm-12 mb-3" id="descripcion_a"></div>
         </div>
         <div class="row">
+        <div class="row">
+          <div class="col-sm-12 mb-3" id="razon_activacion_a"></div>
+        </div>
+        <div class="row">
           <div class="col-sm-4 mb-3" id="importancia_a"></div>
           <div class="col-sm-5 mb-3" id="comunicado_a"></div>
           <div class="col-sm-3 mb-3" id="turno_a"></div>
@@ -189,6 +193,7 @@
     $.get("../DetallesAsignacion/" + id, function(data) {
       $('#asunto_a').empty();
       $('#descripcion_a').empty();
+      $('#razon_activacion_a').empty();
       $('#importancia_a').empty();
       $('#comunicado_a').empty();
       $('#turno_a').empty();
@@ -238,6 +243,7 @@
       $('#crearModal').modal('show');
       var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
       var descripcion = "<textarea id='descripcion' name='descripcion' rows='8' class='form-control form-control-sm' disabled></textarea>"
+      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
       var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
       var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
       var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
@@ -248,6 +254,7 @@
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
       $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+      $('#razon_activacion_a').append("<strong>razon_activacion </strong>" + razon_activacion);
       $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
       $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
       $('#turno_a').append("<strong>Turno </strong>" + turno);
@@ -258,6 +265,8 @@
 
       $('#asunto').val(data[0].asunto);
       $('#descripcion').val(data[0].descripcion);
+      $('#razon_activacion').val(data[0].razon_activacion);
+      console.log(data);
       $('#importancia').val(data[0].importancia);
       $('#comunicado').val(data[0].comunicado);
       $('#turno').val(data[0].turno);
@@ -320,6 +329,7 @@
 
     $('#asunto_a').empty();
     $('#descripcion_a').empty();
+    $('#razon_activacion').empty();
     $('#importancia_a').empty();
     $('#comunicado_a').empty();
     $('#turno_a').empty();
