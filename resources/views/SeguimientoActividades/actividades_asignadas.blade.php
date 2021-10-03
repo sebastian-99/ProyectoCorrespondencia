@@ -190,7 +190,6 @@
     $.get("../DetallesAsignacion/" + id, function(data) {
       $('#asunto_a').empty();
       $('#descripcion_a').empty();
-      $('#razon_activacion_a').empty();
       $('#importancia_a').empty();
       $('#comunicado_a').empty();
       $('#turno_a').empty();
@@ -198,6 +197,7 @@
       $('#area_a').empty();
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
+      $('#razon_activacion_a').empty();
       $('#pass').empty();
       $('#aceptar').show();
       $('#rechazar').show();
@@ -240,7 +240,6 @@
       $('#crearModal').modal('show');
       var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
       var descripcion = "<textarea id='descripcion' name='descripcion' rows='8' class='form-control form-control-sm' disabled></textarea>"
-      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
       var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
       var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
       var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
@@ -248,10 +247,10 @@
       var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
       var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
       var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
+      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
       $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
-      $('#razon_activacion_a').append("<strong>razon_activacion </strong>" + razon_activacion);
       $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
       $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
       $('#turno_a').append("<strong>Turno </strong>" + turno);
@@ -259,11 +258,10 @@
       $('#area_a').append("<strong>Área responsable </strong>" + area);
       $('#f_creacion_a').append("<strong>Fecha de creación </strong>" + creacion);
       $('#periodo_atencion_a').append("<strong>Periodo de atención </strong>" + periodo);
+      $('#razon_activacion_a').append("<strong>Razón de activación </strong>" + razon_activacion);
 
       $('#asunto').val(data[0].asunto);
       $('#descripcion').val(data[0].descripcion);
-      $('#razon_activacion').val(data[0].razon_activacion);
-      console.log(data);
       $('#importancia').val(data[0].importancia);
       $('#comunicado').val(data[0].comunicado);
       $('#turno').val(data[0].turno);
@@ -271,6 +269,8 @@
       $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
+      $('#razon_activacion').val(data[0].razon_activacion);
+      console.log(data);
 
       //Verificar si hay razon de activacion
       const ra = $('#razon_activacion_a').val();
