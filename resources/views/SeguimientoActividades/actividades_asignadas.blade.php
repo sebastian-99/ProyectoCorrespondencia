@@ -136,10 +136,6 @@
           <div class="col-sm-12 mb-3" id="descripcion_a"></div>
         </div>
         <div class="row">
-        <div class="row">
-          <div class="col-sm-12 mb-3" id="razon_activacion_a"></div>
-        </div>
-        <div class="row">
           <div class="col-sm-4 mb-3" id="importancia_a"></div>
           <div class="col-sm-5 mb-3" id="comunicado_a"></div>
           <div class="col-sm-3 mb-3" id="turno_a"></div>
@@ -151,6 +147,7 @@
         <div class="row">
           <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
           <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
+          <div class="col-sm-12 mb-3" id="razon_activacion_a" hidden=""></div>
         </div>
         <!--</div>
             </div>
@@ -274,6 +271,13 @@
       $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
+
+      //Verificar si hay razon de activacion
+      const ra = $('#razon_activacion_a').val();
+      //console.log(ra);
+      if (ra != null) {
+        $('#razon_activacion_a').removeAttr('hidden');
+      }
 
       //Guardar informacion de recibo de actividad
 
