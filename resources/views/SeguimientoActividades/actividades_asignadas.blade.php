@@ -147,7 +147,7 @@
         <div class="row">
           <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
           <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
-          <div class="col-sm-12 mb-3" id="razon_activacion_a" hidden=""></div>
+          <div class="col-sm-12 mb-3" id="razon_activacion_a" ></div>
         </div>
         <!--</div>
             </div>
@@ -250,7 +250,7 @@
       var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
-      $('#descripcion_a').append("<strong>Descripcion </strong>" + descripcion);
+      $('#descripcion_a').append("<strong>Descripción </strong>" + descripcion);
       $('#importancia_a').append("<strong>Importancia </strong>" + importancia);
       $('#comunicado_a').append("<strong>Comunicado </strong>" + comunicado);
       $('#turno_a').append("<strong>Turno </strong>" + turno);
@@ -270,13 +270,15 @@
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
       $('#razon_activacion').val(data[0].razon_activacion);
-      console.log(data);
+      //console.log(data[0]);
 
       //Verificar si hay razon de activacion
-      const ra = $('#razon_activacion_a').val();
-      //console.log(ra);
-      if (ra != null) {
-        $('#razon_activacion_a').removeAttr('hidden');
+      var ra = $('#razon_activacion').val();
+      console.log(ra);
+      if (ra == "") {
+        $('#razon_activacion_a').attr('hidden', true);
+      } else {
+        $('#razon_activacion_a').attr('hidden', false);
       }
 
       //Guardar informacion de recibo de actividad

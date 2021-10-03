@@ -641,13 +641,14 @@ class SeguimientoController extends Controller
 
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
         CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS nombre_area,
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje, res_act.idu_users
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
         INNER JOIN responsables_actividades AS res_act ON res_act.idac_actividades = ac.idac
-        WHERE ac.idac = $idac");
+        WHERE ac.idac = $idac
+        AND res_act.idu_users = $id_user");
 
         return response()->json($actividad);
     }
