@@ -37,7 +37,7 @@ class SeguimientoController extends Controller
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
         } else {
@@ -50,7 +50,7 @@ class SeguimientoController extends Controller
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user AND ac.activo = 1
+            WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
         }
