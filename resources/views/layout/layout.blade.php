@@ -140,7 +140,7 @@
               <p>Actividades<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth()->user()->idtu_tipos_usuarios != 4)
+              @if(Auth()->user()->idtu_tipos_usuarios != 1)
               <li class="nav-item">
                 <a href="{{ url('actividades')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -161,6 +161,12 @@
                 <a href="{{ url('actividades_creadas', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades creadas</p>
+                </a>
+                @endif
+                @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                <a href="{{ url('actividades_pendientes', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ver actividades pendientes</p>
                 </a>
                 @endif
                 @if(Auth()->user()->idtu_tipos_usuarios == 4)

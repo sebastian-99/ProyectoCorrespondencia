@@ -147,6 +147,7 @@
         <div class="row">
           <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
           <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
+          <div class="col-sm-12 mb-3" id="razon_activacion_a" ></div>
         </div>
         <!--</div>
             </div>
@@ -196,6 +197,7 @@
       $('#area_a').empty();
       $('#f_creacion_a').empty();
       $('#periodo_atencion_a').empty();
+      $('#razon_activacion_a').empty();
       $('#pass').empty();
       $('#aceptar').show();
       $('#rechazar').show();
@@ -245,6 +247,7 @@
       var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
       var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
       var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
+      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
       $('#descripcion_a').append("<strong>Descripción </strong>" + descripcion);
@@ -255,6 +258,7 @@
       $('#area_a').append("<strong>Área responsable </strong>" + area);
       $('#f_creacion_a').append("<strong>Fecha de creación </strong>" + creacion);
       $('#periodo_atencion_a').append("<strong>Periodo de atención </strong>" + periodo);
+      $('#razon_activacion_a').append("<strong>Razón de activación </strong>" + razon_activacion);
 
       $('#asunto').val(data[0].asunto);
       $('#descripcion').val(data[0].descripcion);
@@ -265,6 +269,17 @@
       $('#area').val(data[0].nombre_area);
       $('#creacion').val(data[0].fecha_creacion);
       $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
+      $('#razon_activacion').val(data[0].razon_activacion);
+      //console.log(data[0]);
+
+      //Verificar si hay razon de activacion
+      var ra = $('#razon_activacion').val();
+      console.log(ra);
+      if (ra == "") {
+        $('#razon_activacion_a').attr('hidden', true);
+      } else {
+        $('#razon_activacion_a').attr('hidden', false);
+      }
 
       //Guardar informacion de recibo de actividad
 
@@ -320,6 +335,7 @@
 
     $('#asunto_a').empty();
     $('#descripcion_a').empty();
+    $('#razon_activacion').empty();
     $('#importancia_a').empty();
     $('#comunicado_a').empty();
     $('#turno_a').empty();

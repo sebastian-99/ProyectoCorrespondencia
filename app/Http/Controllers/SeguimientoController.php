@@ -137,8 +137,9 @@ class SeguimientoController extends Controller
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id
-            AND ra.idac_actividades = $idac");
+            WHERE ra.idu_users = $id_user");
+
+            //dd($id);
 
 
             if ($ver_acuse[0]->acuse == 2) {
@@ -640,13 +641,15 @@ class SeguimientoController extends Controller
         $id_user = Auth()->user()->idu;
 
         $actividad = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
-        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
-        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
-        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje
+        CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
+        ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS nombre_area,
+        ac.status, porcentaje(ac.idac,$id_user) AS porcentaje, res_act.idu_users
         FROM actividades AS ac
         INNER JOIN users AS us ON us.idu = ac.idu_users
         INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
-        WHERE ac.idac = $idac");
+        INNER JOIN responsables_actividades AS res_act ON res_act.idac_actividades = ac.idac
+        WHERE ac.idac = $idac
+        AND res_act.idu_users = $id_user");
 
         return response()->json($actividad);
     }
@@ -669,13 +672,14 @@ class SeguimientoController extends Controller
 
             //Obtener detalles de la actividad
             $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
-            CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
+            CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
             ac.archivo1, ac.archivo2, ac.archivo3, ac.link1, ac.link2, ac.link3, ta.nombre as tipo_act,
             ac.status, porcentaje(ac.idac,$id) AS porcentaje
             FROM actividades AS ac
             INNER JOIN users AS us ON us.idu = ac.idu_users
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
+            INNER JOIN responsables_actividades AS res_act ON res_act.idac_actividades = ac.idac
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             WHERE ac.idac = $idac");
         } else {
@@ -1014,7 +1018,10 @@ class SeguimientoController extends Controller
 
             if ($request->hasFile('archivo_fin')) {
                 if (Storage::putFileAs('/Seguimientos/', $file_fin, $name_arcfin)) {
+                    $id_user = Auth::user()->idu;
                     $seg_ac->archivo_fin = $name_arcfin;
+                    DB::UPDATE("UPDATE responsables_actividades SET estado_act = 'Completada'
+                    WHERE idu_users = $id_user AND idac_actividades = $idac");
                 }
             }
 
