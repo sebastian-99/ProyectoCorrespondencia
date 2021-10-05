@@ -48,19 +48,13 @@ class horario extends Command
 
         //$texto = "[". date ("Y-m-d H:i:s") . "]: Porfavor dios ayudame";
         //Storage::append('archivo.txt', $texto);
-        $consult = DB::SELECT("SELECT res.idu_users, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm)
-        AS nombre_us, us.email,ac.idac, res.acuse, res.idreac, seg.estado, CURDATE() AS f_actual,
-        MAX(seg.porcentaje) AS porcentaje, ac.fecha_inicio,ac.fecha_fin, us.idtu_tipos_usuarios,ac.asunto
-        FROM responsables_actividades AS res
-        JOIN actividades AS ac ON ac.idac = res.idac_actividades
-        JOIN users AS us ON us.idu = res.idu_users
-        JOIN areas AS ar ON ar.idar = us.idar_areas
-        LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
-        WHERE seg.estado = 'Pendiente'
-        GROUP BY idu_users;
-        ");
-        Mail::to($consult[0]->email)->send(new enviar_recordatorio);
-        log("Holiwis 2");
+       $correos = ["al221711149@gmail.com","urielongo1069@gmail.com", "al221811726@gmail.com"];
+       
+        Mail::to($correos)->send(new enviar_recordatorio);
+        //log("Holiwis 2");
+       
+        
+       
       
     }
 
