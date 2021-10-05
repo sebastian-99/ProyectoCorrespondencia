@@ -129,19 +129,19 @@ class SeguimientoController extends Controller
             $tipo = Auth::user()->idtu_tipos_usuarios;
             if ($tipo == 4) {
                 $asignado = DB::select("SELECT idu FROM users AS u WHERE u.idtu_tipos_usuarios = 2 AND u.idar_areas = $ar ");
+                $id = $asignado[0]->idu;
             } else {
                 $asignado = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
+                $id = $id_user;
             }
 
-            $id = $asignado[0]->idu;
+            //return $id;
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user");
+            WHERE ra.idu_users = $id");
 
-            //dd($id);
-
-
+            
             if ($ver_acuse[0]->acuse == 2) {
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
