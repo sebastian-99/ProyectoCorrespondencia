@@ -137,8 +137,9 @@ class SeguimientoController extends Controller
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id
-            AND ra.idac_actividades = $idac");
+            WHERE ra.idu_users = $id_user");
+
+            //dd($id);
 
 
             if ($ver_acuse[0]->acuse == 2) {
