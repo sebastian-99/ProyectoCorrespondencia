@@ -21,7 +21,7 @@ class PanelController extends Controller
         
         if (auth()->user()->idtu_tipos_usuarios == 4) {
 
-            $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 4 AND idar_areas = $area");
+            $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $area");
             $nombre = $user[0]->nombre;
             $user = $user[0]->idu;
             $actividadesEnSeguimiento = $this->getActividadesEnSeguimiento($user);
