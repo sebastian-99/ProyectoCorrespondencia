@@ -54,7 +54,7 @@ class horario extends Command
             JOIN actividades AS ac ON ac.idac = res.idac_actividades
             JOIN users AS us ON us.idu = res.idu_users
             LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
-            WHERE res.estado_act IS NULL AND ac.`idac` = 33
+            WHERE res.estado_act IS NULL
     ");
         foreach($consulta as $c){
             if($c->resultado == 3){
