@@ -1018,7 +1018,10 @@ class SeguimientoController extends Controller
 
             if ($request->hasFile('archivo_fin')) {
                 if (Storage::putFileAs('/Seguimientos/', $file_fin, $name_arcfin)) {
+                    $id_user = Auth::user()->idu;
                     $seg_ac->archivo_fin = $name_arcfin;
+                    DB::UPDATE("UPDATE responsables_actividades SET estado_act = 'Completada'
+                    WHERE idu_users = $id_user AND idac_actividades = $idac");
                 }
             }
 

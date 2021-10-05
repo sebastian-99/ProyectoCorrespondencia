@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('horario:enviar')->everyMinute();
+        $schedule->command('horario:enviar')->dailyAt('07:00');
     }
 
     /**
