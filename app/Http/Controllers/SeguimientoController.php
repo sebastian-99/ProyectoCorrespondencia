@@ -139,7 +139,7 @@ class SeguimientoController extends Controller
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             WHERE ra.idu_users = $id_user");
 
-            //dd($id);
+            //dd($ver_acuse);
 
 
             if ($ver_acuse[0]->acuse == 2) {
