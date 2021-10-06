@@ -142,7 +142,7 @@ class SeguimientoController extends Controller
             WHERE ra.idu_users = $id
             AND ra.idac_actividades = $idac");
             if ($ver_acuse[0]->acuse == 2) {
-                return "Hola";
+    
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
 
             }

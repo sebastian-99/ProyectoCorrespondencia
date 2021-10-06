@@ -163,7 +163,7 @@
                   <p>Ver actividades creadas</p>
                 </a>
                 @endif
-                @if(Auth()->user()->idtu_tipos_usuarios != 4)
+                @if(Auth()->user()->idtu_tipos_usuarios == 4 || Auth()->user()->idtu_tipos_usuarios == 2)
                 <a href="{{ url('actividades_pendientes', ['id'=>encrypt(Auth()->user()->idu)])}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver actividades pendientes</p>
