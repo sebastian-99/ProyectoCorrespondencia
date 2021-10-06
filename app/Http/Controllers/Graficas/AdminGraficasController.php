@@ -22,7 +22,7 @@ class AdminGraficasController extends Controller
     {
         $tiposActividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('tipos_actividades.idtac', 'tipos_actividades.nombre')
             ->groupBy('tipos_actividades.nombre')
             ->get();
@@ -209,7 +209,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
         ->where('actividades.idar_areas',$areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -275,7 +275,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $Actividades)
         ->where('actividades.idar_areas',$areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -346,7 +346,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
         ->where('actividades.idar_areas',$areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -397,7 +397,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->where('actividades.idar_areas',$areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -448,7 +448,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->where('actividades.idar_areas',$areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -501,7 +501,7 @@ class AdminGraficasController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->where('actividades.idar_areas',$request->areas)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
