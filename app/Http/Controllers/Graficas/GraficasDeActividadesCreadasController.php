@@ -26,7 +26,7 @@ class GraficasDeActividadesCreadasController extends Controller
     {
         $misActividades = Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('actividades.idu_users',$user->idu)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->groupBy('tipos_actividades.idtac')
             ->get();
         return view('sistema.graficas.actividades-creadas',[
@@ -180,7 +180,7 @@ class GraficasDeActividadesCreadasController extends Controller
             ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
             ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('idac','fecha_fin')
             ->get()
             ->each(function($actividad){
@@ -210,7 +210,7 @@ class GraficasDeActividadesCreadasController extends Controller
         return Actividades::join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
                 ->join('areas','areas.idar','actividades.idar_areas')
                 ->whereIn('actividades.idac', $actividades)
-                ->where('actividades.autorizacion', 1)
+                ->where('actividades.aprobacion', 1)
                 ->select(
                     'idac',
                     'areas.nombre',
@@ -301,7 +301,7 @@ class GraficasDeActividadesCreadasController extends Controller
             ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
             ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('idac')
             ->get()
             ->each(function($actividad){
@@ -330,7 +330,7 @@ class GraficasDeActividadesCreadasController extends Controller
             ->where('actividades.idtac_tipos_actividades',$tiposActividades->idtac)
             ->where('actividades.fecha_inicio','>=',$inicio->format('Y-m-d'))
             ->where('actividades.fecha_fin','<=',$fin->format('Y-m-d'))
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('idac')
             ->get()
             ->each(function($actividad){
@@ -362,7 +362,7 @@ class GraficasDeActividadesCreadasController extends Controller
             ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d)'))
             ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d)'))
             ->where('actividades.idu_users', $user->idu)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('actividades.idac')
             ->get();
         return [['actividades' =>$this->getActividadesFinales($actividades)]];

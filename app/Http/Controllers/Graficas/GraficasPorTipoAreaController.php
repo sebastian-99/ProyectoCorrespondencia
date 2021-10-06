@@ -21,7 +21,7 @@ class GraficasPorTipoAreaController extends Controller
         $tiposActividades = ResponsablesActividades::join('actividades','actividades.idac','responsables_actividades.idac_actividades')
             ->join('tipos_actividades','tipos_actividades.idtac','actividades.idtac_tipos_actividades')
             ->where('responsables_actividades.idu_users',$user->idu)
-            ->where('actividades.autorizacion', 1)
+            ->where('actividades.aprobacion', 1)
             ->select('tipos_actividades.idtac', 'tipos_actividades.nombre')
             ->groupBy('tipos_actividades.nombre')
             ->get();
@@ -205,7 +205,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -270,7 +270,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $Actividades)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -342,7 +342,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
         ->whereIn('responsables_actividades.idreac', $actividades)
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -393,7 +393,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -444,7 +444,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('actividades.idtac_tipos_actividades', $tiposActividades->idtac)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
@@ -497,7 +497,7 @@ class GraficasPorTipoAreaController extends Controller
         ->where('tipos_actividades.nombre', $request->tipo_area)
         ->where('actividades.fecha_inicio','>=', $inicio->format('Y-m-d'))
         ->where('actividades.fecha_fin','<=', $fin->format('Y-m-d'))
-        ->where('actividades.autorizacion', 1)
+        ->where('actividades.aprobacion', 1)
         ->select(
             'users.idu',
             DB::raw("CONCAT( users.titulo, '', users.nombre, ' ',users.app, ' ', users.apm) AS responsable"),
