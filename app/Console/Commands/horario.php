@@ -47,15 +47,20 @@ class horario extends Command
         //$user = DB::SELECT("SELECT email FROM users WHERE idu = 15");
 
         //$texto = "[". date ("Y-m-d H:i:s") . "]: Porfavor dios ayudame";
-        //Storage::append('archivo.txt', $texto);
-       $correos = ["al221711149@gmail.com","urielongo1069@gmail.com", "al221811726@gmail.com"];
-       
-        Mail::to($correos)->send(new enviar_recordatorio);
-        //log("Holiwis 2");
-       
-        
-       
-      
+        $consulta = DB::select("SELECT res.idu_users, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre,ac.`fecha_fin`, 
+        TIMESTAMPDIFF (DAY, CURDATE(), ac.`fecha_fin` )  AS resultado,
+            ac.asunto, res.estado_act, res.idreac, us.email
+            FROM responsables_actividades AS res
+            JOIN actividades AS ac ON ac.idac = res.idac_actividades
+            JOIN users AS us ON us.idu = res.idu_users
+            LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
+            WHERE res.estado_act IS NULL
+    ");
+        foreach($consulta as $c){
+            if($c->resultado == 3){
+                Mail::to($c->email)->send(new enviar_recordatorio);
+            }
+        }
     }
 
 }

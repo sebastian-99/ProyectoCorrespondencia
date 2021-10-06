@@ -37,7 +37,7 @@ class SeguimientoController extends Controller
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
         } else {
@@ -50,7 +50,7 @@ class SeguimientoController extends Controller
             INNER JOIN areas AS ar ON ar.idar = ac.idar_areas
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user AND ac.activo = 1
+            WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
         }
@@ -129,19 +129,19 @@ class SeguimientoController extends Controller
             $tipo = Auth::user()->idtu_tipos_usuarios;
             if ($tipo == 4) {
                 $asignado = DB::select("SELECT idu FROM users AS u WHERE u.idtu_tipos_usuarios = 2 AND u.idar_areas = $ar ");
+                $id = $asignado[0]->idu;
             } else {
                 $asignado = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
+                $id = $id_user;
             }
 
-            $id = $asignado[0]->idu;
+            //return $id;
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id_user");
+            WHERE ra.idu_users = $id");
 
-            //dd($id);
-
-
+            
             if ($ver_acuse[0]->acuse == 2) {
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
@@ -1018,7 +1018,10 @@ class SeguimientoController extends Controller
 
             if ($request->hasFile('archivo_fin')) {
                 if (Storage::putFileAs('/Seguimientos/', $file_fin, $name_arcfin)) {
+                    $id_user = Auth::user()->idu;
                     $seg_ac->archivo_fin = $name_arcfin;
+                    DB::UPDATE("UPDATE responsables_actividades SET estado_act = 'Completada'
+                    WHERE idu_users = $id_user AND idac_actividades = $idac");
                 }
             }
 

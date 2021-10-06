@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="form-row">
+<div class="form-row"> 
     <div class="form-group col-12">
         <div class="box">
             <div class="box-body">
@@ -27,7 +27,7 @@
                                             @if(Auth()->user()->idtu_tipos_usuarios != 4)
                                                 ACTIVIDADES DE HOY 
                                             @endif
-                                            @if(Auth()->user()->idtu_tipos_usuarios == 4)
+                                            @if(Auth()->user()->idtu_tipos_usuarios === 4)
                                                 ACTIVIDADES DE HOY PARA {{$nombre}}
                                             @endif    
                                         </h5>
@@ -144,6 +144,7 @@
 
     <script>
         const user_id = '{{ $user }}';
+        //console.log(user_id);
     </script>
     <script  type="module" src="/js/panel/panel.js"></script>
 @endsection
