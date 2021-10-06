@@ -1515,7 +1515,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u 
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
@@ -1530,7 +1530,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
@@ -1545,7 +1545,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_inicio` >=  DATE('$fechaIni')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
@@ -1560,7 +1560,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_inicio` <=  DATE('$fechaFin')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
@@ -1575,7 +1575,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
@@ -1590,7 +1590,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_fin` >=  DATE('$fechaIni')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
@@ -1605,7 +1605,7 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = $id_u
+                WHERE ac.idu_users = $id_u AND ac.aprobacion = 1
                 AND ac.`fecha_fin` <=  DATE('$fechaFin')
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");

@@ -43,7 +43,7 @@ class SeguimientoController extends Controller
         } else {
 
             $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
-            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS AREA,ra.idu_users, ac.activo, 
+            ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS AREA,ra.idu_users,ac.activo, 
             porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
             FROM actividades AS ac
             INNER JOIN users AS us ON us.idu = ac.idu_users
@@ -135,15 +135,16 @@ class SeguimientoController extends Controller
                 $id = $id_user;
             }
 
-            //return $id;
+            
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
-            WHERE ra.idu_users = $id");
-
-            
+            WHERE ra.idu_users = $id
+            AND ra.idac_actividades = $idac");
             if ($ver_acuse[0]->acuse == 2) {
+                return "Hola";
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
+
             }
 
             if ($ver_acuse[0]->acuse == 1) {
@@ -216,7 +217,7 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             
-            WHERE ra.idu_users = $id AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
@@ -231,6 +232,7 @@ class SeguimientoController extends Controller
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
            
             WHERE ra.idu_users = $id AND ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin') AND ac.activo = 1
+            AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
@@ -244,7 +246,7 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
            
-            WHERE ra.idu_users = $id AND ac.`fecha_inicio` >= DATE('$fechaIni') AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.`fecha_inicio` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
@@ -258,7 +260,7 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
            
-            WHERE ra.idu_users = $id AND ac.`fecha_inicio` <= DATE('$fechaFin') AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.`fecha_inicio` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
@@ -272,7 +274,7 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
            
-            WHERE ra.idu_users = $id AND ac.activo = 1
+            WHERE ra.idu_users = $id AND ac.activo = 1 AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
@@ -287,6 +289,7 @@ class SeguimientoController extends Controller
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                
                 WHERE ra.idu_users = $id AND ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin') AND ac.activo = 1
+                AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
             }
@@ -300,7 +303,7 @@ class SeguimientoController extends Controller
                     INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                     LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                    
-                    WHERE ra.idu_users = $id AND ac.`fecha_fin` >= DATE('$fechaIni') AND ac.activo = 1
+                    WHERE ra.idu_users = $id AND ac.`fecha_fin` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
                     GROUP BY ac.idac
                     ORDER BY ac.fecha_creacion DESC");
             }
@@ -314,7 +317,7 @@ class SeguimientoController extends Controller
                     INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                     LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                    
-                    WHERE ra.idu_users = $id AND ac.`fecha_fin` <= DATE('$fechaFin') AND ac.activo = 1
+                    WHERE ra.idu_users = $id AND ac.`fecha_fin` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
                     GROUP BY ac.idac
                     ORDER BY ac.fecha_creacion DESC");
             }
@@ -328,7 +331,7 @@ class SeguimientoController extends Controller
                     INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                     LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                    
-                    WHERE ra.idu_users = $id AND ac.activo = 1
+                    WHERE ra.idu_users = $id AND ac.activo = 1 AND ac.aprobacion = 1
                     GROUP BY ac.idac
                     ORDER BY ac.fecha_creacion DESC");
             }
@@ -347,7 +350,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
         
-        WHERE ra.idu_users = $id_user AND ac.activo = 1
+        WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -362,6 +365,7 @@ class SeguimientoController extends Controller
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
        
         WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin') AND ac.activo = 1
+        AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -375,7 +379,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
        
-        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` >= DATE('$fechaIni') AND ac.activo = 1
+        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -389,7 +393,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
        
-        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` <= DATE('$fechaFin') AND ac.activo = 1
+        WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -403,7 +407,7 @@ class SeguimientoController extends Controller
         INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
         LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
        
-        WHERE ra.idu_users = $id_user AND ac.activo = 1
+        WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
@@ -418,6 +422,7 @@ class SeguimientoController extends Controller
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
            
             WHERE ra.idu_users = $id_user AND ac.`fecha_fin` BETWEEN  DATE('$fechaIni') AND DATE('$fechaFin') AND ac.activo = 1
+            AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
         }
@@ -431,7 +436,7 @@ class SeguimientoController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                
-                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` >= DATE('$fechaIni') AND ac.activo = 1
+                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
@@ -445,7 +450,7 @@ class SeguimientoController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                
-                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` <= DATE('$fechaFin') AND ac.activo = 1
+                WHERE ra.idu_users = $id_user AND ac.`fecha_fin` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
@@ -459,7 +464,7 @@ class SeguimientoController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                
-                WHERE ra.idu_users = $id_user AND ac.activo = 1
+                WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
