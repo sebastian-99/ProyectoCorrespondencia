@@ -398,7 +398,7 @@ class ActividadesController extends Controller
             if ($data == 0) {
                 return ("No existen detalles");
             } else if ($data == 1) {
-                return "<a href=" . route('detallesSeguimiento', encrypt($idac)) . "><button type='button' class='btn btn-success'><i class='nav-icon fas fa-eye'></i></button></a>   ";
+                return "<a href=" . route('detallesSeguimiento', encrypt($idac)) . "><button type='button' class='btn btn-success btn-sm'><i class='nav-icon fas fa-eye'></i></button></a>   ";
             } else if ($data == 2) {
                 if (Auth()->User()->idtu_tipos_usuarios == 3) {
                     return "<a href='#' class='btn btn-danger btn-sm pull-right' data-toggle='modal' data-target='#create$idac'><i class='nav-icon fas fa-eye'></i></a>
@@ -547,7 +547,7 @@ class ActividadesController extends Controller
         $idActvidad = ResponsablesActividades::where('idreac', $idac)->select('idac_actividades')->first();
         $idActvidad = encrypt($idActvidad->idac_actividades);
         $consult = DB::SELECT("SELECT seg.idseac, DATE(seg.fecha) as fecha, seg.detalle, seg.porcentaje, seg.estado, CONCAT(us.titulo,' ',us.nombre,' ',us.app,' ',us.apm) AS nombre,
-        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse, re.created_at
+        arch.ruta, act.asunto, arch.ruta, ar.nombre as nombre_ar, act.fecha_fin, act.status AS status_ac, us.idtu_tipos_usuarios, re.acuse, re.created_at, seg.archivo_fin
         FROM seguimientos_actividades AS seg
         INNER JOIN responsables_actividades AS re ON re.idreac = seg.idreac_responsables_actividades
         INNER JOIN users AS us ON us.idu = re.idu_users
@@ -569,13 +569,17 @@ class ActividadesController extends Controller
             }
             return $arr;
         }
-        function btn($idac, $ruta)
+        function btn($idac, $ruta, $archivo_fin)
         {
-            if ($ruta == "Sin archivo") {
+            if ($ruta == "Sin archivo" && $archivo_fin == NULL) {
                 return "Sin archivos";
-            } else {
-                return "
-                <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
+            } else if($ruta != "Sin archivo" && $archivo_fin == NULL){
+                return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
+            }else if($ruta == "Sin archivo" && $archivo_fin != NULL){
+                return "<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>";
+            }else if ($ruta != "Sin archivo" && $archivo_fin !=NULL){
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success  mt-3 btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>
+                &nbsp; <a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a></div>";
             }
         }
 
@@ -619,7 +623,7 @@ class ActividadesController extends Controller
                 'detalle' =>  $c->detalle,
                 'estado' =>  D($c->porcentaje, $c->fecha_fin, $c->fecha, $c->estado),
                 'porcentaje' => $c->porcentaje . '%',
-                'operaciones' => btn($c->idseac, $c->ruta),
+                'operaciones' => btn($c->idseac, $c->ruta,$c->archivo_fin),
             ));
             $turno = $turno + 1;
         }
