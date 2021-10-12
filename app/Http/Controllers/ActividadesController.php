@@ -257,7 +257,7 @@ class ActividadesController extends Controller
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
         }
-     
+
 
 
         $array = array();
@@ -573,11 +573,11 @@ class ActividadesController extends Controller
         {
             if ($ruta == "Sin archivo" && $archivo_fin == NULL) {
                 return "Sin archivos";
-            } else if($ruta != "Sin archivo" && $archivo_fin == NULL){
+            } else if ($ruta != "Sin archivo" && $archivo_fin == NULL) {
                 return "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>";
-            }else if($ruta == "Sin archivo" && $archivo_fin != NULL){
+            } else if ($ruta == "Sin archivo" && $archivo_fin != NULL) {
                 return "<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>";
-            }else if ($ruta != "Sin archivo" && $archivo_fin !=NULL){
+            } else if ($ruta != "Sin archivo" && $archivo_fin != NULL) {
                 return "<div class='btn-group me-2' role='group' aria-label='Second group'><a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesArchivos' class='edit btn btn-success  mt-3 btn-sm DetallesArchivos'><i class='nav-icon fas fa-file'></i></a>
                 &nbsp; <a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a></div>";
             }
@@ -623,7 +623,7 @@ class ActividadesController extends Controller
                 'detalle' =>  $c->detalle,
                 'estado' =>  D($c->porcentaje, $c->fecha_fin, $c->fecha, $c->estado),
                 'porcentaje' => $c->porcentaje . '%',
-                'operaciones' => btn($c->idseac, $c->ruta,$c->archivo_fin),
+                'operaciones' => btn($c->idseac, $c->ruta, $c->archivo_fin),
             ));
             $turno = $turno + 1;
         }
@@ -669,43 +669,41 @@ class ActividadesController extends Controller
         if (Auth()->user()->idtu_tipos_usuarios == 4) {
 
             $dir = DB::SELECT("SELECT idu FROM users 
-            WHERE idar_areas = ". Auth()->user()->idar_areas. 
-            " AND idtu_tipos_usuarios = 2");
-            
-            $user = DB::table('users')
-            ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
-            ->join('areas', 'areas.idar', '=', 'users.idar_areas')
-            ->select(
-                'users.idu',
-                'users.titulo',
-                'users.nombre',
-                'users.app',
-                'users.apm',
-                'tipos_usuarios.nombre as tipo_usuario',
-                'areas.nombre as nombre_areas',
-                'areas.idar',
-            )
-            ->where('users.idu', '=', $dir[0]->idu)
-            ->get();
-            
-
-        }else{
+            WHERE idar_areas = " . Auth()->user()->idar_areas .
+                " AND idtu_tipos_usuarios = 2");
 
             $user = DB::table('users')
-            ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
-            ->join('areas', 'areas.idar', '=', 'users.idar_areas')
-            ->select(
-                'users.idu',
-                'users.titulo',
-                'users.nombre',
-                'users.app',
-                'users.apm',
-                'tipos_usuarios.nombre as tipo_usuario',
-                'areas.nombre as nombre_areas',
-                'areas.idar',
-            )
-            ->where('users.idu', '=', Auth()->user()->idu)
-            ->get();
+                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('areas', 'areas.idar', '=', 'users.idar_areas')
+                ->select(
+                    'users.idu',
+                    'users.titulo',
+                    'users.nombre',
+                    'users.app',
+                    'users.apm',
+                    'tipos_usuarios.nombre as tipo_usuario',
+                    'areas.nombre as nombre_areas',
+                    'areas.idar',
+                )
+                ->where('users.idu', '=', $dir[0]->idu)
+                ->get();
+        } else {
+
+            $user = DB::table('users')
+                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('areas', 'areas.idar', '=', 'users.idar_areas')
+                ->select(
+                    'users.idu',
+                    'users.titulo',
+                    'users.nombre',
+                    'users.app',
+                    'users.apm',
+                    'tipos_usuarios.nombre as tipo_usuario',
+                    'areas.nombre as nombre_areas',
+                    'areas.idar',
+                )
+                ->where('users.idu', '=', Auth()->user()->idu)
+                ->get();
         }
 
         $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
@@ -715,7 +713,7 @@ class ActividadesController extends Controller
             ->orderBy('nombre', 'Asc')
             ->get();
 
-       
+
 
         return view('Actividades.actividades')
             ->with('hoy', $hoy)
@@ -757,8 +755,8 @@ class ActividadesController extends Controller
 
     public function insert_actividad(Request $r)
     {
-
-        $idusuario = $r->idusuario;
+        //dd($r['tipousuarioarea']);
+        /* $idusuario = $r->idusuario;
         $idar_areas = $r->idar_areas;
         $fechacreacion = $r->fechacreacion;
         $turno = $r->turno;
@@ -853,21 +851,28 @@ class ActividadesController extends Controller
         for ($i = 0; $i < count($tipousuarioarea); $i++) {
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
-        }
+        } */
+
+        /**
+         * Envio de correos a los usuarios asignados.
+         * Obteniendo los responsables de el request
+         */
+       foreach($r['tipousuarioarea'] as $c){
+        echo $c . ", ";
+       }
 
 
 
-        if (Auth()->User()->idtu_tipos_usuarios == 3) {
+        /* if (Auth()->User()->idtu_tipos_usuarios == 3) {
 
             return redirect()->route('reporte_actividades');
-        }else if(Auth()->User()->idtu_tipos_usuarios == 2){
+        } else if (Auth()->User()->idtu_tipos_usuarios == 2) {
 
             return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);
-
-        }else{
+        } else {
 
             return redirect('panel');
-        }
+        } */
     }
 
     public function actividades_modificacion($id)
@@ -1141,8 +1146,8 @@ class ActividadesController extends Controller
 
         //return count(array_diff($array,$tipousuarioarea));
 
-        if(Auth()->user()->idtu_tipos_usuarios != 4){
-            
+        if (Auth()->user()->idtu_tipos_usuarios != 4) {
+
             DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
             turno = '$turno',  comunicado = '$comunicado', fecha_inicio = '$fechainicio',
             hora_inicio = '$horadeinicio', fecha_fin = '$fechatermino', hora_fin = '$horatermino', idtac_tipos_actividades = '$tipoactividad',
@@ -1150,8 +1155,7 @@ class ActividadesController extends Controller
             importancia = '$importancia',  archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3',
             link1 = '$link', link2 = '$link2', link3 = '$link3', aprobacion = 1
             WHERE idac = $id");
-
-        }else{
+        } else {
 
             DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
             turno = '$turno',  comunicado = '$comunicado', fecha_inicio = '$fechainicio',
@@ -1161,7 +1165,7 @@ class ActividadesController extends Controller
             link1 = '$link', link2 = '$link2', link3 = '$link3', aprobacion = 0
             WHERE idac = $id");
         }
-        
+
 
 
         $array = array();
@@ -1197,10 +1201,9 @@ class ActividadesController extends Controller
         if (Auth()->user()->idtu_tipos_usuarios == 2) {
 
             return redirect()->route('reporte_actividades');
+        } else if (Auth()->user()->idtu_tipos_usuarios == 4) {
 
-        }else if(Auth()->user()->idtu_tipos_usuarios == 4) {
-
-            return redirect()->route('actividades_pendientes', ['id'=>encrypt(Auth()->user()->idu)]);
+            return redirect()->route('actividades_pendientes', ['id' => encrypt(Auth()->user()->idu)]);
         }
     }
 
@@ -1277,7 +1280,6 @@ class ActividadesController extends Controller
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
                 } else {
                     return "<a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='fas fa-check'></i></a>";
-                    
                 }
             }
         } else {
@@ -1385,15 +1387,15 @@ class ActividadesController extends Controller
         $ar = Auth()->user()->idar_areas;
         $tipo = Auth::user()->idtu_tipos_usuarios;
 
-        
-        
-        if($tipo == 4){
+
+
+        if ($tipo == 4) {
 
             $dir = DB::SELECT("SELECT idu FROM users 
-                WHERE idar_areas = ". Auth()->user()->idar_areas. 
+                WHERE idar_areas = " . Auth()->user()->idar_areas .
                 " AND idtu_tipos_usuarios = 2");
 
-                $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
                 porcentaje(ac.idac, $id_u) AS porcentaje, ac.status, ta.nombre AS tipo_actividad, ac.aprobacion
                 FROM actividades AS ac
@@ -1402,13 +1404,10 @@ class ActividadesController extends Controller
                 INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
                 LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
                 LEFT JOIN seguimientos_actividades AS sa ON sa.idreac_responsables_actividades = idreac
-                WHERE ac.idu_users = " . $dir[0]->idu ." AND ac.aprobacion = 0
+                WHERE ac.idu_users = " . $dir[0]->idu . " AND ac.aprobacion = 0
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
-            
-
-
-        }else{
+        } else {
 
             $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio,ac.fecha_fin, ac.importancia, ar.nombre, ac.activo, ra.acuse, ra.idu_users, ac.descripcion,
@@ -1424,7 +1423,7 @@ class ActividadesController extends Controller
                 ORDER BY ac.fecha_creacion DESC");
         }
 
-       
+
 
         $array = array();
 
@@ -1439,20 +1438,20 @@ class ActividadesController extends Controller
             return $arr;
         }
 
-        
-            function btn($idac, $aprobacion,$activo, $tipo)
-            {
 
-                if ($aprobacion == 0 && $tipo != 4) {
-                    return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-primary mt-1 btn-sm' href=" . route('aprobacion', ['id' => encrypt($idac), 'aprobacion' => encrypt($aprobacion)]) . "><i class='fas fa-check'></i></a>
-                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
-                }else{
+        function btn($idac, $aprobacion, $activo, $tipo)
+        {
 
-                    return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+            if ($aprobacion == 0 && $tipo != 4) {
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'><a class='btn btn-primary mt-1 btn-sm' href=" . route('aprobacion', ['id' => encrypt($idac), 'aprobacion' => encrypt($aprobacion)]) . "><i class='fas fa-check'></i></a>
                     <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
-                }
+            } else {
+
+                return "<div class='btn-group me-2' role='group' aria-label='Second group'>
+                    <a class='btn btn-warning mt-1 btn-sm' href=" . route('edit_modificacion', ['id' => encrypt($idac)]) . "><i class='fas fa-pencil-alt'></i></a><div>";
             }
-        
+        }
+
 
         function AB($data)
         {
@@ -1523,7 +1522,7 @@ class ActividadesController extends Controller
                 'avance' => AB($data),
                 'atendido_por' =>  D($data),
                 'estatus' =>  E($c->status),
-                'operaciones' => btn($c->idac, $c->aprobacion,$c->activo, $tipo),
+                'operaciones' => btn($c->idac, $c->aprobacion, $c->activo, $tipo),
             ));
         }
 
@@ -1555,7 +1554,7 @@ class ActividadesController extends Controller
             $id = $dir[0]->idu;
             $id_u = $id;
         }
-      
+
 
         if ($fecha_orden == 0) {
             $ac_cre = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
@@ -1662,7 +1661,7 @@ class ActividadesController extends Controller
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
         }
-    
+
 
 
 
@@ -1683,7 +1682,7 @@ class ActividadesController extends Controller
         function btn($idac, $activo)
         {
 
-            if(Auth()->user()->idtu_tipos_usuarios != 4){
+            if (Auth()->user()->idtu_tipos_usuarios != 4) {
                 if ($activo == 1) {
                     return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>
                     <a class='btn btn-danger mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='nav-icon fas fa-ban'></i></a>
@@ -1691,12 +1690,11 @@ class ActividadesController extends Controller
                 } else {
                     return "<a class='btn btn-primary mt-1 btn-sm' href=" . route('activacion', ['id' => encrypt($idac), 'activo' => encrypt($activo)]) . "><i class='fas fa-check'></i></a>";
                 }
-            }else{
+            } else {
                 if ($activo == 1) {
                     return "<div class='btn-group me-2' role='group' aria-label='Second group'><a  class='btn btn-success btn-sm mt-1'  href=" . route('Detalles', ['id' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
                 }
             }
-            
         }
 
         function AB($data)

@@ -11,14 +11,18 @@ class enviar_recordatorio extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $msg;
+    
+    public $subject = "Recordatorio: Tienes una actividad pendiente.";
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($msg)
     {
-        //
+        $this->msg = $msg;
     }
 
     /**
@@ -28,7 +32,6 @@ class enviar_recordatorio extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.recordatorio')
-        ->from('correspondenciautvt@gmail.com');
+        return $this->view('mails.recordatorio');
     }
 }

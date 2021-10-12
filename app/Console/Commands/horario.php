@@ -42,25 +42,24 @@ class horario extends Command
      * @return int
      */
     public function handle()
-    {   
+    {
 
-        //$user = DB::SELECT("SELECT email FROM users WHERE idu = 15");
-
-        //$texto = "[". date ("Y-m-d H:i:s") . "]: Porfavor dios ayudame";
-        $consulta = DB::select("SELECT res.idu_users, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre,ac.`fecha_fin`, 
-        TIMESTAMPDIFF (DAY, CURDATE(), ac.`fecha_fin` )  AS resultado,
-            ac.asunto, res.estado_act, res.idreac, us.email
+    
+        $consulta = DB::select("SELECT res.idu_users, CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre,
+            ac.`fecha_fin`, TIMESTAMPDIFF (DAY, CURDATE(), ac.`fecha_fin` )  AS resultado,
+            ac.asunto, res.estado_act, res.idreac, us.email,
+            CONCAT(us2.titulo,' ', us2.nombre, ' ', us2.app, ' ', us2.apm) AS creador
             FROM responsables_actividades AS res
             JOIN actividades AS ac ON ac.idac = res.idac_actividades
             JOIN users AS us ON us.idu = res.idu_users
+            JOIN users AS us2 ON us2.idu = ac.idu_users
             LEFT JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
-            WHERE res.estado_act IS NULL
+            WHERE res.estado_act IS NULL 
     ");
-        foreach($consulta as $c){
-            if($c->resultado == 3){
-                Mail::to($c->email)->send(new enviar_recordatorio);
+        foreach ($consulta as $c) {
+            if ($c->resultado == 3) {
+                Mail::to($c->email)->send(new enviar_recordatorio($c));
             }
         }
     }
-
 }
