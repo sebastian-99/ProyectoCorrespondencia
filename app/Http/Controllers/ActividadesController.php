@@ -857,10 +857,7 @@ class ActividadesController extends Controller
          * Envio de correos a los usuarios asignados.
          * Obteniendo los responsables de el request
          */
-       foreach($r['tipousuarioarea'] as $c){
-        echo $c . ", ";
-       }
-
+      
 
 
         /* if (Auth()->User()->idtu_tipos_usuarios == 3) {
