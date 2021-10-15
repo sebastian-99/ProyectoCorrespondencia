@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use Arr;
 use PDF;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\enviar_asignacion;
 
 class ActividadesController extends Controller
 {
@@ -755,8 +757,8 @@ class ActividadesController extends Controller
 
     public function insert_actividad(Request $r)
     {
-        //dd($r['tipousuarioarea']);
-        /* $idusuario = $r->idusuario;
+
+        $idusuario = $r->idusuario;
         $idar_areas = $r->idar_areas;
         $fechacreacion = $r->fechacreacion;
         $turno = $r->turno;
@@ -821,7 +823,6 @@ class ActividadesController extends Controller
 
         $tipousuario = $r->tipousuario;
         $tipousuarioarea = $r->tipousuarioarea;
-
         $estado = $r->estado;
         $importancia = $r->importancia;
 
@@ -851,16 +852,30 @@ class ActividadesController extends Controller
         for ($i = 0; $i < count($tipousuarioarea); $i++) {
 
             DB::INSERT("INSERT INTO responsables_actividades (idu_users , idac_actividades) VALUES ('$tipousuarioarea[$i]','$consul')");
-        } */
+        } 
 
         /**
          * Envio de correos a los usuarios asignados.
          * Obteniendo los responsables de el request
          */
-      
-
-
-        /* if (Auth()->User()->idtu_tipos_usuarios == 3) {
+    
+        $userForMail = DB::select("SELECT CONCAT(us.titulo,' ', us.nombre, ' ', us.app, ' ', us.apm) AS nombre,
+            CONCAT(ac.fecha_inicio,' al ', ac.fecha_fin) AS periodo, us.email,
+            CONCAT(us2.titulo,' ', us2.nombre, ' ', us2.app, ' ', us2.apm) AS creador,
+            ac.asunto, ac.comunicado, tp.nombre AS tipo
+             FROM responsables_actividades AS res
+             JOIN actividades AS ac ON ac.idac = res.idac_actividades
+             JOIN tipos_actividades AS tp ON tp.idtac = ac.idtac_tipos_actividades
+             JOIN users AS us ON us.idu = res.idu_users
+             JOIN users AS us2 ON us2.idu = ac.idu_users         
+             WHERE  res.idac_actividades = $consul
+    ");
+     
+         foreach($userForMail as $correos){
+            Mail::to($correos->email)->send(new enviar_asignacion($correos));
+        }
+        //------------------------------------------------------
+        if (Auth()->User()->idtu_tipos_usuarios == 3) {
 
             return redirect()->route('reporte_actividades');
         } else if (Auth()->User()->idtu_tipos_usuarios == 2) {
@@ -869,7 +884,7 @@ class ActividadesController extends Controller
         } else {
 
             return redirect('panel');
-        } */
+        } 
     }
 
     public function actividades_modificacion($id)

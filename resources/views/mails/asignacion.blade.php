@@ -18,16 +18,18 @@
 		<tr>
 			<td style="background-color: #ecf0f1">
 				<div style="color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif">
-					<h1 style="color: #e67e22; margin: 0 0 9px">Hola {{ $msg->nombre }}</h1>
-					<p style="margin: 2px; font-size: 18px">Aún no ha completado la actividad: <strong>"{{ $msg->asunto }}" </strong></p>
+					<h1 style="color: #e67e22; margin: 0 0 9px">Hola {{ $data->nombre }}</h1>
+					<p style="margin: 2px; font-size: 18px">Tiene una nueva actividad de tipo {{$data->tipo}}</p>
+                   <center><h2 style="color: #34495E; margin: 0 0 9px">"{{ $data->comunicado }}"</h2></center> 
+                    <p style="margin: 2px; font-size: 18px">Con el asunto: <strong>"{{ $data->asunto }}" </strong></p> 
 					<p style="margin: 2px; font-size: 18px">Asignada por
-					@if ($msg->nombre == $msg->creador)
+					@if ($data->nombre == $data->creador)
 						usted.
 					@else
-						<strong>: "{{ $msg->creador }}" </strong>
+						<strong>: "{{ $data->creador }}" </strong>
                     @endif 
 					</p>
-					<p style="margin: 2px; font-size: 18px">Finaliza el {{ $msg->fecha_fin }}, esperamos que la pueda atender y completar lo antes posible.</p>
+					<p style="margin: 2px; font-size: 18px">Favor de atender del {{ $data->periodo }}, sin más que añadir gracias por su atención.</p>
 					<h3>Un cordial saludo.</h3>
 					<div style="width: 100%;margin:20px 0; display: inline-block;text-align: center">
 
