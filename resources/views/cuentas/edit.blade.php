@@ -37,12 +37,7 @@
                                                 @endforeach
                                         </select>
                                 </div>
-                                <div class="col-md-6 col-xs-3 pb-3">
-                                    <label for="imagen">Imagen:</label>
-                                        <img src="{{ asset("storage/imagenes_perfil/$user_edit->imagen") }}" height="50">
-                                        <input type="file" class="form-control" id="imagen" name="imagen">
-                                </div>
-                            </div>
+                                
                             <div class="row">
                                     <div class="form-group col-xs-3 col-md-6">
                                         <label for="titulo">Título:</label>
@@ -103,6 +98,13 @@
                                         <option value="1" {{ (old('activo', $user_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                                         <option value="0" {{ (old('activo', $user_edit->activo) == 0) ? 'selected' : '' }}>No</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-3 pb-3">
+                                    <label for="imagen">Imagen:</label>
+                                    <br>
+                                        <img src="{{ asset("storage/imagenes_perfil/$user_edit->imagen") }}" width="150" height="150">
+                                        <input type="file" class="form-control" id="imagen" name="imagen">
                                 </div>
                             </div>
                             <div class="form-group text-center">
