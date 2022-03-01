@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\TiposUsuarios;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
 class UsersController extends Controller
@@ -100,7 +102,7 @@ class UsersController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:tipos_usuarios,idtu'],
             'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
             'titulo' => ['required', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
@@ -120,6 +122,12 @@ class UsersController extends Controller
             'password' => ['required'],
             'idar_areas'  => ['required', 'integer', 'exists:areas,idar']
         ]);
+        if($request->idtu_tipos_usuarios == 4) $director = DB::SELECT("SELECT idu FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $request->idar_areas");
+        if ( count($director) == 0 ) {
+            $validator->errors()->add('asistente', 'Se necesita un gefe de area para poder asignar un asistente al area seleccionada!');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
 
         if($request->hasFile('imagen')){
             $imagen = $request->file('imagen');
