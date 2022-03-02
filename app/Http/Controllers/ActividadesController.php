@@ -1211,11 +1211,11 @@ class ActividadesController extends Controller
 
 
         if (Auth()->user()->idtu_tipos_usuarios == 2) {
+            
+            return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->user()->idu)]);
+        } else if (Auth()->user()->idtu_tipos_usuarios == 3) {
 
             return redirect()->route('reporte_actividades');
-        } else if (Auth()->user()->idtu_tipos_usuarios == 4) {
-
-            return redirect()->route('actividades_pendientes', ['id' => encrypt(Auth()->user()->idu)]);
         }
     }
 

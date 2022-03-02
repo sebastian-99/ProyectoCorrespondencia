@@ -29,20 +29,15 @@
                             @endif
                             <div class="row">
                                 <div class="form-group col-md-6 col-xs-3">
-                                    <label for="idtu_tipos_usuarios">Tipo Usuario:</label>
-                                        <select class="form-select" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" {{ ($mi_id == 2 OR $mi_id == 4) ? 'disabled' : '' }} required>
+                                    <!-- <label for="idtu_tipos_usuarios">Tipo Usuario:</label> -->
+                                        <select class="form-select" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" {{ ($mi_id == 2 OR $mi_id == 4) ? 'disabled' : '' }} required hidden> 
                                             <option value="">Selección</option>
                                                 @foreach($tipos_usuarios as $tipousuario)
                                                     <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->idtu) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
                                                 @endforeach
                                         </select>
                                 </div>
-                                <div class="col-md-6 col-xs-3 pb-3">
-                                    <label for="imagen">Imagen:</label>
-                                        <img src="{{ asset("storage/imagenes_perfil/$user_edit->imagen") }}" height="50">
-                                        <input type="file" class="form-control" id="imagen" name="imagen">
-                                </div>
-                            </div>
+                                
                             <div class="row">
                                     <div class="form-group col-xs-3 col-md-6">
                                         <label for="titulo">Título:</label>
@@ -103,6 +98,13 @@
                                         <option value="1" {{ (old('activo', $user_edit->activo) == 1) ? 'selected' : '' }}>Si</option>
                                         <option value="0" {{ (old('activo', $user_edit->activo) == 0) ? 'selected' : '' }}>No</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-3 pb-3">
+                                    <label for="imagen">Imagen:</label>
+                                    <br>
+                                        <img src="{{ asset("storage/imagenes_perfil/$user_edit->imagen") }}" width="150" height="150">
+                                        <input type="file" class="form-control" id="imagen" name="imagen">
                                 </div>
                             </div>
                             <div class="form-group text-center">

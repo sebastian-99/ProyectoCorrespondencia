@@ -17,6 +17,38 @@ use App\Http\Controllers\Sistema\TipoAreas\TipoAreasController;
 use App\Http\Controllers\Graficas\GraficasPorTipoAreaController;
 use App\Http\Controllers\Graficas\GraficasDeActividadesCreadasController;
 
+use App\Http\Controllers\CorreoController;
+
+Route::get('pruebaCorreo', [CorreoController::class,'enviarNuevo'])->name('pruebaCorreo');
+
+// borrar caché de la aplicación
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return 'Application cache cleared';
+});
+// ejecutar recordatorios
+Route::get('/run-schedules', function() {
+    $exitCode = Artisan::call('schedule:run');
+    return 'Application run schedules';
+});
+
+ // borrar caché de ruta
+ Route::get('/route-cache', function() {
+    $exitCode = Artisan::call('route:cache');
+    return 'Routes cache cleared';
+});
+
+// borrar caché de configuración
+Route::get('/config-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return 'Config cache cleared';
+}); 
+
+// borrar caché de vista
+Route::get('/view-clear', function() {
+    $exitCode = Artisan::call('view:clear');
+    return 'View cache cleared';
+});
 
 Route::redirect('/', 'panel');
 Auth::routes();
@@ -123,4 +155,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/{user}/actividades-creadas/actividades-en-proceso-fuera-de-tiempo', [GraficasDeActividadesCreadasController::class,'actividadesEnProcesoFueraDeTiempo']);
     Route::get('/detalle-actividad/{idac}', [GraficasDeActividadesCreadasController::class,'detalleActividad']);
 
+});
+
+
+Route::get('php', function (){
+    phpinfo();
 });

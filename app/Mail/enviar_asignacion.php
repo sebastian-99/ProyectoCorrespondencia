@@ -32,6 +32,7 @@ class enviar_asignacion extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.asignacion');
+        return $this->from('avisos@utvtol.edu.mx')
+		    ->view('mails.asignacion');
     }
 }

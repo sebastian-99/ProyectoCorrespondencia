@@ -1,0 +1,665 @@
+[11-Nov-2021 04:22:29 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:22:31 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:22:36 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:22:57 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:01 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:02 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:04 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:05 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:05 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:15 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:23:28 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:30:48 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:30:51 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:30:51 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[11-Nov-2021 04:31:11 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[06-Feb-2022 20:01:33 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[06-Feb-2022 20:01:39 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[06-Feb-2022 20:01:41 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "env" does not exist in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#13 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [env] does not exist. in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php:879
+Stack trace:
+#0 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('env')
+#1 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('env', Array, true)
+#2 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('env', Array)
+#3 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container->make('env', Array)
+#4 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php(1423): Illuminate\Foundation\Application->make('env')
+#5 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(631): Illuminate\Container\Container->offsetGet('env')
+#6 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(510): Illuminate\Foundation\Application->runningUnitTests()
+#7 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->parseDriver('stack')
+#8 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(568): Illuminate\Log\LogManager->driver()
+#9 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(252): Illuminate\Log\LogManager->error('syntax error, u...', Array)
+#10 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(414): Illuminate\Foundation\Exceptions\Handler->report(Object(ParseError))
+#11 /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(112): Illuminate\Foundation\Http\Kernel->reportException(Object(ParseError))
+#12 /home/utvtolor/public_html/correspondencia/public/index.php(52): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#13 {main}
+  thrown in /home/utvtolor/public_html/correspondencia/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879

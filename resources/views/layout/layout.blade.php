@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   {{-- <link rel="stylesheet" href="{{asset('src/css/all.min.css')}}"> --}}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -263,6 +263,24 @@
               @endif
             </ul>
           </li>
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="fas fa-question"></i>
+              <p>Ayuda<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+
+                <li class="nav-item">
+                    <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg" class="nav-link">
+                    <i class="fas fa-video"></i>
+                    <p>Guía de uso</p>
+                    </a>
+                </li>
+
+            </ul>
+          </li>
+
         </ul>
         <div class="text-center">
           <img src="{{asset('images/M-Edomex.png')}}" alt="" width="60%" class="mt-4">
@@ -273,6 +291,19 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+
+  <!-- Large modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/m11Kirg2iaU" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
