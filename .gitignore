@@ -2,6 +2,7 @@
 /.vscode
 /public/hot
 /public/archivos
+/public/video
 
 /storage/*.key
 /vendor

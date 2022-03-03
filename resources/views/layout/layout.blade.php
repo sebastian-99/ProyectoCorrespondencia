@@ -299,7 +299,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/m11Kirg2iaU" allowfullscreen></iframe>
+        <video class="embed-responsive-item" src="{{asset('video/Guia.mp4')}}" controls autobuffer></video>
       </div>
     </div>
   </div>
