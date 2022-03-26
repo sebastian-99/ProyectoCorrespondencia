@@ -27,7 +27,7 @@
                                             <select class="form-select" id="idtu_tipos_usuarios" name="idtu_tipos_usuarios" required>
                                                 <option value="">Selección</option>
                                                     @foreach($tipos_usuarios as $tipousuario)
-                                                        <option value="{{ $tipousuario->idtu }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->idtu) ? 'selected' : '' }}>{{ $tipousuario->nombre }}</option>
+                                                        <option value="{{ $tipousuario->id }}" {{ (old('idtu_tipos_usuarios', $user_edit->idtu_tipos_usuarios) == $tipousuario->id) ? 'selected' : '' }}>{{ $tipousuario->name }}</option>
                                                     @endforeach
                                             </select>
                                     </div>

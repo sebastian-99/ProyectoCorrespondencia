@@ -17,9 +17,14 @@ class CreateResponsablesActividadesTable extends Migration
             $table->bigIncrements('idreac');
             $table->unsignedBigInteger('idu_users');
             $table->unsignedBigInteger('idac_actividades');
-            $table->string('frima');
-            $table->boolean('acuse')->default(1);
+            $table->string('firma');
             $table->dateTime('fecha');
+            $table->boolean('acuse')->default(0);
+            $table->dateTime('fecha_acuse');
+            $table->longText('razon_rechazo');
+            $table->longText('razon_activacion');
+            $table->string('estado_act');
+
             $table->timestamps();
             $table->foreign('idu_users')->references('idu')->on('users');
             $table->foreign('idac_actividades')->references('idac')->on('actividades');

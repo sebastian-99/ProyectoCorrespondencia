@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Areas;
 use Illuminate\Http\Request;
-use App\Models\TiposUsuarios;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +25,7 @@ class CuentasController extends Controller
                         ->orderby('idar_areas', 'ASC')
                         ->get();
 
-        $tipos_usuarios = TiposUsuarios::all();
+        $tipos_usuarios = Role::all();
 
         $user_edit = User::query()
                          ->where('idu', Auth::id())
@@ -37,7 +37,7 @@ class CuentasController extends Controller
     public function editar_perfil_post(Request $request)
     {
         $request->validate([
-            'idtu_tipos_usuarios'   => ['nullable', 'integer', 'exists:tipos_usuarios,idtu'],
+            'idtu_tipos_usuarios'   => ['nullable', 'integer', 'exists:roles,id'],
             'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
             'titulo' => ['nullable', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
             'nombre' => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,

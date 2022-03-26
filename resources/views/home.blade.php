@@ -146,6 +146,6 @@
         const user_id = '{{ $user }}';
         //console.log(user_id);
     </script>
-    <script  type="module" src="/js/panel/panel.js"></script>
+    <script  type="module" src="{{asset('js/panel/panel.js') }}"></script>
 @endsection
 @endsection

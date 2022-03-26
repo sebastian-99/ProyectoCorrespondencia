@@ -12,11 +12,22 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use Arr;
 use PDF;
+use Session;
+
 use Illuminate\Support\Facades\Mail;
 use App\Mail\enviar_asignacion;
 
 class ActividadesController extends Controller
 {
+    //Constructor para verificar permisos de rutas
+    public function __construct()
+    {   
+        $this->middleware('can:ver-todas-actividades')->only('reporte_actividades');
+        $this->middleware('can:ver-actividades-pendientes')->only('actividades_pendientes');
+        $this->middleware('can:ver-actividades-creadas')->only('actividades_creadas');       
+        $this->middleware('can:crear-actividades')->only('actividades');       
+    }
+
     public function reporte_actividades()
     {
 
@@ -119,8 +130,8 @@ class ActividadesController extends Controller
                 'activo' => $c->activo,
                 'acuse' => $c->acuse,
                 'idu_users' => $c->idu_users,
-                'avance' => AB($data),
-                'atendido_por' =>  D($data),
+                'avance' => D($data),
+                'atendido_por' =>  AB($data),
                 'estatus' => E($c->status),
                 'operaciones' => btn($c->idac, $c->activo),
             ));
@@ -448,7 +459,7 @@ class ActividadesController extends Controller
         function D($porcentaje, $fecha_fin, $created_at, $acuse)
         {
 
-            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
+            $date = Carbon::now()->locale('es_MX');
 
             //  return ($created_at > $fecha_fin ? "es mayor" : "No es mayor");
             if ($date > $fecha_fin && $created_at == NULL) {
@@ -675,7 +686,7 @@ class ActividadesController extends Controller
                 " AND idtu_tipos_usuarios = 2");
 
             $user = DB::table('users')
-                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
                 ->join('areas', 'areas.idar', '=', 'users.idar_areas')
                 ->select(
                     'users.idu',
@@ -683,7 +694,7 @@ class ActividadesController extends Controller
                     'users.nombre',
                     'users.app',
                     'users.apm',
-                    'tipos_usuarios.nombre as tipo_usuario',
+                    'roles.name as tipo_usuario',
                     'areas.nombre as nombre_areas',
                     'areas.idar',
                 )
@@ -692,7 +703,7 @@ class ActividadesController extends Controller
         } else {
 
             $user = DB::table('users')
-                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
                 ->join('areas', 'areas.idar', '=', 'users.idar_areas')
                 ->select(
                     'users.idu',
@@ -700,7 +711,7 @@ class ActividadesController extends Controller
                     'users.nombre',
                     'users.app',
                     'users.apm',
-                    'tipos_usuarios.nombre as tipo_usuario',
+                    'roles.name as tipo_usuario',
                     'areas.nombre as nombre_areas',
                     'areas.idar',
                 )
@@ -708,9 +719,12 @@ class ActividadesController extends Controller
                 ->get();
         }
 
-        $hoy = Carbon::now()->locale('es_MX')->format('d-m-Y');
+        $hoy = Carbon::now()->locale('es')->isoFormat('D [de] MMMM [del] YYYY [a las] h:mm a');
         $consul = DB::table('actividades')->count() + 1;
-        $tipous = DB::table('areas')->get()->all();
+        $tipous = DB::table('users as u')
+                    ->join('areas as a', 'a.idar', 'u.idar_areas')
+                    ->groupBy('a.nombre')
+                    ->get();
         $tipo_actividad = DB::table('tipos_actividades')
             ->orderBy('nombre', 'Asc')
             ->get();
@@ -728,48 +742,34 @@ class ActividadesController extends Controller
     public function tipousuarios(Request $request)
     {
 
-        //$id_user = Auth()->user()->idu;
         $id = $request->tipo_u;
-        $id_seleccionado;
+        $cor = $request->cor;
 
-        /* for($b=0; $b < count($id); $b++){
-            $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
-            INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
-            INNER JOIN areas AS a ON a.idar = u.idar_areas
-            WHERE u.idtu_tipos_usuarios NOT IN(1)
-            AND a.idar = $id[$b]");
-            $id_seleccionado[$b] = $consul;
-        } */
 
-        //$id_sacado = Arr::flatten($consul);
-
-        $consul = DB::Select("SELECT  u.idu, u.titulo,u.nombre,u.app,u.apm, tu.nombre AS tipo_area, a.nombre AS areas  FROM users AS u
-            INNER JOIN tipos_usuarios AS tu ON tu.idtu = u.idtu_tipos_usuarios
+        $consul = DB::Select("SELECT  u.idu, u.email, u.titulo,u.nombre,u.app,u.apm, tu.name AS tipo_area, a.nombre AS areas  FROM users AS u
+            INNER JOIN roles AS tu ON tu.id = u.idtu_tipos_usuarios
             INNER JOIN areas AS a ON a.idar = u.idar_areas
             WHERE u.idtu_tipos_usuarios NOT IN(1)
             AND u.idtu_tipos_usuarios NOT IN(4)
             AND a.idar = $id");
 
-
-
-        return response()->json($consul);
-    }
+        return response()->json([$consul,$cor]);
+}
 
     public function insert_actividad(Request $r)
     {
 
         $idusuario = $r->idusuario;
         $idar_areas = $r->idar_areas;
-        $fechacreacion = $r->fechacreacion;
+        $fechacreacion = Carbon::now()->locale('es_MX');
         $turno = $r->turno;
         $comunicado = $r->comunicado;
         $Asunto = $r->Asunto;
         $tipoactividad = $r->tipoactividad;
         $fechainicio = $r->fechainicio;
         $fechatermino = $r->fechatermino;
-        $horadeinicio = $r->horadeinicio;
-        $horatermino = $r->horatermino;
         $detalleactividad = $r->detalleactividad;
+        
         if ($r->file('archivos') != null) {
 
             $file = $r->file('archivos');
@@ -825,23 +825,24 @@ class ActividadesController extends Controller
         $tipousuarioarea = $r->tipousuarioarea;
         $estado = $r->estado;
         $importancia = $r->importancia;
+        $co = $r->co;
 
         if(Auth()->user()->idtu_tipos_usuarios == 4){
 
             DB::Insert("INSERT INTO actividades (asunto, descripcion, fecha_creacion, turno, comunicado, fecha_inicio,
-                        hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
-                        importancia, archivo1, archivo2, archivo3, link1, link2, link3)
+                        fecha_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
+                        importancia, archivo1, archivo2, archivo3, link1, link2, link3, filtrocorreo)
                         VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
-                        '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
-                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3')");
+                        '$fechatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
+                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3', '$co')");
         }else{
 
             DB::Insert("INSERT INTO actividades (asunto, descripcion, fecha_creacion, turno, comunicado, fecha_inicio,
-                        hora_inicio, fecha_fin, hora_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
-                        importancia, archivo1, archivo2, archivo3, link1, link2, link3, aprobacion)
+                        fecha_fin, idtac_tipos_actividades, idar_areas, idu_users, status,
+                        importancia, archivo1, archivo2, archivo3, link1, link2, link3, aprobacion, filtrocorreo)
                         VALUES ('$Asunto', '$detalleactividad', '$fechacreacion', '$turno', '$comunicado', '$fechainicio',
-                        '$horadeinicio', '$fechatermino', '$horatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
-                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3', 1)");
+                        '$fechatermino', '$tipoactividad', '$idar_areas', '$idusuario', '$estado',
+                        '$importancia', '$archivos', '$archivos2', '$archivos3', '$link', '$link2', '$link3', 1, '$co')");
 
 
         }
@@ -872,13 +873,14 @@ class ActividadesController extends Controller
     ");
      
          foreach($userForMail as $correos){
-            Mail::to($correos->email)->send(new enviar_asignacion($correos));
+           // Mail::to($correos->email)->send(new enviar_asignacion($correos));
         }
         //------------------------------------------------------
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
 
             return redirect()->route('reporte_actividades');
         } else if (Auth()->User()->idtu_tipos_usuarios == 2) {
+            Session::flash('message', 'Se ha creado la actividad correctamente');
 
             return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);
         } else {
@@ -890,10 +892,11 @@ class ActividadesController extends Controller
     public function actividades_modificacion($id)
     {
         $id = decrypt($id);
+        $hoy = Carbon::now()->locale('es')->isoFormat('D [de] MMMM [del] YYYY [a las] h:mm a');
         $consul = DB::table('actividades')->where('idac', $id)
             ->join('users', 'users.idu', '=', 'actividades.idu_users')
             ->join('areas', 'areas.idar', '=', 'actividades.idar_areas')
-            ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+            ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
             ->join('tipos_actividades', 'tipos_actividades.idtac', '=', 'actividades.idtac_tipos_actividades')
             ->select(
                 'actividades.idac',
@@ -906,10 +909,9 @@ class ActividadesController extends Controller
                 'actividades.comunicado',
                 'actividades.fecha_inicio',
                 'actividades.fecha_fin',
-                'actividades.hora_inicio',
-                'actividades.hora_fin',
+                'actividades.filtrocorreo',
                 'areas.nombre as nombre_area',
-                'tipos_usuarios.nombre as tipo_usuario',
+                'roles.name as tipo_usuario',
                 'users.titulo',
                 'users.nombre',
                 'users.app',
@@ -927,6 +929,7 @@ class ActividadesController extends Controller
                 'actividades.link3',
             )
             ->get();
+            
 
         $personas = DB::SELECT("SELECT CONCAT(us.titulo, ' ' , us.nombre, ' ', us.app, ' ', us.apm) AS nombre, ar.nombre AS nombre_area
                                 FROM responsables_actividades AS re
@@ -950,7 +953,7 @@ class ActividadesController extends Controller
         $json = json_encode($array);
 
 
-        $tipous = DB::SELECT("SELECT a.nombre, a.`idar`
+        $tipous = DB::SELECT("SELECT a.nombre, a.idar
         FROM actividades AS ac
         INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
         INNER JOIN users AS u ON u.idu = re.idu_users
@@ -960,28 +963,26 @@ class ActividadesController extends Controller
 
 
         $array2 = array();
-
+        
         foreach ($tipous as $t) {
             array_push($array2, $t->idar,);
         }
-
+        /**filtrar areas del select2 solo donde existan usuarios */
         if (count($array2) > 0) {
+            $new_arr=implode(''.' AND a.idar != ',$array2);
 
-            $no_seleccionar = DB::SELECT("SELECT *
-        FROM areas AS ar
-        WHERE ar.idar NOT IN (" . implode(',', $array2) . ")");
+            $no_seleccionar = DB::SELECT("SELECT a.idar, a.nombre FROM users AS u 
+            INNER JOIN areas AS a ON a.idar = u.idar_areas
+            WHERE a.idar != $new_arr
+            GROUP BY a.nombre");
         } else {
-            $no_seleccionar = DB::SELECT("SELECT *
-            FROM areas AS ar");
+            $no_seleccionar = DB::SELECT("SELECT a.idar, a.nombre FROM users AS u 
+            INNER JOIN areas AS a ON a.idar = u.idar_areas
+            GROUP BY a.nombre");
         }
+        
 
-
-
-
-        //return $tipous;
-        //return $no_seleccionar;
-
-        $users = DB::SELECT("SELECT u.idu, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario,
+        $users = DB::SELECT("SELECT u.idu, u.email, CONCAT(u.titulo, ' ' , u.app, ' ', u.apm, ' ' , u.nombre) AS usuario,
         a.idar, a.nombre AS nombre_area
         FROM actividades AS ac
         INNER JOIN responsables_actividades AS re ON re.idac_actividades = ac.idac
@@ -999,7 +1000,7 @@ class ActividadesController extends Controller
 
         if (count($array3) > 0 && count($array4) > 0) {
 
-            $no_seleccionar_user = DB::SELECT("SELECT us.idu, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario,
+            $no_seleccionar_user = DB::SELECT("SELECT us.idu, us.email, CONCAT(us.titulo, ' ' , us.app, ' ', us.apm, ' ' , us.nombre) AS usuario,
             ar.nombre AS nombre_area
             FROM users AS us
             INNER JOIN areas AS ar ON ar.idar = us.idar_areas
@@ -1018,6 +1019,7 @@ class ActividadesController extends Controller
 
         return view('Actividades.modificar_actividad')
             ->with('consul', $consul)
+            ->with('hoy', $hoy)
             ->with('tipo_actividad', $tipo_actividad)
             ->with('tipous', $tipous)
             ->with('users', $users)
@@ -1065,16 +1067,16 @@ class ActividadesController extends Controller
         $id = $r->idac;
         $idusuario = $r->idusuario;
         $idar_areas = $r->idar_areas;
-        $fechacreacion = $r->fechacreacion;
         $turno = $r->turno;
         $comunicado = $r->comunicado;
         $Asunto = $r->Asunto;
         $tipoactividad = $r->tipoactividad;
         $fechainicio = $r->fechainicio;
         $fechatermino = $r->fechatermino;
-        $horadeinicio = $r->horadeinicio;
-        $horatermino = $r->horatermino;
+        
         $detalleactividad = $r->detalleactividad;
+
+        
 
 
         if (\Storage::disk('local')->exists($r->archivosoculto)) {
@@ -1160,18 +1162,18 @@ class ActividadesController extends Controller
 
         if (Auth()->user()->idtu_tipos_usuarios != 4) {
 
-            DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
-            turno = '$turno',  comunicado = '$comunicado', fecha_inicio = '$fechainicio',
-            hora_inicio = '$horadeinicio', fecha_fin = '$fechatermino', hora_fin = '$horatermino', idtac_tipos_actividades = '$tipoactividad',
+            DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad',
+            turno = '$turno', comunicado = '$comunicado', fecha_inicio = '$fechainicio',
+            fecha_fin = '$fechatermino', idtac_tipos_actividades = '$tipoactividad',
             status = '$estado',
-            importancia = '$importancia',  archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3',
+            importancia = '$importancia', archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3',
             link1 = '$link', link2 = '$link2', link3 = '$link3', aprobacion = 1
             WHERE idac = $id");
         } else {
 
-            DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad', fecha_creacion = '$fechacreacion',
+            DB::UPDATE("UPDATE actividades SET asunto = '$Asunto', descripcion ='$detalleactividad',
             turno = '$turno',  comunicado = '$comunicado', fecha_inicio = '$fechainicio',
-            hora_inicio = '$horadeinicio', fecha_fin = '$fechatermino', hora_fin = '$horatermino', idtac_tipos_actividades = '$tipoactividad',
+            fecha_fin = '$fechatermino', idtac_tipos_actividades = '$tipoactividad',
             status = '$estado',
             importancia = '$importancia',  archivo1 = '$archivos', archivo2 = '$archivos2', archivo3 = '$archivos3',
             link1 = '$link', link2 = '$link2', link3 = '$link3', aprobacion = 0
@@ -1211,7 +1213,7 @@ class ActividadesController extends Controller
 
 
         if (Auth()->user()->idtu_tipos_usuarios == 2) {
-            
+            Session::flash('message3', 'La actividad'.$Asunto. ' Se ha modificado correctamente.'); 
             return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->user()->idu)]);
         } else if (Auth()->user()->idtu_tipos_usuarios == 3) {
 
@@ -1226,10 +1228,11 @@ class ActividadesController extends Controller
         $activo = decrypt($activo);
 
         if ($activo == 1) {
-
             DB::UPDATE("UPDATE actividades SET activo = '0' , status = 3 WHERE idac = $id");
+            Session::flash('message2', 'La actividad ha sido desactivada.'); 
         } else {
             DB::UPDATE("UPDATE actividades SET activo = '1', status = 1 WHERE idac = $id");
+            Session::flash('message', 'La actividad ha sido activada nuevamente.'); 
         }
 
         return redirect()->route('actividades_creadas', ['id' => encrypt(Auth()->User()->idu)]);

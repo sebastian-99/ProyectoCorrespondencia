@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Areas;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\TiposUsuarios;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -17,13 +17,21 @@ use Illuminate\Validation\Rules\Password;
 
 class UsersController extends Controller
 {
+    //Constructor para verificar permisos de rutas
+    public function __construct()
+    {   
+        $this->middleware('can:users.index')->only('index');
+        $this->middleware('can:users.create')->only('create');
+        $this->middleware('can:users.edit')->only('edit');
+        $this->middleware('can:users.destroy')->only('destroy');
+    }
     /**
      * Vista para mostrar un listado de recuersos.
      */
     public function index()
     {
         $usuarios = User::query()
-                         ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                         ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
                          ->join('areas', 'areas.idar', '=', 'users.idar_areas')
                          ->select(
                                 'users.idu',
@@ -35,13 +43,13 @@ class UsersController extends Controller
                                 'users.email',
                                 'users.password',
                                 'users.activo',
-                                'tipos_usuarios.nombre as idtu_tipos_usuarios',
+                                'roles.name as idtu_tipos_usuarios',
                                 'areas.nombre as idar_areas',
                                 )
                                 ->orderby('nombre', 'ASC')
                          ->get();
         $areas = Areas::all();
-        $tipos_usuarios = TiposUsuarios::all();
+        $tipos_usuarios = Role::all();
 
         $array = array();
 
@@ -91,7 +99,7 @@ class UsersController extends Controller
                         ->orderby('nombretipo', 'ASC')
                         ->orderby('idar_areas', 'ASC')
                         ->get();
-        $tipos_usuarios = TiposUsuarios::all();
+        $tipos_usuarios = Role::all();
         return view( 'users.create', compact('tipos_usuarios', 'areas'));
 
     }
@@ -103,7 +111,7 @@ class UsersController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:tipos_usuarios,idtu'],
+            'idtu_tipos_usuarios'   => ['required', 'integer', 'exists:roles,id'],
             'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
             'titulo' => ['required', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
             'nombre' => ['required', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
@@ -122,6 +130,9 @@ class UsersController extends Controller
             'password' => ['required'],
             'idar_areas'  => ['required', 'integer', 'exists:areas,idar']
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         if($request->idtu_tipos_usuarios == 4){
              $director = DB::SELECT("SELECT idu FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $request->idar_areas");
@@ -149,7 +160,7 @@ class UsersController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'idar_areas' => $request->idar_areas
-        ]);
+        ])->assignRole($request->idtu_tipos_usuarios);  
 
         return redirect()->route('users.index')->with('mensaje', 'El usuario se ha creado exitosamente');
     }
@@ -189,7 +200,7 @@ class UsersController extends Controller
                             ->orderby('idar_areas', 'ASC')
                             ->get();
 
-            $tipos_usuarios = TiposUsuarios::all();
+            $tipos_usuarios = Role::all();
             $usuarios = User::query()
                            ->where('idu', $idu)
                            ->get();
@@ -209,7 +220,7 @@ class UsersController extends Controller
 
             if($usuario){
                 $validator = Validator::make($request->all(), [
-                    'idtu_tipos_usuarios'   => ['nullable', 'integer', 'exists:tipos_usuarios,idtu'],
+                    'idtu_tipos_usuarios'   => ['nullable', 'integer', 'exists:roles,id'],
                     'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
                     'titulo' => ['nullable', 'string', "regex:/^[a-z,A-Z, ,.]*$/"],
                     'nombre' => ['nullable', 'string', "regex:/^[a-z,A-Z,à,á,â,ä,ã,å,ą,č,ć,ę,è,é,ê,ë,ė,į,ì,
@@ -229,6 +240,9 @@ class UsersController extends Controller
                     'idar_areas'  => ['required', 'integer', 'exists:areas,idar'],
                     'activo' => ['required', 'boolean']
                 ]);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
 
                 if($request->idtu_tipos_usuarios == 4){
                     $director = DB::SELECT("SELECT idu FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $request->idar_areas");
@@ -248,6 +262,8 @@ class UsersController extends Controller
                     ]);
                 }
 
+                $rol = $request->idtu_tipos_usuarios;
+
                 if($request->password != null){
                     $actualizar = $usuario->update([
                         'idtu_tipos_usuarios' => $request->idtu_tipos_usuarios,
@@ -260,6 +276,7 @@ class UsersController extends Controller
                         'idar_areas' => $request->idar_areas,
                         'activo'   => $request->activo
                     ]);
+                    $usuario->syncRoles($rol);
 
                 } else {
                     $actualizar = $usuario->update([
@@ -272,6 +289,8 @@ class UsersController extends Controller
                         'idar_areas' => $request->idar_areas,
                         'activo'   => $request->activo
                     ]);
+                    $usuario->syncRoles($rol);
+
                 }
                 return redirect()->route('users.index')->with('mensaje', 'El usuario se ha actualizado exitosamente');
             } else {

@@ -16,6 +16,12 @@ use Brs\FunctionPkg;
 
 class SeguimientoController extends Controller
 {
+    //Constructor para verificar permisos de rutas
+    public function __construct()
+    {
+        $this->middleware('can:ver-actividades-asignadas')->only('actividades_asignadas');
+        $this->middleware('can:ver-seguimientos')->only('Seguimiento');
+    }
 
     public function actividades_asignadas()
     {
@@ -94,7 +100,8 @@ class SeguimientoController extends Controller
             } else {
                 $data = 0;
             }
-            $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
+            $date = Carbon::now()->locale('es_MX');
+            //dd($date);
 
             //return ($data > $end_date ? "es mayor" : "No es mayor");
 
@@ -135,16 +142,15 @@ class SeguimientoController extends Controller
                 $id = $id_user;
             }
 
-            
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             WHERE ra.idu_users = $id
             AND ra.idac_actividades = $idac");
-            if ($ver_acuse[0]->acuse == 2) {
-    
-                return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
 
+            if ($ver_acuse[0]->acuse == 2) {
+
+                return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
 
             if ($ver_acuse[0]->acuse == 1) {
@@ -206,7 +212,7 @@ class SeguimientoController extends Controller
         if (Auth()->user()->idtu_tipos_usuarios == 4) {
             $dir = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
             $id = $dir[0]->idu;
-            
+
             if ($fecha_orden == 0) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
@@ -221,7 +227,7 @@ class SeguimientoController extends Controller
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin != NULL) {
+            if ($fecha_orden == 1 && $fechaIni != null && $fechaFin != null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users,ac.activo,
             porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -236,7 +242,7 @@ class SeguimientoController extends Controller
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin == NULL) {
+            if ($fecha_orden == 1 && $fechaIni != null && $fechaFin == null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
             porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -250,7 +256,7 @@ class SeguimientoController extends Controller
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin != NULL) {
+            if ($fecha_orden == 1 && $fechaIni == null && $fechaFin != null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
             porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -264,7 +270,7 @@ class SeguimientoController extends Controller
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
+            if ($fecha_orden == 1 && $fechaIni == null && $fechaFin == null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
             porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -278,7 +284,7 @@ class SeguimientoController extends Controller
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin != NULL) {
+            if ($fecha_orden == 2 && $fechaIni != null && $fechaFin != null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
                 porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -293,7 +299,7 @@ class SeguimientoController extends Controller
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin == NULL) {
+            if ($fecha_orden == 2 && $fechaIni != null && $fechaFin == null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                     ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
                     porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -307,7 +313,7 @@ class SeguimientoController extends Controller
                     GROUP BY ac.idac
                     ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin != NULL) {
+            if ($fecha_orden == 2 && $fechaIni == null && $fechaFin != null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                     ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users,ac.activo, 
                     porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -321,7 +327,7 @@ class SeguimientoController extends Controller
                     GROUP BY ac.idac
                     ORDER BY ac.fecha_creacion DESC");
             }
-            if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin == NULL) {
+            if ($fecha_orden == 2 && $fechaIni == null && $fechaFin == null) {
                 $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                     ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users,ac.activo, 
                     porcentaje(ac.idac, $id) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -336,12 +342,12 @@ class SeguimientoController extends Controller
                     ORDER BY ac.fecha_creacion DESC");
             }
         } else {
-        
 
 
 
-        if ($fecha_orden == 0) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+
+            if ($fecha_orden == 0) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
@@ -353,9 +359,9 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin != NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 1 && $fechaIni != null && $fechaFin != null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
@@ -368,9 +374,9 @@ class SeguimientoController extends Controller
         AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 1 && $fechaIni != NULL && $fechaFin == NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 1 && $fechaIni != null && $fechaFin == null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
@@ -382,9 +388,9 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin != NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 1 && $fechaIni == null && $fechaFin != null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
@@ -396,9 +402,9 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user AND ac.`fecha_inicio` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 1 && $fechaIni == NULL && $fechaFin == NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 1 && $fechaIni == null && $fechaFin == null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
         ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
         porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
         FROM actividades AS ac
@@ -410,9 +416,9 @@ class SeguimientoController extends Controller
         WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
         GROUP BY ac.idac
         ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin != NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 2 && $fechaIni != null && $fechaFin != null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
             porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
             FROM actividades AS ac
@@ -425,9 +431,9 @@ class SeguimientoController extends Controller
             AND ac.aprobacion = 1
             GROUP BY ac.idac
             ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 2 && $fechaIni != NULL && $fechaFin == NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 2 && $fechaIni != null && $fechaFin == null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
                 porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
                 FROM actividades AS ac
@@ -439,9 +445,9 @@ class SeguimientoController extends Controller
                 WHERE ra.idu_users = $id_user AND ac.`fecha_fin` >= DATE('$fechaIni') AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin != NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 2 && $fechaIni == null && $fechaFin != null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
                 porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
                 FROM actividades AS ac
@@ -453,9 +459,9 @@ class SeguimientoController extends Controller
                 WHERE ra.idu_users = $id_user AND ac.`fecha_fin` <= DATE('$fechaFin') AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
-        }
-        if ($fecha_orden == 2 && $fechaIni == NULL && $fechaFin == NULL) {
-            $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
+            }
+            if ($fecha_orden == 2 && $fechaIni == null && $fechaFin == null) {
+                $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto ,CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
                 ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as area,ra.idu_users, ac.activo,
                 porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
                 FROM actividades AS ac
@@ -467,12 +473,10 @@ class SeguimientoController extends Controller
                 WHERE ra.idu_users = $id_user AND ac.activo = 1 AND ac.aprobacion = 1
                 GROUP BY ac.idac
                 ORDER BY ac.fecha_creacion DESC");
+            }
         }
-    }
-
 
         $array = array();
-
 
         function recorrer($value)
         {
@@ -503,6 +507,8 @@ class SeguimientoController extends Controller
                 return 0;
             }
         }
+
+        /** Funcion para obtener el estado de la actividad */
 
         function D($status, $end_date, $data, $acuse)
         {
@@ -538,6 +544,8 @@ class SeguimientoController extends Controller
             }
         }
 
+        /** Funcion para generar los botones del zing-grid de la actividad por fechas */
+
         function ver($idac)
         {
             //consulta para ver si el acuse se recibio
@@ -546,24 +554,25 @@ class SeguimientoController extends Controller
             $tipo = Auth::user()->idtu_tipos_usuarios;
             if ($tipo == 4) {
                 $asignado = DB::select("SELECT idu FROM users AS u WHERE u.idtu_tipos_usuarios = 2 AND u.idar_areas = $ar ");
+                $id = $asignado[0]->idu;
             } else {
                 $asignado = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
+                $id = $id_user;
             }
 
-            $id = $asignado[0]->idu;
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             WHERE ra.idu_users = $id
             AND ra.idac_actividades = $idac");
 
-
             if ($ver_acuse[0]->acuse == 2) {
+
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
 
             if ($ver_acuse[0]->acuse == 1) {
-                return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+                return "aaa<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
             } else {
                 $idreac = $ver_acuse[0]->idreac;
                 if (Auth()->user()->idtu_tipos_usuarios != 4) {
@@ -576,6 +585,7 @@ class SeguimientoController extends Controller
                 }
             }
         }
+        /** Convertir el array de consulta a formato JSON para procesar datos en el zing.grid */
 
         foreach ($consult as $c) {
 
@@ -599,7 +609,7 @@ class SeguimientoController extends Controller
             ));
         }
         $json = json_encode($array);
-
+        return $json;
         return response()->json($json);
     }
 
@@ -719,8 +729,7 @@ class SeguimientoController extends Controller
 
         $general = explode('*', $actividades[0]->porcentaje)[2];
         $general = number_format($general, 0);
-        $general1 = explode('*', $actividades[0]->porcentaje)[1];
-
+        
         $end_date = $actividades[0]->fecha_fin;
 
 
@@ -730,7 +739,7 @@ class SeguimientoController extends Controller
 
             //Obtener datos del usuario
             $user = DB::table('users')
-                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
                 ->join('areas', 'areas.idar', '=', 'users.idar_areas')
                 ->select(
                     'users.idu',
@@ -738,7 +747,7 @@ class SeguimientoController extends Controller
                     'users.nombre',
                     'users.app',
                     'users.apm',
-                    'tipos_usuarios.nombre as tipo_usuario',
+                    'roles.name as tipo_usuario',
                     'areas.nombre as nombre_areas',
                     'areas.idar',
                     'areas.nombre as area',
@@ -748,7 +757,7 @@ class SeguimientoController extends Controller
         } else {
             //Obtener datos del usuario
             $user = DB::table('users')
-                ->join('tipos_usuarios', 'tipos_usuarios.idtu', '=', 'users.idtu_tipos_usuarios')
+                ->join('roles', 'roles.id', '=', 'users.idtu_tipos_usuarios')
                 ->join('areas', 'areas.idar', '=', 'users.idar_areas')
                 ->select(
                     'users.idu',
@@ -756,7 +765,7 @@ class SeguimientoController extends Controller
                     'users.nombre',
                     'users.app',
                     'users.apm',
-                    'tipos_usuarios.nombre as tipo_usuario',
+                    'roles.name as tipo_usuario',
                     'areas.nombre as nombre_areas',
                     'areas.idar',
                     'areas.nombre as area',
@@ -839,7 +848,7 @@ class SeguimientoController extends Controller
 
 
 
-        //Ver quien ha visto su actividad asignada
+        //Ver cuantos han visto su actividad asignada
 
         $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac
@@ -925,7 +934,7 @@ class SeguimientoController extends Controller
         {
 
             if ($idseac == $ultimo) {
-                if ($archivo_fin != NULL) {
+                if ($archivo_fin != null) {
                     if (Auth()->user()->idtu_tipos_usuarios == 2) {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
@@ -1038,7 +1047,7 @@ class SeguimientoController extends Controller
 
             //Insertar archivos en tabla archivos_seguimientos
 
-            $max_size = (int) ini_get('upload_max_filesize') * 10240;
+            $max_size = (int)ini_get('upload_max_filesize') * 10240;
             $user_id = Auth()->user()->idu;
             $files = $request->file('ruta');
 
@@ -1067,7 +1076,7 @@ class SeguimientoController extends Controller
 
 
             $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
-        
+
             /*Valicación porcentaje general para modificar status en tabla actividades*/
             $consul = DB::SELECT("SELECT 
             porcentaje(ac.idac, 0) AS porcentaje
@@ -1076,13 +1085,13 @@ class SeguimientoController extends Controller
 
             $porcentaje = number_format(explode("*", $consul[0]->porcentaje)[2], 0, '.', ' ');
 
-            if($porcentaje == 100){
-                
+            if ($porcentaje == 100) {
+
                 DB::UPDATE("UPDATE actividades SET status = 2 
                 WHERE idac = $idac");
             }
             /*END Valicación porcentaje general by Azure_Valkyrie*/
-            
+
             Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
             return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
         });
@@ -1100,18 +1109,18 @@ class SeguimientoController extends Controller
     public function EliminarSeguimiento($idarseg, $idseac, $idac)
 
     {
-        
+
         //$ultimo = archivosSeguimientos::find('idarse')->orderBy('idarse')->desc();
         $idarseg = decrypt($idarseg);
         $idseac = decrypt($idseac);
         $idac = decrypt($idac);
-    
 
-        $elim = DB::DELETE("DELETE FROM archivos_seguimientos
+
+        DB::DELETE("DELETE FROM archivos_seguimientos
         where idseac_seguimientos_actividades =$idseac
         ");
 
-        $elim_s = DB::DELETE("DELETE FROM seguimientos_actividades
+        DB::DELETE("DELETE FROM seguimientos_actividades
         where idseac =$idseac
         ");
 
@@ -1122,8 +1131,8 @@ class SeguimientoController extends Controller
 
         $porcentaje = number_format(explode("*", $consul[0]->porcentaje)[2], 0, '.', ' ');
 
-        if($porcentaje < 100){
-            
+        if ($porcentaje < 100) {
+
             DB::UPDATE("UPDATE actividades SET status = 1 
             WHERE idac = $idac");
         }
@@ -1134,3 +1143,4 @@ class SeguimientoController extends Controller
         return back();
     }
 }
+

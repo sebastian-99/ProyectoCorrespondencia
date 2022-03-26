@@ -14,7 +14,7 @@ class TiposAreas extends Model
     protected $fillable = [
         //'idtar',
         'nombre',
-        'activo'
+        'estado'
     ];
 
     public function areas()

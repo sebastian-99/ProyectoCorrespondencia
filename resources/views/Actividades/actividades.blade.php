@@ -2,41 +2,47 @@
 @section('content')
 <style type="text/css">
     html {
- box-sizing: border-box;
-}
-*,
-*::before,
-*::after {
- box-sizing: inherit;
- margin: 0;
- padding: 0;
-}
-.row {
- display: flex;
-}
-.sep {
- display: flex;
- flex-direction: column;
- justify-content: center;
-}
-.sepText {
- display: flex;
- flex-direction: column;
- justify-content: center;
- align-items: center;
- flex: 1;
-}
-.sepText::before,
-.sepText::after {
- content: '';
- flex: 1;
- width: 1px;
- background: #FFCA28;
- /* matches font color */
- margin: .25em;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #e9830e;
+        box-sizing: border-box;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+        margin: 0;
+        padding: 0;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .sep {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .sepText {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
+    .sepText::before,
+    .sepText::after {
+        content: '';
+        flex: 1;
+        width: 1px;
+        background: #198754;
+        /* matches font color */
+        margin: .25em;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #198754;
         color: white;
 
     }
@@ -63,30 +69,30 @@
     }
 </style>
 
-    <div class="card">
-        <div class="card-header bg-success text-light" style="text-align: center;">
-            <h2>Gesti&oacute;n de actividades</h2>
-        </div>
-            <div class="card-body">
-            <div class="row">
-                <div class="col-xs-5 col-sm-5 col-md-5">
+<div class="card">
+    <div class="card-header bg-success text-light" style="text-align: center;">
+        <h2>Gesti&oacute;n de actividades</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xs-5 col-sm-5 col-md-5">
                 <form action="{{route('insert_actividad')}}" method="POST" enctype="multipart/form-data" id="form">
-                @csrf
+                    @csrf
                     <div class="row">
                         <!--Inicio seccion izquierda-->
                         <!--Primera sección-->
 
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-9 col-sm-9 col-md-9">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <strong>Fecha creaci&oacute;n:</strong>
-                                        <input type="text" class="form-control" id="fechacreacion" name="fechacreacion" value="{{$hoy}}" readonly>
+                                        <input type="text" class="form-control" id="fecha_creacion" name="fecha_creacion" value="{{$hoy}}" readonly>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
@@ -100,38 +106,39 @@
                     <!--fin primera sección-->
                     <!--Segunda sección-->
                     <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <strong>Actividad creada por:</strong>
-                                    <input type="text" class="form-control" id="actividadcreador" value ="{{$user[0]->titulo . ' ' . $user[0]->nombre . ' ' . $user[0]->app . ' ' . $user[0]->apm}}" readonly>
-                                    <input type="hidden" name="idusuario" value="{{$user[0]->idu}}">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Actividad creada por:</strong>
+                                        <input type="text" class="form-control" id="actividadcreador" value="{{$user[0]->titulo . ' ' . $user[0]->nombre . ' ' . $user[0]->app . ' ' . $user[0]->apm}}" readonly>
+                                        <input type="hidden" name="idusuario" value="{{$user[0]->idu}}">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <strong>Tipo de usuario-detalle:</strong>
-                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
-                                    <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}" >
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>Tipo de usuario-detalle:</strong>
+                                        <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$user[0]->tipo_usuario . ' - ' . $user[0]->nombre_areas}}" readonly>
+                                        <input type="hidden" name="idar_areas" value="{{$user[0]->idar}}">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
+                        </div>
                     </div>
                     <!--fin Segunda sección-->
                     <!--Tercera sección-->
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <strong>#Comunicado:</strong>
+                            <strong>#Comunicado:</strong>
+                            <div class="input-group">
                                 <input type="text" class="form-control" id="comunicado" name="comunicado" required>
+                                <button class="btn btn-danger" type="button" id="btncomunicado"><i class="nav-icon fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -153,7 +160,7 @@
                                 <strong>Tipo actividad:</strong>
                                 <select class="form-control" name="tipoactividad" id="tipoactividad">
                                     @foreach($tipo_actividad as $tipo)
-                                        <option value="{{$tipo->idtac}}">{{$tipo->nombre}}</option>
+                                    <option value="{{$tipo->idtac}}">{{$tipo->nombre}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -162,42 +169,32 @@
                     <!--fin Quinta sección-->
                     <!--Sexta sección-->
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
-                                <strong>Fecha de inicio:</strong>
-                                <input class="form-control" type="date" name="fechainicio" id="fechainicio" required>
+                                <strong>Fecha y hora de inicio:</strong>
+                                <input class="form-control" type="datetime-local" name="fechainicio" id="fechainicio" required>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Fecha de termino:</strong>
-                                <input class="form-control" type="date" name="fechatermino" id="fechatermino" required>
-                            </div>
-                        </div>
+
                     </div>
                     <!--fin Sexta sección-->
                     <!--Septima sección-->
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
-                                <strong>Hora de inicio:</strong>
-                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio">
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino">
+                                <strong>Fecha y hora de termino:</strong>
+                                <input class="form-control" type="datetime-local" name="fechatermino" id="fechatermino" required>
                             </div>
                         </div>
                     </div>
+
                     <!--fin Septima sección-->
                     <!--Octava sección-->
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Detalle de actividad:</strong>
-                                <textarea  class="form-control" name="detalleactividad" id="detalleactividad" rows="3" required></textarea>
+                                <textarea class="form-control" name="detalleactividad" id="detalleactividad" rows="3" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -227,15 +224,15 @@
 
                     </div>
                     <!--Fin Novena sección-->
-                </div>
-                <div class="col-xs-1 col-sm-1 col-md-1 sep">
-                    <span class="sepText">
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 sep">
+                <span class="sepText">
 
-                                </span>
+                </span>
 
-                  </div>
-                    <!--Parte derecha-->
-                    <div class="col-xs-6 col-sm-6 col-md-6">
+            </div>
+            <!--Parte derecha-->
+            <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -249,6 +246,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <input type="checkbox" id="enviarcorreo" name="cor">
+                                <input type="text" id="co" name="co" hidden>
+                                <span>Filtrar por correo</span>
+                            </div>
+
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Seleccione usuarios de las área:</strong>
@@ -302,20 +305,21 @@
                             <button type="submit" id="button"class="btn btn-primary" readonly>Enviar</button>
                         </div>
                     </div>
+            <!--Parte derecha-->
 
-            </div>
-            </form>
         </div>
-
-
+        </form>
     </div>
 
+
+</div>
+
 <script>
-/* Incrementorio de campos */
+    /* Incrementorio de campos */
 
     let suma = 1;
     console.log(suma);
-    $("#boton").on('click',function(){
+    $("#boton").on('click', function() {
 
         suma = suma + 1;
         console.log(suma);
@@ -333,26 +337,26 @@
                                 <input type="text" class="form-control" id="link" name="link${suma}">
                             </div>
                         </div> `);
-        if(suma == 3){
-            $("#boton").attr('disabled',true);
+        if (suma == 3) {
+            $("#boton").attr('disabled', true);
         }
     });
 
 
-/* Instancia de Select2 */
+    /* Instancia de Select2 */
 
-     $("#tipousuario").select2({
-        closeOnSelect : false,
+    $("#tipousuario").select2({
+        closeOnSelect: false,
 
-      });
+    });
 
-     $("#tipousuarioarea").select2({
-        closeOnSelect : false,
+    $("#tipousuarioarea").select2({
+        closeOnSelect: false,
 
-      });
+    });
 
 
-    $("#tipousuario").on('select2:select',function(e){
+    $("#tipousuario").on('select2:select', function(e) {
 
         $("#tipousuarioarea").attr("disabled", true);
 
@@ -360,24 +364,30 @@
 
         //let tipo_u = $("#tipousuario").val();
         let tipo_u = e.params.data.id;
-        
+
         /* $("#tipousuarioarea").empty(); */
-        
         $.ajax({
             type:'GET',
             data:{
-                tipo_u:tipo_u
+                tipo_u:tipo_u,
+                cor:cor
             },
             url : "{{route('ajax_tipousuarios')}}",
             success:function(data){
 
+                console.log(data[0]);
+                if (data[1] == 1) {
+                    for(let i = data[0].length - 1; i >= 0; i--){
 
-                console.log(data);
+                        $("#tipousuarioarea").append(`<option value="${data[0][i].idu}">${data[0][i].email}</option>`).trigger('change')
 
-                for(let i = data.length - 1; i >= 0; i--){
+                    }
+                } else {
+                    for(let i = data[0].length - 1; i >= 0; i--){
 
-                    $("#tipousuarioarea").append(`<option value="${data[i].idu}">${data[i].titulo} ${data[i].nombre} ${data[i].app} ${data[i].apm} - ${data[i].areas}</option>`).trigger('change')
+                        $("#tipousuarioarea").append(`<option value="${data[0][i].idu}">${data[0][i].titulo} ${data[0][i].nombre} ${data[0][i].app} ${data[0][i].apm} - ${data[0][i].areas}</option>`).trigger('change')
 
+                    }
                 }
 
                 $("#tipousuarioarea").attr("disabled", false);
@@ -388,8 +398,8 @@
 
             }
         });
-       
-       
+
+
     });
 
 
@@ -399,11 +409,36 @@
         $(this).val(null);
     });
 
-    $("#form").submit(function(event){
+    $("#form").submit(function(event) {
 
         $("#button").prop("disabled", true);
 
     });
+
+    /* Borrar comunicado */
+    $('#btncomunicado').on('click', function() {        
+        $('#comunicado').val('');
+    });
+
+    /* Filtrado por correo */
+    let cor = null;//$('#co').val("dsss");
+    $('#enviarcorreo').on('change', function() {                
+        //console.log(cor);
+        if ($(this).is(':checked')) {
+            cor = 1;
+            $('#co').attr('value',cor);
+            console.log(cor);
+        } else {
+            cor = 0;
+            $('#co').attr('value',cor);
+            console.log(cor);
+        }
+
+        $("#tipousuario").val('').change();
+        $('#tipousuarioarea').empty();
+        //$("#tipousuarioarea").val('').change();
+    });
+
 </script>
 
-@endsection
+@endsection 

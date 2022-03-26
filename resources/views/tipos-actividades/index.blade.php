@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Tipos de actividades</h2>
-                    <a href="{{url('tipos-actividades/create')}}"><button class="btn btn-success"><i class="fas fa-plus-square"></i></button></a>
+                    <a href="{{url('admin/tipos-actividades/create')}}"><button class="btn btn-success"><i class="fas fa-plus-square"></i></button></a>
                 </div>
             </div>
         </div>

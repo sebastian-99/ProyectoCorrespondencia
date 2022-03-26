@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class AreasController extends Controller
 {
+    //Constructor para verificar permisos de rutas
+    public function __construct()
+    {   
+        $this->middleware('can:areas.index')->only('index');
+        $this->middleware('can:areas.create')->only('create');
+        $this->middleware('can:areas.edit')->only('edit');
+        $this->middleware('can:areas.destroy')->only('destroy');
+    }
     /**
      * Vista para mostrar un listado de recursos.
      */

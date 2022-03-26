@@ -28,8 +28,8 @@ class CreateUsersTable extends Migration
             $table->boolean('activo')->default(1);
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('idtu_tipos_usuarios')->references('idtu')->on('tipos_usuarios');
-            $table->foreign('idar_areas')->references('idar')->on('areas');
+            $table->foreign('idtu_tipos_usuarios')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('idar_areas')->references('idar')->on('areas')->onDelete('cascade');
         });
     }
 

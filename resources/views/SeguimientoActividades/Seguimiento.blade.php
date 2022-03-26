@@ -57,6 +57,20 @@
 </div>
 
 <div class="row">
+<div class="col-sm-12">
+        @if (Session::has('message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{Session::get('message')}}.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                @if (Session::has('message2'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                   {{Session::get('message2')}}.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+    </div>
     <div class="col-sm-8">
 
         <div class="card">
@@ -79,8 +93,8 @@
                             <td> {{ Carbon\Carbon::parse($actividades->fecha_creacion)->locale('es')->isoFormat('D MMMM h:mm a') }}</td>
                             <td>{{$actividades->creador}} </td>
                             <td>
-                                {{ Carbon\Carbon::parse($actividades->fecha_inicio)->locale('es')->isoFormat('D MMMM') }} al
-                                {{ Carbon\Carbon::parse($actividades->fecha_fin)->locale('es')->isoFormat('D MMMM') }}
+                                {{ Carbon\Carbon::parse($actividades->fecha_inicio)->locale('es')->isoFormat('D MMMM h:mm a') }} -
+                                {{ Carbon\Carbon::parse($actividades->fecha_fin)->locale('es')->isoFormat('D MMMM h:mm a') }}
                             </td>
                         </tr>
                     </tbody>
@@ -198,9 +212,13 @@
                             <td colspan="3">Esta actividad no contiene archivos para atender.</td>
                         </tr>
                         @endif
-                        @if ($actividades->archivo1 != "Sin archivo")
+                        @if ($actividades->archivo1 != "Sin archivo" || $actividades->link1 != "Sin Link")
                         <tr>
-                            <td><a download={{$archivo1}} href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>
+                            @if ($actividades->archivo1 != "Sin archivo")
+                                <a download={{$archivo1}} href="{{asset('archivos/').'/'.$actividades->archivo1}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a>
+                            @endif
+                            </td>
                             <td>{{$archivo1}}</td>
                             <td>
                             @if ($actividades->link1 != "Sin Link")
@@ -211,9 +229,13 @@
                             </td>
                         </tr>
                         @endif
-                        @if ($actividades->archivo2 != "Sin archivo")
+                        @if ($actividades->archivo2 != "Sin archivo" || $actividades->link2 != "Sin Link")
                         <tr>
-                            <td><a download="{{$archivo2}}" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>
+                            @if ($actividades->archivo2 != "Sin archivo")
+                                <a download="{{$archivo2}}" href="{{asset('archivos/').'/'.$actividades->archivo2}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a>
+                            @endif
+                            </td>
                             <td>{{$archivo2}}</td>
                             <td>
                             @if ($actividades->link2 != "Sin Link")
@@ -225,9 +247,13 @@
                         </tr>
                         @endif
 
-                        @if ($actividades->archivo3 != "Sin archivo")
+                        @if ($actividades->archivo3 != "Sin archivo" || $actividades->link3 != "Sin Link")
                         <tr>
-                            <td><a download="{{$archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a></td>
+                            <td>
+                            @if ($actividades->archivo3 != "Sin archivo")
+                                <a download="{{$archivo3}}" href="{{asset('archivos/').'/'.$actividades->archivo3}}" class="btn btn-sm btn-danger"><i class="fa fa-download"></i></a>
+                            @endif
+                            </td>
                             <td>{{$archivo3}}</td>
                             <td>
                             @if ($actividades->link3 != "Sin Link")
@@ -348,17 +374,8 @@
                 <center>
                     <h4>Seguimientos de mi actividad</h4>
                 </center><br>
-                @if (Session::has('message'))
-                <p class="alert alert-info">
-                    {{Session::get('message')}}
-                </p>
-                @endif
-                @if (Session::has('message2'))
-                <p class="alert alert-danger">
-                    {{Session::get('message2')}}
-                </p>
-                @endif
-                <zing-grid lang="custom" caption='Reporte de seguimientos' sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter  selector data="{{$json_sa}}">
+               
+                <zing-grid lang="custom" caption='Reporte de seguimientos' nodata="Aqui se muestran los seguimientos que subas." selector sort search pager page-size='10' page-size-options='5,10,20,30' layout='row' viewport-stop theme='android' id='zing-grid' filter  selector data="{{$json_sa}}">
                     <zg-colgroup>
                         <zg-column index='idseac' header='No. Seguimiento' width="" type='text'></zg-column>
                         <zg-column index='detalle' header='Detalle' width="300" type='text'></zg-column>

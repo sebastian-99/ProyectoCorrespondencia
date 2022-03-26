@@ -26,17 +26,6 @@ Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');
     return 'Application cache cleared';
 });
-// ejecutar recordatorios
-Route::get('/run-schedules', function() {
-    $exitCode = Artisan::call('schedule:run');
-    return 'Application run schedules';
-});
-
- // borrar caché de ruta
- Route::get('/route-cache', function() {
-    $exitCode = Artisan::call('route:cache');
-    return 'Routes cache cleared';
-});
 
 // borrar caché de configuración
 Route::get('/config-cache', function() {
@@ -44,17 +33,13 @@ Route::get('/config-cache', function() {
     return 'Config cache cleared';
 }); 
 
-// borrar caché de vista
-Route::get('/view-clear', function() {
-    $exitCode = Artisan::call('view:clear');
-    return 'View cache cleared';
-});
 
 Route::redirect('/', 'panel');
 Auth::routes();
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/panel', [PanelController::class,'panel']);
+Route::middleware(['auth','activo'])->group(function () {
+
+    Route::get('/panel', [PanelController::class,'panel'])->name('panel');
     Route::get('/panel/get-actividades-hoy/{idu}', [PanelController::class,'getActividadesHoy']);
     Route::get('/panel/get-actividades-pendientes/{idu}', [PanelController::class,'getActividadesPendientes']);
     Route::get('/panel/get-actividades-por-mes/{idu}', [PanelController::class,'getActividadesPorMes']);
@@ -67,17 +52,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panel/get-actividades-sin-acuse-de-recibido', [PanelController::class,'getActividadesSinAcuseDeRecibido']);
 
 
-//////////////////////////////////////////////  U S U A R I O S  ///////////////////////////////////////////////////////////////
-    Route::resource('users', UsersController::class, ['names' => 'users']);
-
+//////////////////////////////////////////////  U S U A R I O S  /////////////////////////////////////////////////////////////////
+    Route::resource('admin/users', UsersController::class, ['names' => 'users']);
     Route::get('editar-perfil', [CuentasController::class, 'editar_perfil'])->name('editar-perfil');
     Route::post('editar-perfil', [CuentasController::class, 'editar_perfil_post'])->name('editar-perfil.post');
+//-------------------------------------------------------------------------------------------------------------------------------
 
+//////////////////////////////////////// T I P O S  A C T I V I D A D E S  ///////////////////////////////////////////////////////
+    Route::resource('admin/tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+//-------------------------------------------------------------------------------------------------------------------------------
 
-    Route::resource('tipos-actividades', TiposActividadesController::class, ['names' => 'tipos-actividades']);
+////////////////////////////////////////////////  Á R E A S  /////////////////////////////////////////////////////////////////////
+    Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
+//-------------------------------------------------------------------------------------------------------------------------------
 
-    Route::resource('areas', AreasController::class, ['names' => 'areas']);
-    //Seguimiento de actividades
+//////////////////////////////////////////  S E G U I M I E N T O S  /////////////////////////////////////////////////////////////
     Route::get('actividades_asignadas', [SeguimientoController::class,'actividades_asignadas'])->name('actividades_asignadas');
     Route::get('fecha_actividades_asignadas', [SeguimientoController::class,'fecha_actividades_asignadas'])->name('fecha_actividades_asignadas');
     Route::get('DetallesAsignacion/{idac}', [SeguimientoController::class, 'DetallesAsignacion'])->name('DetallesAsignacion');
@@ -87,8 +76,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('DetallesArchivos/{idarc}', [SeguimientoController::class, 'DetallesArchivos'])->name('DetallesArchivos');
     Route::post('aceptarActividad', [SeguimientoController::class,'aceptarActividad'])->name('aceptarActividad');
     Route::post('rechazarActividad', [SeguimientoController::class,'rechazarActividad'])->name('rechazarActividad');
-    //Actividades
+//-------------------------------------------------------------------------------------------------------------------------------
 
+////////////////////////////////////////////  A C T I V I D A D E S  /////////////////////////////////////////////////////////////
     Route::get('reporte_actividades', [ActividadesController::class,'reporte_actividades'])->name('reporte_actividades');
     Route::get('fecha_ajax', [ActividadesController::class,'fecha_ajax'])->name('fecha_ajax');
     Route::get('activacion/{id}/{activo}', [ActividadesController::class,'activacion'])->name('activacion');
@@ -99,28 +89,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('quitar_ajax2', [ActividadesController::class,'quitar_ajax2'])->name('quitar_ajax2');
     Route::POST('insert_actividad', [ActividadesController::class,'insert_actividad'])->name('insert_actividad');
     Route::get('actividades_modificacion/{id}', [ActividadesController::class,'actividades_modificacion'])->name('edit_modificacion');
+    Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
     Route::post('updateRechazo', [ActividadesController::class, 'updateRechazo'])->name('updateRechazo');
     Route::get('EliminarResponsables/{idreac}', [ActividadesController::class, 'EliminarResponsables'])->name('EliminarResponsables');
-
     Route::get('Detalles/{id}', [ActividadesController::class, 'Detalles'])->name('Detalles');
     Route::get('detallesSeguimiento/{idac}', [ActividadesController::class, 'detallesSeguimiento'])->name('detallesSeguimiento');
     Route::get('DetallesArchivos/{idarseg}', [ActividadesController::class, 'DetallesArchivos'])->name('DetallesArchivos');
-    /* Generación PDF */
-    Route::get('pdf/{idac}', [ActividadesController::class, 'pdf'])->name('pdf');
-    /* Fin de generación PDF */
-    Route::POST('update_actividades', [ActividadesController::class,'update_actividades'])->name('update_actividades');
-
-    Route::resource('admin/areas', AreasController::class, ['names' => 'areas']);
-    Route::resource('admin/users', UsersController::class, ['names' => 'users']);
-
     Route::get('actividades_creadas/{id}', [ActividadesController::class, 'actividades_creadas'])->name('actividades_creadas');
     Route::get('actividades_pendientes/{id}', [ActividadesController::class, 'actividades_pendientes'])->name('actividades_pendientes');
     Route::get('ajax_filtro_fecha', [ActividadesController::class, 'ajax_filtro_fecha'])->name('ajax_filtro_fecha');
-
+    /* Generación PDF */
+    Route::get('pdf/{idac}', [ActividadesController::class, 'pdf'])->name('pdf');
+    /* Generación Firma Digital */
     Route::get('hello', [EncryptController::class,'index']);
+//-------------------------------------------------------------------------------------------------------------------------------
+
+
 
     Route::get('/dashboard/{user}',[GraficasPorTipoAreaController::class,'dashboard']);
-
     Route::post('/dashboard/{user}',[GraficasPorTipoAreaController::class,'getEstadisticasDeActividades']);
 
     Route::post('/dashboard/{user}/get-actividades-completadas', [GraficasPorTipoAreaController::class,'actividadesCompletadas']);
@@ -137,9 +123,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/seguimiento/{idac}', [GraficasPorTipoAreaController::class,'seguimiento']);
 
-    //lol
     Route::get('/dashboard/{user}/actividades-creadas',[GraficasDeActividadesCreadasController::class,'dashboard']);
-
     Route::post('/dashboard/{user}/actividades-creadas',[GraficasDeActividadesCreadasController::class,'getEstadisticasDeActividades']);
 
     Route::post('/dashboard/{user}/actividades-creadas/get-actividades-completadas', [GraficasDeActividadesCreadasController::class,'actividadesCompletadas']);
@@ -156,7 +140,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detalle-actividad/{idac}', [GraficasDeActividadesCreadasController::class,'detalleActividad']);
 
 });
-
 
 Route::get('php', function (){
     phpinfo();

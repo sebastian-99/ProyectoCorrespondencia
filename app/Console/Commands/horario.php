@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\enviar_recordatorio;
 use DB;
-
-
+use Illuminate\Support\Facades\Log;
 
 class horario extends Command
 {
@@ -58,6 +57,8 @@ class horario extends Command
     ");
         foreach ($consulta as $c) {
             if ($c->resultado == 3) {
+            //$text='Se envio un recordatorio a: '.$c->email.' el '.date('H:i:s');
+            //Storage::append('archivo.txt', $text);
                 Mail::to($c->email)->send(new enviar_recordatorio($c));
             }
         }

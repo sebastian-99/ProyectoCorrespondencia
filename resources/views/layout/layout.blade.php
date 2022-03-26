@@ -101,7 +101,8 @@
               </p>
             </a>
           </li>
-        @if(Auth()->user()->idtu_tipos_usuarios == 1)
+        <!-- Sección de administracion -->
+        @can('Administracion')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="fas fa-users-cog"></i>
@@ -110,21 +111,21 @@
             <ul class="nav nav-treeview">
 
                 <li class="nav-item">
-                    <a href="{{ url('users')}}" class="nav-link">
+                    <a href="{{ url('admin/users')}}" class="nav-link">
                     <i class="fas fa-user"></i>
                     <p>Usuarios</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('areas')}}" class="nav-link">
+                    <a href="{{ url('admin/areas')}}" class="nav-link">
                     <i class="fas fa-chart-area"></i>
                     <p>Áreas</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('tipos-actividades')}}" class="nav-link">
+                    <a href="{{ url('admin/tipos-actividades')}}" class="nav-link">
                     <i class="fas fa-layer-group"></i>
                     <p>Tipos de actividades</p>
                     </a>
@@ -132,7 +133,10 @@
 
             </ul>
           </li>
-        @endif
+        @endcan
+        <!-- Fin de sección de administracion -->
+
+        <!-- Sección de actividades -->
         @if(Auth()->user()->idtu_tipos_usuarios != 1)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -194,6 +198,7 @@
           </li>
 
           @endif
+          <!-- Fin de sección de actividades -->
           @if(Auth()->user()->idtu_tipos_usuarios == 1)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">

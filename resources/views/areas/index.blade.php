@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Áreas</h2>
-                    <a href="{{url('areas/create')}}"><button class="btn btn-success"><i class="fas fa-plus-square"></i></button></a>
+                    <a href="{{url('admin/areas/create')}}"><button class="btn btn-success"><i class="fas fa-plus-square"></i></button></a>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ class CreateArchivosSeguimientosTable extends Migration
             $table->unsignedBigInteger('idseac_seguimientos_actividades');
             $table->string('nombre');
             $table->string('ruta');
-            $table->longText('detalle');
+            $table->longText('detalle_a');
             $table->timestamps();
             $table->foreign('idseac_seguimientos_actividades')->references('idseac')->on('seguimientos_actividades');
         });

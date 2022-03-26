@@ -7,6 +7,14 @@ use App\Models\TiposActividades;
 
 class TiposActividadesController extends Controller
 {
+    //Constructor para verificar permisos de rutas
+    public function __construct()
+    {   
+        $this->middleware('can:tipos-actividades.index')->only('index');
+        $this->middleware('can:tipos-actividades.create')->only('create');
+        $this->middleware('can:tipos-actividades.edit')->only('edit');
+        $this->middleware('can:tipos-actividades.destroy')->only('destroy');
+    }
     /**
      * Vista para mostrar un listado de recursos
      */

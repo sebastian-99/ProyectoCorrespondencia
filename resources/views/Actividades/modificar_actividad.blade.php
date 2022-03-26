@@ -40,12 +40,12 @@
  content: '';
  flex: 1;
  width: 1px;
- background: #FFCA28;
+ background: #198754;
  /* matches font color */
  margin: .25em;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #e9830e;
+        background-color: #198754;
         color: white;
 
     }
@@ -78,70 +78,58 @@
         </div>
             <div class="card-body">
             <div class="row">
+                <!--Inicio seccion izquierda-->
                 <div class="col-xs-5 col-sm-5 col-md-5">
-                <form action="{{route('update_actividades')}}" id="form" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" value="{{$consul[0]->idac}}" name="idac">
-                    <div class="row">
-                        <!--Inicio seccion izquierda-->
-                        <!--Primera sección-->
+                    <form action="{{route('update_actividades')}}" id="form" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" value="{{$consul[0]->idac}}" name="idac">
+                        <div class="row">
+                            <!--Primera sección-->
 
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-9 col-sm-9 col-md-9">
+                                <div class="row">
                                     <div class="form-group">
                                         <strong>Fecha creaci&oacute;n:</strong>
-                                        <input type="text" class="form-control" id="fechacreacion" name="fechacreacion" value="{{$consul[0]->fecha_creacion}}" readonly>
-                                    </div>
+                                        <input type="text" class="form-control" id="fechacreacion" name="fechacreacion" value="{{$hoy}}" readonly>
+                                    </div>        
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12">
+                            <!-- Segunda sección -->
+                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                <div class="row">
                                     <div class="form-group">
                                         <strong>Turno:</strong>
                                         <input type="text" class="form-control" id="turno" name="turno" value="{{$consul[0]->turno}}" readonly>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Segunda sección -->
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <strong>Actividad creada por:</strong>
+                                        <input type="text" class="form-control" id="actividadcreador" value ="{{$consul[0]->titulo. ' ' . $consul[0]->nombre . ' ' . $consul[0]->app . ' ' . $consul[0]->apm}}" readonly>
+                                    </div>                                  
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <strong>Tipo de usuario - detalle:</strong>
+                                        <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$consul[0]->tipo_usuario . ' - ' . $consul[0]->nombre_area}}" readonly>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--fin primera sección-->
-                    <!--Segunda sección-->
-                    <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <!--Tercera sección-->
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <strong>Actividad creada por:</strong>
-                                    <input type="text" class="form-control" id="actividadcreador" value ="{{$consul[0]->titulo. ' ' . $consul[0]->nombre . ' ' . $consul[0]->app . ' ' . $consul[0]->apm}}" readonly>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <strong>Tipo de usuario - detalle:</strong>
-                                    <input type="text" class="form-control" id="tipodetalle" name="tipodetalle" value="{{$consul[0]->tipo_usuario . ' - ' . $consul[0]->nombre_area}}" readonly>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    </div>
-                    <!--fin Segunda sección-->
-                    <!--Tercera sección-->
-                    <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <strong>#Comunicado:</strong>
+                            <strong>#Comunicado:</strong>
+                            <div class="input-group">
                                 <input type="text" class="form-control" id="comunicado" name="comunicado" value="{{$consul[0]->comunicado}}" required>
+                                <button class="btn btn-danger" type="button" id="btncomunicado"><i class="nav-icon fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -173,32 +161,21 @@
                     <!--fin Quinta sección-->
                     <!--Sexta sección-->
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Fecha de inicio:</strong>
-                                <input class="form-control" type="date" name="fechainicio" id="fechainicio" value="{{$consul[0]->fecha_inicio}}" required>
+                                <input class="form-control" type="datetime-local" name="fechainicio" id="fechainicio" value="{{Carbon\Carbon::parse($consul[0]->fecha_inicio)->format('Y-m-d\TH:i')}}" required>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Fecha de termino:</strong>
-                                <input class="form-control" type="date" name="fechatermino" id="fechatermino" value="{{$consul[0]->fecha_fin}}" required>
-                            </div>
-                        </div>
+                        
                     </div>
                     <!--fin Sexta sección-->
                     <!--Septima sección-->
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
-                                <strong>Hora de inicio:</strong>
-                                <input class="form-control" type="time" name="horadeinicio" id="horadeinicio" value="{{($consul[0]->hora_inicio == '00:00:00') ? null : $consul[0]->hora_inicio }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <strong>Hora de termino:</strong>
-                                <input class="form-control" type="time" name="horatermino" id="horatermino" value="{{($consul[0]->hora_fin == '00:00:00') ? null : $consul[0]->hora_fin }}">
+                                <strong>Fecha de termino:</strong>
+                                <input class="form-control" type="datetime-local" name="fechatermino" id="fechatermino" value="{{Carbon\Carbon::parse($consul[0]->fecha_fin)->format('Y-m-d\TH:i')}}" required>
                             </div>
                         </div>
                     </div>
@@ -286,7 +263,7 @@
                   </div>
                     <!--Parte derecha-->
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="row">
+                    <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Seleccione participantes:</strong>
@@ -302,6 +279,9 @@
                                         @endforeach
                                     @endif
                                     </select>
+                                    <strong>Filtrar por correo</strong>
+                                    <input type="checkbox" id="enviarcorreo" disabled value="{{($consul[0]->filtrocorreo == 1)? 'checked' : ''}}">
+                                    <input type="text" id="co" name="co" value="{{ $consul[0]->filtrocorreo }}" hidden>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -311,11 +291,19 @@
                                     <label>&nbsp;</label>
                                     <select class="form-control" name="tipousuarioarea[]" id="tipousuarioarea" multiple="multiple" required>
                                         @foreach($users as $tu)
-                                            <option selected value="{{$tu->idu}}">{{$tu->usuario . " - " . $tu->nombre_area}}</option>
+                                            @if($consul[0]->filtrocorreo == 0)
+                                                <option selected value="{{$tu->idu}}">{{$tu->usuario . " - " . $tu->nombre_area}}</option>
+                                            @else
+                                                <option selected value="{{$tu->idu}}">{{$tu->email}}</option>
+                                            @endif
                                         @endforeach
                                         @if($no_seleccionar_user != null)
                                             @foreach($no_seleccionar_user as $no)
-                                                <option value="{{$no->idu}}">{{$no->usuario . ' - ' . $no->nombre_area}}</option>
+                                                @if($consul[0]->filtrocorreo == 0)
+                                                    <option value="{{$no->idu}}">{{$no->usuario . ' - ' . $no->nombre_area}}</option>
+                                                @else
+                                                    <option value="{{$no->idu}}">{{$no->email}}</option>                                        
+                                                @endif
                                             @endforeach
                                         @endif
                                     </select>
@@ -372,6 +360,7 @@
                                             <zing-grid
                                             lang="custom"
                                             caption='Personas que ya están dando seguimiento'
+                                            selector
                                             sort
                                             search
                                             pager
@@ -382,6 +371,7 @@
                                             theme='android'
                                             id='zing-grid'
                                             filter
+                                            nodata="Aun nadie a recibido la actividad. Una vez que un usuario acepte ya no podras eliminarlo."
                                             data = "{{$json}}">
                                             <zg-colgroup>
                                                 <zg-column index='personas' header='Nombre' type='text'></zg-column>
@@ -505,7 +495,7 @@
 
                 
                 if(data.length >= 1 && data[0].acuse == 1){
-                    alert("Tiene una actividad");
+                    alert("El usuario ya acepto la actividad.");
                 }else{
                     
                     $(`#tipousuarioarea option[value='${val}']`).prop('selected', false).trigger('change');
@@ -542,7 +532,7 @@
 
                 console.log(data[1][0].idu);
                 if(data[0][0].contar == 1){
-                    alert("hay gente aqui");
+                    alert("Hay gente asignada en esta área que ya acepto la actividad.");
                 }else{
 
                     $(`#tipousuario option[value='${val}']`).prop('selected', false).trigger('change');
@@ -574,10 +564,19 @@
     });
     
     $("#form").submit(function(event){
-        
         $("#button").prop("disabled", true);
-       
     });
+
+    /* Borrar comunicado */
+    $('#btncomunicado').on('click', function() {        
+        $('#comunicado').val('');
+    });
+
+    /* Filtrado por correo */
+    //let cor = {{$consul[0]->filtrocorreo}};
+    //$('#co').attr('value',cor);
+
+    
 </script>
 
 @endsection

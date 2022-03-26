@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-sm-11">
                     <h2 align="center">Usuarios</h2>
-                    <a href="{{url('users/create')}}"><button class="btn btn-success"><i class="fas fa-user-alt"></i></button></a>
+                    <a href="{{url('admin/users/create')}}"><button class="btn btn-success"><i class="fas fa-user-alt"></i></button></a>
                 </div>
             </div>
         </div>

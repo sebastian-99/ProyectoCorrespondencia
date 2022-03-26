@@ -62,9 +62,31 @@
                 <input class="form-control" name="fechaFin" id="fechaFin" type="date" readonly>
             </div>
         </div>
+        
+    </div>
+    <div class="col-sm-12">
+        <br>
+        @if (Session::has('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{Session::get('message')}}.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if (Session::has('message2'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{Session::get('message2')}}.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if (Session::has('message3'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{Session::get('message3')}}.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
     </div>
     <div class="card-body">
-        <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
+        <zing-grid lang="custom" caption='Reporte de oficios' nodata="Aquí se muestran las actividades que se creen por tu persona." selector sort search pager page-size='10' page-size-options='1,2,3,4,5,10' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
             <zg-colgroup>
                 <zg-column index='turno' header='Turno' width="100" type='number'></zg-column>
                 <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>

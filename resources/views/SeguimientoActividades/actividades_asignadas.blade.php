@@ -84,7 +84,7 @@
   </div>
   @endif
   <div class="card-body">
-    <zing-grid lang="custom" caption='Reporte de oficios' sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
+    <zing-grid lang="custom" caption='Reporte de oficios' nodata="Aquí se muestran las actividades que te asignen." selector sort search pager page-size='10' page-size-options='10,15,20,25,30' layout='row' viewport-stop theme='android' id='zing-grid' filter selector data="{{$json}}">
       <zg-colgroup>
         <zg-column index='turno' header='Turno' width="100" type='text'></zg-column>
         <zg-column index='asunto' header='Asunto' width="200" type='text'></zg-column>
@@ -145,8 +145,8 @@
           <div class="col-sm-6 mb-3" id="area_a"></div>
         </div>
         <div class="row">
-          <div class="col-sm-6 mb-3" id="f_creacion_a"></div>
-          <div class="col-sm-6 mb-3" id="periodo_atencion_a"></div>
+          <div class="col-sm-12 mb-3" id="f_creacion_a"></div>
+          <div class="col-sm-12 mb-3" id="periodo_atencion_a"></div>
           <div class="col-sm-12 mb-3" id="razon_activacion_a" ></div>
         </div>
         <!--</div>
@@ -237,9 +237,26 @@
 
       });
 
+       //Funcion para darle formato a las fechas recibidas
+       function formatDate(dateString) {
+        var date = new Date(dateString);
+        var days = date.getDate();
+        const month = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        var month_name = month[date.getMonth()];
+        var year = date.getFullYear();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var strTime = days + ' ' + month_name + ' ' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+      }
+
       $('#crearModal').modal('show');
       var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
-      var descripcion = "<textarea id='descripcion' name='descripcion' rows='8' class='form-control form-control-sm' disabled></textarea>"
+      var descripcion = "<textarea id='descripcion' name='descripcion' rows='5' class='form-control form-control-sm' disabled></textarea>"
       var importancia = "<input id='importancia' name='importancia'  class='form-control form-control-sm' disabled>"
       var comunicado = "<input id='comunicado' name='comunicado'  class='form-control form-control-sm' disabled>"
       var turno = "<input id='turno' name='turno'  class='form-control form-control-sm' disabled>"
@@ -247,7 +264,7 @@
       var area = "<input id='area' name='area'  class='form-control form-control-sm' disabled>"
       var creacion = "<input id='creacion' name='creacion'  class='form-control form-control-sm' disabled>"
       var periodo = "<input id='periodo' name='periodo'  class='form-control form-control-sm' disabled>"
-      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='8' class='form-control form-control-sm' disabled></textarea>"
+      var razon_activacion = "<textarea id='razon_activacion' name='razon_activacion' rows='5' class='form-control form-control-sm' disabled></textarea>"
 
       $('#asunto_a').append("<strong>Asunto </strong>" + asunto);
       $('#descripcion_a').append("<strong>Descripción </strong>" + descripcion);
@@ -267,8 +284,9 @@
       $('#turno').val(data[0].turno);
       $('#creador').val(data[0].creador);
       $('#area').val(data[0].nombre_area);
-      $('#creacion').val(data[0].fecha_creacion);
-      $('#periodo').val(data[0].fecha_inicio + ' al ' + data[0].fecha_fin);
+    
+      $('#creacion').val(formatDate(data[0].fecha_creacion));
+      $('#periodo').val(formatDate(data[0].fecha_inicio) + ' / ' + formatDate(data[0].fecha_fin));
       $('#razon_activacion').val(data[0].razon_activacion);
       //console.log(data[0]);
 
