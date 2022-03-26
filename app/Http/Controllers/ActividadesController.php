@@ -873,7 +873,7 @@ class ActividadesController extends Controller
     ");
      
          foreach($userForMail as $correos){
-           // Mail::to($correos->email)->send(new enviar_asignacion($correos));
+            Mail::to($correos->email)->send(new enviar_asignacion($correos));
         }
         //------------------------------------------------------
         if (Auth()->User()->idtu_tipos_usuarios == 3) {
