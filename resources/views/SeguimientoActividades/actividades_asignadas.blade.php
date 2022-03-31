@@ -120,15 +120,7 @@
       </div>
 
       <div class="container">
-        <!--<div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Ver Detalles
-              </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-              <div class="accordion-body">-->
+      
         <div class="row">
           <div class="col-sm-12 mb-3" id="asunto_a"></div>
         </div>
@@ -149,10 +141,6 @@
           <div class="col-sm-12 mb-3" id="periodo_atencion_a"></div>
           <div class="col-sm-12 mb-3" id="razon_activacion_a" ></div>
         </div>
-        <!--</div>
-            </div>
-          </div>{{-- cierre de acordion--}}
-        </div>{{-- cierre de acordion-item --}}-->
         <div>
           <div id="sec1" hidden>
             <label>Ingresa tu contraseña para confirmación</label>
@@ -165,7 +153,6 @@
           <label>Describe la situación del porque rechazas la actividad</label>
           <Textarea class="form-control" name="rechazo" id="razon_r" value="{{old('rechazo')}}" rows="5" required></Textarea>
         </div>
-
       </div>
       <br><br>
       <div class="form-group text-center">
@@ -204,6 +191,7 @@
       $('#guardar').attr('hidden', true);
       $('#cancelar').attr('hidden', true);
 
+      //Disparador dependiendo que la accion que tome sobre la actividad
       var val = 0;
 
       $('#aceptar').on('click', function() {
@@ -254,6 +242,7 @@
         return strTime;
       }
 
+      //Crear el modal con la informacion de la actividad
       $('#crearModal').modal('show');
       var asunto = "<input id='asunto' name='asunto' class='form-control form-control-sm' disabled>"
       var descripcion = "<textarea id='descripcion' name='descripcion' rows='5' class='form-control form-control-sm' disabled></textarea>"
@@ -337,7 +326,6 @@
             method: 'POST',
             success: function(data) {
               location.reload();
-              //alert('no funciona');
             },
             error: function(data) {
               console.log(data);
@@ -348,7 +336,7 @@
     }); //cierre de function cuando abre ventana modal
   }); //cierre function get
 
-
+  //borrar los elementos creados cuando se cierra el modal
   $("#crearModal").on('hidden.bs.modal', function() {
 
     $('#asunto_a').empty();
@@ -369,7 +357,7 @@
     val = 0;
   }); //cierre acciones al cierre modal
 
-
+  //Ajax para obtener la informacion de acuerdo al filtro establecido
   $('#button').on("click", function() {
 
     let fecha_orden = $('#fecha_orden').val()

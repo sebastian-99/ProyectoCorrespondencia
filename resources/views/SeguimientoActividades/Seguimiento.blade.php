@@ -8,7 +8,7 @@
 <script>
     if (es) ZingGrid.registerLanguage(es, 'custom');
 </script>
-
+<!-- Script para barra de porcentaje -->
 <script>
     addEventListener('load', inicio, false);
     function inicio() {
@@ -19,13 +19,6 @@
         document.getElementById('porc').innerHTML = document.getElementById('porcentaje').value;
     }
 </script>
-
-<style>
-    body {
-        color: #4D4D4D;
-        font: 15px, Helvetica;
-    }
-</style>
 
 @endsection
 
@@ -99,7 +92,6 @@
                         </tr>
                     </tbody>
                 </table><br>
-
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
@@ -123,33 +115,26 @@
                             </td>
                             <td>{{$user->tipo_usuario . ' - ' . $user->nombre_areas}}</td>
                             <td>{{$actividades->importancia}}</td>
-
                         </tr>
                     </tbody>
                 </table><br>
                 <table class="table table-responsive table-striped">
                     <thead class="">
                         <tr style="background-color: #607d8b; color: #ffffff">
-                        <th scope="col" style='width:214px'>Área responsable</th>
-                        <th scope="col" style='width:214px'>Acuse de recibido</th>
-                        <th scope="col" style='width:214px'>Tipo de actividad </th>
-                            
-
+                            <th scope="col" style='width:214px'>Área responsable</th>
+                            <th scope="col" style='width:214px'>Acuse de recibido</th>
+                            <th scope="col" style='width:214px'>Tipo de actividad </th>                           
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                         <td>{{$actividades->nombre_area}}</td>
                             <td>Si</td>
-                            <td>{{$actividades->tipo_act}}</td>
-                            
-                           
-
+                            <td>{{$actividades->tipo_act}}</td>                                                    
                         </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
     <div class="col-sm-4">
@@ -168,9 +153,7 @@
                     <div class='btn-group me-2' role='group' aria-label='Second group'>
                     <p class="bd-lead">
                        <h6>Avance total:</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control form-control-sm" style='width: 40px;' disabled type="text"  value="{{$general}}">%
-                    </p></div>
-                    
-                    
+                    </p></div>                   
                     <br><br>
                     <p class="bd-lead">
                         <center><h5>Estado de la actividad:</h5></center>
@@ -178,12 +161,6 @@
                     <p class="bd-lead">
                         <center><h6>{{$est_act}}</h6></center>
                     </p>
-                    <!--<div class="d-md-flex align-items-center justify-content-between">
-                        <h3 class="bd-title">Status atención</h3>
-                    </div>
-                    <input class="form-control form-control-sm bg-success" value="En tiempo" type="text" disabled>-->
-
-
                 </div>
 
             </div>
@@ -246,7 +223,6 @@
                             </td>
                         </tr>
                         @endif
-
                         @if ($actividades->archivo3 != "Sin archivo" || $actividades->link3 != "Sin Link")
                         <tr>
                             <td>
@@ -266,13 +242,10 @@
                         @endif
                     </tbody>
                 </table>
-          
-
-
             </div>
         </div>
-       
     </div>
+    {{-- Formulario para dar nuevos seguimientos (Solo mostrar si la actividad aún no esta completada). --}}
     @if(Auth()->user()->idtu_tipos_usuarios == 2 && $max_ai->avance_i != "100")                      
     <div class="col-sm-12">
         <div class="card">
@@ -280,12 +253,6 @@
                 <form action="{{route('AgregarSeguimiento')}}" method="POST" enctype="multipart/form-data" id="form">
                     @csrf
                     <input type="hidden" name="idac" value="{{$idac}}">
-                    <!--<div class="col-sm-4">
-                        <div class="mb-3">
-                            <label for="NoSeguimiento" class="form-label">No. Seguimiento</label>
-                            <input type="text" class="form-control form-control-sm" id="idseac" name="idseac">
-                        </div>
-                    </div>-->
                     <center>
                     <h4>Dar un nuevo seguimiento</h4>
                 </center><br>
@@ -337,32 +304,22 @@
                                 {{--- Aquí se agrega el archivo definalizacion del seguimiento---}}
                             </div>
                         </div>
-                    </div>
-
-                    
+                    </div>                   
                     <div class="col-sm-12">
                         <div class="form-group">                     
                             <label for="archivo" class="form-label">Agregar archivos</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="btn btn-sm rounded-circle btn-success addfile" id="addfile"><i class='fa fa-plus-circle'></i></a>           
                         </div>
-                    </div>             
-                   
+                    </div>               
                         <table class="table table-responsive">           
                         <tr>
                             <div id="nuevoInputfile">
                                 {{-- Aqui se van agregando más inputs type file para agregar varios archivos --}}
                             </div>
                         </tr>
-                        </table>   
-                           
-                        
-                    
-
+                        </table>               
                     <div class="col-sm-2">
-
                         <button type="submit" class="btn btn-sm btn-success" id="dar_seg">Guardar seguimiento</button>
-
-                    </div>
-                   
+                    </div>   
                 </form>
             </div>
         </div>
@@ -451,8 +408,6 @@
                 alert('El porcentaje no puede ser menor que el ultimo');
                 $('#porc').html(vp);
                 $('#porcentaje').val(vp);
-                //console.log(verif_p);
-                //console.log(vp);
             }
             
         }
@@ -502,9 +457,26 @@ $("#form").submit(function(event){
            i=i+1;
            break;
          }else{
+
+        //Funcion para darle formato a las fechas recibidas
+       function formatDate(dateString) {
+        var date = new Date(dateString);
+        var days = date.getDate();
+        const month = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        var month_name = month[date.getMonth()];
+        var year = date.getFullYear();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var strTime = days + ' ' + month_name + ' ' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+      }
       
         $('#modelHeading').html("Detalles de tus archivos subidos");
-        $('#fecha_info').html("<p>" + '  ( ' + data[i].fecha + ' )' + "</p>");
+        $('#fecha_info').html("<p>" + '  ( ' + formatDate(data[i].fecha) + ' )' + "</p>");
         $('#det_seg').html("<h4>" + data[0].detalle + "</h4><br>");
         $('#ajaxModel').modal('show');
         var nombre = "<td><input id='nombre"+i+"' name='nombre"+i+"'  style='width:100%' disabled class='form-control form-control-sm'></td>"
@@ -528,9 +500,7 @@ $("#form").submit(function(event){
         $('#ruta'+i).attr('download',data[i].nombre);
         $('#ruta'+i).text(texto);
         }
-       
-     
-  
+
         i=i+1;
          }
         }

@@ -16,18 +16,22 @@ use Brs\FunctionPkg;
 
 class SeguimientoController extends Controller
 {
-    //Constructor para verificar permisos de rutas
+    /* Constructor para verificar permisos de rutas de acuerdo al rol asiginado del usuario */
     public function __construct()
     {
         $this->middleware('can:ver-actividades-asignadas')->only('actividades_asignadas');
         $this->middleware('can:ver-seguimientos')->only('Seguimiento');
     }
 
+    /* Filtrar solo las actividades que se me han asignado */
+
     public function actividades_asignadas()
     {
-        //Filtrar solo mis actividades que tengo asignadas
         $id_user = Auth()->user()->idu;
         $ar = Auth()->user()->idar_areas;
+
+        /* Obtener las actividades que tenga asignadas el jefe del asistente
+       con los datos del jefe */
 
         if (Auth()->user()->idtu_tipos_usuarios == 4) {
 
@@ -48,6 +52,8 @@ class SeguimientoController extends Controller
             ORDER BY ac.fecha_creacion DESC");
         } else {
 
+            /* Obtener las actividades que tenga asignadas el jefe de área */
+
             $consult = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre AS AREA,ra.idu_users,ac.activo, 
             porcentaje(ac.idac, $id_user) AS porcentaje, ac.descripcion,ac.status, ra.acuse, ta.nombre AS tipo_actividad
@@ -61,7 +67,16 @@ class SeguimientoController extends Controller
             ORDER BY ac.fecha_creacion DESC");
         }
 
+        /* Lo siguiente es para el uso de la libreria ZingGrid para que se muestren en la tabla.
+        Declaracion de un array para despues insertar los datos */
+
         $array = array();
+
+        /* (NOTA: las variables $data y $value de las siguientes 4 funciones,
+        se recuperan en una funcion en la base de datos.
+        Dandoles el formato requerido para mostrar en la tabla Zing-Grid) */
+
+        /* Funcion para mostrar el porcentaje total de cada actividad y darle formato */
 
         function recorrer($value)
         {
@@ -74,6 +89,8 @@ class SeguimientoController extends Controller
             return $arr;
         }
 
+        /* Funcion para mostrar los usuarios que han atendido actividad */
+
         function AB($data)
         {
             if (gettype($data) == "array") {
@@ -84,6 +101,8 @@ class SeguimientoController extends Controller
             }
         }
 
+        /* Función para mostrar el porcentaje y se le de formato */
+
         function C($data)
         {
             if (gettype($data) == "array") {
@@ -93,6 +112,8 @@ class SeguimientoController extends Controller
             }
         }
 
+        /* Función para mostrar el estado de la actividad */
+
         function D($status, $end_date, $data, $acuse)
         {
             if (gettype($data) == "array") {
@@ -101,36 +122,27 @@ class SeguimientoController extends Controller
                 $data = 0;
             }
             $date = Carbon::now()->locale('es_MX');
-            //dd($date);
-
-            //return ($data > $end_date ? "es mayor" : "No es mayor");
-
             if ($date <= $end_date && $data < 100 && $acuse == 1) {
-
                 return "En proceso – En Tiempo";
             } elseif ($date <= $end_date  && $data == 100 && $acuse == 1) {
-
                 return "Concluido – En tiempo";
             } elseif ($date >= $end_date  && $data < 100 && $acuse == 1) {
-
                 return "En proceso - Fuera de Tiempo";
             } elseif ($date >= $end_date  && $data == 100 && $acuse == 1) {
-
                 return "Concluido – Fuera de Tiempo";
             } elseif ($acuse == 2) {
-
                 return "Acuse rechazado";
             } elseif ($status == 3) {
-
                 return "Cancelado";
             } else {
                 return "Sin aceptar acuse";
             }
         }
 
+        /* Funcion para ver los botones de la operaciones */
+
         function ver($idac)
         {
-            //consulta para ver si el acuse se recibio
             $id_user = Auth::user()->idu;
             $ar = Auth::user()->idar_areas;
             $tipo = Auth::user()->idtu_tipos_usuarios;
@@ -142,31 +154,44 @@ class SeguimientoController extends Controller
                 $id = $id_user;
             }
 
+            /* Consulta para ver si la actividad ya fue aceptada por el usuario */
+
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
             WHERE ra.idu_users = $id
             AND ra.idac_actividades = $idac");
 
+            /* Si el acuse fue rechazado */
+
             if ($ver_acuse[0]->acuse == 2) {
 
                 return "<a class='btn btn-sm btn-danger' disabled><i class='nav-icon fas fa-ban'></i></a>";
             }
+            /* Si el acuse fue aceptado */
 
             if ($ver_acuse[0]->acuse == 1) {
                 return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
             } else {
+
+            /* Si aun no he aceptado el acuse y el usuario no es un asistente*/
+
                 $idreac = $ver_acuse[0]->idreac;
                 if (Auth()->user()->idtu_tipos_usuarios != 4) {
                     return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idac) . "  data-original-title='DetallesAsignacion' class='edit btn btn-primary btn-sm DetallesAsignacion' id='detalle'><i class='nav-icon fas fa-user-check'></i></a>
                         <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
                 } else {
+
+            /* Si aun no he aceptado el acuse y el usuario es un asistente*/
+            
                     return "<a class='btn btn-success mt-1 btn-sm' id='$idreac' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . " hidden><i class='nav-icon fas fa-eye'></i></a>
                         <a class='btn btn-sm btn-danger' id='mensaje' hidden disabled><i class='nav-icon fas fa-ban'></i></a>";
                 }
             }
         }
+
+        /* Foreach para insertar en el array todos los datos */
 
         foreach ($consult as $c) {
 
@@ -189,7 +214,13 @@ class SeguimientoController extends Controller
                 'operaciones' => ver($c->idac),
             ));
         }
+
+        /* Convertir todo el array en formato JSON */
+
         $json = json_encode($array);
+
+        /* Si es asistente retornar a la vista con los datos de su jefe
+        sino continuar normalmente */
 
         if (Auth()->user()->idtu_tipos_usuarios == 4) {
             return view('SeguimientoActividades.actividades_asignadas')
@@ -200,6 +231,10 @@ class SeguimientoController extends Controller
                 ->with('json', $json);
         }
     }
+
+    /* Obtener datos de actividades asignadas en base a los filtros seleccionados por fechas.
+    NOTA:(Mismas funciones que en actividades_asignadas) */
+
     public function fecha_actividades_asignadas(Request $request)
     {
         $id_user = Auth()->user()->idu;
@@ -508,8 +543,6 @@ class SeguimientoController extends Controller
             }
         }
 
-        /** Funcion para obtener el estado de la actividad */
-
         function D($status, $end_date, $data, $acuse)
         {
             if (gettype($data) == "array") {
@@ -518,37 +551,25 @@ class SeguimientoController extends Controller
                 $data = 0;
             }
             $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
-
-            //return ($data > $end_date ? "es mayor" : "No es mayor");
-
             if ($date <= $end_date && $data < 100 && $acuse == 1) {
-
                 return "En proceso – En Tiempo";
             } elseif ($date <= $end_date  && $data == 100 && $acuse == 1) {
-
                 return "Concluido – En tiempo";
             } elseif ($date >= $end_date  && $data < 100 && $acuse == 1) {
-
                 return "En proceso - Fuera de Tiempo";
             } elseif ($date >= $end_date  && $data == 100 && $acuse == 1) {
-
                 return "Concluido – Fuera de Tiempo";
             } elseif ($acuse == 2) {
-
                 return "Acuse rechazado";
             } elseif ($status == 3) {
-
                 return "Cancelado";
             } else {
                 return "Sin aceptar acuse";
             }
         }
 
-        /** Funcion para generar los botones del zing-grid de la actividad por fechas */
-
         function ver($idac)
         {
-            //consulta para ver si el acuse se recibio
             $id_user = Auth::user()->idu;
             $ar = Auth::user()->idar_areas;
             $tipo = Auth::user()->idtu_tipos_usuarios;
@@ -559,7 +580,6 @@ class SeguimientoController extends Controller
                 $asignado = DB::SELECT("SELECT idu FROM users WHERE idar_areas = $ar AND idtu_tipos_usuarios = 2");
                 $id = $id_user;
             }
-
             $ver_acuse = DB::SELECT("SELECT ra.acuse, ra.idreac
             FROM actividades AS ac
             LEFT JOIN responsables_actividades AS ra ON ra.idac_actividades = ac.idac
@@ -572,7 +592,7 @@ class SeguimientoController extends Controller
             }
 
             if ($ver_acuse[0]->acuse == 1) {
-                return "aaa<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
+                return "<a class='btn btn-success mt-1 btn-sm' id='btn-mostrar' href=" . route('Seguimiento', ['idac' => encrypt($idac)]) . "><i class='nav-icon fas fa-eye'></i></a>";
             } else {
                 $idreac = $ver_acuse[0]->idreac;
                 if (Auth()->user()->idtu_tipos_usuarios != 4) {
@@ -585,7 +605,6 @@ class SeguimientoController extends Controller
                 }
             }
         }
-        /** Convertir el array de consulta a formato JSON para procesar datos en el zing.grid */
 
         foreach ($consult as $c) {
 
@@ -613,6 +632,8 @@ class SeguimientoController extends Controller
         return response()->json($json);
     }
 
+    /* Si se acepta la actividad camibar el estado del acuse */
+
     public function aceptarActividad(Request $request)
     {
         $contraseña = $request->pass;
@@ -627,12 +648,12 @@ class SeguimientoController extends Controller
                 acuse = 1, fecha_acuse = CURDATE(), firma = '$firma'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
             Session::flash('message', 'Ahora podrás darle seguimiento a esta actividad');
-            //return response()->json('aceptado');
         } else {
             Session::flash('message2', 'Contraseña incorrecta, favor de verificar que la contraseña este escrita correctamente');
-            //return 'Contraseña incorrecta';
         }
     }
+
+    /* Si se rechaaza la actividad camibar el estado del acuse */
 
     public function rechazarActividad(Request $request)
     {
@@ -644,11 +665,11 @@ class SeguimientoController extends Controller
                 acuse = 2, fecha_acuse = CURDATE(), razon_rechazo = '$razon_r'
                 WHERE idu_users = $id_user AND idac_actividades = $idac");
         Session::flash('rechazo', 'Usted ha rechazado la actividad, por lo que no se ha bloqueado la actividad, para desbloquear la actividad deberá ponerse en contacto con el creador de la actividad');
-        //return response()->json('aceptado');
-
 
         return response()->json('aceptado');
     }
+
+    /* Obtener detalles de la actividad para mostrarlos en el modal por medio de Ajax */
 
     public function DetallesAsignacion($idac)
     {
@@ -668,10 +689,12 @@ class SeguimientoController extends Controller
 
         return response()->json($actividad);
     }
+    
+    /* Funcion para ver los seguimientos que se le han dado a esa actividad asigada */
 
     public function Seguimiento($idac)
     {
-        //Encriptar el id de la actividad que se esta consulutando
+    /* Desencriptar el id de la actividad que se esta consulutando */
         $idac = decrypt($idac);
         $id_user = Auth()->user()->idu;
         $ar = Auth::user()->idar_areas;
@@ -680,12 +703,11 @@ class SeguimientoController extends Controller
         $director = DB::SELECT("SELECT CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS director FROM users AS us WHERE idtu_tipos_usuarios = 2 AND idar_areas = $ar");
         $dir = $director[0]->director;
 
-        //Verificar si es asistente o director
+    /* Verificar si es asistente o director y obtener detalles de esa actividad */
         if ($tipo == 4) {
             $asignado = DB::select("SELECT idu FROM users AS u WHERE u.idtu_tipos_usuarios = 2 AND u.idar_areas = $ar ");
             $id = $asignado[0]->idu;
 
-            //Obtener detalles de la actividad
             $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
             CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado, res_act.razon_activacion,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
@@ -698,7 +720,6 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             WHERE ac.idac = $idac");
         } else {
-            //Obtener detalles de la actividad
             $actividades = DB::SELECT("SELECT  ac.idac ,ac.turno, ac.fecha_creacion, ac.asunto, ac.descripcion,
             CONCAT(us.titulo, ' ', us.nombre, ' ', us.app, ' ', us.apm) AS creador, ac.comunicado,
             ac.fecha_inicio, ac.fecha_fin, ac.importancia, ar.nombre as nombre_area,
@@ -710,11 +731,12 @@ class SeguimientoController extends Controller
             INNER JOIN tipos_actividades AS ta ON ta.idtac = ac.idtac_tipos_actividades
             WHERE ac.idac = $idac");
         }
-        //dd($actividades);
 
         $archivo1 = null;
         $archivo2 = null;
         $archivo3 = null;
+
+        /* Darle otro formato al nombre de los archivos almacenados  */
 
         if ($actividades[0]->archivo1 != 'Sin archivo') {
             $archivo1 = explode("_", $actividades[0]->archivo1)[2];
@@ -726,10 +748,10 @@ class SeguimientoController extends Controller
             $archivo3 = explode("_", $actividades[0]->archivo3)[2];
         }
 
-
+        /* Extraer porcentaje general de la actividad */
         $general = explode('*', $actividades[0]->porcentaje)[2];
         $general = number_format($general, 0);
-        
+
         $end_date = $actividades[0]->fecha_fin;
 
 
@@ -777,7 +799,7 @@ class SeguimientoController extends Controller
         //Obtener la fecha actual
         $now = Carbon::now();
 
-        //Obtener el responsable que le esta dando seguimiento ala actividad
+        //Obtener el responsable que le esta dando seguimiento a la actividad
         if ($tipo != 4) {
             $resp = DB::table('responsables_actividades')
                 ->join('actividades', 'actividades.idac', '=', 'responsables_actividades.idac_actividades')
@@ -814,46 +836,33 @@ class SeguimientoController extends Controller
             JOIN seguimientos_actividades AS seg ON seg.idreac_responsables_actividades = res.idreac
             WHERE idac_actividades = $idac AND idu_users = $id");
         }
-        //dd($resp);
 
         //ver el estado de la actividad
         $date = Carbon::now()->locale('es')->isoFormat("Y-MM-DD");
 
-        //return ($data > $end_date ? "es mayor" : "No es mayor");
         if ($date <= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 0) {
-
             $est_act = "En proceso – En Tiempo";
         } elseif ($date <= $end_date && $max_ai[0]->avance_i == 100 && $resp[0]->acuse == 1) {
-
             $est_act = "Concluido – En tiempo";
         } elseif ($date >= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 0) {
-
             $est_act = "En proceso – Fuera de tiempo";
         } elseif ($date <= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 1) {
-
             $est_act = "En proceso – En Tiempo";
         } elseif ($date >= $end_date && $max_ai[0]->avance_i < 100 && $resp[0]->acuse == 1) {
-
             $est_act = "En proceso - Fuera de Tiempo";
         } elseif ($date >= $end_date && $max_ai[0]->avance_i == 100 && $resp[0]->acuse == 1) {
-
             $est_act = "Concluido – Fuera de Tiempo";
         } elseif ($resp[0]->acuse == 2 && $resp[0]->acuse == 2) {
-
             $est_act = "Acuse rechazado";
         } elseif ($actividades[0]->status == 3) {
-
             $est_act = "Cancelado";
         }
-
-
 
         //Ver cuantos han visto su actividad asignada
 
         $atendido = DB::SELECT("SELECT COUNT(ra.acuse) AS atencion FROM responsables_actividades AS ra
         WHERE idac_actividades = $idac
         AND ra.acuse = 1");
-        //dd($atendido);
 
         //Ver el total de personas asignadas a esa actividad
         $total_at = DB::SELECT("SELECT COUNT(ra.acuse) AS total FROM responsables_actividades AS ra
@@ -868,7 +877,7 @@ class SeguimientoController extends Controller
         }
 
         if ($tipo == 4) {
-            //Obtener los seguimientos que se le ha dado a la actividad asignada
+        //Obtener los seguimientos que se le ha dado a la actividad asignada
             $asignado = DB::select("SELECT idu FROM users AS u WHERE u.idtu_tipos_usuarios = 2 AND u.idar_areas = $ar ");
             $id = $asignado[0]->idu;
 
@@ -930,41 +939,51 @@ class SeguimientoController extends Controller
             ORDER BY sa.idseac DESC LIMIT 1");
         }
 
+        /* Funcion para ver los botones de los seguimientos realizados */
+
         function detalles($idseac, $idarseg, $ultimo, $archivo_fin, $idac)
         {
-
+            /* Si es el ultimo seguimiento que se ha realizado */
             if ($idseac == $ultimo) {
+                /* y si ya se subio el oficio de termnino */
                 if ($archivo_fin != null) {
+                    /* la persona logeada sea un usuario normal (Jefe) */
                     if (Auth()->user()->idtu_tipos_usuarios == 2) {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                             &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>
                             &nbsp;<a class='btn btn-danger mt-3 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac), 'idac' => encrypt($idac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
                     } else {
+                        /* Si es cualquier otro tipo de usuario */
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                             <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-3 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                             &nbsp;<a download='archivo-finalizacion' href=" . asset("archivos/Seguimientos/$archivo_fin") . " class='ArchivoTermino btn btn-dark btn-sm mt-3'><i class='nav-icon fas fa-file-pdf'></i></a>";
                     }
                 } else {
+                    /* Si aún no se sube el oficio de termino y el usuario es: (Jefe) */
                     if (Auth()->user()->idtu_tipos_usuarios == 2) {
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>
                         <a class='btn btn-danger mt-1 btn-sm' href=" . route('EliminarSeguimiento', ['idarse' => encrypt($idarseg), 'idseac' => encrypt($idseac), 'idac' => encrypt($idac)]) . " id='boton_disabled' ><i class='nav-icon fas fa-trash'></i></a></div>";
                     } else {
+                        /* Si aún no se sube el oficio de termino y el usuario no es: (Jefe) */
                         return "<div class='btn-group me-2' role='group' aria-label='Second group'>
                         <a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
                     }
                 }
             } else {
+            /* Si aun no es el ultimo seguimiento  */
                 return  "<a href='javascript:void(0)' data-toggle='tooltip' data-id=" . encrypt($idseac) . "  data-original-title='DetallesArchivos' class='btn btn-success btn-sm mt-1 DetallesArchivos'><i class='nav-icon fas fa-eye'></i></a>";
             }
         }
 
+        /* Contador para marcar el total de seguimientos dados */
 
-        //dd($seguimientos);
         foreach ($seguimientos as $seg_ac) {
             $turno = 1;
         }
+
+        /* Procesar los datos transformando en formato JSON para tabla Zing-Grid */
 
         foreach ($seguimientos as $seg_ac) {
 
@@ -981,7 +1000,6 @@ class SeguimientoController extends Controller
             $turno = $turno + 1;
         }
         $json_sa = json_encode($array_sa);
-        //dd($ultimo_seg[0]);
 
         return view('SeguimientoActividades.Seguimiento')
             ->with('actividades', $actividades[0])
@@ -1002,20 +1020,26 @@ class SeguimientoController extends Controller
             ->with('dir', $dir);
     }
 
+    /* Funcion para guardar el nuevo seguimiento */
+
     public function AgregarSeguimiento(Request $request)
     {
         return DB::transaction(function () use ($request) {
 
+            /* Dando nombres a las variables que llegan del request */
             $idseac = $request->idseac;
             $idac = $request->idac;
             $idreac_responsables_actividades = $request->idreac_responsables_actividades;
             $idseac_seguimientos_actividades = $request->idseac_seguimientos_actividades;
+            /* Obtener fecha actual */
             $now = Carbon::now();
             $detalle = $request->detalle;
             $porcentaje = $request->porcentaje;
             $estado = $request->estado;
 
-
+            /* Si se subieron archivos en el seguimiento y el nombre tiene espacios 
+            en blanco eliminarlos para evitar un error de compatibidad del navegador
+            al descargar, ademas concatenando la fecha al nombre. */
             if ($request->file('archivo_fin')) {
                 $searchString = " ";
                 $replaceString = "-";
@@ -1023,13 +1047,13 @@ class SeguimientoController extends Controller
                 $name_arcfin = date('YmdHis_') . $file_fin->getClientOriginalName();
                 $name_arcfin = str_replace($searchString, $replaceString, $name_arcfin);
             }
-
+            /* Guardar datos de la tabla de seguimientos_actividades*/
             $seg_ac = new seguimientosActividades;
             $seg_ac->idreac_responsables_actividades = $idreac_responsables_actividades;
             $seg_ac->fecha = $now;
             $seg_ac->detalle = $request->detalle;
             $seg_ac->porcentaje = $request->porcentaje;
-
+            /* Si ya es el ultimo seguimiento y recibe el oficio de termino guardar en ruta indicada */
             if ($request->hasFile('archivo_fin')) {
                 if (Storage::putFileAs('/Seguimientos/', $file_fin, $name_arcfin)) {
                     $id_user = Auth::user()->idu;
@@ -1040,19 +1064,16 @@ class SeguimientoController extends Controller
             }
 
             $seg_ac->estado = $request->estado;
-
             $seg_ac->save();
 
-
-
-            //Insertar archivos en tabla archivos_seguimientos
+            /* Guardar datos de la tabla de archivos_seguimientos*/
 
             $max_size = (int)ini_get('upload_max_filesize') * 10240;
             $user_id = Auth()->user()->idu;
             $files = $request->file('ruta');
 
             if ($request->hasFile('ruta')) {
-
+                /* Si se subieron archivos guardar con su descripción */
                 foreach ($files as $index => $file) {
                     if (Storage::putFileAs('/Seguimientos/', $file, date('Ymd_His_') . $file->getClientOriginalName())) {
 
@@ -1065,6 +1086,7 @@ class SeguimientoController extends Controller
                     }
                 }
             } else {
+                /* Si no se subieron archivos */
                 archivosSeguimientos::create([
                     'idseac_seguimientos_actividades' => $idseac_seguimientos_actividades = $seg_ac->idseac,
                     'nombre' => 'Sin archivo',
@@ -1073,11 +1095,9 @@ class SeguimientoController extends Controller
                 ]);
             }
 
-
-
             $consid = responsablesActividades::find($seg_ac->idreac_responsables_actividades);
 
-            /*Valicación porcentaje general para modificar status en tabla actividades*/
+            /*Validación porcentaje general para modificar status en tabla actividades*/
             $consul = DB::SELECT("SELECT 
             porcentaje(ac.idac, 0) AS porcentaje
             FROM actividades AS ac
@@ -1090,12 +1110,13 @@ class SeguimientoController extends Controller
                 DB::UPDATE("UPDATE actividades SET status = 2 
                 WHERE idac = $idac");
             }
-            /*END Valicación porcentaje general by Azure_Valkyrie*/
 
             Session::flash('message', 'Se le ha dado un nuevo seguimiento a esta actividad');
             return redirect()->route('Seguimiento', ['idac' => encrypt($consid->idac_actividades)]);
         });
     }
+
+    /* Ver los detalles de archivos subidos en base al seleccionado (MOdal con Ajax) */
     public function DetallesArchivos($idarc)
     {
         $idarc = decrypt($idarc);
@@ -1106,23 +1127,31 @@ class SeguimientoController extends Controller
         return response()->json($query);
     }
 
+    /* Funcion para eliminar un seguimiento */
+
     public function EliminarSeguimiento($idarseg, $idseac, $idac)
-
     {
-
-        //$ultimo = archivosSeguimientos::find('idarse')->orderBy('idarse')->desc();
         $idarseg = decrypt($idarseg);
         $idseac = decrypt($idseac);
         $idac = decrypt($idac);
 
+        /* Eliminar archivos del servidor */
+        $fileToDelete = DB::SELECT("SELECT ruta FROM archivos_seguimientos 
+        WHERE idseac_seguimientos_actividades = $idseac");
+         
+         foreach($fileToDelete as $ftd){
+             $path = "/Seguimientos/".$ftd->ruta;
+             Storage::disk('local')->delete($path);
+             
+        }
+        
+        /* Eliminar registros en la BD */
 
         DB::DELETE("DELETE FROM archivos_seguimientos
-        where idseac_seguimientos_actividades =$idseac
-        ");
+        where idseac_seguimientos_actividades =$idseac");
 
         DB::DELETE("DELETE FROM seguimientos_actividades
-        where idseac =$idseac
-        ");
+        where idseac =$idseac");
 
         $consul = DB::SELECT("SELECT 
         porcentaje(ac.idac, 0) AS porcentaje
@@ -1138,9 +1167,6 @@ class SeguimientoController extends Controller
         }
 
         Session::flash('message2', 'Se ha eliminado el seguimiento de actividad');
-
-
         return back();
     }
 }
-
