@@ -18,7 +18,7 @@ class PanelController extends Controller
     {
         $user = auth()->user()->idu;
         $area = Auth()->user()->idar_areas;
-        
+        //Secretaria
         if (auth()->user()->idtu_tipos_usuarios == 4) {
 
             $user = DB::SELECT("SELECT idu, CONCAT(titulo, ' ',nombre, ' ', app, ' ', apm) AS nombre FROM users WHERE idtu_tipos_usuarios = 2 AND idar_areas = $area");
@@ -92,10 +92,11 @@ class PanelController extends Controller
 
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
-
+                //obtienen seguimientos
                 $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
 
                 $collection->numero_de_seguimiento = $seguimiento->count();
+                //calcula promedio de los seguimientos obtenidos
                 $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
                 $collection->seguimiento = $seguimiento->first();
@@ -140,9 +141,11 @@ class PanelController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                //obtienen seguimientos
                 $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
 
                 $collection->numero_de_seguimiento = $seguimiento->count();
+                //calcula promedio de los seguimientos obtenidos
                 $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
                 $collection->seguimiento = $seguimiento->first();
@@ -155,6 +158,7 @@ class PanelController extends Controller
         $hoy = Carbon::now();
         $mesInicial = $hoy->startOfMonth()->format('Y-m-d');
         $mesFinal = $hoy->endOfMonth()->format('Y-m-d');
+        //Actividaes que se filtran por fecha inicial
         $actividadesFechaInicio = User::where('users.idu', $idu)
             ->join('responsables_actividades', 'idu_users', 'users.idu')
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
@@ -191,14 +195,17 @@ class PanelController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                //obtienen seguimientos
                 $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
                 $collection->numero_de_seguimiento = $seguimiento->count();
+                //calcula promedio de los seguimientos obtenidos
                 $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
                 $collection->seguimiento = $seguimiento->first();
                 return $collection;
 
             });
+            //Actividades que se filtran por fecha final
             $actividadesFechaFin = User::where('users.idu', $idu)
             ->join('responsables_actividades', 'idu_users', 'users.idu')
             ->join('actividades', 'idac', 'responsables_actividades.idac_actividades')
@@ -235,8 +242,10 @@ class PanelController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                //obtienen seguimientos
                 $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
                 $collection->numero_de_seguimiento = $seguimiento->count();
+                //calcula promedio de los seguimientos obtenidos
                 $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
                 $collection->seguimiento = $seguimiento->first();
@@ -245,7 +254,7 @@ class PanelController extends Controller
             });
 
             $collection = collect([]);
-
+            //Se unen los dos arreglos de las actividades por fecha ynicio y fecha fin
             foreach ($actividadesFechaInicio As $actividad){
                 $collection->push($actividad);
             }
@@ -311,8 +320,10 @@ class PanelController extends Controller
                 $collection->creador = User::where('idu',$collection->creador_id)
                     ->select('idu','titulo', 'nombre', 'app','apm')->first();
 
+                //obtienen seguimientos
                 $seguimiento = SeguimientosActividades::where('idreac_responsables_actividades',$collection->idreac)->get();
                 $collection->numero_de_seguimiento = $seguimiento->count();
+                //calcula promedio de los seguimientos obtenidos
                 $collection->porcentaje_seguimiento = $seguimiento->avg('porcentaje');
 
                 $collection->seguimiento = $seguimiento->first();
